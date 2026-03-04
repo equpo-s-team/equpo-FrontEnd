@@ -1,0 +1,293 @@
+
+.font-maxwell {
+    font-family: 'Maxwell', 'DM Sans', sans-serif;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-d1 {
+    transition-delay: 0.1s;
+}
+
+.reveal-d2 {
+    transition-delay: 0.2s;
+}
+
+.reveal-d3 {
+    transition-delay: 0.3s;
+}
+
+.reveal-d4 {
+    transition-delay: 0.4s;
+}
+
+.world-orb {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #c8f5d0, #89D99D 50%, #50d3c2);
+    box-shadow: 0 0 0 1px rgba(137, 217, 157, 0.3),
+    0 0 60px rgba(137, 217, 157, 0.25),
+    0 0 120px rgba(105, 232, 240, 0.15),
+    inset 0 -30px 60px rgba(0, 0, 0, 0.15);
+    position: relative;
+    animation: floatOrb 6s ease-in-out infinite;
+}
+
+.world-orb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(ellipse 60% 30% at 30% 25%, rgba(255, 255, 255, 0.4) 0%, transparent 60%),
+    repeating-linear-gradient(
+            45deg,
+            transparent 0px, transparent 12px,
+            rgba(255, 255, 255, 0.06) 12px, rgba(255, 255, 255, 0.06) 13px
+    );
+}
+
+.world-orb::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            rgba(105, 232, 240, 0.2) 60deg,
+            transparent 120deg,
+            rgba(137, 217, 157, 0.15) 180deg,
+            transparent 240deg,
+            rgba(105, 232, 240, 0.2) 300deg,
+            transparent 360deg
+    );
+    animation: rotateConic 12s linear infinite;
+}
+
+.orbit-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 1px dashed rgba(137, 217, 157, 0.2);
+}
+
+.orbit-ring-1 {
+    width: 340px;
+    height: 340px;
+    margin: -170px 0 0 -170px;
+    animation: orbitSpin 20s linear infinite;
+}
+
+.orbit-ring-2 {
+    width: 400px;
+    height: 400px;
+    margin: -200px 0 0 -200px;
+    animation: orbitSpin 30s linear infinite reverse;
+}
+
+.orbit-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+    background: var(--color-green);
+    box-shadow: 0 0 8px var(--color-green);
+}
+
+.orbit-dot-cyan {
+    background: var(--color-cyan);
+    box-shadow: 0 0 8px var(--color-cyan);
+    top: auto;
+    bottom: -4px;
+}
+
+.float-card {
+    animation: floatCard 5s ease-in-out infinite;
+}
+
+.float-card-d1 {
+    animation-delay: 0s;
+}
+
+.float-card-d2 {
+    animation-delay: 1.2s;
+}
+
+.float-card-d3 {
+    animation-delay: 2.1s;
+}
+
+.float-card-d4 {
+    animation-delay: 0.7s;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 1.2rem;
+    padding: 0.5rem 0 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-track.dragging {
+    cursor: grabbing;
+}
+
+.slide-card {
+    flex: 0 0 320px;
+    scroll-snap-align: start;
+}
+
+.slide-card-inner {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s;
+}
+
+.slide-card-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-green), var(--color-cyan));
+    border-radius: 20px 20px 0 0;
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+
+.slide-card-inner:hover {
+    transform: translateY(-6px);
+    border-color: rgba(137, 217, 157, 0.3);
+}
+
+.slide-card-inner:hover::before {
+    opacity: 1;
+}
+
+.feat-card-hover {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.feat-card-hover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: linear-gradient(0deg, var(--color-green-light), transparent);
+    transition: height 0.3s;
+}
+
+.feat-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.07);
+    border-color: rgba(137, 217, 157, 0.35);
+}
+
+.feat-card-hover:hover::after {
+    height: 60px;
+}
+
+/* ── MOCK BOARD ── */
+.mock-task {
+    transition: transform 0.15s;
+}
+
+.mock-task:hover {
+    transform: translateY(-1px);
+}
+
+.ring-bg {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 3;
+}
+
+.ring-fill {
+    fill: none;
+    stroke: var(--color-green);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 88;
+    stroke-dashoffset: 22;
+}
+
+.world-mini-orb {
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #c8f5d0, #89D99D 50%, #50d3c2);
+    box-shadow: 0 0 16px rgba(70, 217, 202, 0.35);
+    animation: floatOrb 4s ease-in-out infinite;
+}
+
+@keyframes floatOrb {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-18px);
+    }
+}
+
+@keyframes rotateConic {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes orbitSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes floatCard {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes heroEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-copy-enter {
+    animation: heroEntrance 0.8s ease forwards;
+}
+
+.hero-visual-enter {
+    animation: heroEntrance 0.9s 0.18s ease both;
+}

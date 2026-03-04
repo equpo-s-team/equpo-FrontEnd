@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Maxwell';
+  src: url('/fonts/MAXWELL_BOLD.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-green: #89D99D;
+  --color-cyan: #69E8F0;
+  --color-dark: #0f1a14;
+  --color-mid: #1c2b21;
+  --color-off-white: #f7faf8;
+  --color-muted: #7a8f7e;
+  --color-border: #e2ece5;
+  --color-green-light: rgba(137, 217, 157, 0.12);
+  --color-cyan-light: rgba(105, 232, 240, 0.10);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: var(--color-dark);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

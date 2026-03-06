@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AuthSwitch from "./ui/auth-switch";
+import AuthSwitch from "./auth/components/AuthSwitch";
 
 export default function Navbar() {
     const [showAuth, setShowAuth] = useState(false);

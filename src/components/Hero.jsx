@@ -120,7 +120,6 @@ export default function Hero() {
 
                 <div className="hero-visual-enter flex items-center justify-center h-[520px]">
                     <div className="relative w-[420px] h-[420px]">
-
                         <div className="orbit-ring orbit-ring-1">
                             <div className="orbit-dot"/>
                         </div>
@@ -132,14 +131,14 @@ export default function Hero() {
                             className="world-orb absolute top-1/2 left-1/2 w-[280px] h-[280px]"
                         />
 
-                        <FloatCard className="float-card float-card-d1 top-[8%] -left-[5%] hover:scale-105" icon="🌿"
+                        <FloatCard className="float-card float-card-d1 top-[3%] -left-[8%] hover:scale-110 hover:rotate-1" icon="🌿"
                                    title="Mundo activo" label="+12% esta semana" iconBg="bg-green/20"/>
-                        <FloatCard className="float-card float-card-d2 top-[14%] -right-[2%] hover:scale-105" icon="⚡"
+                        <FloatCard className="float-card float-card-d2 top-[12%] -right-[5%] hover:scale-110 hover:-rotate-1" icon="⚡"
                                    title="3 tareas completadas" label="Hoy" iconBg="bg-cyan/20"/>
-                        <div className="float-card float-card-d3 float-card absolute bottom-[18%] -left-[8%] hover:scale-105">
+                        <div className="float-card float-card-d3 float-card absolute bottom-[28%] -left-[10%] hover:scale-110 hover:rotate-1">
                             <FloatCardRing title="Nivel 7" label="75% al siguiente"/>
                         </div>
-                        <FloatCard className="float-card float-card-d4 bottom-[10%] right-0 hover:scale-105" icon="💬"
+                        <FloatCard className="float-card float-card-d4 bottom-[18%] right-0 hover:scale-110 hover:-rotate-1" icon="💬"
                                    title="Chat activo" label="4 miembros en línea" iconBg="bg-yellow-100"/>
                     </div>
                 </div>
@@ -150,34 +149,73 @@ export default function Hero() {
 
 function FloatCard({className = '', icon, title, label, iconBg = 'bg-green/10'}) {
     return (
-        <div
-            className={`absolute bg-white/90 backdrop-blur-sm border border-border rounded-2xl px-4 py-[.7rem] flex items-center gap-3 shadow-card font-body text-[.8rem] font-medium text-dark whitespace-nowrap transition-all duration-300 hover:shadow-lg hover:bg-white ${className}`}
+        <motion.div
+            className={`absolute bg-white/95 backdrop-blur-md border border-border/50 rounded-3xl px-6 py-4 flex items-center gap-4 shadow-xl font-body text-base font-medium text-dark whitespace-nowrap transition-all duration-500 hover:shadow-2xl hover:bg-white hover:border-green/30 ${className}`}
+            whileHover={{ 
+                scale: 1.05, 
+                rotate: [0, 1, -1, 0],
+                transition: { duration: 0.3 }
+            }}
+            whileTap={{ scale: 0.98 }}
         >
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[.9rem] transition-transform hover:scale-110 ${iconBg}`}>
+            <motion.div 
+                className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-colors duration-300 ${iconBg}`}
+                whileHover={{ backgroundColor: "#7a8f7e" }}
+            >
                 {icon}
-            </div>
+            </motion.div>
             <div className="flex flex-col">
-                <span className="font-semibold text-[.82rem]">{title}</span>
-                <span className="text-muted text-[.68rem] font-normal">{label}</span>
+                <motion.span 
+                    className="font-bold text-lg"
+                    whileHover={{ scale: 1.05 }}
+                >
+                    {title}
+                </motion.span>
+                <motion.span 
+                    className="text-muted text-sm font-normal"
+                    whileHover={{ scale: 1.05 }}
+                >
+                    {label}
+                </motion.span>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
 function FloatCardRing({title, label}) {
     return (
-        <div
-            className="bg-white/90 backdrop-blur-sm border border-border rounded-2xl px-4 py-[.7rem] flex items-center gap-3 shadow-card font-body text-[.8rem] font-medium text-dark whitespace-nowrap transition-all duration-300 hover:shadow-lg hover:bg-white">
-            <div className="w-9 h-9 relative">
-                <svg width="36" height="36" viewBox="0 0 36 36" style={{transform: 'rotate(-90deg)'}}>
-                    <circle className="ring-bg" cx="18" cy="18" r="14"/>
-                    <circle className="ring-fill" cx="18" cy="18" r="14"/>
+        <motion.div
+            className="bg-white/95 backdrop-blur-md border border-border/50 rounded-3xl px-6 py-4 flex items-center gap-4 shadow-xl font-body text-base font-medium text-dark whitespace-nowrap transition-all duration-500 hover:shadow-2xl hover:bg-white hover:border-green/30"
+            whileHover={{ 
+                scale: 1.05, 
+                rotate: [0, -1, 1, 0],
+                transition: { duration: 0.3 }
+            }}
+            whileTap={{ scale: 0.98 }}
+        >
+            <motion.div 
+                className="w-10 h-10 rounded-xl flex items-center justify-center bg-green/20 transition-colors duration-300"
+                whileHover={{ backgroundColor: "#7a8f7e" }}
+            >
+                <svg width="40" height="40" viewBox="0 0 40 40" style={{transform: 'rotate(-90deg)'}}>
+                    <circle className="ring-bg" cx="20" cy="20" r="16"/>
+                    <circle className="ring-fill" cx="20" cy="20" r="16"/>
                 </svg>
-            </div>
+            </motion.div>
             <div className="flex flex-col">
-                <span className="font-semibold text-[.82rem]">{title}</span>
-                <span className="text-muted text-[.68rem] font-normal">{label}</span>
+                <motion.span 
+                    className="font-bold text-lg"
+                    whileHover={{ scale: 1.05 }}
+                >
+                    {title}
+                </motion.span>
+                <motion.span 
+                    className="text-muted text-sm font-normal"
+                    whileHover={{ scale: 1.05 }}
+                >
+                    {label}
+                </motion.span>
             </div>
-        </div>
+        </motion.div>
     );
 }

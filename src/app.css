@@ -321,3 +321,36 @@
 .hero-visual-enter {
     animation: heroEntrance 0.9s 0.18s ease both;
 }
+
+/* Connecting lines animations */
+@keyframes dashFlow {
+    to {
+        stroke-dashoffset: -10;
+    }
+}
+
+@keyframes linePulse {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.connecting-line {
+    animation: dashFlow 20s linear infinite, linePulse 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.particle-glow {
+    filter: drop-shadow(0 0 3px currentColor);
+}

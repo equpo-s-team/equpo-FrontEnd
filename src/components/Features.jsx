@@ -1,38 +1,39 @@
 import {SectionLabel} from './WhatIsEqupo';
+import { Layout, Globe, Users, MessageCircle, Phone, Star } from 'lucide-react';
 
 const FEATURES = [
     {
-        icon: '📋',
+        icon: <Layout size={24} />,
         title: 'Tablero colaborativo',
         desc: 'Organiza tareas con claridad y flujo.',
         micro: 'Arrastra, prioriza, avanza.',
     },
     {
-        icon: '🌐',
+        icon: <Globe size={24} />,
         title: 'Equipos con espacio virtual propio',
         desc: 'Cada equipo tiene su "mundo" y su dinámica.',
         micro: 'Contexto compartido, identidad real.',
     },
     {
-        icon: '👥',
+        icon: <Users size={24} />,
         title: 'Gestión de miembros',
         desc: 'Invita, asigna roles, ajusta permisos.',
         micro: 'Orden sin burocracia.',
     },
     {
-        icon: '💬',
+        icon: <MessageCircle size={24} />,
         title: 'Chat integrado',
         desc: 'Conversaciones por equipo o por tema.',
         micro: 'Menos "¿en qué iba esto?"',
     },
     {
-        icon: '📞',
+        icon: <Phone size={24} />,
         title: 'Llamadas rápidas',
         desc: 'Conecta cuando el texto no alcanza.',
         micro: 'Una reunión breve, un gran avance.',
     },
     {
-        icon: '⭐',
+        icon: <Star size={24} />,
         title: 'Puntos y niveles',
         desc: 'Logros por constancia y colaboración.',
         micro: 'Progreso medible, motivación sana.',

@@ -1,4 +1,5 @@
 import { SectionLabel } from './WhatIsEqupo';
+import { Check } from 'lucide-react';
 
 export default function CTAFinal() {
   return (
@@ -44,7 +45,7 @@ export default function CTAFinal() {
           {['Configuración rápida', 'Para equipos pequeños o grandes', 'Diseñado para mejorar hábitos colectivos'].map(
             (item) => (
               <li key={item} className="flex items-center gap-2 font-body text-[.85rem] text-white/55">
-                <span className="text-green text-[.8rem]">✔</span>
+                <Check size={16} className="text-green" />
                 {item}
               </li>
             )

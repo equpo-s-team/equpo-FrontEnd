@@ -1,4 +1,5 @@
 import { useReveal } from '../hooks/useReveal';
+import { TrendingUp } from 'lucide-react';
 
 export default function WhatIsEqupo() {
   const { ref, classes } = useReveal();
@@ -64,7 +65,7 @@ export default function WhatIsEqupo() {
               <div className="world-mini-orb w-11 h-11 flex-shrink-0 animate-float-orb-fast" />
               <div className="font-body text-[.75rem]">
                 <strong className="block font-semibold text-dark text-[.82rem]">Mundo prosperando</strong>
-                <span className="text-muted">Equipo en racha 🔥</span>
+                <span className="text-muted">Equipo en racha <TrendingUp size={14} className="inline text-green ml-1" /></span>
               </div>
             </div>
           </div>

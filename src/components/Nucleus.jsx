@@ -1,34 +1,35 @@
 import { useRef, useState } from 'react';
 import { SectionLabel } from './WhatIsEqupo';
+import { Heart, Rocket, Zap, Globe, TrendingUp, User } from 'lucide-react';
 
 const SLIDES = [
   {
     num: '01',
-    icon: '🤝',
+    icon: <Heart size={24} className="text-white" />,
     title: 'Lo que haces, se siente.',
     text: 'Completar tareas y colaborar mejora el entorno del equipo. El resultado es compartido: el progreso también.',
   },
   {
     num: '02',
-    icon: '🚀',
+    icon: <Rocket size={24} className="text-white" />,
     title: 'Progreso que impulsa, no que agobia.',
     text: 'Puntos y niveles como guía, no como castigo. Reconocimiento constante y metas claras para cada quien.',
   },
   {
     num: '03',
-    icon: '⚡',
+    icon: <Zap size={24} className="text-white" />,
     title: 'Menos fricción, más ritmo.',
     text: 'Todo en un solo lugar: tareas, comunicación, decisiones y seguimiento. Sin saltar entre herramientas.',
   },
   {
     num: '04',
-    icon: '🌍',
+    icon: <Globe size={24} className="text-white" />,
     title: 'Un ambiente que evoluciona contigo.',
     text: 'El espacio virtual cambia con el desempeño colectivo: una forma simple y visual de ver cómo va el equipo.',
   },
   {
     num: '05',
-    icon: '📈',
+    icon: <TrendingUp size={24} className="text-white" />,
     title: 'Tu perfil cuenta tu historia.',
     text: 'Registro de desempeño en el tiempo: niveles, puntos y constancia. Ideal para objetivos personales y de equipo.',
   },
@@ -44,8 +45,9 @@ export default function Nucleus() {
   const scrollLeft = useRef(0);
 
   const updateDots = () => {
-    const idx = Math.round(trackRef.current.scrollLeft / CARD_W);
-    setActiveIdx(idx);
+    const scrollLeft = trackRef.current.scrollLeft;
+    const idx = Math.round(scrollLeft / CARD_W*4);
+    setActiveIdx(Math.min(idx, SLIDES.length - 1));
   };
 
   const onMouseDown = (e) => {
@@ -66,8 +68,9 @@ export default function Nucleus() {
   };
 
   const goTo = (idx) => {
-    trackRef.current.scrollTo({ left: idx * CARD_W, behavior: 'smooth' });
-    setActiveIdx(idx);
+    const boundedIdx = Math.min(idx, SLIDES.length - 1);
+    trackRef.current.scrollTo({ left: boundedIdx * CARD_W, behavior: 'smooth' });
+    setActiveIdx(boundedIdx);
   };
 
   return (

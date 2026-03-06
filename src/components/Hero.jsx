@@ -1,4 +1,24 @@
+import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+
 export default function Hero() {
+    const [titleNumber, setTitleNumber] = useState(0);
+    const titles = useMemo(
+        () => ["colaborativo", "vivo", "responsable", "motivador", "interactivo"],
+        []
+    );
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (titleNumber === titles.length - 1) {
+                setTitleNumber(0);
+            } else {
+                setTitleNumber(titleNumber + 1);
+            }
+        }, 2000);
+        return () => clearTimeout(timeoutId);
+    }, [titleNumber, titles]);
+
     return (
         <section className="relative overflow-hidden min-h-screen">
             <div className="animated-gradient-bg"/>
@@ -21,16 +41,35 @@ export default function Hero() {
 
                     <h1 className="font-maxwell text-display-xl text-dark mb-5">
                         Organiza tareas.{' '} <br/>
-                        <em
-                            className="not-italic"
-                            style={{
-                                background: 'linear-gradient(120deg, #89D99D 0%, #69E8F0 100%)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                            }}
-                        >
-                            Sube de nivel.
-                        </em>{' '}
+                        <span className="relative inline-block overflow-hidden md:pb-4 md:pt-1 min-w-[1000px]">
+                            &nbsp;
+                            {titles.map((title, index) => (
+                                <motion.em
+                                    key={index}
+                                    className="absolute not-italic font-semibold left-0 top-3.5 pr-5"
+                                    style={{
+                                        background: 'linear-gradient(120deg, #89D99D 0%, #69E8F0 100%)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                    }}
+                                    initial={{ opacity: 0, y: "-100" }}
+                                    transition={{ type: "spring", stiffness: 50 }}
+                                    animate={
+                                        titleNumber === index
+                                            ? {
+                                                y: 0,
+                                                opacity: 1,
+                                            }
+                                            : {
+                                                y: titleNumber > index ? -150 : 150,
+                                                opacity: 0,
+                                            }
+                                    }
+                                >
+                                    {title}
+                                </motion.em>
+                            ))}
+                        </span>
                         <br/>
                         Haz que el equipo prospere.
                     </h1>

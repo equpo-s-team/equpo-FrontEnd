@@ -3,6 +3,24 @@
     font-family: 'Maxwell', 'DM Sans', sans-serif;
 }
 
+.animated-gradient-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(137, 217, 157, 0.35) 0%,
+        rgba(105, 232, 240, 0.32) 25%,
+        rgba(255, 182, 193, 0.15) 50%,
+        rgba(105, 232, 240, 0.34) 75%,
+        rgba(137, 217, 157, 0.3) 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 6s ease infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
 .reveal {
     opacity: 0;
     transform: translateY(28px);
@@ -249,6 +267,18 @@
     }
     50% {
         transform: translateY(-18px);
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
     }
 }
 

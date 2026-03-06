@@ -1,11 +1,16 @@
 export default function Hero() {
     return (
-        <section className="relative overflow-hidden bg-white min-h-screen">
+        <section className="relative overflow-hidden min-h-screen">
+            <div className="animated-gradient-bg"/>
+            <div 
+                className="interactive-bg-orb"
+            />
+
             <div
                 className="absolute -top-20 -left-28 w-[500px] h-[500px] rounded-full bg-radial-green pointer-events-none"/>
 
             <div
-                className="max-w-[90vw] mx-auto px-[5vw] grid md:grid-cols-2 gap-12 items-center pt-[120px] pb-20 min-h-screen">
+                className="max-w-[90vw] mx-auto px-[5vw] grid md:grid-cols-2 gap-12 items-center pt-[120px] pb-20 min-h-screen relative z-10">
                 <div className="hero-copy-enter">
                     <div className="flex items-center gap-2 mb-5">
                         <span className="block w-6 h-0.5 bg-green rounded"/>
@@ -85,16 +90,17 @@ export default function Hero() {
                         </div>
 
                         <div
-                            className="world-orb absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px]"/>
+                            className="world-orb absolute top-1/2 left-1/2 w-[280px] h-[280px]"
+                        />
 
-                        <FloatCard className="float-card float-card-d1 top-[8%] -left-[5%]" icon="🌿"
+                        <FloatCard className="float-card float-card-d1 top-[8%] -left-[5%] hover:scale-105" icon="🌿"
                                    title="Mundo activo" label="+12% esta semana" iconBg="bg-green/20"/>
-                        <FloatCard className="float-card float-card-d2 top-[14%] -right-[2%]" icon="⚡"
+                        <FloatCard className="float-card float-card-d2 top-[14%] -right-[2%] hover:scale-105" icon="⚡"
                                    title="3 tareas completadas" label="Hoy" iconBg="bg-cyan/20"/>
-                        <div className="float-card float-card-d3 float-card absolute bottom-[18%] -left-[8%]">
+                        <div className="float-card float-card-d3 float-card absolute bottom-[18%] -left-[8%] hover:scale-105">
                             <FloatCardRing title="Nivel 7" label="75% al siguiente"/>
                         </div>
-                        <FloatCard className="float-card float-card-d4 bottom-[10%] right-0" icon="💬"
+                        <FloatCard className="float-card float-card-d4 bottom-[10%] right-0 hover:scale-105" icon="💬"
                                    title="Chat activo" label="4 miembros en línea" iconBg="bg-yellow-100"/>
                     </div>
                 </div>
@@ -106,9 +112,9 @@ export default function Hero() {
 function FloatCard({className = '', icon, title, label, iconBg = 'bg-green/10'}) {
     return (
         <div
-            className={`absolute bg-white border border-border rounded-2xl px-4 py-[.7rem] flex items-center gap-3 shadow-card font-body text-[.8rem] font-medium text-dark whitespace-nowrap ${className}`}
+            className={`absolute bg-white/90 backdrop-blur-sm border border-border rounded-2xl px-4 py-[.7rem] flex items-center gap-3 shadow-card font-body text-[.8rem] font-medium text-dark whitespace-nowrap transition-all duration-300 hover:shadow-lg hover:bg-white ${className}`}
         >
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[.9rem] ${iconBg}`}>
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[.9rem] transition-transform hover:scale-110 ${iconBg}`}>
                 {icon}
             </div>
             <div className="flex flex-col">
@@ -122,7 +128,7 @@ function FloatCard({className = '', icon, title, label, iconBg = 'bg-green/10'})
 function FloatCardRing({title, label}) {
     return (
         <div
-            className="bg-white border border-border rounded-2xl px-4 py-[.7rem] flex items-center gap-3 shadow-card font-body text-[.8rem] font-medium text-dark whitespace-nowrap">
+            className="bg-white/90 backdrop-blur-sm border border-border rounded-2xl px-4 py-[.7rem] flex items-center gap-3 shadow-card font-body text-[.8rem] font-medium text-dark whitespace-nowrap transition-all duration-300 hover:shadow-lg hover:bg-white">
             <div className="w-9 h-9 relative">
                 <svg width="36" height="36" viewBox="0 0 36 36" style={{transform: 'rotate(-90deg)'}}>
                     <circle className="ring-bg" cx="18" cy="18" r="14"/>

@@ -72,7 +72,7 @@ export default function Hero() {
                         Haz que el equipo prospere.
                     </h1>
 
-                    <p className="font-body text-[1.3rem] leading-[1.6] text-muted max-w-[520px] mb-10">
+                    <p className="font-body text-[1.3rem] leading-[1.6] accent-gray-300 max-w-[520px] mb-10">
                         Con equpo, cada tarea completada no solo avanza proyectos: mejora el bienestar del
                         espacio virtual del equipo. Trabajo real, impacto visible, motivación compartida.
                     </p>
@@ -91,7 +91,7 @@ export default function Hero() {
                             'Empieza en minutos.',
                             'Diseñado para equipos colaborativos.',
                         ].map((txt) => (
-                            <p key={txt} className="font-body text-[0.95rem] text-muted flex items-center gap-2">
+                            <p key={txt} className="font-body text-[0.95rem] accent-gray-300 flex items-center gap-2">
                                 <Activity size={16} className="text-cyan" />
                                 {txt}
                             </p>

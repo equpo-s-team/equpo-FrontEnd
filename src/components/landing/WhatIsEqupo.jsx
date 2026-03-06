@@ -1,4 +1,4 @@
-import { useReveal } from '../hooks/useReveal';
+import { useReveal } from '../../hooks/useReveal';
 import { TrendingUp } from 'lucide-react';
 
 export default function WhatIsEqupo() {
@@ -8,11 +8,9 @@ export default function WhatIsEqupo() {
     <section id="what" className="bg-offwhite py-24 px-[5vw]">
       <div className="max-w-[1160px] mx-auto grid md:grid-cols-2 gap-20 items-center">
 
-        {/* ── MOCKUP ── */}
         <div className="reveal" ref={ref}>
           <div className="relative">
             <div className="bg-white border border-border rounded-[20px] p-6 shadow-card-lg">
-              {/* Board header */}
               <div className="flex justify-between items-center mb-5">
                 <span className="font-maxwell text-[.9rem] text-dark">Sprint Q2 — equpo</span>
                 <div className="flex">
@@ -77,7 +75,7 @@ export default function WhatIsEqupo() {
           <h2 className="font-maxwell text-display-lg text-dark mb-5 reveal reveal-d1">
             Un tablero colaborativo… con un giro que sí se nota.
           </h2>
-          <p className="font-body text-[.97rem] leading-[1.75] text-muted mb-5 reveal reveal-d2">
+          <p className="font-body text-[.97rem] leading-[1.75] accent-gray-400 mb-5 reveal reveal-d2">
             equpo es una plataforma para equipos de cualquier rubro que combina todo lo que necesitas para trabajar bien y juntos.
           </p>
           <ul className="list-none flex flex-col gap-3 mb-7 reveal reveal-d2">

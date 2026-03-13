@@ -9,17 +9,17 @@ import CTAFinal from './components/CTAFinal';
 import Footer from './components/Footer';
 
 export default function App() {
-  const { containerRef } = useRevealAll();
+    const { containerRef } = useRevealAll();
 
-  return (
-    <div ref={containerRef} className="font-body">
-      <Navbar />
-      <Hero />
-      <WhatIsEqupo />
-      <Nucleus />
-      <Features />
-      <CTAFinal />
-      <Footer />
-    </div>
-  );
+    return (
+        <div ref={containerRef} className="font-body">
+            <Navbar />
+            <Hero />
+            <WhatIsEqupo />
+            <Nucleus />
+            <Features />
+            <CTAFinal />
+            <Footer />
+        </div>
+    );
 }

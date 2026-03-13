@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { TrendingUp, CheckCircle, MessageCircle, Activity } from 'lucide-react';
+import {useEffect, useMemo, useState, useRef} from "react";
+import {motion} from "framer-motion";
+import {TrendingUp, CheckCircle, MessageCircle, Activity} from 'lucide-react';
+import HeroVisual from './HeroVisual';
 
 export default function Hero() {
     const [titleNumber, setTitleNumber] = useState(0);
@@ -50,18 +51,12 @@ export default function Hero() {
                                         WebkitBackgroundClip: 'text',
                                         WebkitTextFillColor: 'transparent',
                                     }}
-                                    initial={{ opacity: 0, y: "-100" }}
-                                    transition={{ type: "spring", stiffness: 50 }}
+                                    initial={{opacity: 0, y: "-100"}}
+                                    transition={{type: "spring", stiffness: 50}}
                                     animate={
                                         titleNumber === index
-                                            ? {
-                                                y: 0,
-                                                opacity: 1,
-                                            }
-                                            : {
-                                                y: titleNumber > index ? -150 : 150,
-                                                opacity: 0,
-                                            }
+                                            ? {y: 0, opacity: 1}
+                                            : {y: titleNumber > index ? -150 : 150, opacity: 0}
                                     }
                                 >
                                     {title}
@@ -92,7 +87,7 @@ export default function Hero() {
                             'Diseñado para equipos colaborativos.',
                         ].map((txt) => (
                             <p key={txt} className="font-body text-[0.95rem] text-muted flex items-center gap-2">
-                                <Activity size={16} className="text-cyan" />
+                                <Activity size={16} className="text-cyan"/>
                                 {txt}
                             </p>
                         ))}
@@ -116,29 +111,35 @@ export default function Hero() {
                     </p>
                 </div>
 
-                <div className="hero-visual-enter flex items-center justify-center h-[520px]">
-                    <div className="relative w-[420px] h-[420px]">
-                        <div className="orbit-ring orbit-ring-1">
-                            <div className="orbit-dot"/>
-                        </div>
-                        <div className="orbit-ring orbit-ring-2">
-                            <div className="orbit-dot orbit-dot-cyan"/>
-                        </div>
+                {/* 3D Visual container — replaces old orb/orbits */}
+                <div className="hero-visual-enter flex items-center justify-center h-full relative">
+                    <HeroVisual/>
 
-                        <div
-                            className="world-orb absolute top-1/2 left-1/2 w-[280px] h-[280px]"
-                        />
-
-                        <FloatCard className="float-card float-card-d1 top-[3%] -left-[8%] hover:scale-110 hover:rotate-1" icon={<TrendingUp size={20} />}
-                                   title="Mundo activo" label="+12% esta semana" iconBg="bg-green/20"/>
-                        <FloatCard className="float-card float-card-d2 top-[12%] -right-[5%] hover:scale-110 hover:-rotate-1" icon={<CheckCircle size={20} />}
-                                   title="3 tareas completadas" label="Hoy" iconBg="bg-cyan/20"/>
-                        <div className="float-card float-card-d3 float-card absolute bottom-[28%] -left-[10%] hover:scale-110 hover:rotate-1">
-                            <FloatCardRing title="Nivel 7" label="75% al siguiente"/>
-                        </div>
-                        <FloatCard className="float-card float-card-d4 bottom-[18%] right-0 hover:scale-110 hover:-rotate-1" icon={<MessageCircle size={20} />}
-                                   title="Chat activo" label="4 miembros en línea" iconBg="bg-yellow-100"/>
+                    {/* Floating cards preserved, layered above canvas */}
+                    <FloatCard
+                        className="absolute top-[3%] -left-[8%] z-20"
+                        icon={<TrendingUp size={20}/>}
+                        title="Mundo activo"
+                        label="+12% esta semana"
+                        iconBg="bg-green/20"
+                    />
+                    <FloatCard
+                        className="absolute top-[12%] -right-[5%] z-20"
+                        icon={<CheckCircle size={20}/>}
+                        title="3 tareas completadas"
+                        label="Hoy"
+                        iconBg="bg-cyan/20"
+                    />
+                    <div className="absolute bottom-[28%] -left-[10%] z-20">
+                        <FloatCardRing title="Nivel 7" label="75% al siguiente"/>
                     </div>
+                    <FloatCard
+                        className="absolute bottom-[18%] right-0 z-20"
+                        icon={<MessageCircle size={20}/>}
+                        title="Chat activo"
+                        label="4 miembros en línea"
+                        iconBg="bg-yellow-100"
+                    />
                 </div>
             </div>
         </section>
@@ -148,33 +149,18 @@ export default function Hero() {
 function FloatCard({className = '', icon, title, label, iconBg = 'bg-green/10'}) {
     return (
         <motion.div
-            className={`absolute bg-white/95 backdrop-blur-md border border-border/50 rounded-3xl px-6 py-4 flex items-center gap-4 shadow-xl font-body text-base font-medium text-dark whitespace-nowrap transition-all duration-500 hover:shadow-2xl hover:bg-white hover:border-green/30 ${className}`}
-            whileHover={{ 
-                scale: 1.05, 
-                rotate: [0, 1, -1, 0],
-                transition: { duration: 0.3 }
-            }}
-            whileTap={{ scale: 0.98 }}
+            className={`bg-white/95 backdrop-blur-md border border-border/50 rounded-3xl px-6 py-4 flex items-center gap-4 shadow-xl font-body text-base font-medium text-dark whitespace-nowrap transition-all duration-500 hover:shadow-2xl hover:bg-white hover:border-green/30 ${className}`}
+            whileHover={{scale: 1.05, rotate: [0, 1, -1, 0], transition: {duration: 0.3}}}
+            whileTap={{scale: 0.98}}
         >
-            <motion.div 
+            <motion.div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-colors duration-300 ${iconBg}`}
-                whileHover={{ backgroundColor: "#7a8f7e" }}
             >
-                {typeof icon === 'string' ? icon : icon}
+                {icon}
             </motion.div>
             <div className="flex flex-col">
-                <motion.span 
-                    className="font-bold text-lg"
-                    whileHover={{ scale: 1.05 }}
-                >
-                    {title}
-                </motion.span>
-                <motion.span 
-                    className="text-muted text-sm font-normal"
-                    whileHover={{ scale: 1.05 }}
-                >
-                    {label}
-                </motion.span>
+                <span className="font-bold text-lg">{title}</span>
+                <span className="text-muted text-sm font-normal">{label}</span>
             </div>
         </motion.div>
     );
@@ -184,35 +170,18 @@ function FloatCardRing({title, label}) {
     return (
         <motion.div
             className="bg-white/95 backdrop-blur-md border border-border/50 rounded-3xl px-6 py-4 flex items-center gap-4 shadow-xl font-body text-base font-medium text-dark whitespace-nowrap transition-all duration-500 hover:shadow-2xl hover:bg-white hover:border-green/30"
-            whileHover={{ 
-                scale: 1.05, 
-                rotate: [0, -1, 1, 0],
-                transition: { duration: 0.3 }
-            }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{scale: 1.05, rotate: [0, -1, 1, 0], transition: {duration: 0.3}}}
+            whileTap={{scale: 0.98}}
         >
-            <motion.div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center bg-green/20 transition-colors duration-300"
-                whileHover={{ backgroundColor: "#7a8f7e" }}
-            >
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green/20">
                 <svg width="40" height="40" viewBox="0 0 40 40" style={{transform: 'rotate(-90deg)'}}>
                     <circle className="ring-bg" cx="20" cy="20" r="16"/>
                     <circle className="ring-fill" cx="20" cy="20" r="16"/>
                 </svg>
-            </motion.div>
+            </div>
             <div className="flex flex-col">
-                <motion.span 
-                    className="font-bold text-lg"
-                    whileHover={{ scale: 1.05 }}
-                >
-                    {title}
-                </motion.span>
-                <motion.span 
-                    className="text-muted text-sm font-normal"
-                    whileHover={{ scale: 1.05 }}
-                >
-                    {label}
-                </motion.span>
+                <span className="font-bold text-lg">{title}</span>
+                <span className="text-muted text-sm font-normal">{label}</span>
             </div>
         </motion.div>
     );

@@ -1,12 +1,12 @@
 import './app.css';
 import { useRevealAll } from './hooks/useReveal';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import WhatIsEqupo from './components/WhatIsEqupo';
-import Nucleus from './components/Nucleus';
-import Features from './components/Features';
-import CTAFinal from './components/CTAFinal';
-import Footer from './components/Footer';
+import Hero from './components/landing/Hero';
+import WhatIsEqupo from './components/landing/WhatIsEqupo';
+import Nucleus from './components/landing/Nucleus';
+import Features from './components/landing/Features';
+import CTAFinal from './components/landing/CTAFinal';
+import Footer from './components/landing/Footer';
 
 export default function App() {
     const { containerRef } = useRevealAll();

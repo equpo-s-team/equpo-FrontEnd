@@ -55,3 +55,62 @@ dist-ssr
 
 tmp/
 temp/
+
+# Vite
+.vite/
+
+# Build outputs
+build/
+
+# Environment variables
+.env.*
+!.env.example
+
+# OS generated files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+
+# Dependency directories
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output/
+
+# Storybook build outputs
+storybook-static/
+
+# ESLint cache
+.eslintcache
+
+# Stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache
+.parcel-cache
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test

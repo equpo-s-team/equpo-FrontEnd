@@ -1,5 +1,5 @@
-import {useReveal} from '../hooks/useReveal';
 import {TrendingUp} from 'lucide-react';
+import {useReveal} from "@/hooks/useReveal.js";
 
 export default function WhatIsEqupo() {
     const {ref, classes} = useReveal();

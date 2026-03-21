@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState, useRef} from "react";
 import {motion} from "framer-motion";
 import {TrendingUp, CheckCircle, MessageCircle, Activity} from 'lucide-react';
-import HeroVisual from './HeroVisual';
+import HeroVisual from "@/components/HeroVisual.jsx";
 
 export default function Hero() {
     const [titleNumber, setTitleNumber] = useState(0);

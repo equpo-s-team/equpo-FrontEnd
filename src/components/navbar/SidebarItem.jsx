@@ -13,7 +13,7 @@ export default function SidebarItem({ id, icon: Icon, label, badge }) {
                 group relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
                 transition-all duration-200 cursor-pointer
                 ${isActive
-                    ? 'bg-secondary text-blue shadow-purple-glow/20'
+                    ? 'bg-offwhite text-blue shadow-purple-glow/20'
                     : 'text-primary-foreground hover:text-tertiary-foreground hover:bg-secondary'
                 }
                 ${collapsed ? 'justify-center' : ''}

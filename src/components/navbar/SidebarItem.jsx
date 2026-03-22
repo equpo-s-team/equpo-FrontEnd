@@ -23,26 +23,22 @@ export default function SidebarItem({ id, icon: Icon, label, badge }) {
                 <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-blue rounded-r-full" />
             )}
 
-            {/* Icon */}
             <span className={`flex-shrink-0 transition-colors duration-200 ${isActive ? 'text-blue' : ''}`}>
                 <Icon size={18} strokeWidth={isActive ? 2.2 : 1.8} />
             </span>
 
-            {/* Label */}
             {!collapsed && (
                 <span className={`text-sm font-body font-medium whitespace-nowrap transition-colors duration-200 ${isActive ? 'text-blue' : ''}`}>
                     {label}
                 </span>
             )}
 
-            {/* Badge */}
             {badge && !collapsed && (
                 <span className="ml-auto flex-shrink-0 px-1.5 py-0.5 rounded-full bg-purple-foreground/20 text-purple text-[10px] font-semibold font-body">
                     {badge}
                 </span>
             )}
 
-            {/* Tooltip when collapsed */}
             {collapsed && (
                 <div className="
                     pointer-events-none absolute left-full ml-3 z-50

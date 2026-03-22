@@ -12,12 +12,14 @@ export default function Sidebar() {
     return (
         <aside
             className={`
-                hidden lg:flex flex-col fixed left-0 top-0 h-screen z-40
-                bg-primary border-r border-secondary transition-all duration-300 ease-in-out
-                ${collapsed ? 'w-[68px]' : 'w-[220px]'}
-            `}
+    hidden lg:flex flex-col fixed left-0 top-0 h-screen z-40 rounded-r-2xl
+    bg-primary border-r border-secondary transition-all duration-300 ease-in-out
+    ${collapsed ? 'w-[68px]' : 'w-[220px]'}
+    shadow-neonPurple
+  `}
         >
-            <SidebarLogo/>
+
+    <SidebarLogo/>
 
             <nav className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2 flex flex-col gap-5 scrollbar-hide">
                 <SidebarSection label="Principal">

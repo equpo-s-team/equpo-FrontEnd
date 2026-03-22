@@ -1,0 +1,148 @@
+// src/data/kanbanData.js
+
+export const USERS = [
+    {id: 'AT', name: 'Ana Torres', role: 'Frontend Dev', gradient: 'from-blue to-purple'},
+    {id: 'JR', name: 'Jhon Ríos', role: 'Backend Dev', gradient: 'from-green to-blue'},
+    {id: 'ML', name: 'María López', role: 'QA Engineer', gradient: 'from-red to-orange'},
+    {id: 'CS', name: 'Carlos Suárez', role: 'DevOps', gradient: 'from-orange to-red'},
+    {id: 'LV', name: 'Laura Vélez', role: 'UI/UX Designer', gradient: 'from-purple to-blue'},
+    {id: 'DM', name: 'Diego Mora', role: 'Backend Dev', gradient: 'from-blue to-green'},
+    {id: 'SR', name: 'Sofía Ruiz', role: 'Product Manager', gradient: 'from-red to-purple'},
+];
+
+export const TAGS = [
+    {label: 'Frontend', color: 'blue'},
+    {label: 'Backend', color: 'green'},
+    {label: 'API', color: 'cyan'},
+    {label: 'Bug', color: 'red'},
+    {label: 'Urgente', color: 'orange'},
+    {label: 'Diseño', color: 'purple'},
+    {label: 'Mobile', color: 'blue'},
+    {label: 'Testing', color: 'green'},
+    {label: 'Crítico', color: 'red'},
+    {label: 'Research', color: 'orange'},
+];
+
+export const PRIORITIES = [
+    {label: 'Alta', icon: '🔴', value: 'high'},
+    {label: 'Media', icon: '🟡', value: 'medium'},
+    {label: 'Baja', icon: '🟢', value: 'low'},
+];
+
+// Column definitions
+export const COLUMNS = [
+    {id: 'todo', label: 'To Do', accent: 'todo'},
+    {id: 'progress', label: 'In Progress', accent: 'progress'},
+    {id: 'qa', label: 'In QA', accent: 'qa'},
+    {id: 'done', label: 'Done', accent: 'done'},
+];
+
+export const INITIAL_CARDS = {
+    todo: [
+        {
+            id: 'FLW-041', priority: 'high',
+            title: 'Diseñar esquema de base de datos para reportes',
+            desc: 'Crear el ERD con las tablas report_config, report_run y dimensiones necesarias para el generador de reportes dinámicos.',
+            tags: ['Backend', 'Urgente'],
+            progress: 0,
+            assignees: ['JR'],
+            attachments: 2, comments: 1,
+        },
+        {
+            id: 'FLW-042', priority: 'medium',
+            title: 'Definir endpoints REST para exportación de datos',
+            desc: 'Especificación OpenAPI 3.0 para /export/csv, /export/pdf y /export/xlsx con soporte de filtros y paginación.',
+            tags: ['API', 'Backend'],
+            progress: 0,
+            assignees: ['ML'],
+            attachments: 0, comments: 3,
+        },
+        {
+            id: 'FLW-043', priority: 'low',
+            title: 'Componente DateRangePicker reutilizable',
+            desc: 'Selector de rango con presets (últimos 7 días, mes actual, trimestre) y soporte para múltiples locales y zonas horarias.',
+            tags: ['Frontend', 'Diseño'],
+            progress: 0,
+            assignees: ['AT'],
+            attachments: 1, comments: 0,
+        },
+    ],
+    progress: [
+        {
+            id: 'FLW-037', priority: 'high',
+            title: 'Autenticación JWT con refresh tokens automático',
+            desc: 'Middleware con tokens de corta duración y renovación silenciosa en background. Soporte para sesiones multi-dispositivo.',
+            tags: ['Backend', 'Urgente'],
+            progress: 65,
+            assignees: ['JR', 'ML'],
+            attachments: 4, comments: 7,
+        },
+        {
+            id: 'FLW-039', priority: 'medium',
+            title: 'Dashboard de métricas con gráficos interactivos',
+            desc: 'Integrar Chart.js para KPIs de ventas, usuarios activos y conversión con tooltips dinámicos y filtros en tiempo real.',
+            tags: ['Frontend', 'Diseño'],
+            progress: 40,
+            assignees: ['AT'],
+            attachments: 2, comments: 5,
+        },
+        {
+            id: 'FLW-040', priority: 'high',
+            title: 'Optimizar queries lentas en reportes de inventario',
+            desc: 'EXPLAIN ANALYZE revela full table scans en tabla de 2M+ registros. Índices compuestos y materialización de vistas críticas.',
+            tags: ['Backend', 'Bug'],
+            progress: 80,
+            assignees: ['CS'],
+            attachments: 3, comments: 9,
+        },
+    ],
+    qa: [
+        {
+            id: 'FLW-033', priority: 'high',
+            title: 'Validación de formularios con Zod en checkout',
+            desc: 'Cobertura para dirección, método de pago y cupones. Pendiente edge cases en campos opcionales y flujos alternativos.',
+            tags: ['Frontend', 'API'],
+            progress: 90,
+            assignees: ['AT', 'ML'],
+            attachments: 2, comments: 4,
+        },
+        {
+            id: 'FLW-035', priority: 'medium',
+            title: 'Tests E2E notificaciones push multiplataforma',
+            desc: 'Playwright para verificar entrega en Chrome, Firefox y Safari con distintos estados de permiso del sistema operativo.',
+            tags: ['Frontend', 'Testing'],
+            progress: 75,
+            assignees: ['CS'],
+            attachments: 1, comments: 2,
+        },
+    ],
+    done: [
+        {
+            id: 'FLW-028', priority: 'low',
+            title: 'Pipeline CI/CD completo con GitHub Actions',
+            desc: 'Workflows de lint, test, build y deploy automático a staging en cada PR. Deploy a producción con aprobación manual.',
+            tags: ['Backend', 'API'],
+            progress: 100,
+            assignees: ['JR'],
+            attachments: 5, comments: 12,
+        },
+        {
+            id: 'FLW-029', priority: 'medium',
+            title: 'Migración a React 19 sin breaking changes',
+            desc: 'Actualización completa a React 19 RC con nuevas APIs de use() y mejoras en concurrent features. Cero regresiones.',
+            tags: ['Frontend', 'Urgente'],
+            progress: 100,
+            assignees: ['AT', 'ML'],
+            attachments: 3, comments: 6,
+        },
+        {
+            id: 'FLW-031', priority: 'low',
+            title: 'Sistema de iconografía y design tokens de marca',
+            desc: 'Icon set de 80 SVGs optimizados, tokens de color y tipografía exportados como CSS custom properties y Figma variables.',
+            tags: ['Diseño', 'Frontend'],
+            progress: 100,
+            assignees: ['CS'],
+            attachments: 8, comments: 3,
+        },
+    ],
+};

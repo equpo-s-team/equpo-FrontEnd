@@ -5,56 +5,62 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 const BLENDER = {
     diorama: {
         pos: [-0.210613, 11.4867, 6.10119],
-        rot: [0, 0, 0],
+        rot: [0, 0, 45],
         dim: [40, 46.5, 49.5],
     },
     red: {
         pos: [-1.38803, 8.13763, 11.7951],
-        rot: [-1.79982, -14.4155, -105.054],
-        dim: [2, 2, 3],
+        rot: [-1.79982, -14.4155, -15.054],
     },
     blue: {
-        pos: [-8.60154, 23.638, 22.6323],
-        rot: [18.5256, 34.9198, -70.6502],
-        dim: [2, 2, 3],
+        pos: [-8.60154, 23.638, 25.6323],
+        rot: [28.5256, 44.9198, 20.6502],
+        dim: [1, 1, 2],
     },
     green: {
         pos: [6.81631, 8.79447, 18.5554],
-        rot: [4.76954, -14.5964, -91.5697],
-        dim: [2, 2, 3],
+        rot: [4.76954, -14.5964, -1.5697],
+        dim: [1, 1, 2],
     },
     purple: {
         pos: [-7.20747, 24.1785, 11.5395],
-        rot: [-8.7537, 49.5327, -119.62],
-        dim: [2, 2, 3],
+        rot: [-8.7537, 49.5327, -29.62],
+        dim: [1, 1, 2],
     },
     darkBlue: {
-        pos: [-15.4344, 15.2605, 10.8325],
-        rot: [-2.53757, -43.5884, 84.4929],
-        dim: [2, 2, 3],
+        pos: [-20.4344, 15.2605, 10.8325],
+        rot: [-2.53757, -43.5884, 174.4929],
+        dim: [1, 1, 2],
     },
 };
 
 const DEG = Math.PI / 180;
+
+function blenderPos([x, y, z]) {
+    return [x, z, -y];
+}
 
 function blenderRot([x, y, z]) {
     return new THREE.Euler(
         x * DEG,
         z * DEG,
         -y * DEG,
-        'XYZ'
+        'YXZ'
     );
 }
 
 function getScaled() {
-    const scale = 1 / Math.max(...BLENDER.diorama.dim);
-    const origin = BLENDER.diorama.pos;
 
-    function s([x, y, z]) {
+    const scale = 1 / Math.max(...BLENDER.diorama.dim);
+    const originBL = BLENDER.diorama.pos;
+    const origin3 = blenderPos(originBL);
+
+    function s(blPos) {
+        const [tx, ty, tz] = blenderPos(blPos);
         return [
-            (x - origin[0]) * scale,
-            (y - origin[1]) * scale,
-            (z - origin[2]) * scale,
+            (tx - origin3[0]) * scale,
+            (ty - origin3[1]) * scale,
+            (tz - origin3[2]) * scale,
         ];
     }
 
@@ -117,7 +123,6 @@ export default function HeroVisual() {
         scene.add(fillLight);
 
         const N = getScaled();
-        ;
 
         const loader = new GLTFLoader();
         const BASE = '/models/';
@@ -149,7 +154,7 @@ export default function HeroVisual() {
                     model.traverse((node) => {
                         if (node.isMesh) {
                             node.castShadow = true;
-                            node.receiveShadow = true;
+                            node.receiveShadow = false;
                         }
                     });
                     group.add(model);
@@ -171,10 +176,13 @@ export default function HeroVisual() {
         loadModel('purpleGhost.glb', ghostPivot, N.purple, BLENDER.purple.rot, 'purple');
         loadModel('darkBlueGhost.glb', ghostPivot, N.darkBlue, BLENDER.darkBlue.rot, 'darkBlue');
 
-        /* ── Camera framing (runs once all models loaded) ─────────────────── */
+        /* ── Camera framing (runs once all models are loaded) ─────────────── */
         function fitCamera() {
-            // Compute bounding box of ghost pivot to frame them properly
-            const box = new THREE.Box3().setFromObject(ghostPivot);
+            // Frame the entire scene (diorama + ghosts)
+            const box = new THREE.Box3();
+            box.expandByObject(dioramaGroup);
+            box.expandByObject(ghostPivot);
+
             const center = new THREE.Vector3();
             const size = new THREE.Vector3();
             box.getCenter(center);
@@ -183,24 +191,22 @@ export default function HeroVisual() {
             const maxDim = Math.max(size.x, size.y, size.z);
             const fovRad = camera.fov * DEG;
             let dist = (maxDim / 2) / Math.tan(fovRad / 2);
-            dist *= 1.5; // padding
+            dist *= 1; // padding
 
             camera.position.set(center.x, center.y + size.y * 0.05, center.z + dist);
-            camera.lookAt(center.x, center.y - size.y * 0.1, center.z);
+            camera.lookAt(center.x, center.y - size.y * 0.05, center.z);
             camera.updateProjectionMatrix();
 
-            // Store rest positions for parallax
             restCameraPos.copy(camera.position);
-            restLookAt.copy(center);
+            restLookAt.set(center.x, center.y - size.y * 0.05, center.z);
         }
 
-        /* ── Parallax state ───────────────────────────────────────────────── */
-        const mouse = {x: 0, y: 0}; // -1..1 normalised to container
+        const mouse = {x: 0, y: 0};
         const restCameraPos = new THREE.Vector3(0, 0.18, 1.4);
         const restLookAt = new THREE.Vector3(0, 0.08, 0);
         const targetGhostOffset = new THREE.Vector2(0, 0);
         const currentGhostOffset = new THREE.Vector2(0, 0);
-        const PARALLAX_STRENGTH = 0.04; // max world units ghosts shift
+        const PARALLAX_STRENGTH = 0.04;
 
         function onMouseMove(e) {
             const rect = container.getBoundingClientRect();
@@ -220,11 +226,9 @@ export default function HeroVisual() {
         container.addEventListener('mouseleave', onMouseLeave);
 
         /* ── Scroll animation for blueGhost ──────────────────────────────── */
-        // Blue ghost descends toward the #what section as user scrolls.
-        // We measure how far the hero section has been scrolled past.
-        const blueRestY = N.blue[1];   // normalised Y at rest
-        const blueTargetY = blueRestY - 0.35; // how far it drops (world units)
-        let blueScrollT = 0; // 0 = hero, 1 = fully scrolled to #what
+        const blueRestY = N.blue[1];
+        const blueTargetY = blueRestY - 0.35;
+        let blueScrollT = 0;
 
         function onScroll() {
             const heroSection = container.closest('section');
@@ -244,21 +248,20 @@ export default function HeroVisual() {
             animId = requestAnimationFrame(animate);
             const t = clock.getElapsedTime();
 
-            // Smooth ghost parallax offset
+            // Smooth parallax
             currentGhostOffset.lerp(targetGhostOffset, 0.06);
             ghostPivot.position.set(currentGhostOffset.x, currentGhostOffset.y, 0);
 
-            // Gentle idle float for ghosts
+            // Idle float
             if (ghosts.red) ghosts.red.position.y = N.red[1] + Math.sin(t * 0.9 + 0.0) * 0.008;
             if (ghosts.green) ghosts.green.position.y = N.green[1] + Math.sin(t * 0.8 + 1.2) * 0.010;
             if (ghosts.purple) ghosts.purple.position.y = N.purple[1] + Math.sin(t * 1.0 + 2.4) * 0.007;
             if (ghosts.darkBlue) ghosts.darkBlue.position.y = N.darkBlue[1] + Math.sin(t * 0.7 + 0.8) * 0.009;
 
-            // Blue ghost scroll descent
+            // Blue ghost scroll descent + fade
             if (ghosts.blue) {
                 const targetY = THREE.MathUtils.lerp(blueRestY, blueTargetY, blueScrollT);
                 ghosts.blue.position.y = targetY + Math.sin(t * 1.1 + 3.0) * 0.007;
-                // Fade out as it descends
                 ghosts.blue.traverse((node) => {
                     if (node.isMesh && node.material) {
                         node.material.transparent = true;

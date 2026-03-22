@@ -67,7 +67,6 @@ export default {
                     DEFAULT: 'hsl(var(--muted))',
                     foreground: 'hsl(var(--muted-foreground))',
                 },
-
                 border: 'hsl(var(--border))',
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
@@ -100,10 +99,18 @@ export default {
 
             backgroundImage: {
                 'gradient-red-bg': 'linear-gradient(135deg, #F65A70 0%, #FFAF93 100%)',
+                'gradient-red-text': 'linear-gradient(135deg, #F65A70 0%, #FFAF93 100%)',
+
                 'gradient-orange-bg': 'linear-gradient(135deg, #FF94AE 0%, #FCE98D 100%)',
+                'gradient-orange-text': 'linear-gradient(135deg, #FF94AE 0%, #FCE98D 100%)',
+
                 'gradient-purple-bg': 'linear-gradient(135deg,#d99aee 0%, #5961F9 100%)',
+                'gradient-purple-text': 'linear-gradient(135deg, #EE9AE5 0%, #5961F9 100%)',
+
                 'gradient-blue-bg': 'linear-gradient(135deg, #60AFFF 0%, #86F0FD 100%)',
+
                 'gradient-green-bg': 'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
+                'gradient-green-text': 'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
             },
 
             fontFamily: {
@@ -115,18 +122,6 @@ export default {
                 'display-xl': ['clamp(2.4rem, 4.5vw, 3.8rem)', {lineHeight: '1.07', letterSpacing: '-0.035em'}],
                 'display-lg': ['clamp(1.8rem, 3vw, 2.6rem)', {lineHeight: '1.15', letterSpacing: '-0.03em'}],
                 'display-md': ['clamp(2rem, 4vw, 3rem)', {lineHeight: '1.1', letterSpacing: '-0.03em'}],
-            },
-
-            boxShadow: {
-                neonRed: "0 0 15px #F65A70",
-                neonPink: "0 0 15px #FF94AE",
-                neonCyan: "0 0 15px #86F0FD",
-                neonGreen: "0 0 15px #CEFB7C",
-                neonPurple: "0 0 15px #99A1FC",
-                'green-glow': '0 8px 32px rgba(137,217,157,0.3)',
-                'green-glow-lg': '0 14px 40px rgba(137,217,157,0.4)',
-                card: '0 8px 32px rgba(0,0,0,0.08)',
-                'card-lg': '0 20px 60px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04)',
             },
 
             animation: {
@@ -153,6 +148,13 @@ export default {
                     '0%, 100%': {transform: 'translateY(0px)'},
                     '50%': {transform: 'translateY(-10px)'},
                 },
+            },
+
+            boxShadow: {
+                'green-glow': '0 8px 32px rgba(137,217,157,0.3)',
+                'green-glow-lg': '0 14px 40px rgba(137,217,157,0.4)',
+                card: '0 8px 32px rgba(0,0,0,0.08)',
+                'card-lg': '0 20px 60px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04)',
             },
 
             borderRadius: {

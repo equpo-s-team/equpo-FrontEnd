@@ -12,6 +12,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^12.10.0",
     "framer-motion": "^12.35.0",
     "lucide-react": "^0.577.0",
     "react": "^18.3.1",
@@ -24,6 +25,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "firebase-tools": "^15.10.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.5"
@@ -32,5 +34,18 @@
     "chokidar": {
       "fsevents": "2.3.2"
     }
-  }
+  },
+  "description": "React + Vite + Tailwind CSS",
+  "main": "postcss.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/equpo-s-team/equpo-FrontEnd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/equpo-s-team/equpo-FrontEnd/issues"
+  },
+  "homepage": "https://github.com/equpo-s-team/equpo-FrontEnd#readme"
 }

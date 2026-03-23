@@ -1,0 +1,80 @@
+type User @table {
+  displayName: String!
+  level: Int!
+  experiencePoints: Int!
+  virtualCurrency: Int!
+  lastActive: Timestamp!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  photoURL: String
+}
+
+type Team @table {
+  name: String!
+  leader: User!
+  virtualCurrency: Int!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  description: String
+}
+
+type TeamMembership @table(key: ["user", "team"]) {
+  user: User!
+  team: Team!
+  role: String!
+  joinedAt: Timestamp!
+}
+
+type Task @table {
+  title: String!
+  dueDate: Timestamp!
+  priority: String!
+  status: String!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  description: String
+  category: String
+  isRecurring: Boolean
+  recurringInterval: String
+  assignedUser: User
+  teamId: UUID
+}
+
+type Achievement @table {
+  user: User!
+  name: String!
+  unlockedAt: Timestamp!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  description: String
+  iconURL: String
+}
+
+type Reward @table {
+  name: String!
+  cost: Int!
+  experienceGranted: Int!
+  type: String!
+  isTeamReward: Boolean!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  description: String
+  iconURL: String
+}
+
+type UserReward @table(key: ["user", "reward"]) {
+  user: User!
+  reward: Reward!
+  dateObtained: Timestamp!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+  redeemedAt: Timestamp
+}
+
+type TeamReward @table(key: ["team", "reward"]) {
+  team: Team!
+  reward: Reward!
+  dateObtained: Timestamp!
+  createdAt: Timestamp!
+  updatedAt: Timestamp!
+}

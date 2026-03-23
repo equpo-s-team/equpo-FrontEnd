@@ -1,308 +1,311 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from "@/lib/utils";
-import { AlertTriangle } from 'lucide-react';
-import { 
-  AuthMode, 
-  RegistrationStep, 
-  FormData, 
-  FormErrors 
+import React, {useState, useCallback} from 'react';
+import {motion, AnimatePresence} from 'framer-motion';
+import {cn} from "@/lib/utils";
+import {AlertTriangle} from 'lucide-react';
+import {
+    AuthMode,
+    RegistrationStep,
+    FormData,
+    FormErrors
 } from '@/components/auth';
-import { useAuthValidation } from '@/components/auth';
-import { LoginForm } from './LoginForm';
-import { SignupForm } from './SignupForm';
-import { ResetForm } from './ResetForm';
-import { VerificationForm } from '@/components/auth';
-import { CompleteForm } from './CompleteForm';
+import {useAuthValidation} from '@/components/auth';
+import {LoginForm} from './LoginForm';
+import {SignupForm} from './SignupForm';
+import {ResetForm} from './ResetForm';
+import {VerificationForm} from '@/components/auth';
+import {CompleteForm} from './CompleteForm';
 
 interface AuthFormProps {
-  onSuccess?: (userData: { email: string; name?: string }) => void;
-  onClose?: () => void;
-  initialMode?: AuthMode;
-  className?: string;
+    onSuccess?: (userData: { email: string; name?: string }) => void;
+    onClose?: () => void;
+    initialMode?: AuthMode;
+    className?: string;
 }
 
-export const AuthForm: React.FC<AuthFormProps> = ({ 
-  onSuccess, 
-  onClose, 
-  initialMode = 'login', 
-  className 
-}) => {
-  const [authMode, setAuthMode] = useState<AuthMode>(initialMode);
-  const [registrationStep, setRegistrationStep] = useState<RegistrationStep>('details');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    agreeToTerms: false,
-    rememberMe: false,
-    verificationCode: '',
-  });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [fieldTouched, setFieldTouched] = useState<Record<string, boolean>>({});
+export const AuthForm: React.FC<AuthFormProps> = ({
+                                                      onSuccess,
+                                                      onClose,
+                                                      initialMode = 'login',
+                                                      className
+                                                  }) => {
+    const [authMode, setAuthMode] = useState<AuthMode>(initialMode);
+    const [registrationStep, setRegistrationStep] = useState<RegistrationStep>('details');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [formData, setFormData] = useState<FormData>({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        agreeToTerms: false,
+        rememberMe: false,
+        verificationCode: '',
+    });
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [fieldTouched, setFieldTouched] = useState<Record<string, boolean>>({});
 
-  const { validateField, validateForm } = useAuthValidation(formData, authMode, registrationStep);
+    const {validateField, validateForm} = useAuthValidation(formData, authMode, registrationStep);
 
-  React.useEffect(() => {
-    const savedEmail = localStorage.getItem('userEmail');
-    const rememberMe = localStorage.getItem('rememberMe') === 'true';
-    if (savedEmail && authMode === 'login') {
-      setFormData(prev => ({ ...prev, email: savedEmail, rememberMe }));
-    }
-  }, [authMode]);
-
-  const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    if (fieldTouched[field]) {
-      const error = validateField(field, value);
-      setErrors(prev => ({ ...prev, [field]: error || undefined }));
-    }
-  }, [fieldTouched, validateField]);
-
-  const handleFieldBlur = useCallback((field: keyof FormData) => {
-    setFieldTouched(prev => ({ ...prev, [field]: true }));
-    const value = formData[field];
-    const error = validateField(field, value);
-    setErrors(prev => ({ ...prev, [field]: error || undefined }));
-  }, [formData, validateField]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors = validateForm();
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setIsLoading(true);
-    setErrors({});
-    
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      if (authMode === 'login') {
-        if (formData.rememberMe) {
-          localStorage.setItem('userEmail', formData.email);
-          localStorage.setItem('rememberMe', 'true');
+    React.useEffect(() => {
+        const savedEmail = localStorage.getItem('userEmail');
+        const rememberMe = localStorage.getItem('rememberMe') === 'true';
+        if (savedEmail && authMode === 'login') {
+            setFormData(prev => ({...prev, email: savedEmail, rememberMe}));
         }
-        
-        setSuccessMessage('Login successful');
-        onSuccess?.({ email: formData.email });
-        
-      } else if (authMode === 'signup') {
-        if (registrationStep === 'details') {
-          setRegistrationStep('verification');
-          setSuccessMessage('Account created! Please verify your email.');
-        } else if (registrationStep === 'verification') {
-          setRegistrationStep('complete');
-          setSuccessMessage('Email verified successfully!');
-          onSuccess?.({ email: formData.email, name: formData.name });
+    }, [authMode]);
+
+    const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
+        setFormData(prev => ({...prev, [field]: value}));
+
+        if (fieldTouched[field]) {
+            const error = validateField(field, value);
+            setErrors(prev => ({...prev, [field]: error || undefined}));
         }
-        
-      } else if (authMode === 'reset') {
-        setSuccessMessage('Password reset email sent!');
-        setTimeout(() => setAuthMode('login'), 2000);
-      }
-      
-    } catch (error) {
-      setErrors({ 
-        general: 'Authentication failed. Please try again.' 
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    }, [fieldTouched, validateField]);
 
-  const renderAuthContent = () => {
-    if (authMode === 'reset') {
-      return (
-        <ResetForm
-          formData={formData}
-          errors={errors}
-          isLoading={isLoading}
-          onInputChange={handleInputChange}
-          onFieldBlur={handleFieldBlur}
-          onBackToLogin={() => setAuthMode('login')}
-        />
-      );
-    }
+    const handleFieldBlur = useCallback((field: keyof FormData) => {
+        setFieldTouched(prev => ({...prev, [field]: true}));
+        const value = formData[field];
+        const error = validateField(field, value);
+        setErrors(prev => ({...prev, [field]: error || undefined}));
+    }, [formData, validateField]);
 
-    if (authMode === 'signup' && registrationStep === 'verification') {
-      return (
-        <VerificationForm
-          formData={formData}
-          errors={errors}
-          isLoading={isLoading}
-          onInputChange={handleInputChange}
-          onFieldBlur={handleFieldBlur}
-          onBackToDetails={() => setRegistrationStep('details')}
-        />
-      );
-    }
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const newErrors = validateForm();
 
-    if (authMode === 'signup' && registrationStep === 'complete') {
-      return <CompleteForm onClose={onClose} />;
-    }
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
 
-    if (authMode === 'login') {
-      return (
-        <LoginForm
-          formData={formData}
-          errors={errors}
-          showPassword={showPassword}
-          isLoading={isLoading}
-          onInputChange={handleInputChange}
-          onFieldBlur={handleFieldBlur}
-          onTogglePassword={() => setShowPassword(!showPassword)}
-          onResetPassword={() => setAuthMode('reset')}
-        />
-      );
-    }
+        setIsLoading(true);
+        setErrors({});
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            if (authMode === 'login') {
+                if (formData.rememberMe) {
+                    localStorage.setItem('userEmail', formData.email);
+                    localStorage.setItem('rememberMe', 'true');
+                }
+
+                setSuccessMessage('Login successful');
+                onSuccess?.({email: formData.email});
+
+            } else if (authMode === 'signup') {
+                if (registrationStep === 'details') {
+                    setRegistrationStep('verification');
+                    setSuccessMessage('Account created! Please verify your email.');
+                } else if (registrationStep === 'verification') {
+                    setRegistrationStep('complete');
+                    setSuccessMessage('Email verified successfully!');
+                    onSuccess?.({email: formData.email, name: formData.name});
+                }
+
+            } else if (authMode === 'reset') {
+                setSuccessMessage('Password reset email sent!');
+                setTimeout(() => setAuthMode('login'), 2000);
+            }
+
+        } catch (error) {
+            setErrors({
+                general: 'Authentication failed. Please try again.'
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const renderAuthContent = () => {
+        if (authMode === 'reset') {
+            return (
+                <ResetForm
+                    formData={formData}
+                    errors={errors}
+                    isLoading={isLoading}
+                    onInputChange={handleInputChange}
+                    onFieldBlur={handleFieldBlur}
+                    onBackToLogin={() => setAuthMode('login')}
+                />
+            );
+        }
+
+        if (authMode === 'signup' && registrationStep === 'verification') {
+            return (
+                <VerificationForm
+                    formData={formData}
+                    errors={errors}
+                    isLoading={isLoading}
+                    onInputChange={handleInputChange}
+                    onFieldBlur={handleFieldBlur}
+                    onBackToDetails={() => setRegistrationStep('details')}
+                />
+            );
+        }
+
+        if (authMode === 'signup' && registrationStep === 'complete') {
+            return <CompleteForm onClose={onClose}/>;
+        }
+
+        if (authMode === 'login') {
+            return (
+                <LoginForm
+                    formData={formData}
+                    errors={errors}
+                    showPassword={showPassword}
+                    isLoading={isLoading}
+                    onInputChange={handleInputChange}
+                    onFieldBlur={handleFieldBlur}
+                    onTogglePassword={() => setShowPassword(!showPassword)}
+                    onResetPassword={() => setAuthMode('reset')}
+                />
+            );
+        }
+
+        return (
+            <SignupForm
+                formData={formData}
+                errors={errors}
+                showPassword={showPassword}
+                showConfirmPassword={showConfirmPassword}
+                isLoading={isLoading}
+                onInputChange={handleInputChange}
+                onFieldBlur={handleFieldBlur}
+                onTogglePassword={() => setShowPassword(!showPassword)}
+                onToggleConfirmPassword={() => setShowConfirmPassword(!showConfirmPassword)}
+            />
+        );
+    };
 
     return (
-      <SignupForm
-        formData={formData}
-        errors={errors}
-        showPassword={showPassword}
-        showConfirmPassword={showConfirmPassword}
-        isLoading={isLoading}
-        onInputChange={handleInputChange}
-        onFieldBlur={handleFieldBlur}
-        onTogglePassword={() => setShowPassword(!showPassword)}
-        onToggleConfirmPassword={() => setShowConfirmPassword(!showConfirmPassword)}
-      />
+        <div
+            className={cn("p-4", className)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="auth-title"
+        >
+            {successMessage && (
+                <div
+                    className="mb-4 p-3 bg-emerald-500/20 border border-emerald-400/30 rounded-xl flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-5">
+                    <svg className="h-4 w-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span className="text-emerald-700 text-sm">{successMessage}</span>
+                </div>
+            )}
+
+            {errors.general && (
+                <div
+                    className="mb-4 p-3 bg-red-500/20 border border-red-400/30 rounded-xl flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-5">
+                    <AlertTriangle className="h-4 w-4 text-red-500"/>
+                    <span className="text-red-500 text-sm">{errors.general}</span>
+                </div>
+            )}
+
+            <div className="text-center mb-6">
+                <AnimatePresence mode="wait">
+                    <motion.h2
+                        key={`title-${authMode}`}
+                        id="auth-title"
+                        className="text-2xl font-bold mb-2"
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -10}}
+                        transition={{duration: 0.3, ease: "easeInOut"}}
+                    >
+                        {authMode === 'login' ? 'Welcome Back' :
+                            authMode === 'reset' ? 'Reset Password' : 'Create Account'}
+                    </motion.h2>
+                </AnimatePresence>
+
+                <AnimatePresence mode="wait">
+                    <motion.p
+                        key={`desc-${authMode}`}
+                        className="text-gray-600"
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -10}}
+                        transition={{duration: 0.3, ease: "easeInOut", delay: 0.1}}
+                    >
+                        {authMode === 'login' ? 'Sign in to your account' :
+                            authMode === 'reset' ? 'Recover your account access' :
+                                'Create a new account'}
+                    </motion.p>
+                </AnimatePresence>
+            </div>
+
+            {authMode !== 'reset' && (
+                <div className="flex bg-gray-100 rounded-xl p-1 mb-4">
+                    <motion.button
+                        onClick={() => setAuthMode('login')}
+                        className={cn(
+                            "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all",
+                            authMode === 'login'
+                                ? "bg-white text-gray-800 shadow-sm"
+                                : "text-gray-600 hover:text-gray-800"
+                        )}
+                        type="button"
+                        whileTap={{scale: 0.98}}
+                        transition={{duration: 0.2}}
+                    >
+                        Login
+                    </motion.button>
+                    <motion.button
+                        onClick={() => {
+                            setAuthMode('signup');
+                            setRegistrationStep('details');
+                        }}
+                        className={cn(
+                            "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all",
+                            authMode === 'signup'
+                                ? "bg-white text-gray-800 shadow-sm"
+                                : "text-gray-600 hover:text-gray-800"
+                        )}
+                        type="button"
+                        whileTap={{scale: 0.98}}
+                        transition={{duration: 0.2}}
+                    >
+                        Sign Up
+                    </motion.button>
+                </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={authMode}
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -10}}
+                        transition={{duration: 0.3, ease: "easeInOut"}}
+                    >
+                        {renderAuthContent()}
+                    </motion.div>
+                </AnimatePresence>
+            </form>
+
+            {authMode !== 'reset' && registrationStep === 'details' && (
+                <div className="text-center mt-6">
+                    <p className="text-gray-600 text-sm">
+                        {authMode === 'login' ? "Don't have an account? " : "Already have an account? "}
+                        <button
+                            type="button"
+                            onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
+                            className="text-emerald-500 hover:text-emerald-600 font-medium transition-colors"
+                        >
+                            {authMode === 'login' ? 'Sign up' : 'Sign in'}
+                        </button>
+                    </p>
+                </div>
+            )}
+        </div>
     );
-  };
-
-  return (
-    <div 
-      className={cn("p-4", className)}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="auth-title"
-    >
-      {successMessage && (
-        <div className="mb-4 p-3 bg-emerald-500/20 border border-emerald-400/30 rounded-xl flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-5">
-          <svg className="h-4 w-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <span className="text-emerald-700 text-sm">{successMessage}</span>
-        </div>
-      )}
-
-      {errors.general && (
-        <div className="mb-4 p-3 bg-red-500/20 border border-red-400/30 rounded-xl flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-5">
-          <AlertTriangle className="h-4 w-4 text-red-500" />
-          <span className="text-red-500 text-sm">{errors.general}</span>
-        </div>
-      )}
-
-      <div className="text-center mb-6">
-        <AnimatePresence mode="wait">
-          <motion.h2 
-            key={`title-${authMode}`}
-            id="auth-title"
-            className="text-2xl font-bold mb-2"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            {authMode === 'login' ? 'Welcome Back' : 
-             authMode === 'reset' ? 'Reset Password' : 'Create Account'}
-          </motion.h2>
-        </AnimatePresence>
-        
-        <AnimatePresence mode="wait">
-          <motion.p 
-            key={`desc-${authMode}`}
-            className="text-gray-600"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: "easeInOut", delay: 0.1 }}
-          >
-            {authMode === 'login' ? 'Sign in to your account' : 
-             authMode === 'reset' ? 'Recover your account access' :
-             'Create a new account'}
-          </motion.p>
-        </AnimatePresence>
-      </div>
-
-      {authMode !== 'reset' && (
-        <div className="flex bg-gray-100 rounded-xl p-1 mb-4">
-          <motion.button
-            onClick={() => setAuthMode('login')}
-            className={cn(
-              "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all",
-              authMode === 'login'
-                ? "bg-white text-gray-800 shadow-sm" 
-                : "text-gray-600 hover:text-gray-800"
-            )}
-            type="button"
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-          >
-            Login
-          </motion.button>
-          <motion.button
-            onClick={() => {
-              setAuthMode('signup');
-              setRegistrationStep('details');
-            }}
-            className={cn(
-              "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all",
-              authMode === 'signup'
-                ? "bg-white text-gray-800 shadow-sm" 
-                : "text-gray-600 hover:text-gray-800"
-            )}
-            type="button"
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.2 }}
-          >
-            Sign Up
-          </motion.button>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={authMode}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            {renderAuthContent()}
-          </motion.div>
-        </AnimatePresence>
-      </form>
-
-      {authMode !== 'reset' && registrationStep === 'details' && (
-        <div className="text-center mt-6">
-          <p className="text-gray-600 text-sm">
-            {authMode === 'login' ? "Don't have an account? " : "Already have an account? "}
-            <button
-              type="button"
-              onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-              className="text-emerald-500 hover:text-emerald-600 font-medium transition-colors"
-            >
-              {authMode === 'login' ? 'Sign up' : 'Sign in'}
-            </button>
-          </p>
-        </div>
-      )}
-    </div>
-  );
 };

@@ -139,7 +139,6 @@ export default function WhatIsEqupo() {
     );
 }
 
-/* ── Sub-components ── */
 function KanbanCol({ title, dotGrad, tasks }) {
     return (
         <div>

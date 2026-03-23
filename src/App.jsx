@@ -1,6 +1,6 @@
 import './app.css';
 import { useRevealAll } from './hooks/useReveal';
-import Navbar from './components/Navbar';
+import Navbar from './components/landing/Navbar.jsx';
 import Hero from './components/landing/Hero';
 import WhatIsEqupo from './components/landing/WhatIsEqupo';
 import Nucleus from './components/landing/Nucleus';
@@ -9,14 +9,14 @@ import CTAFinal from './components/landing/CTAFinal';
 import Footer from './components/landing/Footer';
 import AppLayout from "@/components/AppLayout.jsx";
 import {SidebarProvider} from "@/components/navbar/SidebarContext.jsx";
-
-
-const isDashboard = true;
+import {auth} from "@/firebase.js";
 
 export default function App() {
     const { containerRef } = useRevealAll();
+    const { isAuth } = auth;
 
-    if (isDashboard) {
+    console.log(isAuth);
+    if (isAuth) {
         return (
             <SidebarProvider>
                 <AppLayout>

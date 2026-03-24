@@ -4,7 +4,7 @@ import Sidebar from "@/components/navbar/Sidebar.jsx";
 
 
 export default function AppLayout({ children }) {
-    const { collapsed } = useSidebar();
+    const { collapsed, activeItem } = useSidebar();
 
     return (
         <div className="min-h-screen bg-secondary font-body">

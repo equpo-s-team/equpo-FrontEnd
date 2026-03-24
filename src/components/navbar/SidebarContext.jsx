@@ -4,7 +4,7 @@ const SidebarContext = createContext(null);
 
 export function SidebarProvider({ children }) {
     const [collapsed, setCollapsed] = useState(false);
-    const [activeItem, setActiveItem] = useState('my-espacio');
+    const [activeItem, setActiveItem] = useState('my-space');
 
     const toggle = () => setCollapsed(prev => !prev);
 

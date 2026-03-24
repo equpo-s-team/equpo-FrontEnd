@@ -1,19 +1,31 @@
 'use client';
 
 import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {motion, AnimatePresence} from 'framer-motion';
 import {ArrowLeft} from 'lucide-react';
 import {AuthForm} from './AuthForm';
 import {MarketingPanel} from './MarketingPanel';
 
-export const Component = () => {
+interface AuthSwitchProps {
+    onClose?: () => void;
+}
+
+export const Component = ({onClose}: AuthSwitchProps) => {
     const [isClosing, setIsClosing] = useState(false);
+    const navigate = useNavigate();
 
     const goBack = () => {
         setIsClosing(true);
         setTimeout(() => {
-            window.location.href = '/';
-        }, 500);
+            onClose?.();
+        }, 300);
+    };
+
+    const handleSuccess = (userData: {email: string; name?: string}) => {
+        console.log('Authentication successful:', userData);
+        setIsClosing(true);
+        navigate('/dashboard');
     };
 
     return (
@@ -64,10 +76,7 @@ export const Component = () => {
 
                                     <div className="w-3/5 bg-white/95 backdrop-blur-xl p-16 h-full overflow-y-auto">
                                         <AuthForm
-                                            onSuccess={(userData) => {
-                                                console.log('Authentication successful:', userData);
-                                                window.location.href = '/dashboard';
-                                            }}
+                                            onSuccess={handleSuccess}
                                             onClose={() => {
                                                 console.log('Auth form closed');
                                                 goBack();

@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import {useAuth} from '@/context/AuthContext';
-import {SidebarProvider} from '@/components/navbar/SidebarContext.jsx';
+import {SidebarProvider, useSidebar} from '@/components/navbar/SidebarContext.jsx';
 import AppLayout from '@/components/AppLayout.jsx';
 import Navbar from '@/components/landing/Navbar.jsx';
 import Hero from '@/components/landing/Hero';
@@ -9,17 +9,32 @@ import Nucleus from '@/components/landing/Nucleus';
 import Features from '@/components/landing/Features';
 import CTAFinal from '@/components/landing/CTAFinal';
 import Footer from '@/components/landing/Footer';
+import KanbanBoard from "@/components/board/KanbanBoard.jsx";
 
 function Dashboard() {
+    const {activeItem} = useSidebar();
+
+    const renderContent = () => {
+        switch (activeItem) {
+            case 'my-space':
+                return <div>Mi Espacio</div>;
+            case 'missiones':
+                return <KanbanBoard/>;
+            case 'chat':
+                return <div>Mi Espacio</div>;
+            case 'reports':
+                return <div>Mi Espacio</div>;
+            case 'settings':
+                return <div>Mi Espacio</div>;
+            default:
+                return <div>Mi Espacio</div>;
+        }
+    };
+
     return (
-        <SidebarProvider>
-            <AppLayout>
-                <div className="p-8 text-dark bg-light-mid w-full h-full rounded-l-2xl">
-                    <h1 className="font-maxwell text-display-lg text-green-dark mb-2">Mi Espacio</h1>
-                    <p className="text-dark/50 font-body">Contenido del dashboard aquí.</p>
-                </div>
-            </AppLayout>
-        </SidebarProvider>
+        <AppLayout>
+            {renderContent()}
+        </AppLayout>
     );
 }
 
@@ -39,15 +54,20 @@ function PublicLayout() {
 
 function ProtectedRoute({children}) {
     const {isAuth, isLoading} = useAuth();
-    
+
     if (isLoading) {
         return <div className="flex items-center justify-center min-h-screen">
             <div className="text-gray-600">Loading...</div>
         </div>;
     }
-    
-    return isAuth ? children : <Navigate to="/" replace/>;
+
+    return isAuth ? (
+        <SidebarProvider>
+            {children}
+        </SidebarProvider>
+    ) : <Navigate to="/" replace/>;
 }
+
 
 export default function Router() {
     return (

@@ -1,5 +1,5 @@
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
-import {useAuth} from '@/hooks/useAuth.js';
+import {useAuth} from '@/context/AuthContext';
 import {SidebarProvider} from '@/components/navbar/SidebarContext.jsx';
 import AppLayout from '@/components/AppLayout.jsx';
 import Navbar from '@/components/landing/Navbar.jsx';
@@ -38,7 +38,14 @@ function PublicLayout() {
 }
 
 function ProtectedRoute({children}) {
-    const {isAuth} = useAuth();
+    const {isAuth, isLoading} = useAuth();
+    
+    if (isLoading) {
+        return <div className="flex items-center justify-center min-h-screen">
+            <div className="text-gray-600">Loading...</div>
+        </div>;
+    }
+    
     return isAuth ? children : <Navigate to="/" replace/>;
 }
 

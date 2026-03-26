@@ -10,6 +10,7 @@ import Features from '@/components/landing/Features';
 import CTAFinal from '@/components/landing/CTAFinal';
 import Footer from '@/components/landing/Footer';
 import KanbanBoard from "@/components/board/KanbanBoard.jsx";
+import Reports from "@/components/reports/Reportes.js";
 
 function Dashboard() {
     const {activeItem} = useSidebar();
@@ -23,7 +24,7 @@ function Dashboard() {
             case 'chat':
                 return <div>Mi Espacio</div>;
             case 'reports':
-                return <div>Mi Espacio</div>;
+                return <Reports/>;
             case 'settings':
                 return <div>Mi Espacio</div>;
             default:

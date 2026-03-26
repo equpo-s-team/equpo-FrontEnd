@@ -54,39 +54,37 @@ export default {
                     900: '#1A1815',
                 },
                 offwhite: '#f7faf8',
-
                 kanban: {
                     todo:     '#9b7fe1',
                     progress: '#86F0FD',
                     qa:       '#FF94AE',
                     done:     '#9CEDC1',
                 },
-
                 muted: {
                     DEFAULT: 'hsl(var(--muted))',
                     foreground: 'hsl(var(--muted-foreground))',
                 },
-                border: 'hsl(var(--border))',
+                border:     'hsl(var(--border))',
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
                 card: {
-                    DEFAULT: 'hsl(var(--card))',
+                    DEFAULT:    'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',
                 },
                 popover: {
-                    DEFAULT: 'hsl(var(--popover))',
+                    DEFAULT:    'hsl(var(--popover))',
                     foreground: 'hsl(var(--popover-foreground))',
                 },
                 accent: {
-                    DEFAULT: 'hsl(var(--accent))',
+                    DEFAULT:    'hsl(var(--accent))',
                     foreground: 'hsl(var(--accent-foreground))',
                 },
                 destructive: {
-                    DEFAULT: 'hsl(var(--destructive))',
+                    DEFAULT:    'hsl(var(--destructive))',
                     foreground: 'hsl(var(--destructive-foreground))',
                 },
                 input: 'hsl(var(--input))',
-                ring: 'hsl(var(--ring))',
+                ring:  'hsl(var(--ring))',
                 chart: {
                     '1': 'hsl(var(--chart-1))',
                     '2': 'hsl(var(--chart-2))',
@@ -97,22 +95,22 @@ export default {
             },
 
             backgroundImage: {
-                'gradient-red-bg':    'linear-gradient(135deg, #F65A70 0%, #FFAF93 100%)',
-                'gradient-orange-bg': 'linear-gradient(135deg, #FF94AE 0%, #FCE98D 100%)',
-                'gradient-purple-bg': 'linear-gradient(135deg, #d99aee 0%, #5961F9 100%)',
-                'gradient-blue-bg':   'linear-gradient(135deg, #60AFFF 0%, #86F0FD 100%)',
-                'gradient-green-bg':  'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
-                'gradient-todo-bg':   'linear-gradient(135deg, #9b7fe1 0%, #5961F9 100%)',
+                'gradient-red-bg':      'linear-gradient(135deg, #F65A70 0%, #FFAF93 100%)',
+                'gradient-orange-bg':   'linear-gradient(135deg, #FF94AE 0%, #FCE98D 100%)',
+                'gradient-purple-bg':   'linear-gradient(135deg, #d99aee 0%, #5961F9 100%)',
+                'gradient-blue-bg':     'linear-gradient(135deg, #60AFFF 0%, #86F0FD 100%)',
+                'gradient-green-bg':    'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
+                'gradient-todo-bg':     'linear-gradient(135deg, #9b7fe1 0%, #5961F9 100%)',
                 'gradient-progress-bg': 'linear-gradient(135deg, #86F0FD 0%, #60AFFF 100%)',
-                'gradient-qa-bg':     'linear-gradient(135deg, #FF94AE 0%, #F65A70 100%)',
-                'gradient-done-bg':   'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
-                'avatar-at':          'linear-gradient(135deg, #60AFFF, #5961F9)',
-                'avatar-jr':          'linear-gradient(135deg, #9CEDC1, #86F0FD)',
-                'avatar-ml':          'linear-gradient(135deg, #F65A70, #FF94AE)',
-                'avatar-cs':          'linear-gradient(135deg, #FF94AE, #F65A70)',
-                'avatar-lv':          'linear-gradient(135deg, #9b7fe1, #5961F9)',
-                'avatar-dm':          'linear-gradient(135deg, #86F0FD, #60AFFF)',
-                'avatar-sr':          'linear-gradient(135deg, #F65A70, #9b7fe1)',
+                'gradient-qa-bg':       'linear-gradient(135deg, #FF94AE 0%, #F65A70 100%)',
+                'gradient-done-bg':     'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
+                'avatar-at': 'linear-gradient(135deg, #60AFFF, #5961F9)',
+                'avatar-jr': 'linear-gradient(135deg, #9CEDC1, #86F0FD)',
+                'avatar-ml': 'linear-gradient(135deg, #F65A70, #FF94AE)',
+                'avatar-cs': 'linear-gradient(135deg, #FF94AE, #F65A70)',
+                'avatar-lv': 'linear-gradient(135deg, #9b7fe1, #5961F9)',
+                'avatar-dm': 'linear-gradient(135deg, #86F0FD, #60AFFF)',
+                'avatar-sr': 'linear-gradient(135deg, #F65A70, #9b7fe1)',
             },
 
             fontFamily: {
@@ -126,6 +124,11 @@ export default {
                 'display-md': ['clamp(2rem, 4vw, 3rem)',        { lineHeight: '1.1',  letterSpacing: '-0.03em'  }],
             },
 
+            spacing: {
+                '4.5': '1.125rem',
+                '18':  '4.5rem',
+            },
+
             boxShadow: {
                 neonRed:    '0 0 15px #F65A70',
                 neonPink:   '0 0 15px #FF94AE',
@@ -135,19 +138,16 @@ export default {
                 neonBlue:   '0 0 15px #60AFFF',
                 neonGrey:   '0 0 15px #B0ADA7',
 
-                // Column-level glows (border + ambient)
                 'col-todo':     '0 0 10px rgba(176,173,167,0.35), 0 0 24px rgba(176,173,167,0.12)',
                 'col-progress': '0 0 10px rgba(96,175,255,0.40),  0 0 26px rgba(96,175,255,0.14)',
                 'col-qa':       '0 0 10px rgba(134,240,253,0.40), 0 0 26px rgba(134,240,253,0.14)',
                 'col-done':     '0 0 10px rgba(156,237,193,0.40), 0 0 26px rgba(156,237,193,0.14)',
 
-                // Card-level glows (resting)
                 'card-todo':     '0 0 6px rgba(176,173,167,0.18), 0 2px 5px rgba(0,0,0,0.04)',
                 'card-progress': '0 0 6px rgba(96,175,255,0.20),  0 2px 5px rgba(0,0,0,0.04)',
                 'card-qa':       '0 0 6px rgba(134,240,253,0.20), 0 2px 5px rgba(0,0,0,0.04)',
                 'card-done':     '0 0 6px rgba(156,237,193,0.20), 0 2px 5px rgba(0,0,0,0.04)',
 
-                // Card hover glows
                 'card-todo-hover':     '0 0 16px rgba(176,173,167,0.45), 0 4px 14px rgba(0,0,0,0.06)',
                 'card-progress-hover': '0 0 16px rgba(96,175,255,0.50),  0 4px 14px rgba(0,0,0,0.06)',
                 'card-qa-hover':       '0 0 16px rgba(134,240,253,0.50), 0 4px 14px rgba(0,0,0,0.06)',
@@ -160,21 +160,22 @@ export default {
             },
 
             animation: {
-                'float-orb':      'floatOrb 6s ease-in-out infinite',
-                'float-orb-fast': 'floatOrb 4s ease-in-out infinite',
-                'rotate-conic':   'rotateConic 12s linear infinite',
-                'orbit-slow':     'orbitSpin 20s linear infinite',
-                'orbit-slow-rev': 'orbitSpin 30s linear infinite reverse',
-                'float-card':     'floatCard 5s ease-in-out infinite',
-                'pulse-neon':     'pulseNeon 2.4s ease-in-out infinite',
-                'pulse-neon-fast':'pulseNeon 2s ease-in-out infinite',
-                'fade-down':      'fadeDown 0.18s ease both',
+                'float-orb':       'floatOrb 6s ease-in-out infinite',
+                'float-orb-fast':  'floatOrb 4s ease-in-out infinite',
+                'rotate-conic':    'rotateConic 12s linear infinite',
+                'orbit-slow':      'orbitSpin 20s linear infinite',
+                'orbit-slow-rev':  'orbitSpin 30s linear infinite reverse',
+                'float-card':      'floatCard 5s ease-in-out infinite',
+                'pulse-neon':      'pulseNeon 2.4s ease-in-out infinite',
+                'pulse-neon-fast': 'pulseNeon 2s ease-in-out infinite',
+                'fade-down':       'fadeDown 0.18s ease both',
+                'fade-up':         'fadeUp 0.4s ease both',
             },
 
             keyframes: {
                 floatOrb: {
-                    '0%, 100%': { transform: 'translateY(0px)' },
-                    '50%':      { transform: 'translateY(-18px)' },
+                    '0%, 100%': { transform: 'translateY(0px) scale(1)' },
+                    '50%':      { transform: 'translateY(-18px) scale(1.04)' },
                 },
                 rotateConic: {
                     to: { transform: 'rotate(360deg)' },
@@ -192,6 +193,10 @@ export default {
                 },
                 fadeDown: {
                     from: { opacity: '0', transform: 'translateY(-6px)' },
+                    to:   { opacity: '1', transform: 'translateY(0)' },
+                },
+                fadeUp: {
+                    from: { opacity: '0', transform: 'translateY(14px)' },
                     to:   { opacity: '1', transform: 'translateY(0)' },
                 },
             },

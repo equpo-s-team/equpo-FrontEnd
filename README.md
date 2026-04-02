@@ -1,7 +1,7 @@
 # equpo — Landing Page
 
 React + Vite + Tailwind CSS
-intento de cambio ahre
+
 ## Estructura del proyecto
 
 ```

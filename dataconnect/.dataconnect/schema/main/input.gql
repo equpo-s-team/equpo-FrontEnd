@@ -1,0 +1,3868 @@
+"""
+✨ `Achievement_KeyOutput` returns the primary key fields of table type `Achievement`.
+
+It has the same format as `Achievement_Key`, but is only used as mutation return value.
+"""
+scalar Achievement_KeyOutput
+"""
+✨ `AssignedUser_KeyOutput` returns the primary key fields of table type `AssignedUser`.
+
+It has the same format as `AssignedUser_Key`, but is only used as mutation return value.
+"""
+scalar AssignedUser_KeyOutput
+"""
+✨ `Group_KeyOutput` returns the primary key fields of table type `Group`.
+
+It has the same format as `Group_Key`, but is only used as mutation return value.
+"""
+scalar Group_KeyOutput
+"""
+✨ `GroupMembership_KeyOutput` returns the primary key fields of table type `GroupMembership`.
+
+It has the same format as `GroupMembership_Key`, but is only used as mutation return value.
+"""
+scalar GroupMembership_KeyOutput
+"""
+✨ `Reward_KeyOutput` returns the primary key fields of table type `Reward`.
+
+It has the same format as `Reward_Key`, but is only used as mutation return value.
+"""
+scalar Reward_KeyOutput
+"""
+✨ `Task_KeyOutput` returns the primary key fields of table type `Task`.
+
+It has the same format as `Task_Key`, but is only used as mutation return value.
+"""
+scalar Task_KeyOutput
+"""
+✨ `TaskCategory_KeyOutput` returns the primary key fields of table type `TaskCategory`.
+
+It has the same format as `TaskCategory_Key`, but is only used as mutation return value.
+"""
+scalar TaskCategory_KeyOutput
+"""
+✨ `Team_KeyOutput` returns the primary key fields of table type `Team`.
+
+It has the same format as `Team_Key`, but is only used as mutation return value.
+"""
+scalar Team_KeyOutput
+"""
+✨ `TeamMembership_KeyOutput` returns the primary key fields of table type `TeamMembership`.
+
+It has the same format as `TeamMembership_Key`, but is only used as mutation return value.
+"""
+scalar TeamMembership_KeyOutput
+"""
+✨ `TeamReward_KeyOutput` returns the primary key fields of table type `TeamReward`.
+
+It has the same format as `TeamReward_Key`, but is only used as mutation return value.
+"""
+scalar TeamReward_KeyOutput
+"""
+✨ `User_KeyOutput` returns the primary key fields of table type `User`.
+
+It has the same format as `User_Key`, but is only used as mutation return value.
+"""
+scalar User_KeyOutput
+"""
+✨ `UserReward_KeyOutput` returns the primary key fields of table type `UserReward`.
+
+It has the same format as `UserReward_Key`, but is only used as mutation return value.
+"""
+scalar UserReward_KeyOutput
+"""
+✨ Generated data input type for table 'Achievement'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Achievement_Data {
+  """
+  ✨ Generated from Field `Achievement`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Achievement`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `Achievement`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `Achievement`.`description` of type `String`)
+  """
+  description_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`iconURL` of type `String`
+  """
+  iconURL: String
+  """
+  ✨ `_expr` server value variant of `iconURL` (✨ Generated from Field `Achievement`.`iconURL` of type `String`)
+  """
+  iconURL_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Achievement`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`
+  """
+  unlockedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `unlockedAt` (✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`)
+  """
+  unlockedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `unlockedAt` (✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`)
+  """
+  unlockedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `unlockedAt` (✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`)
+  """
+  unlockedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Achievement'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Achievement_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Achievement_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Achievement_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Achievement_Filter!]
+  """
+  ✨ Generated from Field `Achievement`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Achievement`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `Achievement`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `Achievement`.`iconURL` of type `String`
+  """
+  iconURL: String_Filter
+  """
+  ✨ Generated from Field `Achievement`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`
+  """
+  unlockedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'Achievement'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Achievement_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Achievement_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Achievement_Filter
+}
+"""
+✨ Generated having input type for table 'Achievement'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Achievement_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Achievement_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Achievement_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Achievement_Having!]
+  """
+  ✨ Generated from Field `Achievement`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`iconURL_count` of type `Int!`
+  """
+  iconURL_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt_count` of type `Int!`
+  """
+  unlockedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
+  ✨ Generated from Field `Achievement`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt_min` of type `Timestamp`
+  """
+  unlockedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt_max` of type `Timestamp`
+  """
+  unlockedAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Achievement'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Achievement_Key {
+  """
+  ✨ Generated from Field `Achievement`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Achievement`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Achievement'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Achievement_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Achievement_Filter
+}
+"""
+✨ Generated order input type for table 'Achievement'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Achievement_Order {
+  """
+  ✨ Generated from Field `Achievement`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`iconURL` of type `String`
+  """
+  iconURL: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`
+  """
+  unlockedAt: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`description_count` of type `Int!`
+  """
+  description_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`iconURL_count` of type `Int!`
+  """
+  iconURL_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`name_count` of type `Int!`
+  """
+  name_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt_count` of type `Int!`
+  """
+  unlockedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt_min` of type `Timestamp`
+  """
+  unlockedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`unlockedAt_max` of type `Timestamp`
+  """
+  unlockedAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Achievement`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'AssignedUser'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input AssignedUser_Data {
+  """
+  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
+  """
+  taskId: UUID
+  """
+  ✨ `_expr` server value variant of `taskId` (✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`)
+  """
+  taskId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `AssignedUser`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AssignedUser`.`task` of type `Task!`
+  """
+  task: Task_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AssignedUser`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'AssignedUser'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input AssignedUser_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [AssignedUser_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: AssignedUser_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [AssignedUser_Filter!]
+  """
+  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
+  """
+  taskId: UUID_Filter
+  """
+  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `AssignedUser`.`task` of type `Task!`
+  """
+  task: Task_Filter
+  """
+  ✨ Generated from Field `AssignedUser`.`user` of type `User!`
+  """
+  user: User_Filter
+}
+"""
+✨ Generated first-row input type for table 'AssignedUser'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input AssignedUser_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [AssignedUser_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: AssignedUser_Filter
+}
+"""
+✨ Generated having input type for table 'AssignedUser'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input AssignedUser_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [AssignedUser_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: AssignedUser_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [AssignedUser_Having!]
+  """
+  ✨ Generated from Field `AssignedUser`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `AssignedUser`.`taskId_count` of type `Int!`
+  """
+  taskId_count: Int_Filter
+  """
+  ✨ Generated from Field `AssignedUser`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'AssignedUser'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input AssignedUser_Key {
+  """
+  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
+  """
+  taskId: UUID
+  """
+  ✨ `_expr` server value variant of `taskId` (✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`)
+  """
+  taskId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `AssignedUser`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'AssignedUser'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input AssignedUser_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: AssignedUser_Filter
+}
+"""
+✨ Generated order input type for table 'AssignedUser'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input AssignedUser_Order {
+  """
+  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
+  """
+  taskId: OrderDirection
+  """
+  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `AssignedUser`.`task` of type `Task!`
+  """
+  task: Task_Order
+  """
+  ✨ Generated from Field `AssignedUser`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `AssignedUser`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `AssignedUser`.`taskId_count` of type `Int!`
+  """
+  taskId_count: OrderDirection
+  """
+  ✨ Generated from Field `AssignedUser`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Group'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Group_Data {
+  """
+  ✨ Generated from Field `Group`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Group`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Group`.`teamId` of type `UUID!`
+  """
+  teamId: UUID
+  """
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `Group`.`teamId` of type `UUID!`)
+  """
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Group`.`team` of type `Team!`
+  """
+  team: Team_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Group`.`groupName` of type `String!`
+  """
+  groupName: String
+  """
+  ✨ `_expr` server value variant of `groupName` (✨ Generated from Field `Group`.`groupName` of type `String!`)
+  """
+  groupName_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Group'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Group_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Group_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Group_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Group_Filter!]
+  """
+  ✨ Generated from Field `Group`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Group`.`teamId` of type `UUID!`
+  """
+  teamId: UUID_Filter
+  """
+  ✨ Generated from Field `Group`.`team` of type `Team!`
+  """
+  team: Team_Filter
+  """
+  ✨ Generated from Field `Group`.`groupName` of type `String!`
+  """
+  groupName: String_Filter
+  """
+  ✨ Generated from Field `Group`.`groupMemberships_on_group` of type `[GroupMembership!]!`
+  """
+  groupMemberships_on_group: GroupMembership_ListFilter
+  """
+  ✨ Generated from Field `Group`.`tasks_on_assignedGroup` of type `[Task!]!`
+  """
+  tasks_on_assignedGroup: Task_ListFilter
+  """
+  ✨ Generated from Field `Group`.`users_via_GroupMembership` of type `[User!]!`
+  """
+  users_via_GroupMembership: User_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Group'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Group_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Group_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Group_Filter
+}
+"""
+✨ Generated having input type for table 'Group'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Group_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Group_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Group_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Group_Having!]
+  """
+  ✨ Generated from Field `Group`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Group`.`groupName_count` of type `Int!`
+  """
+  groupName_count: Int_Filter
+  """
+  ✨ Generated from Field `Group`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Group`.`teamId_count` of type `Int!`
+  """
+  teamId_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Group'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Group_Key {
+  """
+  ✨ Generated from Field `Group`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Group`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Group'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Group_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Group_Filter
+}
+"""
+✨ Generated order input type for table 'Group'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Group_Order {
+  """
+  ✨ Generated from Field `Group`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Group`.`teamId` of type `UUID!`
+  """
+  teamId: OrderDirection
+  """
+  ✨ Generated from Field `Group`.`team` of type `Team!`
+  """
+  team: Team_Order
+  """
+  ✨ Generated from Field `Group`.`groupName` of type `String!`
+  """
+  groupName: OrderDirection
+  """
+  ✨ Generated from Field `Group`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Group`.`groupName_count` of type `Int!`
+  """
+  groupName_count: OrderDirection
+  """
+  ✨ Generated from Field `Group`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Group`.`teamId_count` of type `Int!`
+  """
+  teamId_count: OrderDirection
+}
+"""
+✨ Generated data input type for table 'GroupMembership'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input GroupMembership_Data {
+  """
+  ✨ Generated from Field `GroupMembership`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `GroupMembership`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `GroupMembership`.`groupId` of type `UUID!`
+  """
+  groupId: UUID
+  """
+  ✨ `_expr` server value variant of `groupId` (✨ Generated from Field `GroupMembership`.`groupId` of type `UUID!`)
+  """
+  groupId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `GroupMembership`.`group` of type `Group!`
+  """
+  group: Group_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `GroupMembership`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'GroupMembership'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input GroupMembership_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [GroupMembership_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: GroupMembership_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [GroupMembership_Filter!]
+  """
+  ✨ Generated from Field `GroupMembership`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `GroupMembership`.`groupId` of type `UUID!`
+  """
+  groupId: UUID_Filter
+  """
+  ✨ Generated from Field `GroupMembership`.`group` of type `Group!`
+  """
+  group: Group_Filter
+  """
+  ✨ Generated from Field `GroupMembership`.`user` of type `User!`
+  """
+  user: User_Filter
+}
+"""
+✨ Generated first-row input type for table 'GroupMembership'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input GroupMembership_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [GroupMembership_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: GroupMembership_Filter
+}
+"""
+✨ Generated having input type for table 'GroupMembership'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input GroupMembership_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [GroupMembership_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: GroupMembership_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [GroupMembership_Having!]
+  """
+  ✨ Generated from Field `GroupMembership`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `GroupMembership`.`groupId_count` of type `Int!`
+  """
+  groupId_count: Int_Filter
+  """
+  ✨ Generated from Field `GroupMembership`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'GroupMembership'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input GroupMembership_Key {
+  """
+  ✨ Generated from Field `GroupMembership`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `GroupMembership`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `GroupMembership`.`groupId` of type `UUID!`
+  """
+  groupId: UUID
+  """
+  ✨ `_expr` server value variant of `groupId` (✨ Generated from Field `GroupMembership`.`groupId` of type `UUID!`)
+  """
+  groupId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'GroupMembership'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input GroupMembership_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: GroupMembership_Filter
+}
+"""
+✨ Generated order input type for table 'GroupMembership'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input GroupMembership_Order {
+  """
+  ✨ Generated from Field `GroupMembership`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `GroupMembership`.`groupId` of type `UUID!`
+  """
+  groupId: OrderDirection
+  """
+  ✨ Generated from Field `GroupMembership`.`group` of type `Group!`
+  """
+  group: Group_Order
+  """
+  ✨ Generated from Field `GroupMembership`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `GroupMembership`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `GroupMembership`.`groupId_count` of type `Int!`
+  """
+  groupId_count: OrderDirection
+  """
+  ✨ Generated from Field `GroupMembership`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Reward'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Reward_Data {
+  """
+  ✨ Generated from Field `Reward`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Reward`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`cost` of type `Int!`
+  """
+  cost: Int
+  """
+  ✨ `_expr` server value variant of `cost` (✨ Generated from Field `Reward`.`cost` of type `Int!`)
+  """
+  cost_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `cost` (✨ Generated from Field `Reward`.`cost` of type `Int!`)
+  """
+  cost_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Reward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Reward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Reward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `Reward`.`description` of type `String`)
+  """
+  description_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted` of type `Int!`
+  """
+  experienceGranted: Int
+  """
+  ✨ `_expr` server value variant of `experienceGranted` (✨ Generated from Field `Reward`.`experienceGranted` of type `Int!`)
+  """
+  experienceGranted_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `experienceGranted` (✨ Generated from Field `Reward`.`experienceGranted` of type `Int!`)
+  """
+  experienceGranted_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`iconURL` of type `String`
+  """
+  iconURL: String
+  """
+  ✨ `_expr` server value variant of `iconURL` (✨ Generated from Field `Reward`.`iconURL` of type `String`)
+  """
+  iconURL_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`isTeamReward` of type `Boolean!`
+  """
+  isTeamReward: Boolean
+  """
+  ✨ `_expr` server value variant of `isTeamReward` (✨ Generated from Field `Reward`.`isTeamReward` of type `Boolean!`)
+  """
+  isTeamReward_expr: Boolean_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Reward`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`type` of type `String!`
+  """
+  type: String
+  """
+  ✨ `_expr` server value variant of `type` (✨ Generated from Field `Reward`.`type` of type `String!`)
+  """
+  type_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `Reward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Reward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Reward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Reward'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Reward_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Reward_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Reward_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Reward_Filter!]
+  """
+  ✨ Generated from Field `Reward`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Reward`.`cost` of type `Int!`
+  """
+  cost: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Reward`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted` of type `Int!`
+  """
+  experienceGranted: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`iconURL` of type `String`
+  """
+  iconURL: String_Filter
+  """
+  ✨ Generated from Field `Reward`.`isTeamReward` of type `Boolean!`
+  """
+  isTeamReward: Boolean_Filter
+  """
+  ✨ Generated from Field `Reward`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Reward`.`type` of type `String!`
+  """
+  type: String_Filter
+  """
+  ✨ Generated from Field `Reward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Reward`.`teamRewards_on_reward` of type `[TeamReward!]!`
+  """
+  teamRewards_on_reward: TeamReward_ListFilter
+  """
+  ✨ Generated from Field `Reward`.`userRewards_on_reward` of type `[UserReward!]!`
+  """
+  userRewards_on_reward: UserReward_ListFilter
+  """
+  ✨ Generated from Field `Reward`.`teams_via_TeamReward` of type `[Team!]!`
+  """
+  teams_via_TeamReward: Team_ListFilter
+  """
+  ✨ Generated from Field `Reward`.`users_via_UserReward` of type `[User!]!`
+  """
+  users_via_UserReward: User_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Reward'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Reward_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Reward_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Reward_Filter
+}
+"""
+✨ Generated having input type for table 'Reward'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Reward_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Reward_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Reward_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Reward_Having!]
+  """
+  ✨ Generated from Field `Reward`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`cost_count` of type `Int!`
+  """
+  cost_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_count` of type `Int!`
+  """
+  experienceGranted_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`iconURL_count` of type `Int!`
+  """
+  iconURL_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`isTeamReward_count` of type `Int!`
+  """
+  isTeamReward_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`type_count` of type `Int!`
+  """
+  type_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`cost_sum` of type `Int`
+  """
+  cost_sum: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_sum` of type `Int`
+  """
+  experienceGranted_sum: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`cost_avg` of type `Float`
+  """
+  cost_avg: Float_Filter
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_avg` of type `Float`
+  """
+  experienceGranted_avg: Float_Filter
+  """
+  ✨ Generated from Field `Reward`.`cost_min` of type `Int`
+  """
+  cost_min: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_min` of type `Int`
+  """
+  experienceGranted_min: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Reward`.`cost_max` of type `Int`
+  """
+  cost_max: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_max` of type `Int`
+  """
+  experienceGranted_max: Int_Filter
+  """
+  ✨ Generated from Field `Reward`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Reward'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Reward_Key {
+  """
+  ✨ Generated from Field `Reward`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Reward`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Reward'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Reward_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Reward_Filter
+}
+"""
+✨ Generated order input type for table 'Reward'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Reward_Order {
+  """
+  ✨ Generated from Field `Reward`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`cost` of type `Int!`
+  """
+  cost: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted` of type `Int!`
+  """
+  experienceGranted: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`iconURL` of type `String`
+  """
+  iconURL: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`isTeamReward` of type `Boolean!`
+  """
+  isTeamReward: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`type` of type `String!`
+  """
+  type: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`cost_count` of type `Int!`
+  """
+  cost_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`description_count` of type `Int!`
+  """
+  description_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_count` of type `Int!`
+  """
+  experienceGranted_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`iconURL_count` of type `Int!`
+  """
+  iconURL_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`isTeamReward_count` of type `Int!`
+  """
+  isTeamReward_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`name_count` of type `Int!`
+  """
+  name_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`type_count` of type `Int!`
+  """
+  type_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`cost_sum` of type `Int`
+  """
+  cost_sum: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_sum` of type `Int`
+  """
+  experienceGranted_sum: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`cost_avg` of type `Float`
+  """
+  cost_avg: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_avg` of type `Float`
+  """
+  experienceGranted_avg: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`cost_min` of type `Int`
+  """
+  cost_min: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_min` of type `Int`
+  """
+  experienceGranted_min: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`cost_max` of type `Int`
+  """
+  cost_max: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`experienceGranted_max` of type `Int`
+  """
+  experienceGranted_max: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Task'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Task_Data {
+  """
+  ✨ Generated from Field `Task`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Task`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`assignedGroupId` of type `UUID`
+  """
+  assignedGroupId: UUID
+  """
+  ✨ `_expr` server value variant of `assignedGroupId` (✨ Generated from Field `Task`.`assignedGroupId` of type `UUID`)
+  """
+  assignedGroupId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`assignedUserUid` of type `String`
+  """
+  assignedUserUid: String
+  """
+  ✨ `_expr` server value variant of `assignedUserUid` (✨ Generated from Field `Task`.`assignedUserUid` of type `String`)
+  """
+  assignedUserUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  """
+  teamIdId: UUID
+  """
+  ✨ `_expr` server value variant of `teamIdId` (✨ Generated from Field `Task`.`teamIdId` of type `UUID!`)
+  """
+  teamIdId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
+  """
+  assignedGroup: Group_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`assignedUser` of type `User`
+  """
+  assignedUser: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  """
+  teamId: Team_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`category` of type `String`
+  """
+  category: String
+  """
+  ✨ `_expr` server value variant of `category` (✨ Generated from Field `Task`.`category` of type `String`)
+  """
+  category_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
+  """
+  dueDate: Timestamp
+  """
+  ✨ `_expr` server value variant of `dueDate` (✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`)
+  """
+  dueDate_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `dueDate` (✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`)
+  """
+  dueDate_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `dueDate` (✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`)
+  """
+  dueDate_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`isRecurring` of type `Boolean`
+  """
+  isRecurring: Boolean
+  """
+  ✨ `_expr` server value variant of `isRecurring` (✨ Generated from Field `Task`.`isRecurring` of type `Boolean`)
+  """
+  isRecurring_expr: Boolean_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`priority` of type `String!`
+  """
+  priority: String
+  """
+  ✨ `_expr` server value variant of `priority` (✨ Generated from Field `Task`.`priority` of type `String!`)
+  """
+  priority_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`recurringInterval` of type `String`
+  """
+  recurringInterval: String
+  """
+  ✨ `_expr` server value variant of `recurringInterval` (✨ Generated from Field `Task`.`recurringInterval` of type `String`)
+  """
+  recurringInterval_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `Task`.`status` of type `String!`)
+  """
+  status_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Task'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Task_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Task_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Task_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Task_Filter!]
+  """
+  ✨ Generated from Field `Task`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Task`.`assignedGroupId` of type `UUID`
+  """
+  assignedGroupId: UUID_Filter
+  """
+  ✨ Generated from Field `Task`.`assignedUserUid` of type `String`
+  """
+  assignedUserUid: String_Filter
+  """
+  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  """
+  teamIdId: UUID_Filter
+  """
+  ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
+  """
+  assignedGroup: Group_Filter
+  """
+  ✨ Generated from Field `Task`.`assignedUser` of type `User`
+  """
+  assignedUser: User_Filter
+  """
+  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  """
+  teamId: Team_Filter
+  """
+  ✨ Generated from Field `Task`.`category` of type `String`
+  """
+  category: String_Filter
+  """
+  ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
+  """
+  dueDate: Timestamp_Filter
+  """
+  ✨ Generated from Field `Task`.`isRecurring` of type `Boolean`
+  """
+  isRecurring: Boolean_Filter
+  """
+  ✨ Generated from Field `Task`.`priority` of type `String!`
+  """
+  priority: String_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringInterval` of type `String`
+  """
+  recurringInterval: String_Filter
+  """
+  ✨ Generated from Field `Task`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `Task`.`assignedUsers_on_task` of type `[AssignedUser!]!`
+  """
+  assignedUsers_on_task: AssignedUser_ListFilter
+  """
+  ✨ Generated from Field `Task`.`taskCategory_on_task` of type `TaskCategory`
+  """
+  taskCategory_on_task: TaskCategory_Filter
+  """
+  ✨ Generated from Field `Task`.`users_via_AssignedUser` of type `[User!]!`
+  """
+  users_via_AssignedUser: User_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Task'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Task_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Task_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Task_Filter
+}
+"""
+✨ Generated having input type for table 'Task'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Task_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Task_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Task_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Task_Having!]
+  """
+  ✨ Generated from Field `Task`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`assignedGroupId_count` of type `Int!`
+  """
+  assignedGroupId_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`assignedUserUid_count` of type `Int!`
+  """
+  assignedUserUid_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`category_count` of type `Int!`
+  """
+  category_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`dueDate_count` of type `Int!`
+  """
+  dueDate_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`isRecurring_count` of type `Int!`
+  """
+  isRecurring_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`priority_count` of type `Int!`
+  """
+  priority_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringInterval_count` of type `Int!`
+  """
+  recurringInterval_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`teamIdId_count` of type `Int!`
+  """
+  teamIdId_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`dueDate_min` of type `Timestamp`
+  """
+  dueDate_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Task`.`dueDate_max` of type `Timestamp`
+  """
+  dueDate_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Task'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Task_Key {
+  """
+  ✨ Generated from Field `Task`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Task`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Task'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Task_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Task_Filter
+}
+"""
+✨ Generated order input type for table 'Task'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Task_Order {
+  """
+  ✨ Generated from Field `Task`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`assignedGroupId` of type `UUID`
+  """
+  assignedGroupId: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`assignedUserUid` of type `String`
+  """
+  assignedUserUid: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  """
+  teamIdId: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
+  """
+  assignedGroup: Group_Order
+  """
+  ✨ Generated from Field `Task`.`assignedUser` of type `User`
+  """
+  assignedUser: User_Order
+  """
+  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  """
+  teamId: Team_Order
+  """
+  ✨ Generated from Field `Task`.`category` of type `String`
+  """
+  category: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
+  """
+  dueDate: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`isRecurring` of type `Boolean`
+  """
+  isRecurring: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`priority` of type `String!`
+  """
+  priority: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringInterval` of type `String`
+  """
+  recurringInterval: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`assignedGroupId_count` of type `Int!`
+  """
+  assignedGroupId_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`assignedUserUid_count` of type `Int!`
+  """
+  assignedUserUid_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`category_count` of type `Int!`
+  """
+  category_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`dueDate_count` of type `Int!`
+  """
+  dueDate_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`isRecurring_count` of type `Int!`
+  """
+  isRecurring_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`priority_count` of type `Int!`
+  """
+  priority_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringInterval_count` of type `Int!`
+  """
+  recurringInterval_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`status_count` of type `Int!`
+  """
+  status_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`teamIdId_count` of type `Int!`
+  """
+  teamIdId_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`dueDate_min` of type `Timestamp`
+  """
+  dueDate_min: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`dueDate_max` of type `Timestamp`
+  """
+  dueDate_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'TaskCategory'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input TaskCategory_Data {
+  """
+  ✨ Generated from Field `TaskCategory`.`taskId` of type `UUID!`
+  """
+  taskId: UUID
+  """
+  ✨ `_expr` server value variant of `taskId` (✨ Generated from Field `TaskCategory`.`taskId` of type `UUID!`)
+  """
+  taskId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
+  """
+  task: Task_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TaskCategory`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `TaskCategory`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'TaskCategory'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input TaskCategory_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [TaskCategory_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: TaskCategory_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [TaskCategory_Filter!]
+  """
+  ✨ Generated from Field `TaskCategory`.`taskId` of type `UUID!`
+  """
+  taskId: UUID_Filter
+  """
+  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
+  """
+  task: Task_Filter
+  """
+  ✨ Generated from Field `TaskCategory`.`name` of type `String!`
+  """
+  name: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'TaskCategory'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input TaskCategory_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [TaskCategory_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: TaskCategory_Filter
+}
+"""
+✨ Generated having input type for table 'TaskCategory'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input TaskCategory_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [TaskCategory_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: TaskCategory_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [TaskCategory_Having!]
+  """
+  ✨ Generated from Field `TaskCategory`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `TaskCategory`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `TaskCategory`.`taskId_count` of type `Int!`
+  """
+  taskId_count: Int_Filter
+}
+"""
+✨ Generated key input type for table 'TaskCategory'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input TaskCategory_Key {
+  """
+  ✨ Generated from Field `TaskCategory`.`taskId` of type `UUID!`
+  """
+  taskId: UUID
+  """
+  ✨ `_expr` server value variant of `taskId` (✨ Generated from Field `TaskCategory`.`taskId` of type `UUID!`)
+  """
+  taskId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'TaskCategory'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input TaskCategory_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: TaskCategory_Filter
+}
+"""
+✨ Generated order input type for table 'TaskCategory'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input TaskCategory_Order {
+  """
+  ✨ Generated from Field `TaskCategory`.`taskId` of type `UUID!`
+  """
+  taskId: OrderDirection
+  """
+  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
+  """
+  task: Task_Order
+  """
+  ✨ Generated from Field `TaskCategory`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `TaskCategory`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `TaskCategory`.`name_count` of type `Int!`
+  """
+  name_count: OrderDirection
+  """
+  ✨ Generated from Field `TaskCategory`.`taskId_count` of type `Int!`
+  """
+  taskId_count: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Team'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Team_Data {
+  """
+  ✨ Generated from Field `Team`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Team`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Team`.`leaderUid` of type `String!`
+  """
+  leaderUid: String
+  """
+  ✨ `_expr` server value variant of `leaderUid` (✨ Generated from Field `Team`.`leaderUid` of type `String!`)
+  """
+  leaderUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Team`.`leader` of type `User!`
+  """
+  leader: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Team`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Team`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Team`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Team`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Team`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `Team`.`description` of type `String`)
+  """
+  description_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Team`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Team`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency` of type `Int!`
+  """
+  virtualCurrency: Int
+  """
+  ✨ `_expr` server value variant of `virtualCurrency` (✨ Generated from Field `Team`.`virtualCurrency` of type `Int!`)
+  """
+  virtualCurrency_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `virtualCurrency` (✨ Generated from Field `Team`.`virtualCurrency` of type `Int!`)
+  """
+  virtualCurrency_update: [Int_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'Team'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Team_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Team_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Team_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Team_Filter!]
+  """
+  ✨ Generated from Field `Team`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Team`.`leaderUid` of type `String!`
+  """
+  leaderUid: String_Filter
+  """
+  ✨ Generated from Field `Team`.`leader` of type `User!`
+  """
+  leader: User_Filter
+  """
+  ✨ Generated from Field `Team`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Team`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `Team`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency` of type `Int!`
+  """
+  virtualCurrency: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`groups_on_team` of type `[Group!]!`
+  """
+  groups_on_team: Group_ListFilter
+  """
+  ✨ Generated from Field `Team`.`tasks_on_teamId` of type `[Task!]!`
+  """
+  tasks_on_teamId: Task_ListFilter
+  """
+  ✨ Generated from Field `Team`.`teamMemberships_on_team` of type `[TeamMembership!]!`
+  """
+  teamMemberships_on_team: TeamMembership_ListFilter
+  """
+  ✨ Generated from Field `Team`.`teamRewards_on_team` of type `[TeamReward!]!`
+  """
+  teamRewards_on_team: TeamReward_ListFilter
+  """
+  ✨ Generated from Field `Team`.`rewards_via_TeamReward` of type `[Reward!]!`
+  """
+  rewards_via_TeamReward: Reward_ListFilter
+  """
+  ✨ Generated from Field `Team`.`users_via_TeamMembership` of type `[User!]!`
+  """
+  users_via_TeamMembership: User_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'Team'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Team_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Team_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Team_Filter
+}
+"""
+✨ Generated having input type for table 'Team'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Team_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Team_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Team_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Team_Having!]
+  """
+  ✨ Generated from Field `Team`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`leaderUid_count` of type `Int!`
+  """
+  leaderUid_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_count` of type `Int!`
+  """
+  virtualCurrency_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_sum` of type `Int`
+  """
+  virtualCurrency_sum: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_avg` of type `Float`
+  """
+  virtualCurrency_avg: Float_Filter
+  """
+  ✨ Generated from Field `Team`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Team`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_min` of type `Int`
+  """
+  virtualCurrency_min: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Team`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_max` of type `Int`
+  """
+  virtualCurrency_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'Team'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Team_Key {
+  """
+  ✨ Generated from Field `Team`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Team`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'Team'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Team_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Team_Filter
+}
+"""
+✨ Generated order input type for table 'Team'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Team_Order {
+  """
+  ✨ Generated from Field `Team`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`leaderUid` of type `String!`
+  """
+  leaderUid: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`leader` of type `User!`
+  """
+  leader: User_Order
+  """
+  ✨ Generated from Field `Team`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency` of type `Int!`
+  """
+  virtualCurrency: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`description_count` of type `Int!`
+  """
+  description_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`id_count` of type `Int!`
+  """
+  id_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`leaderUid_count` of type `Int!`
+  """
+  leaderUid_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`name_count` of type `Int!`
+  """
+  name_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_count` of type `Int!`
+  """
+  virtualCurrency_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_sum` of type `Int`
+  """
+  virtualCurrency_sum: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_avg` of type `Float`
+  """
+  virtualCurrency_avg: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_min` of type `Int`
+  """
+  virtualCurrency_min: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`virtualCurrency_max` of type `Int`
+  """
+  virtualCurrency_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'TeamMembership'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input TeamMembership_Data {
+  """
+  ✨ Generated from Field `TeamMembership`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `TeamMembership`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamMembership`.`teamId` of type `UUID!`
+  """
+  teamId: UUID
+  """
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `TeamMembership`.`teamId` of type `UUID!`)
+  """
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamMembership`.`team` of type `Team!`
+  """
+  team: Team_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamMembership`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt` of type `Timestamp!`
+  """
+  joinedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `joinedAt` (✨ Generated from Field `TeamMembership`.`joinedAt` of type `Timestamp!`)
+  """
+  joinedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `joinedAt` (✨ Generated from Field `TeamMembership`.`joinedAt` of type `Timestamp!`)
+  """
+  joinedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `joinedAt` (✨ Generated from Field `TeamMembership`.`joinedAt` of type `Timestamp!`)
+  """
+  joinedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamMembership`.`role` of type `String!`
+  """
+  role: String
+  """
+  ✨ `_expr` server value variant of `role` (✨ Generated from Field `TeamMembership`.`role` of type `String!`)
+  """
+  role_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'TeamMembership'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input TeamMembership_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [TeamMembership_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: TeamMembership_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [TeamMembership_Filter!]
+  """
+  ✨ Generated from Field `TeamMembership`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`teamId` of type `UUID!`
+  """
+  teamId: UUID_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`team` of type `Team!`
+  """
+  team: Team_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt` of type `Timestamp!`
+  """
+  joinedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`role` of type `String!`
+  """
+  role: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'TeamMembership'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input TeamMembership_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [TeamMembership_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: TeamMembership_Filter
+}
+"""
+✨ Generated having input type for table 'TeamMembership'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input TeamMembership_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [TeamMembership_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: TeamMembership_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [TeamMembership_Having!]
+  """
+  ✨ Generated from Field `TeamMembership`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt_count` of type `Int!`
+  """
+  joinedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`role_count` of type `Int!`
+  """
+  role_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`teamId_count` of type `Int!`
+  """
+  teamId_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt_min` of type `Timestamp`
+  """
+  joinedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt_max` of type `Timestamp`
+  """
+  joinedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'TeamMembership'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input TeamMembership_Key {
+  """
+  ✨ Generated from Field `TeamMembership`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `TeamMembership`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamMembership`.`teamId` of type `UUID!`
+  """
+  teamId: UUID
+  """
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `TeamMembership`.`teamId` of type `UUID!`)
+  """
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'TeamMembership'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input TeamMembership_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: TeamMembership_Filter
+}
+"""
+✨ Generated order input type for table 'TeamMembership'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input TeamMembership_Order {
+  """
+  ✨ Generated from Field `TeamMembership`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`teamId` of type `UUID!`
+  """
+  teamId: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`team` of type `Team!`
+  """
+  team: Team_Order
+  """
+  ✨ Generated from Field `TeamMembership`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt` of type `Timestamp!`
+  """
+  joinedAt: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`role` of type `String!`
+  """
+  role: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt_count` of type `Int!`
+  """
+  joinedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`role_count` of type `Int!`
+  """
+  role_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`teamId_count` of type `Int!`
+  """
+  teamId_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt_min` of type `Timestamp`
+  """
+  joinedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `TeamMembership`.`joinedAt_max` of type `Timestamp`
+  """
+  joinedAt_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'TeamReward'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input TeamReward_Data {
+  """
+  ✨ Generated from Field `TeamReward`.`teamId` of type `UUID!`
+  """
+  teamId: UUID
+  """
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `TeamReward`.`teamId` of type `UUID!`)
+  """
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: UUID
+  """
+  ✨ `_expr` server value variant of `rewardId` (✨ Generated from Field `TeamReward`.`rewardId` of type `UUID!`)
+  """
+  rewardId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamReward`.`reward` of type `Reward!`
+  """
+  reward: Reward_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamReward`.`team` of type `Team!`
+  """
+  team: Team_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `TeamReward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `TeamReward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `TeamReward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained` of type `Timestamp!`
+  """
+  dateObtained: Timestamp
+  """
+  ✨ `_expr` server value variant of `dateObtained` (✨ Generated from Field `TeamReward`.`dateObtained` of type `Timestamp!`)
+  """
+  dateObtained_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `dateObtained` (✨ Generated from Field `TeamReward`.`dateObtained` of type `Timestamp!`)
+  """
+  dateObtained_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `dateObtained` (✨ Generated from Field `TeamReward`.`dateObtained` of type `Timestamp!`)
+  """
+  dateObtained_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `TeamReward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `TeamReward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `TeamReward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'TeamReward'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input TeamReward_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [TeamReward_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: TeamReward_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [TeamReward_Filter!]
+  """
+  ✨ Generated from Field `TeamReward`.`teamId` of type `UUID!`
+  """
+  teamId: UUID_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: UUID_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`reward` of type `Reward!`
+  """
+  reward: Reward_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`team` of type `Team!`
+  """
+  team: Team_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained` of type `Timestamp!`
+  """
+  dateObtained: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'TeamReward'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input TeamReward_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [TeamReward_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: TeamReward_Filter
+}
+"""
+✨ Generated having input type for table 'TeamReward'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input TeamReward_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [TeamReward_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: TeamReward_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [TeamReward_Having!]
+  """
+  ✨ Generated from Field `TeamReward`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained_count` of type `Int!`
+  """
+  dateObtained_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`rewardId_count` of type `Int!`
+  """
+  rewardId_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`teamId_count` of type `Int!`
+  """
+  teamId_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained_min` of type `Timestamp`
+  """
+  dateObtained_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained_max` of type `Timestamp`
+  """
+  dateObtained_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'TeamReward'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input TeamReward_Key {
+  """
+  ✨ Generated from Field `TeamReward`.`teamId` of type `UUID!`
+  """
+  teamId: UUID
+  """
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `TeamReward`.`teamId` of type `UUID!`)
+  """
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TeamReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: UUID
+  """
+  ✨ `_expr` server value variant of `rewardId` (✨ Generated from Field `TeamReward`.`rewardId` of type `UUID!`)
+  """
+  rewardId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'TeamReward'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input TeamReward_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: TeamReward_Filter
+}
+"""
+✨ Generated order input type for table 'TeamReward'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input TeamReward_Order {
+  """
+  ✨ Generated from Field `TeamReward`.`teamId` of type `UUID!`
+  """
+  teamId: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`reward` of type `Reward!`
+  """
+  reward: Reward_Order
+  """
+  ✨ Generated from Field `TeamReward`.`team` of type `Team!`
+  """
+  team: Team_Order
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained` of type `Timestamp!`
+  """
+  dateObtained: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained_count` of type `Int!`
+  """
+  dateObtained_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`rewardId_count` of type `Int!`
+  """
+  rewardId_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`teamId_count` of type `Int!`
+  """
+  teamId_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained_min` of type `Timestamp`
+  """
+  dateObtained_min: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`dateObtained_max` of type `Timestamp`
+  """
+  dateObtained_max: OrderDirection
+  """
+  ✨ Generated from Field `TeamReward`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'User'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input User_Data {
+  """
+  ✨ Generated from Field `User`.`uid` of type `String!`
+  """
+  uid: String
+  """
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `User`.`uid` of type `String!`)
+  """
+  uid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: String
+  """
+  ✨ `_expr` server value variant of `displayName` (✨ Generated from Field `User`.`displayName` of type `String!`)
+  """
+  displayName_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`experiencePoints` of type `Int!`
+  """
+  experiencePoints: Int
+  """
+  ✨ `_expr` server value variant of `experiencePoints` (✨ Generated from Field `User`.`experiencePoints` of type `Int!`)
+  """
+  experiencePoints_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `experiencePoints` (✨ Generated from Field `User`.`experiencePoints` of type `Int!`)
+  """
+  experiencePoints_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`lastActive` of type `Timestamp!`
+  """
+  lastActive: Timestamp
+  """
+  ✨ `_expr` server value variant of `lastActive` (✨ Generated from Field `User`.`lastActive` of type `Timestamp!`)
+  """
+  lastActive_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `lastActive` (✨ Generated from Field `User`.`lastActive` of type `Timestamp!`)
+  """
+  lastActive_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `lastActive` (✨ Generated from Field `User`.`lastActive` of type `Timestamp!`)
+  """
+  lastActive_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`level` of type `Int!`
+  """
+  level: Int
+  """
+  ✨ `_expr` server value variant of `level` (✨ Generated from Field `User`.`level` of type `Int!`)
+  """
+  level_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `level` (✨ Generated from Field `User`.`level` of type `Int!`)
+  """
+  level_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`photoURL` of type `String`
+  """
+  photoURL: String
+  """
+  ✨ `_expr` server value variant of `photoURL` (✨ Generated from Field `User`.`photoURL` of type `String`)
+  """
+  photoURL_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `User`.`virtualCurrency` of type `Int!`
+  """
+  virtualCurrency: Int
+  """
+  ✨ `_expr` server value variant of `virtualCurrency` (✨ Generated from Field `User`.`virtualCurrency` of type `Int!`)
+  """
+  virtualCurrency_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `virtualCurrency` (✨ Generated from Field `User`.`virtualCurrency` of type `Int!`)
+  """
+  virtualCurrency_update: [Int_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [User_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: User_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [User_Filter!]
+  """
+  ✨ Generated from Field `User`.`uid` of type `String!`
+  """
+  uid: String_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: String_Filter
+  """
+  ✨ Generated from Field `User`.`experiencePoints` of type `Int!`
+  """
+  experiencePoints: Int_Filter
+  """
+  ✨ Generated from Field `User`.`lastActive` of type `Timestamp!`
+  """
+  lastActive: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`level` of type `Int!`
+  """
+  level: Int_Filter
+  """
+  ✨ Generated from Field `User`.`photoURL` of type `String`
+  """
+  photoURL: String_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`virtualCurrency` of type `Int!`
+  """
+  virtualCurrency: Int_Filter
+  """
+  ✨ Generated from Field `User`.`achievements_on_user` of type `[Achievement!]!`
+  """
+  achievements_on_user: Achievement_ListFilter
+  """
+  ✨ Generated from Field `User`.`assignedUsers_on_user` of type `[AssignedUser!]!`
+  """
+  assignedUsers_on_user: AssignedUser_ListFilter
+  """
+  ✨ Generated from Field `User`.`groupMemberships_on_user` of type `[GroupMembership!]!`
+  """
+  groupMemberships_on_user: GroupMembership_ListFilter
+  """
+  ✨ Generated from Field `User`.`tasks_on_assignedUser` of type `[Task!]!`
+  """
+  tasks_on_assignedUser: Task_ListFilter
+  """
+  ✨ Generated from Field `User`.`teams_on_leader` of type `[Team!]!`
+  """
+  teams_on_leader: Team_ListFilter
+  """
+  ✨ Generated from Field `User`.`teamMemberships_on_user` of type `[TeamMembership!]!`
+  """
+  teamMemberships_on_user: TeamMembership_ListFilter
+  """
+  ✨ Generated from Field `User`.`userRewards_on_user` of type `[UserReward!]!`
+  """
+  userRewards_on_user: UserReward_ListFilter
+  """
+  ✨ Generated from Field `User`.`groups_via_GroupMembership` of type `[Group!]!`
+  """
+  groups_via_GroupMembership: Group_ListFilter
+  """
+  ✨ Generated from Field `User`.`rewards_via_UserReward` of type `[Reward!]!`
+  """
+  rewards_via_UserReward: Reward_ListFilter
+  """
+  ✨ Generated from Field `User`.`tasks_via_AssignedUser` of type `[Task!]!`
+  """
+  tasks_via_AssignedUser: Task_ListFilter
+  """
+  ✨ Generated from Field `User`.`teams_via_TeamMembership` of type `[Team!]!`
+  """
+  teams_via_TeamMembership: Team_ListFilter
+}
+"""
+✨ Generated first-row input type for table 'User'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input User_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [User_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: User_Filter
+}
+"""
+✨ Generated having input type for table 'User'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [User_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: User_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [User_Having!]
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`experiencePoints_count` of type `Int!`
+  """
+  experiencePoints_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`lastActive_count` of type `Int!`
+  """
+  lastActive_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`level_count` of type `Int!`
+  """
+  level_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`photoURL_count` of type `Int!`
+  """
+  photoURL_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`uid_count` of type `Int!`
+  """
+  uid_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_count` of type `Int!`
+  """
+  virtualCurrency_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`experiencePoints_sum` of type `Int`
+  """
+  experiencePoints_sum: Int_Filter
+  """
+  ✨ Generated from Field `User`.`level_sum` of type `Int`
+  """
+  level_sum: Int_Filter
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_sum` of type `Int`
+  """
+  virtualCurrency_sum: Int_Filter
+  """
+  ✨ Generated from Field `User`.`experiencePoints_avg` of type `Float`
+  """
+  experiencePoints_avg: Float_Filter
+  """
+  ✨ Generated from Field `User`.`level_avg` of type `Float`
+  """
+  level_avg: Float_Filter
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_avg` of type `Float`
+  """
+  virtualCurrency_avg: Float_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`experiencePoints_min` of type `Int`
+  """
+  experiencePoints_min: Int_Filter
+  """
+  ✨ Generated from Field `User`.`lastActive_min` of type `Timestamp`
+  """
+  lastActive_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`level_min` of type `Int`
+  """
+  level_min: Int_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_min` of type `Int`
+  """
+  virtualCurrency_min: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`experiencePoints_max` of type `Int`
+  """
+  experiencePoints_max: Int_Filter
+  """
+  ✨ Generated from Field `User`.`lastActive_max` of type `Timestamp`
+  """
+  lastActive_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`level_max` of type `Int`
+  """
+  level_max: Int_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_max` of type `Int`
+  """
+  virtualCurrency_max: Int_Filter
+}
+"""
+✨ Generated key input type for table 'User'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input User_Key {
+  """
+  ✨ Generated from Field `User`.`uid` of type `String!`
+  """
+  uid: String
+  """
+  ✨ `_expr` server value variant of `uid` (✨ Generated from Field `User`.`uid` of type `String!`)
+  """
+  uid_expr: String_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'User'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input User_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: User_Filter
+}
+"""
+✨ Generated order input type for table 'User'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input User_Order {
+  """
+  ✨ Generated from Field `User`.`uid` of type `String!`
+  """
+  uid: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String!`
+  """
+  displayName: OrderDirection
+  """
+  ✨ Generated from Field `User`.`experiencePoints` of type `Int!`
+  """
+  experiencePoints: OrderDirection
+  """
+  ✨ Generated from Field `User`.`lastActive` of type `Timestamp!`
+  """
+  lastActive: OrderDirection
+  """
+  ✨ Generated from Field `User`.`level` of type `Int!`
+  """
+  level: OrderDirection
+  """
+  ✨ Generated from Field `User`.`photoURL` of type `String`
+  """
+  photoURL: OrderDirection
+  """
+  ✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `User`.`virtualCurrency` of type `Int!`
+  """
+  virtualCurrency: OrderDirection
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`experiencePoints_count` of type `Int!`
+  """
+  experiencePoints_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`lastActive_count` of type `Int!`
+  """
+  lastActive_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`level_count` of type `Int!`
+  """
+  level_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`photoURL_count` of type `Int!`
+  """
+  photoURL_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`uid_count` of type `Int!`
+  """
+  uid_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_count` of type `Int!`
+  """
+  virtualCurrency_count: OrderDirection
+  """
+  ✨ Generated from Field `User`.`experiencePoints_sum` of type `Int`
+  """
+  experiencePoints_sum: OrderDirection
+  """
+  ✨ Generated from Field `User`.`level_sum` of type `Int`
+  """
+  level_sum: OrderDirection
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_sum` of type `Int`
+  """
+  virtualCurrency_sum: OrderDirection
+  """
+  ✨ Generated from Field `User`.`experiencePoints_avg` of type `Float`
+  """
+  experiencePoints_avg: OrderDirection
+  """
+  ✨ Generated from Field `User`.`level_avg` of type `Float`
+  """
+  level_avg: OrderDirection
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_avg` of type `Float`
+  """
+  virtualCurrency_avg: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`experiencePoints_min` of type `Int`
+  """
+  experiencePoints_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`lastActive_min` of type `Timestamp`
+  """
+  lastActive_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`level_min` of type `Int`
+  """
+  level_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_min` of type `Int`
+  """
+  virtualCurrency_min: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `User`.`experiencePoints_max` of type `Int`
+  """
+  experiencePoints_max: OrderDirection
+  """
+  ✨ Generated from Field `User`.`lastActive_max` of type `Timestamp`
+  """
+  lastActive_max: OrderDirection
+  """
+  ✨ Generated from Field `User`.`level_max` of type `Int`
+  """
+  level_max: OrderDirection
+  """
+  ✨ Generated from Field `User`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
+  """
+  ✨ Generated from Field `User`.`virtualCurrency_max` of type `Int`
+  """
+  virtualCurrency_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'UserReward'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input UserReward_Data {
+  """
+  ✨ Generated from Field `UserReward`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `UserReward`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: UUID
+  """
+  ✨ `_expr` server value variant of `rewardId` (✨ Generated from Field `UserReward`.`rewardId` of type `UUID!`)
+  """
+  rewardId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`reward` of type `Reward!`
+  """
+  reward: Reward_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `UserReward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `UserReward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `UserReward`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained` of type `Timestamp!`
+  """
+  dateObtained: Timestamp
+  """
+  ✨ `_expr` server value variant of `dateObtained` (✨ Generated from Field `UserReward`.`dateObtained` of type `Timestamp!`)
+  """
+  dateObtained_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `dateObtained` (✨ Generated from Field `UserReward`.`dateObtained` of type `Timestamp!`)
+  """
+  dateObtained_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `dateObtained` (✨ Generated from Field `UserReward`.`dateObtained` of type `Timestamp!`)
+  """
+  dateObtained_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt` of type `Timestamp`
+  """
+  redeemedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `redeemedAt` (✨ Generated from Field `UserReward`.`redeemedAt` of type `Timestamp`)
+  """
+  redeemedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `redeemedAt` (✨ Generated from Field `UserReward`.`redeemedAt` of type `Timestamp`)
+  """
+  redeemedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `redeemedAt` (✨ Generated from Field `UserReward`.`redeemedAt` of type `Timestamp`)
+  """
+  redeemedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `UserReward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `UserReward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `UserReward`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'UserReward'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input UserReward_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [UserReward_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: UserReward_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [UserReward_Filter!]
+  """
+  ✨ Generated from Field `UserReward`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `UserReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: UUID_Filter
+  """
+  ✨ Generated from Field `UserReward`.`reward` of type `Reward!`
+  """
+  reward: Reward_Filter
+  """
+  ✨ Generated from Field `UserReward`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `UserReward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained` of type `Timestamp!`
+  """
+  dateObtained: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt` of type `Timestamp`
+  """
+  redeemedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'UserReward'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input UserReward_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [UserReward_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: UserReward_Filter
+}
+"""
+✨ Generated having input type for table 'UserReward'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input UserReward_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [UserReward_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: UserReward_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [UserReward_Having!]
+  """
+  ✨ Generated from Field `UserReward`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `UserReward`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained_count` of type `Int!`
+  """
+  dateObtained_count: Int_Filter
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt_count` of type `Int!`
+  """
+  redeemedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `UserReward`.`rewardId_count` of type `Int!`
+  """
+  rewardId_count: Int_Filter
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `UserReward`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
+  ✨ Generated from Field `UserReward`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained_min` of type `Timestamp`
+  """
+  dateObtained_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt_min` of type `Timestamp`
+  """
+  redeemedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained_max` of type `Timestamp`
+  """
+  dateObtained_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt_max` of type `Timestamp`
+  """
+  redeemedAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'UserReward'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input UserReward_Key {
+  """
+  ✨ Generated from Field `UserReward`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `UserReward`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: UUID
+  """
+  ✨ `_expr` server value variant of `rewardId` (✨ Generated from Field `UserReward`.`rewardId` of type `UUID!`)
+  """
+  rewardId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'UserReward'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input UserReward_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: UserReward_Filter
+}
+"""
+✨ Generated order input type for table 'UserReward'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input UserReward_Order {
+  """
+  ✨ Generated from Field `UserReward`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`rewardId` of type `UUID!`
+  """
+  rewardId: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`reward` of type `Reward!`
+  """
+  reward: Reward_Order
+  """
+  ✨ Generated from Field `UserReward`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `UserReward`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained` of type `Timestamp!`
+  """
+  dateObtained: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt` of type `Timestamp`
+  """
+  redeemedAt: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained_count` of type `Int!`
+  """
+  dateObtained_count: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt_count` of type `Int!`
+  """
+  redeemedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`rewardId_count` of type `Int!`
+  """
+  rewardId_count: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained_min` of type `Timestamp`
+  """
+  dateObtained_min: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt_min` of type `Timestamp`
+  """
+  redeemedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`dateObtained_max` of type `Timestamp`
+  """
+  dateObtained_max: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`redeemedAt_max` of type `Timestamp`
+  """
+  redeemedAt_max: OrderDirection
+  """
+  ✨ Generated from Field `UserReward`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: OrderDirection
+}

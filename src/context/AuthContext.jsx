@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '@/firebase';
+import { getUser } from '@/dataconnect-generated';
 
 const AuthContext = createContext(null);
 
@@ -8,15 +9,45 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const fetchDatabaseUser = useCallback(async () => {
+        try {
+            const result = await getUser();
+            return result.data?.users?.[0] ?? null;
+        } catch (error) {
+            console.error('Error fetching database user:', error);
+            return null;
+        }
+    }, []);
+
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                setUser({
+                // First set basic Firebase user data
+                const userData = {
                     uid: user.uid,
                     email: user.email,
                     displayName: user.displayName,
                     photoURL: user.photoURL,
-                });
+                };
+
+                // Fetch database user data for current auth user
+                const databaseUser = await fetchDatabaseUser();
+
+                if (databaseUser) {
+                    // Merge Firebase user data with database user data
+                    setUser({
+                        ...userData,
+                        level: databaseUser.level,
+                        experiencePoints: databaseUser.experiencePoints,
+                        virtualCurrency: databaseUser.virtualCurrency,
+                        lastActive: databaseUser.lastActive,
+                        createdAt: databaseUser.createdAt,
+                        updatedAt: databaseUser.updatedAt,
+                    });
+                } else {
+                    // No database user found, return Firebase data only
+                    setUser(userData);
+                }
             } else {
                 setUser(null);
             }
@@ -24,7 +55,7 @@ export function AuthProvider({ children }) {
         });
 
         return unsubscribe;
-    }, []);
+    }, [fetchDatabaseUser]);
 
     const value = {
         user,

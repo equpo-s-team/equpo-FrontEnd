@@ -1,0 +1,603 @@
+extend type Query {
+  """
+  ✨ Look up a single `Achievement` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  achievement(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Achievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Achievement_FirstRow
+  ): Achievement @fdc_generated(from: "Achievement", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `AssignedUser` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  assignedUser(
+    """
+    The key used to identify the object.
+    """
+    key: AssignedUser_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: AssignedUser_FirstRow
+  ): AssignedUser @fdc_generated(from: "AssignedUser", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Group` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  group(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Group_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Group_FirstRow
+  ): Group @fdc_generated(from: "Group", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `GroupMembership` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  groupMembership(
+    """
+    The key used to identify the object.
+    """
+    key: GroupMembership_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: GroupMembership_FirstRow
+  ): GroupMembership @fdc_generated(from: "GroupMembership", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Reward` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  reward(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Reward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Reward_FirstRow
+  ): Reward @fdc_generated(from: "Reward", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Task` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  task(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Task_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Task_FirstRow
+  ): Task @fdc_generated(from: "Task", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `TaskCategory` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  taskCategory(
+    """
+    The key used to identify the object.
+    """
+    key: TaskCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TaskCategory_FirstRow
+  ): TaskCategory @fdc_generated(from: "TaskCategory", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `Team` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  team(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Team_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Team_FirstRow
+  ): Team @fdc_generated(from: "Team", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `TeamMembership` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  teamMembership(
+    """
+    The key used to identify the object.
+    """
+    key: TeamMembership_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TeamMembership_FirstRow
+  ): TeamMembership @fdc_generated(from: "TeamMembership", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `TeamReward` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  teamReward(
+    """
+    The key used to identify the object.
+    """
+    key: TeamReward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TeamReward_FirstRow
+  ): TeamReward @fdc_generated(from: "TeamReward", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `User` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  user(
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User @fdc_generated(from: "User", purpose: QUERY_SINGLE)
+  """
+  ✨ Look up a single `UserReward` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userReward(
+    """
+    The key used to identify the object.
+    """
+    key: UserReward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserReward_FirstRow
+  ): UserReward @fdc_generated(from: "UserReward", purpose: QUERY_SINGLE)
+  """
+  ✨ List `Achievement` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  achievements(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Achievement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Achievement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Achievement_Having
+  ): [Achievement!]! @fdc_generated(from: "Achievement", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `AssignedUser` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  assignedUsers(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AssignedUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AssignedUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AssignedUser_Having
+  ): [AssignedUser!]! @fdc_generated(from: "AssignedUser", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Group` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  groups(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Group_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Group_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Group_Having
+  ): [Group!]! @fdc_generated(from: "Group", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `GroupMembership` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  groupMemberships(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: GroupMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [GroupMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: GroupMembership_Having
+  ): [GroupMembership!]! @fdc_generated(from: "GroupMembership", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Reward` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  rewards(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Reward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Reward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Reward_Having
+  ): [Reward!]! @fdc_generated(from: "Reward", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Task` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  tasks(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Task_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Task_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Task_Having
+  ): [Task!]! @fdc_generated(from: "Task", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `TaskCategory` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  taskCategories(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TaskCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TaskCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TaskCategory_Having
+  ): [TaskCategory!]! @fdc_generated(from: "TaskCategory", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `Team` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  teams(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Team_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Team_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Team_Having
+  ): [Team!]! @fdc_generated(from: "Team", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `TeamMembership` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  teamMemberships(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamMembership_Having
+  ): [TeamMembership!]! @fdc_generated(from: "TeamMembership", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `TeamReward` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  teamRewards(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamReward_Having
+  ): [TeamReward!]! @fdc_generated(from: "TeamReward", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `User` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  users(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: User_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [User_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: User_Having
+  ): [User!]! @fdc_generated(from: "User", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `UserReward` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userRewards(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserReward_Having
+  ): [UserReward!]! @fdc_generated(from: "UserReward", purpose: QUERY_MULTIPLE)
+}

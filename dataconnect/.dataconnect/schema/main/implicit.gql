@@ -1,0 +1,110 @@
+extend type Achievement {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Achievement", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Achievement`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "Achievement.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type AssignedUser {
+  """
+  ✨ Implicit foreign key field based on `AssignedUser`.`task`. It must match the value of `Task`.`id`. See `@ref` for how to customize it.
+  """
+  taskId: UUID! @fdc_generated(from: "AssignedUser.task", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `AssignedUser`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "AssignedUser.user", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Group {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Group", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Group`.`team`. It must match the value of `Team`.`id`. See `@ref` for how to customize it.
+  """
+  teamId: UUID! @fdc_generated(from: "Group.team", purpose: IMPLICIT_REF_FIELD)
+}
+extend type GroupMembership {
+  """
+  ✨ Implicit foreign key field based on `GroupMembership`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "GroupMembership.user", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `GroupMembership`.`group`. It must match the value of `Group`.`id`. See `@ref` for how to customize it.
+  """
+  groupId: UUID! @fdc_generated(from: "GroupMembership.group", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Reward {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Reward", purpose: IMPLICIT_KEY_FIELD)
+}
+extend type Task {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Task", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Task`.`assignedGroup`. It must match the value of `Group`.`id`. See `@ref` for how to customize it.
+  """
+  assignedGroupId: UUID @fdc_generated(from: "Task.assignedGroup", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Task`.`assignedUser`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  assignedUserUid: String @fdc_generated(from: "Task.assignedUser", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Task`.`teamId`. It must match the value of `Team`.`id`. See `@ref` for how to customize it.
+  """
+  teamIdId: UUID! @fdc_generated(from: "Task.teamId", purpose: IMPLICIT_REF_FIELD)
+}
+extend type TaskCategory {
+  """
+  ✨ Implicit foreign key field based on `TaskCategory`.`task`. It must match the value of `Task`.`id`. See `@ref` for how to customize it.
+  """
+  taskId: UUID! @fdc_generated(from: "TaskCategory.task", purpose: IMPLICIT_REF_FIELD)
+}
+extend type Team {
+  """
+  ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
+  """
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Team", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Team`.`leader`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  leaderUid: String! @fdc_generated(from: "Team.leader", purpose: IMPLICIT_REF_FIELD)
+}
+extend type TeamMembership {
+  """
+  ✨ Implicit foreign key field based on `TeamMembership`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "TeamMembership.user", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `TeamMembership`.`team`. It must match the value of `Team`.`id`. See `@ref` for how to customize it.
+  """
+  teamId: UUID! @fdc_generated(from: "TeamMembership.team", purpose: IMPLICIT_REF_FIELD)
+}
+extend type TeamReward {
+  """
+  ✨ Implicit foreign key field based on `TeamReward`.`team`. It must match the value of `Team`.`id`. See `@ref` for how to customize it.
+  """
+  teamId: UUID! @fdc_generated(from: "TeamReward.team", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `TeamReward`.`reward`. It must match the value of `Reward`.`id`. See `@ref` for how to customize it.
+  """
+  rewardId: UUID! @fdc_generated(from: "TeamReward.reward", purpose: IMPLICIT_REF_FIELD)
+}
+extend type UserReward {
+  """
+  ✨ Implicit foreign key field based on `UserReward`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "UserReward.user", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `UserReward`.`reward`. It must match the value of `Reward`.`id`. See `@ref` for how to customize it.
+  """
+  rewardId: UUID! @fdc_generated(from: "UserReward.reward", purpose: IMPLICIT_REF_FIELD)
+}

@@ -1,0 +1,1976 @@
+extend type Achievement {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Achievement", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Achievement` table.
+  """
+  _count: Int! @fdc_generated(from: "Achievement.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.description", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `iconURL` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  iconURL_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.iconURL", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `unlockedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  unlockedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.unlockedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Achievement` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement.userUid", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `Achievement` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Achievement.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `unlockedAt` field in the `Achievement` table.
+  """
+  unlockedAt_min: Timestamp @fdc_generated(from: "Achievement.unlockedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `Achievement` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Achievement.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Achievement` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Achievement.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `unlockedAt` field in the `Achievement` table.
+  """
+  unlockedAt_max: Timestamp @fdc_generated(from: "Achievement.unlockedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Achievement` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Achievement.updatedAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Achievement.id", purpose: ENTITY_ID)
+}
+extend type AssignedUser {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "AssignedUser", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `AssignedUser` table.
+  """
+  _count: Int! @fdc_generated(from: "AssignedUser.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `AssignedUser` table where the `taskId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  taskId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "AssignedUser.taskId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `AssignedUser` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "AssignedUser.userUid", purpose: QUERY_COUNT)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "AssignedUser.taskId,userUid", purpose: ENTITY_ID)
+}
+extend type Group {
+  """
+  ✨ List `GroupMembership` objects in a one-to-many relationship (where `GroupMembership`.`group` is this object).
+  """
+  groupMemberships_on_group(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: GroupMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [GroupMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: GroupMembership_Having
+  ): [GroupMembership!]! @fdc_generated(from: "GroupMembership.group", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Task` objects in a one-to-many relationship (where `Task`.`assignedGroup` is this object).
+  """
+  tasks_on_assignedGroup(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Task_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Task_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Task_Having
+  ): [Task!]! @fdc_generated(from: "Task.assignedGroup", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `User` objects using `GroupMembership` as the join table (a `GroupMembership` object exists where its `group` is this and its `user` is that).
+  """
+  users_via_GroupMembership(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: GroupMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [GroupMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: GroupMembership_Having
+  ): [User!]! @fdc_generated(from: "GroupMembership", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Group", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Group` table.
+  """
+  _count: Int! @fdc_generated(from: "Group.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Group` table where the `groupName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  groupName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Group.groupName", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Group` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Group.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Group` table where the `teamId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  teamId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Group.teamId", purpose: QUERY_COUNT)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Group.id", purpose: ENTITY_ID)
+}
+extend type GroupMembership {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "GroupMembership", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `GroupMembership` table.
+  """
+  _count: Int! @fdc_generated(from: "GroupMembership.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `GroupMembership` table where the `groupId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  groupId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "GroupMembership.groupId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `GroupMembership` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "GroupMembership.userUid", purpose: QUERY_COUNT)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "GroupMembership.userUid,groupId", purpose: ENTITY_ID)
+}
+extend type Reward {
+  """
+  ✨ List `TeamReward` objects in a one-to-many relationship (where `TeamReward`.`reward` is this object).
+  """
+  teamRewards_on_reward(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamReward_Having
+  ): [TeamReward!]! @fdc_generated(from: "TeamReward.reward", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `UserReward` objects in a one-to-many relationship (where `UserReward`.`reward` is this object).
+  """
+  userRewards_on_reward(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserReward_Having
+  ): [UserReward!]! @fdc_generated(from: "UserReward.reward", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Team` objects using `TeamReward` as the join table (a `TeamReward` object exists where its `reward` is this and its `team` is that).
+  """
+  teams_via_TeamReward(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamReward_Having
+  ): [Team!]! @fdc_generated(from: "TeamReward", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `User` objects using `UserReward` as the join table (a `UserReward` object exists where its `reward` is this and its `user` is that).
+  """
+  users_via_UserReward(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserReward_Having
+  ): [User!]! @fdc_generated(from: "UserReward", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Reward", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Reward` table.
+  """
+  _count: Int! @fdc_generated(from: "Reward.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `cost` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  cost_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.cost", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.description", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `experienceGranted` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  experienceGranted_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.experienceGranted", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `iconURL` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  iconURL_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.iconURL", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `isTeamReward` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  isTeamReward_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.isTeamReward", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `type` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  type_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.type", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Reward` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `cost` field in the `Reward` table.
+  """
+  cost_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "Reward.cost", purpose: QUERY_SUM)
+  """
+  ✨ Sum the `experienceGranted` field in the `Reward` table.
+  """
+  experienceGranted_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "Reward.experienceGranted", purpose: QUERY_SUM)
+  """
+  ✨ Average the `cost` field in the `Reward` table.
+  """
+  cost_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Reward.cost", purpose: QUERY_AVG)
+  """
+  ✨ Average the `experienceGranted` field in the `Reward` table.
+  """
+  experienceGranted_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Reward.experienceGranted", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `cost` field in the `Reward` table.
+  """
+  cost_min: Int @fdc_generated(from: "Reward.cost", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `createdAt` field in the `Reward` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Reward.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `experienceGranted` field in the `Reward` table.
+  """
+  experienceGranted_min: Int @fdc_generated(from: "Reward.experienceGranted", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `Reward` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Reward.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `cost` field in the `Reward` table.
+  """
+  cost_max: Int @fdc_generated(from: "Reward.cost", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `createdAt` field in the `Reward` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Reward.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `experienceGranted` field in the `Reward` table.
+  """
+  experienceGranted_max: Int @fdc_generated(from: "Reward.experienceGranted", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Reward` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Reward.updatedAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Reward.id", purpose: ENTITY_ID)
+}
+extend type Task {
+  """
+  ✨ List `AssignedUser` objects in a one-to-many relationship (where `AssignedUser`.`task` is this object).
+  """
+  assignedUsers_on_task(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AssignedUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AssignedUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AssignedUser_Having
+  ): [AssignedUser!]! @fdc_generated(from: "AssignedUser.task", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `TaskCategory` objects in a one-to-one relationship (where `TaskCategory`.`task` is this object).
+  """
+  taskCategory_on_task: TaskCategory @fdc_generated(from: "TaskCategory.task", purpose: QUERY_SINGLE_ONE_TO_ONE)
+  """
+  ✨ List `User` objects using `AssignedUser` as the join table (a `AssignedUser` object exists where its `task` is this and its `user` is that).
+  """
+  users_via_AssignedUser(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AssignedUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AssignedUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AssignedUser_Having
+  ): [User!]! @fdc_generated(from: "AssignedUser", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Task", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Task` table.
+  """
+  _count: Int! @fdc_generated(from: "Task.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `assignedGroupId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  assignedGroupId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.assignedGroupId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `assignedUserUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  assignedUserUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.assignedUserUid", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `category` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  category_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.category", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `dueDate` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  dueDate_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.dueDate", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `isRecurring` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  isRecurring_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.isRecurring", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `priority` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  priority_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.priority", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `recurringInterval` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  recurringInterval_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.recurringInterval", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `status` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  status_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.status", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Task` table where the `teamIdId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  teamIdId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.teamIdId", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `dueDate` field in the `Task` table.
+  """
+  dueDate_min: Timestamp @fdc_generated(from: "Task.dueDate", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `dueDate` field in the `Task` table.
+  """
+  dueDate_max: Timestamp @fdc_generated(from: "Task.dueDate", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Task.id", purpose: ENTITY_ID)
+}
+extend type TaskCategory {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "TaskCategory", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `TaskCategory` table.
+  """
+  _count: Int! @fdc_generated(from: "TaskCategory.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TaskCategory` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TaskCategory.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TaskCategory` table where the `taskId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  taskId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TaskCategory.taskId", purpose: QUERY_COUNT)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "TaskCategory.taskId", purpose: ENTITY_ID)
+}
+extend type Team {
+  """
+  ✨ List `Group` objects in a one-to-many relationship (where `Group`.`team` is this object).
+  """
+  groups_on_team(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Group_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Group_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Group_Having
+  ): [Group!]! @fdc_generated(from: "Group.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Task` objects in a one-to-many relationship (where `Task`.`teamId` is this object).
+  """
+  tasks_on_teamId(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Task_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Task_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Task_Having
+  ): [Task!]! @fdc_generated(from: "Task.teamId", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `TeamMembership` objects in a one-to-many relationship (where `TeamMembership`.`team` is this object).
+  """
+  teamMemberships_on_team(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamMembership_Having
+  ): [TeamMembership!]! @fdc_generated(from: "TeamMembership.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `TeamReward` objects in a one-to-many relationship (where `TeamReward`.`team` is this object).
+  """
+  teamRewards_on_team(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamReward_Having
+  ): [TeamReward!]! @fdc_generated(from: "TeamReward.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Reward` objects using `TeamReward` as the join table (a `TeamReward` object exists where its `team` is this and its `reward` is that).
+  """
+  rewards_via_TeamReward(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamReward_Having
+  ): [Reward!]! @fdc_generated(from: "TeamReward", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `User` objects using `TeamMembership` as the join table (a `TeamMembership` object exists where its `team` is this and its `user` is that).
+  """
+  users_via_TeamMembership(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamMembership_Having
+  ): [User!]! @fdc_generated(from: "TeamMembership", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "Team", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `Team` table.
+  """
+  _count: Int! @fdc_generated(from: "Team.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Team` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Team.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Team` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  description_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Team.description", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Team` table where the `id` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  id_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Team.id", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Team` table where the `leaderUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  leaderUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Team.leaderUid", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Team` table where the `name` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  name_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Team.name", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Team` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Team.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Team` table where the `virtualCurrency` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  virtualCurrency_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Team.virtualCurrency", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `virtualCurrency` field in the `Team` table.
+  """
+  virtualCurrency_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "Team.virtualCurrency", purpose: QUERY_SUM)
+  """
+  ✨ Average the `virtualCurrency` field in the `Team` table.
+  """
+  virtualCurrency_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Team.virtualCurrency", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `createdAt` field in the `Team` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "Team.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `Team` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "Team.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `virtualCurrency` field in the `Team` table.
+  """
+  virtualCurrency_min: Int @fdc_generated(from: "Team.virtualCurrency", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `Team` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "Team.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `Team` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "Team.updatedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `virtualCurrency` field in the `Team` table.
+  """
+  virtualCurrency_max: Int @fdc_generated(from: "Team.virtualCurrency", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "Team.id", purpose: ENTITY_ID)
+}
+extend type TeamMembership {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "TeamMembership", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `TeamMembership` table.
+  """
+  _count: Int! @fdc_generated(from: "TeamMembership.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamMembership` table where the `joinedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  joinedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamMembership.joinedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamMembership` table where the `role` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  role_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamMembership.role", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamMembership` table where the `teamId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  teamId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamMembership.teamId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamMembership` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamMembership.userUid", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `joinedAt` field in the `TeamMembership` table.
+  """
+  joinedAt_min: Timestamp @fdc_generated(from: "TeamMembership.joinedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `joinedAt` field in the `TeamMembership` table.
+  """
+  joinedAt_max: Timestamp @fdc_generated(from: "TeamMembership.joinedAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "TeamMembership.userUid,teamId", purpose: ENTITY_ID)
+}
+extend type TeamReward {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "TeamReward", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `TeamReward` table.
+  """
+  _count: Int! @fdc_generated(from: "TeamReward.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamReward` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamReward.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamReward` table where the `dateObtained` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  dateObtained_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamReward.dateObtained", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamReward` table where the `rewardId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  rewardId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamReward.rewardId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamReward` table where the `teamId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  teamId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamReward.teamId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `TeamReward` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "TeamReward.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `TeamReward` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "TeamReward.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `dateObtained` field in the `TeamReward` table.
+  """
+  dateObtained_min: Timestamp @fdc_generated(from: "TeamReward.dateObtained", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `TeamReward` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "TeamReward.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `TeamReward` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "TeamReward.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `dateObtained` field in the `TeamReward` table.
+  """
+  dateObtained_max: Timestamp @fdc_generated(from: "TeamReward.dateObtained", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `TeamReward` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "TeamReward.updatedAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "TeamReward.teamId,rewardId", purpose: ENTITY_ID)
+}
+extend type User {
+  """
+  ✨ List `Achievement` objects in a one-to-many relationship (where `Achievement`.`user` is this object).
+  """
+  achievements_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Achievement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Achievement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Achievement_Having
+  ): [Achievement!]! @fdc_generated(from: "Achievement.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `AssignedUser` objects in a one-to-many relationship (where `AssignedUser`.`user` is this object).
+  """
+  assignedUsers_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AssignedUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AssignedUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AssignedUser_Having
+  ): [AssignedUser!]! @fdc_generated(from: "AssignedUser.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `GroupMembership` objects in a one-to-many relationship (where `GroupMembership`.`user` is this object).
+  """
+  groupMemberships_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: GroupMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [GroupMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: GroupMembership_Having
+  ): [GroupMembership!]! @fdc_generated(from: "GroupMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Task` objects in a one-to-many relationship (where `Task`.`assignedUser` is this object).
+  """
+  tasks_on_assignedUser(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Task_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Task_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Task_Having
+  ): [Task!]! @fdc_generated(from: "Task.assignedUser", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Team` objects in a one-to-many relationship (where `Team`.`leader` is this object).
+  """
+  teams_on_leader(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Team_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Team_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Team_Having
+  ): [Team!]! @fdc_generated(from: "Team.leader", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `TeamMembership` objects in a one-to-many relationship (where `TeamMembership`.`user` is this object).
+  """
+  teamMemberships_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamMembership_Having
+  ): [TeamMembership!]! @fdc_generated(from: "TeamMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `UserReward` objects in a one-to-many relationship (where `UserReward`.`user` is this object).
+  """
+  userRewards_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserReward_Having
+  ): [UserReward!]! @fdc_generated(from: "UserReward.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Group` objects using `GroupMembership` as the join table (a `GroupMembership` object exists where its `user` is this and its `group` is that).
+  """
+  groups_via_GroupMembership(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: GroupMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [GroupMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: GroupMembership_Having
+  ): [Group!]! @fdc_generated(from: "GroupMembership", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `Reward` objects using `UserReward` as the join table (a `UserReward` object exists where its `user` is this and its `reward` is that).
+  """
+  rewards_via_UserReward(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserReward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserReward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserReward_Having
+  ): [Reward!]! @fdc_generated(from: "UserReward", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `Task` objects using `AssignedUser` as the join table (a `AssignedUser` object exists where its `user` is this and its `task` is that).
+  """
+  tasks_via_AssignedUser(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: AssignedUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [AssignedUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: AssignedUser_Having
+  ): [Task!]! @fdc_generated(from: "AssignedUser", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `Team` objects using `TeamMembership` as the join table (a `TeamMembership` object exists where its `user` is this and its `team` is that).
+  """
+  teams_via_TeamMembership(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TeamMembership_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TeamMembership_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TeamMembership_Having
+  ): [Team!]! @fdc_generated(from: "TeamMembership", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "User", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `User` table.
+  """
+  _count: Int! @fdc_generated(from: "User.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `displayName` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  displayName_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.displayName", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `experiencePoints` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  experiencePoints_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.experiencePoints", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `lastActive` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  lastActive_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.lastActive", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `level` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  level_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.level", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `photoURL` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  photoURL_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.photoURL", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `uid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  uid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.uid", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `User` table where the `virtualCurrency` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  virtualCurrency_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "User.virtualCurrency", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `experiencePoints` field in the `User` table.
+  """
+  experiencePoints_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "User.experiencePoints", purpose: QUERY_SUM)
+  """
+  ✨ Sum the `level` field in the `User` table.
+  """
+  level_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "User.level", purpose: QUERY_SUM)
+  """
+  ✨ Sum the `virtualCurrency` field in the `User` table.
+  """
+  virtualCurrency_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "User.virtualCurrency", purpose: QUERY_SUM)
+  """
+  ✨ Average the `experiencePoints` field in the `User` table.
+  """
+  experiencePoints_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "User.experiencePoints", purpose: QUERY_AVG)
+  """
+  ✨ Average the `level` field in the `User` table.
+  """
+  level_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "User.level", purpose: QUERY_AVG)
+  """
+  ✨ Average the `virtualCurrency` field in the `User` table.
+  """
+  virtualCurrency_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "User.virtualCurrency", purpose: QUERY_AVG)
+  """
+  ✨ Minimum of the `createdAt` field in the `User` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `experiencePoints` field in the `User` table.
+  """
+  experiencePoints_min: Int @fdc_generated(from: "User.experiencePoints", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `lastActive` field in the `User` table.
+  """
+  lastActive_min: Timestamp @fdc_generated(from: "User.lastActive", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `level` field in the `User` table.
+  """
+  level_min: Int @fdc_generated(from: "User.level", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `User` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "User.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `virtualCurrency` field in the `User` table.
+  """
+  virtualCurrency_min: Int @fdc_generated(from: "User.virtualCurrency", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `User` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "User.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `experiencePoints` field in the `User` table.
+  """
+  experiencePoints_max: Int @fdc_generated(from: "User.experiencePoints", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `lastActive` field in the `User` table.
+  """
+  lastActive_max: Timestamp @fdc_generated(from: "User.lastActive", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `level` field in the `User` table.
+  """
+  level_max: Int @fdc_generated(from: "User.level", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `User` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "User.updatedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `virtualCurrency` field in the `User` table.
+  """
+  virtualCurrency_max: Int @fdc_generated(from: "User.virtualCurrency", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "User.uid", purpose: ENTITY_ID)
+}
+extend type UserReward {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserReward", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `UserReward` table.
+  """
+  _count: Int! @fdc_generated(from: "UserReward.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserReward` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  createdAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserReward.createdAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserReward` table where the `dateObtained` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  dateObtained_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserReward.dateObtained", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserReward` table where the `redeemedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  redeemedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserReward.redeemedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserReward` table where the `rewardId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  rewardId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserReward.rewardId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserReward` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  updatedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserReward.updatedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserReward` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserReward.userUid", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `createdAt` field in the `UserReward` table.
+  """
+  createdAt_min: Timestamp @fdc_generated(from: "UserReward.createdAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `dateObtained` field in the `UserReward` table.
+  """
+  dateObtained_min: Timestamp @fdc_generated(from: "UserReward.dateObtained", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `redeemedAt` field in the `UserReward` table.
+  """
+  redeemedAt_min: Timestamp @fdc_generated(from: "UserReward.redeemedAt", purpose: QUERY_MIN)
+  """
+  ✨ Minimum of the `updatedAt` field in the `UserReward` table.
+  """
+  updatedAt_min: Timestamp @fdc_generated(from: "UserReward.updatedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `createdAt` field in the `UserReward` table.
+  """
+  createdAt_max: Timestamp @fdc_generated(from: "UserReward.createdAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `dateObtained` field in the `UserReward` table.
+  """
+  dateObtained_max: Timestamp @fdc_generated(from: "UserReward.dateObtained", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `redeemedAt` field in the `UserReward` table.
+  """
+  redeemedAt_max: Timestamp @fdc_generated(from: "UserReward.redeemedAt", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `updatedAt` field in the `UserReward` table.
+  """
+  updatedAt_max: Timestamp @fdc_generated(from: "UserReward.updatedAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserReward.userUid,rewardId", purpose: ENTITY_ID)
+}

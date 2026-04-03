@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { tasksApi } from '../api/tasksApi';
-import type { CreateTaskPayload } from '../types';
+import type { CreateTaskPayload } from '../types/tasks';
 
 export function useCreateTask() {
   const queryClient = useQueryClient();

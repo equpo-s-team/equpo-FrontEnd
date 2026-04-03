@@ -8,4 +8,4 @@ export type {
     TeamTask,
     TaskListMeta,
     GetTeamTasksOptions,
-} from './types/taskSchemaDC.ts';
+} from './types/tasks';

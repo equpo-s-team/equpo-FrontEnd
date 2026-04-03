@@ -2,7 +2,7 @@ import {useState} from 'react';
 import AppHeader from './AppHeader.jsx';
 import FilterBar from './FilterBar.jsx';
 import KanbanColumn from './KanbanColumn.jsx';
-import {COLUMNS, INITIAL_CARDS} from "@/components/board/kanbanData.js";
+import {COLUMNS, INITIAL_CARDS} from "./kanbanData.js";
 
 export default function KanbanBoard() {
     const [cards, setCards] = useState(INITIAL_CARDS);

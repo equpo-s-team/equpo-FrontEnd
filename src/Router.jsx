@@ -2,7 +2,11 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import {useAuth} from '@/context/AuthContext';
 import {SidebarProvider, useSidebar} from '@/features/layout/components/navbar/SidebarContext.jsx';
 import AppLayout from '@/features/layout/components/AppLayout.jsx';
+<<<<<<< HEAD
 import TeamBoard from "@/features/board/TeamBoard.jsx";
+=======
+import KanbanBoard from "@/features/board/components/KanbanBoard.jsx";
+>>>>>>> 6d14def (refactor(core): Restructure frontend into feature modules)
 import LandingPage from "@/features/presentation/page.jsx";
 import {ReportPage} from "@/features/reports/page.tsx";
 

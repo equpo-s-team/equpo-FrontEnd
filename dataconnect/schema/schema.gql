@@ -50,11 +50,6 @@ type GroupMembership @table(key: ["user", "group"]) {
   group: Group!
 }
 
-type AssignedUser @table(key: ["task", "user"]) {
-  task: Task!
-  user: User!
-}
-
 type TaskCategory @table(key: ["task"]) {
   task: Task!
   name: String!

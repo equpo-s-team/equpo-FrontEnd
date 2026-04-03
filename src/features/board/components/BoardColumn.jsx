@@ -1,5 +1,5 @@
 import {Plus} from 'lucide-react';
-import KanbanCard from './KanbanCard.jsx';
+import BoardCard from './BoardCard.jsx';
 import {COLUMN_CONFIG} from "./columnConfig.js";
 
 function ColIndicator({accent}) {
@@ -41,7 +41,7 @@ function DropZone({onDrop, columnIndex, position}) {
     );
 }
 
-export default function KanbanColumn({column, cards, onMoveCard, columnIndex}) {
+export default function BoardColumn({column, cards, onMoveCard, columnIndex}) {
     const {id, label, accent} = column;
     const cfg = COLUMN_CONFIG[accent];
 
@@ -115,7 +115,7 @@ export default function KanbanColumn({column, cards, onMoveCard, columnIndex}) {
             >
                 {cards.map((card, index) => (
                     <div key={card.id}>
-                        <KanbanCard
+                        <BoardCard
                             card={card}
                             accent={accent}
                             columnId={id}

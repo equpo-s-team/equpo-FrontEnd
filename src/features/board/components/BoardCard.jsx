@@ -1,6 +1,13 @@
+//import {Paperclip, MessageSquare} from 'lucide-react';
 import { useRef } from 'react';
 
-import { COLUMN_CONFIG, PRIORITY_CONFIG, USER_GRADIENT } from './columnConfig.js';
+import {
+    COLUMN_CONFIG,
+    PRIORITY_CONFIG,
+    TAG_COLOR_CONFIG,
+    TAG_LABEL_TO_COLOR,
+    USER_GRADIENT
+} from "./columnConfig.js";
 
 const STATUS_TO_PROGRESS = {
   todo: 0,

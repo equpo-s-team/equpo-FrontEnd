@@ -2,7 +2,7 @@ import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import {useAuth} from '@/context/AuthContext';
 import {SidebarProvider, useSidebar} from '@/features/layout/components/navbar/SidebarContext.jsx';
 import AppLayout from '@/features/layout/components/AppLayout.jsx';
-import KanbanBoard from "@/features/board/components/KanbanBoard.jsx";
+import TeamBoard from "@/features/board/TeamBoard.jsx";
 import LandingPage from "@/features/presentation/page.jsx";
 import {ReportPage} from "@/features/reports/page.tsx";
 
@@ -14,7 +14,7 @@ function Dashboard() {
             case 'my-space':
                 return <div>Mi Espacio</div>;
             case 'missiones':
-                return <KanbanBoard/>;
+                return <TeamBoard/>;
             case 'chat':
                 return <div>Mi Espacio</div>;
             case 'reports':

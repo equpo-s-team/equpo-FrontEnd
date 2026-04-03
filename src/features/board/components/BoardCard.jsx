@@ -31,7 +31,7 @@ function UserAvatar({userId, size = 'sm'}) {
     );
 }
 
-export default function KanbanCard({card, accent, columnId, onMoveCard, position}) {
+export default function BoardCard({card, accent, columnId, onMoveCard, position}) {
     const cfg = COLUMN_CONFIG[accent];
     const prio = PRIORITY_CONFIG[card.priority];
 

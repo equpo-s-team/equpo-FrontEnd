@@ -12,6 +12,7 @@ import {
 import LandingPage from '@/features/presentation/page.jsx';
 import { ReportPage } from '@/features/reports/page.tsx';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
+import GamePage from "@/features/enviroment/GamePage.tsx";
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -19,7 +20,7 @@ function Dashboard() {
   const renderContent = () => {
     switch (activeItem) {
       case 'my-space':
-        return <div>Mi Espacio</div>;
+        return <GamePage/>;
       case 'missiones':
         return <TeamBoard />;
       case 'chat':

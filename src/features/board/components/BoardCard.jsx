@@ -41,6 +41,7 @@ function UserAvatar({userId, size = 'sm'}) {
 export default function BoardCard({card, accent, columnId, onMoveCard, position}) {
     const cfg = COLUMN_CONFIG[accent];
     const prio = PRIORITY_CONFIG[card.priority];
+    const progress = STATUS_TO_PROGRESS[columnId] ?? 0;
 
     // Handle drag start to set data
     const handleDragStart = (e) => {

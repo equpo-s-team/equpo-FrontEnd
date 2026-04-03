@@ -1,10 +1,10 @@
 import {useState} from 'react';
-import AppHeader from './AppHeader.jsx';
-import FilterBar from './FilterBar.jsx';
-import KanbanColumn from './KanbanColumn.jsx';
+import AppHeader from './components/AppHeader.jsx';
+import FilterBar from './components/FilterBar.jsx';
+import BoardColumn from './components/BoardColumn.jsx';
 import {COLUMNS, INITIAL_CARDS} from "./kanbanData.js";
 
-export default function KanbanBoard() {
+export default function TeamBoard() {
     const [cards, setCards] = useState(INITIAL_CARDS);
 
     const moveCard = (cardId, fromColumnId, toColumnId, position) => {
@@ -45,7 +45,7 @@ export default function KanbanBoard() {
              ">
                 {COLUMNS.map((col, index) => (
                     <div key={col.id} className="snap-start">
-                        <KanbanColumn
+                        <BoardColumn
                             column={col}
                             cards={cards[col.id] || []}
                             onMoveCard={moveCard}

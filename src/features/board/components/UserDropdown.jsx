@@ -9,7 +9,6 @@ export default function UserDropdown({selected, onChange}) {
     const ref = useRef(null);
     const inputRef = useRef(null);
 
-    // Close on outside click
     useEffect(() => {
         const handler = (e) => {
             if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -18,7 +17,6 @@ export default function UserDropdown({selected, onChange}) {
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
-    // Focus search when opens
     useEffect(() => {
         if (open && inputRef.current) inputRef.current.focus();
     }, [open]);
@@ -39,7 +37,6 @@ export default function UserDropdown({selected, onChange}) {
 
     return (
         <div ref={ref} className="relative">
-            {/* Trigger */}
             <button
                 onClick={() => setOpen(o => !o)}
                 className={`
@@ -52,7 +49,6 @@ export default function UserDropdown({selected, onChange}) {
                 }
         `}
             >
-                {/* Mini avatars */}
                 {shownAvatars.length > 0 && (
                     <div className="flex">
                         {shownAvatars.map((u, i) => (

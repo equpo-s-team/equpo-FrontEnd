@@ -171,14 +171,14 @@ import { useGetUser } from '@dataconnect/generated/react'
 
 export default function GetUserComponent() {
   // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  // Call the Query hooks function to get a `UseQueryResult` object which holds the state of your Query.
   const query = useGetUser();
 
-  // You can also pass in a `DataConnect` instance to the Query hook function.
+  // You can also pass in a `DataConnect` instance to the Query hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const query = useGetUser(dataConnect);
 
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hooks function.
   const options = { staleTime: 5 * 1000 };
   const query = useGetUser(options);
 
@@ -272,14 +272,14 @@ import { connectorConfig, CreateUserVariables } from '@dataconnect/generated';
 import { useCreateUser } from '@dataconnect/generated/react'
 
 export default function CreateUserComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useCreateUser();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useCreateUser(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -292,7 +292,7 @@ export default function CreateUserComponent() {
   };
   const mutation = useCreateUser(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useCreateUser` Mutation requires an argument of type `CreateUserVariables`:
   const createUserVars: CreateUserVariables = {
     displayName: ..., 
@@ -361,14 +361,14 @@ import { connectorConfig } from '@dataconnect/generated';
 import { useTouchUserLastActive } from '@dataconnect/generated/react'
 
 export default function TouchUserLastActiveComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useTouchUserLastActive();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useTouchUserLastActive(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -381,7 +381,7 @@ export default function TouchUserLastActiveComponent() {
   };
   const mutation = useTouchUserLastActive(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   mutation.mutate();
 
   // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
@@ -454,14 +454,14 @@ import { connectorConfig, UpdateUserVariables } from '@dataconnect/generated';
 import { useUpdateUser } from '@dataconnect/generated/react'
 
 export default function UpdateUserComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useUpdateUser();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useUpdateUser(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -474,7 +474,7 @@ export default function UpdateUserComponent() {
   };
   const mutation = useUpdateUser(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useUpdateUser` Mutation has an optional argument of type `UpdateUserVariables`:
   const updateUserVars: UpdateUserVariables = {
     displayName: ..., // optional
@@ -558,14 +558,14 @@ import { connectorConfig, CreateTeamVariables } from '@dataconnect/generated';
 import { useCreateTeam } from '@dataconnect/generated/react'
 
 export default function CreateTeamComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useCreateTeam();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useCreateTeam(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -578,7 +578,7 @@ export default function CreateTeamComponent() {
   };
   const mutation = useCreateTeam(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useCreateTeam` Mutation requires an argument of type `CreateTeamVariables`:
   const createTeamVars: CreateTeamVariables = {
     name: ..., 
@@ -657,14 +657,14 @@ import { connectorConfig, UpdateTeamVariables } from '@dataconnect/generated';
 import { useUpdateTeam } from '@dataconnect/generated/react'
 
 export default function UpdateTeamComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useUpdateTeam();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useUpdateTeam(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -677,7 +677,7 @@ export default function UpdateTeamComponent() {
   };
   const mutation = useUpdateTeam(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useUpdateTeam` Mutation requires an argument of type `UpdateTeamVariables`:
   const updateTeamVars: UpdateTeamVariables = {
     id: ..., 
@@ -758,14 +758,14 @@ import { connectorConfig, CreateAchievementVariables } from '@dataconnect/genera
 import { useCreateAchievement } from '@dataconnect/generated/react'
 
 export default function CreateAchievementComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useCreateAchievement();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useCreateAchievement(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -778,7 +778,7 @@ export default function CreateAchievementComponent() {
   };
   const mutation = useCreateAchievement(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useCreateAchievement` Mutation requires an argument of type `CreateAchievementVariables`:
   const createAchievementVars: CreateAchievementVariables = {
     userUid: ..., 
@@ -859,14 +859,14 @@ import { connectorConfig, UpdateAchievementVariables } from '@dataconnect/genera
 import { useUpdateAchievement } from '@dataconnect/generated/react'
 
 export default function UpdateAchievementComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useUpdateAchievement();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useUpdateAchievement(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -879,7 +879,7 @@ export default function UpdateAchievementComponent() {
   };
   const mutation = useUpdateAchievement(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useUpdateAchievement` Mutation requires an argument of type `UpdateAchievementVariables`:
   const updateAchievementVars: UpdateAchievementVariables = {
     id: ..., 
@@ -962,14 +962,14 @@ import { connectorConfig, CreateRewardVariables } from '@dataconnect/generated';
 import { useCreateReward } from '@dataconnect/generated/react'
 
 export default function CreateRewardComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useCreateReward();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useCreateReward(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -982,7 +982,7 @@ export default function CreateRewardComponent() {
   };
   const mutation = useCreateReward(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useCreateReward` Mutation requires an argument of type `CreateRewardVariables`:
   const createRewardVars: CreateRewardVariables = {
     name: ..., 
@@ -1067,14 +1067,14 @@ import { connectorConfig, UpdateRewardVariables } from '@dataconnect/generated';
 import { useUpdateReward } from '@dataconnect/generated/react'
 
 export default function UpdateRewardComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useUpdateReward();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useUpdateReward(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -1087,7 +1087,7 @@ export default function UpdateRewardComponent() {
   };
   const mutation = useUpdateReward(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useUpdateReward` Mutation requires an argument of type `UpdateRewardVariables`:
   const updateRewardVars: UpdateRewardVariables = {
     id: ..., 
@@ -1168,14 +1168,14 @@ import { connectorConfig, CreateUserRewardVariables } from '@dataconnect/generat
 import { useCreateUserReward } from '@dataconnect/generated/react'
 
 export default function CreateUserRewardComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useCreateUserReward();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useCreateUserReward(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -1188,7 +1188,7 @@ export default function CreateUserRewardComponent() {
   };
   const mutation = useCreateUserReward(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useCreateUserReward` Mutation requires an argument of type `CreateUserRewardVariables`:
   const createUserRewardVars: CreateUserRewardVariables = {
     userUid: ..., 
@@ -1265,14 +1265,14 @@ import { connectorConfig, RedeemUserRewardVariables } from '@dataconnect/generat
 import { useRedeemUserReward } from '@dataconnect/generated/react'
 
 export default function RedeemUserRewardComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useRedeemUserReward();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useRedeemUserReward(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -1285,7 +1285,7 @@ export default function RedeemUserRewardComponent() {
   };
   const mutation = useRedeemUserReward(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useRedeemUserReward` Mutation requires an argument of type `RedeemUserRewardVariables`:
   const redeemUserRewardVars: RedeemUserRewardVariables = {
     userUid: ..., 
@@ -1362,14 +1362,14 @@ import { connectorConfig, CreateTeamRewardVariables } from '@dataconnect/generat
 import { useCreateTeamReward } from '@dataconnect/generated/react'
 
 export default function CreateTeamRewardComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useCreateTeamReward();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useCreateTeamReward(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -1382,7 +1382,7 @@ export default function CreateTeamRewardComponent() {
   };
   const mutation = useCreateTeamReward(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useCreateTeamReward` Mutation requires an argument of type `CreateTeamRewardVariables`:
   const createTeamRewardVars: CreateTeamRewardVariables = {
     teamId: ..., 
@@ -1459,14 +1459,14 @@ import { connectorConfig, UpdateTeamRewardVariables } from '@dataconnect/generat
 import { useUpdateTeamReward } from '@dataconnect/generated/react'
 
 export default function UpdateTeamRewardComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useUpdateTeamReward();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useUpdateTeamReward(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -1479,7 +1479,7 @@ export default function UpdateTeamRewardComponent() {
   };
   const mutation = useUpdateTeamReward(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useUpdateTeamReward` Mutation requires an argument of type `UpdateTeamRewardVariables`:
   const updateTeamRewardVars: UpdateTeamRewardVariables = {
     teamId: ..., 
@@ -1556,14 +1556,14 @@ import { connectorConfig, AddTeamMemberVariables } from '@dataconnect/generated'
 import { useAddTeamMember } from '@dataconnect/generated/react'
 
 export default function AddTeamMemberComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useAddTeamMember();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useAddTeamMember(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -1576,7 +1576,7 @@ export default function AddTeamMemberComponent() {
   };
   const mutation = useAddTeamMember(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useAddTeamMember` Mutation requires an argument of type `AddTeamMemberVariables`:
   const addTeamMemberVars: AddTeamMemberVariables = {
     userUid: ..., 
@@ -1654,14 +1654,14 @@ import { connectorConfig, UpdateTeamMemberRoleVariables } from '@dataconnect/gen
 import { useUpdateTeamMemberRole } from '@dataconnect/generated/react'
 
 export default function UpdateTeamMemberRoleComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  // Call the Mutation hooks function to get a `UseMutationResult` object which holds the state of your Mutation.
   const mutation = useUpdateTeamMemberRole();
 
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  // You can also pass in a `DataConnect` instance to the Mutation hooks function.
   const dataConnect = getDataConnect(connectorConfig);
   const mutation = useUpdateTeamMemberRole(dataConnect);
 
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hooks function.
   const options = {
     onSuccess: () => { console.log('Mutation succeeded!'); }
   };
@@ -1674,7 +1674,7 @@ export default function UpdateTeamMemberRoleComponent() {
   };
   const mutation = useUpdateTeamMemberRole(dataConnect, options);
 
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // After calling the Mutation hooks function, you must call `UseMutationResult.mutate()` to execute the Mutation.
   // The `useUpdateTeamMemberRole` Mutation requires an argument of type `UpdateTeamMemberRoleVariables`:
   const updateTeamMemberRoleVars: UpdateTeamMemberRoleVariables = {
     userUid: ..., 

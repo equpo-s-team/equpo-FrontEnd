@@ -1,4 +1,4 @@
-import {useSidebar} from "@/components/navbar/SidebarContext.jsx";
+import {useSidebar} from "./SidebarContext.jsx";
 
 export default function SidebarSection({ label, children }) {
     const { collapsed } = useSidebar();

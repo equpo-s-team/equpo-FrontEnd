@@ -1,5 +1,5 @@
 import {Home, Star, MessageCircle, ChartColumnBig, Settings} from "lucide-react";
-import {useSidebar} from "@/components/navbar/SidebarContext.jsx";
+import {useSidebar} from "./SidebarContext.jsx";
 
 const NAV_ITEMS = [
     {id: 'my-space', label: 'Mi Espacio', icon: Home},

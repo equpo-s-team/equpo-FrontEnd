@@ -1,6 +1,6 @@
-import {useSidebar} from "@/components/navbar/SidebarContext.jsx";
-import BottomNav from "@/components/navbar/BottomNav.jsx";
-import Sidebar from "@/components/navbar/Sidebar.jsx";
+import {useSidebar} from "./navbar/SidebarContext.jsx";
+import BottomNav from "./navbar/BottomNav.jsx";
+import Sidebar from "./navbar/Sidebar.jsx";
 
 
 export default function AppLayout({ children }) {

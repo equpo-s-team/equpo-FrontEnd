@@ -5,7 +5,7 @@ import {
     TAG_COLOR_CONFIG,
     TAG_LABEL_TO_COLOR,
     USER_GRADIENT
-} from "@/components/board/columnConfig.js";
+} from "./columnConfig.js";
 
 function TagChip({label}) {
     const color = TAG_LABEL_TO_COLOR[label] || 'blue';

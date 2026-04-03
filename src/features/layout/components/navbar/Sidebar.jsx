@@ -3,7 +3,7 @@ import SidebarItem from './SidebarItem.jsx';
 import SidebarSection from './SidebarSection.jsx';
 import SidebarUser from './SidebarUser.jsx';
 import SidebarToggle from './SidebarToggle.jsx';
-import {useSidebar} from "@/components/navbar/SidebarContext.jsx";
+import {useSidebar} from "./SidebarContext.jsx";
 import {Home, Star, MessageCircle, ChartColumnBig, Settings} from "lucide-react";
 
 export default function Sidebar() {

@@ -1,6 +1,6 @@
 import {Plus} from 'lucide-react';
 import KanbanCard from './KanbanCard.jsx';
-import {COLUMN_CONFIG} from "@/components/board/columnConfig.js";
+import {COLUMN_CONFIG} from "./columnConfig.js";
 
 function ColIndicator({accent}) {
     const cfg = COLUMN_CONFIG[accent];

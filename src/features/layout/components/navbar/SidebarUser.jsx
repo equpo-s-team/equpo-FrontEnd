@@ -1,4 +1,4 @@
-import {useSidebar} from "@/components/navbar/SidebarContext.jsx";
+import {useSidebar} from "./SidebarContext.jsx";
 import {SquareArrowRightExit} from "lucide-react";
 
 export default function SidebarUser() {

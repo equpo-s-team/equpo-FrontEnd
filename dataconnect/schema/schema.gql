@@ -32,7 +32,6 @@ type Task @table {
   dueDate: Timestamp!
   priority: String!
   status: String!
-  category: String
   isRecurring: Boolean
   recurringInterval: String
   assignedUser: User

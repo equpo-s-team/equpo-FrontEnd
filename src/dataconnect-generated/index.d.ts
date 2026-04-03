@@ -25,12 +25,6 @@ export interface AddTeamMemberVariables {
   role: string;
 }
 
-export interface AssignedUser_Key {
-  taskId: UUIDString;
-  userUid: string;
-  __typename?: 'AssignedUser_Key';
-}
-
 export interface CreateAchievementData {
   achievement_insert: Achievement_Key;
 }

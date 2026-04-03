@@ -10,6 +10,7 @@ import Features from '@/components/landing/Features';
 import CTAFinal from '@/components/landing/CTAFinal';
 import Footer from '@/components/landing/Footer';
 import KanbanBoard from "@/components/board/KanbanBoard.jsx";
+import GamePage from "@/features/enviroment/GamePage.tsx";
 
 function Dashboard() {
     const {activeItem} = useSidebar();
@@ -17,7 +18,7 @@ function Dashboard() {
     const renderContent = () => {
         switch (activeItem) {
             case 'my-space':
-                return <div>Mi Espacio</div>;
+                return <GamePage/>;
             case 'missiones':
                 return <KanbanBoard/>;
             case 'chat':

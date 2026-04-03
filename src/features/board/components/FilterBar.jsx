@@ -2,7 +2,6 @@ import {useState} from 'react';
 import {SlidersHorizontal} from 'lucide-react';
 import UserDropdown from './UserDropdown.jsx';
 import FilterDropdown from './FilterDropdown.jsx';
-import {PRIORITIES, TAGS} from "./kanbanData.js";
 
 export default function FilterBar() {
     const [selectedUsers, setSelectedUsers] = useState(['AT', 'JR', 'ML']);

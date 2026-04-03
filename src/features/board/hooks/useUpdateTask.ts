@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { tasksApi } from '../api/tasksApi';
-import type { UpdateTaskPayload } from '../types';
+import type { UpdateTaskPayload } from '../types/tasks';
 
 export function useUpdateTask() {
   const queryClient = useQueryClient();

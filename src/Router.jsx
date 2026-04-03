@@ -1,15 +1,10 @@
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import {useAuth} from '@/context/AuthContext';
-import {SidebarProvider, useSidebar} from '@/components/navbar/SidebarContext.jsx';
-import AppLayout from '@/components/AppLayout.jsx';
-import Navbar from '@/components/landing/Navbar.jsx';
-import Hero from '@/components/landing/Hero';
-import WhatIsEqupo from '@/components/landing/WhatIsEqupo';
-import Nucleus from '@/components/landing/Nucleus';
-import Features from '@/components/landing/Features';
-import CTAFinal from '@/components/landing/CTAFinal';
-import Footer from '@/components/landing/Footer';
-import KanbanBoard from "@/components/board/KanbanBoard.jsx";
+import {SidebarProvider, useSidebar} from '@/features/layout/components/navbar/SidebarContext.jsx';
+import AppLayout from '@/features/layout/components/AppLayout.jsx';
+import KanbanBoard from "@/features/board/components/KanbanBoard.jsx";
+import LandingPage from "@/features/presentation/page.jsx";
+import {ReportPage} from "@/features/reports/page.tsx";
 
 function Dashboard() {
     const {activeItem} = useSidebar();
@@ -23,7 +18,7 @@ function Dashboard() {
             case 'chat':
                 return <div>Mi Espacio</div>;
             case 'reports':
-                return <div>Mi Espacio</div>;
+                return <ReportPage/>;
             case 'settings':
                 return <div>Mi Espacio</div>;
             default:
@@ -35,20 +30,6 @@ function Dashboard() {
         <AppLayout>
             {renderContent()}
         </AppLayout>
-    );
-}
-
-function PublicLayout() {
-    return (
-        <div className="font-body">
-            <Navbar/>
-            <Hero/>
-            <WhatIsEqupo/>
-            <Nucleus/>
-            <Features/>
-            <CTAFinal/>
-            <Footer/>
-        </div>
     );
 }
 
@@ -73,7 +54,7 @@ export default function Router() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<PublicLayout/>}/>
+                <Route path="/" element={<LandingPage/>}/>
                 <Route
                     path="/dashboard"
                     element={

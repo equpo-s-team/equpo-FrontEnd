@@ -19,14 +19,14 @@ function TagChip({label}) {
     const cfg = TAG_COLOR_CONFIG[color] || TAG_COLOR_CONFIG.blue;
     return (
         <span
-            className={`px-2.5 py-[3px] rounded-xl text-[11px] font-medium border-[1.5px] ${cfg.bg} ${cfg.text} ${cfg.border}`}>
+            className="px-2.5 py-[3px] rounded-xl text-[11px] font-medium border-[1.5px] bg-grey-50 text-grey-700 border-grey-200">
       {label}
     </span>
     );
 }
 
 function UserAvatar({userId, size = 'sm'}) {
-    const dim = size === 'sm' ? 'w-[21px] h-[21px] text-[7.5px]' : 'w-7 h-7 text-[10px]';
+    const dim = size === 'sm' ? 'w-5.5 h-5.5 text-[7.5px]' : 'w-7 h-7 text-[10px]';
     return (
         <div
             className={`${dim} rounded-full font-bold text-white flex items-center justify-center border-2 border-primary`}

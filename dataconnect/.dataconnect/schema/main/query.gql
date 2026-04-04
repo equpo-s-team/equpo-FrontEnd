@@ -19,20 +19,6 @@ extend type Query {
     first: Achievement_FirstRow
   ): Achievement @fdc_generated(from: "Achievement", purpose: QUERY_SINGLE)
   """
-  ✨ Look up a single `AssignedUser` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
-  """
-  assignedUser(
-    """
-    The key used to identify the object.
-    """
-    key: AssignedUser_Key
-
-    """
-    Fetch the first row based on the filters and ordering.
-    """
-    first: AssignedUser_FirstRow
-  ): AssignedUser @fdc_generated(from: "AssignedUser", purpose: QUERY_SINGLE)
-  """
   ✨ Look up a single `Group` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
   group(
@@ -179,6 +165,20 @@ extend type Query {
     first: User_FirstRow
   ): User @fdc_generated(from: "User", purpose: QUERY_SINGLE)
   """
+  ✨ Look up a single `UserAchievement` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  userAchievement(
+    """
+    The key used to identify the object.
+    """
+    key: UserAchievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserAchievement_FirstRow
+  ): UserAchievement @fdc_generated(from: "UserAchievement", purpose: QUERY_SINGLE)
+  """
   ✨ Look up a single `UserReward` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
   userReward(
@@ -226,40 +226,6 @@ extend type Query {
     """
     having: Achievement_Having
   ): [Achievement!]! @fdc_generated(from: "Achievement", purpose: QUERY_MULTIPLE)
-  """
-  ✨ List `AssignedUser` objects in the table and return selected fields, optionally filtered by `where` conditions
-  """
-  assignedUsers(
-    """
-    Filter condition to narrow down the query results.
-    """
-    where: AssignedUser_Filter
-
-    """
-    Order the query results by specific fields.
-    """
-    orderBy: [AssignedUser_Order!]
-
-    """
-    Number of rows to skip before starting to return the results.
-    """
-    offset: Int
-
-    """
-    Maximum number of rows to return (defaults to 100 rows).
-    """
-    limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: AssignedUser_Having
-  ): [AssignedUser!]! @fdc_generated(from: "AssignedUser", purpose: QUERY_MULTIPLE)
   """
   ✨ List `Group` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
@@ -566,6 +532,40 @@ extend type Query {
     """
     having: User_Having
   ): [User!]! @fdc_generated(from: "User", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `UserAchievement` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  userAchievements(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserAchievement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserAchievement_Having
+  ): [UserAchievement!]! @fdc_generated(from: "UserAchievement", purpose: QUERY_MULTIPLE)
   """
   ✨ List `UserReward` objects in the table and return selected fields, optionally filtered by `where` conditions
   """

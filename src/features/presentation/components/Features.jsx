@@ -1,5 +1,6 @@
 import { SectionLabel } from './WhatIsEqupo.jsx';
 import { Layout, Globe, Users, MessageCircle, Phone, Star } from 'lucide-react';
+import { useRevealAll } from '@/hooks/useReveal.js';
 
 const FEATURES = [
     {

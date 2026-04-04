@@ -42,12 +42,12 @@ export const Component = ({onClose}: AuthSwitchProps) => {
                     <div className="absolute inset-0 animated-gradient-bg"/>
 
                     <div
-                        className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full bg-radial-green opacity-40 animate-pulse"/>
+                        className="absolute -top-32 -left-32 w-80 h-80 rounded-full bg-radial-green opacity-40 animate-pulse"/>
                     <div
-                        className="absolute -bottom-32 -right-32 w-[600px] h-[600px] rounded-full bg-radial-blue opacity-40 animate-pulse"
+                        className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full bg-radial-blue opacity-40 animate-pulse"
                         style={{animationDelay: '2s'}}/>
                     <div
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-r from-emerald-400/10 to-cyan-400/10 blur-3xl animate-pulse"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-gradient-to-r from-emerald-400/10 to-cyan-400/10 blur-3xl animate-pulse"
                         style={{animationDelay: '1s'}}/>
 
                     <motion.button
@@ -67,10 +67,10 @@ export const Component = ({onClose}: AuthSwitchProps) => {
                             animate={{opacity: 1, scale: 1}}
                             exit={{opacity: 0, scale: 0.9, y: 20}}
                             transition={{duration: 0.5, ease: "easeInOut"}}
-                            className="w-[85vw] max-w-6xl h-[85vh]"
+                            className="w-[85vw] max-w-6xl h-[85vh] md:w-[700px] md:h-[600px]"
                         >
                             <div
-                                className="bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden h-full">
+                                className="bg-white/10 backdrop-blur-2xl rounded-[1.5rem] border border-white/20 shadow-2xl overflow-hidden h-full">
                                 <div className="flex h-full">
                                     <MarketingPanel/>
 

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { tasksApi } from '../api/tasksApi';
-import type { GetTeamTasksOptions } from '../types/tasks';
+import type { GetTeamTasksOptions } from '../types';
 
 export function useTasks(teamId: string, options: GetTeamTasksOptions = {}) {
   return useQuery({

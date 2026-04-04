@@ -1,0 +1,469 @@
+/* Variables Globales */
+:root {
+    --primary-color: #5a67d8;
+    --secondary-color: #4c51bf;
+    --success-color: #48bb78;
+    --danger-color: #f56565;
+    --warning-color: #ed8936;
+    --light-bg: #f5f7fa;
+    --dark-bg: #1a202c;
+    --border-color: #e0e7ff;
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --transition: all 0.2s ease;
+}
+
+/* Reset y estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: #ffffff;
+    color: var(--text-primary);
+}
+
+body {
+    background: var(--light-bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container para login y registro */
+.container-auth {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 1000px;
+    width: 90%;
+    margin: 2rem auto;
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+/* Box de autenticación */
+.auth-box {
+    background: white;
+    border-radius: 0;
+    padding: 2.5rem;
+    box-shadow: none;
+}
+
+.register-box {
+    grid-column: 1 / 2;
+    border-right: 1px solid var(--border-color);
+}
+
+/* Header de autenticación */
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+    font-size: 1.6rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.auth-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Formularios */
+.form-register {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group label i {
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    background-color: white;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(90, 103, 216, 0.05);
+}
+
+/* Password wrapper */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 0.9rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+/* Password strength meter */
+.password-strength {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+.strength-bar {
+    height: 3px;
+    width: 100%;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.strength-bar::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 30%;
+    background: var(--danger-color);
+    transition: var(--transition);
+}
+
+#strength-text {
+    color: var(--danger-color);
+    min-width: 90px;
+    font-weight: 500;
+}
+
+/* Checkbox */
+.form-group.checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.form-group.checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.form-group.checkbox label {
+    margin: 0;
+    font-weight: 400;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.form-group.checkbox a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.form-group.checkbox a:hover {
+    text-decoration: underline;
+}
+
+/* Botón submit */
+.btn-submit {
+    padding: 0.8rem 1.2rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-submit:hover {
+    background: var(--secondary-color);
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* Mensajes de error */
+.error-message {
+    color: var(--danger-color);
+    font-size: 0.8rem;
+    margin-top: -0.4rem;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* Footer de autenticación */
+.auth-footer {
+    text-align: center;
+    padding: 1.2rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.auth-footer p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.link-auth {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.link-auth:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Redes Sociales */
+.social-register {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.social-register p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: white;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-btn:hover {
+    border-color: var(--primary-color);
+    background: #f8f9ff;
+}
+
+.social-btn.google:hover {
+    color: #ea4335;
+    border-color: #ea4335;
+}
+
+.social-btn.github:hover {
+    color: #333;
+    border-color: #333;
+}
+
+.social-btn.microsoft:hover {
+    color: #00a4ef;
+    border-color: #00a4ef;
+}
+
+/* Lado decorativo */
+.auth-decorator {
+    background: var(--primary-color);
+    border-radius: 0;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    grid-column: 2;
+}
+
+.decorator-content {
+    text-align: center;
+}
+
+.decorator-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.decorator-content p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    line-height: 1.5;
+}
+
+.decorator-icon {
+    font-size: 4rem;
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container-auth {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .register-box {
+        grid-column: 1 / 2;
+        border-right: none;
+    }
+
+    .auth-decorator {
+        display: none;
+    }
+
+    .auth-box {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-box {
+        padding: 1.5rem;
+    }
+
+    .auth-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .form-group {
+        gap: 0.3rem;
+    }
+
+    .social-buttons {
+        gap: 0.6rem;
+    }
+
+    .social-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 0.5rem;
+    }
+
+    .container-auth {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .auth-box {
+        padding: 1.2rem;
+    }
+
+    .auth-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .auth-header p {
+        font-size: 0.8rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group input {
+        font-size: 16px;
+        padding: 0.65rem 0.8rem;
+    }
+
+    .btn-submit {
+        padding: 0.7rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Estilos para Login (reutilizable) */
+.login-box {
+    grid-column: 1 / -1;
+    max-width: 450px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .login-box {
+        grid-column: 1 / 2;
+        max-width: 100%;
+    }
+}
+

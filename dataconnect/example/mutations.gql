@@ -1,4 +1,4 @@
-### ── USER (cliente) ───────────────────────────────────────────────────────────
+# ── USER (cliente) ───────────────────────────────────────────────────────────
 mutation CreateUser($displayName: String!, $photoURL: String) @auth(level: USER) {
   user_upsert(
     data: {
@@ -23,6 +23,21 @@ mutation TouchUserLastActive @auth(level: USER) {
   )
 }
 
+mutation UpdateUser($displayName: String, $photoURL: String, $level: Int, $experiencePoints: Int, $virtualCurrency: Int) @auth(level: USER) {
+  user_update(
+    key: { uid_expr: "auth.uid" }
+    data: {
+      displayName: $displayName
+      photoURL: $photoURL
+      level: $level
+      experiencePoints: $experiencePoints
+      virtualCurrency: $virtualCurrency
+      updatedAt_expr: "request.time"
+      lastActive_expr: "request.time"
+    }
+  )
+}
+
 query GetUser @auth(level: USER) {
   users(where: { uid: { eq_expr: "auth.uid" } }, limit: 1) {
     uid
@@ -35,4 +50,128 @@ query GetUser @auth(level: USER) {
     updatedAt
     photoURL
   }
+}
+
+# ── TEAM (cliente) ───────────────────────────────────────────────────────────
+# Any authenticated user can create a team; creator becomes leader automatically.
+mutation CreateTeam($name: String!, $virtualCurrency: Int!, $description: String) @auth(level: USER) {
+  team_insert(data: {
+    name: $name
+    leaderUid_expr: "auth.uid"
+    virtualCurrency: $virtualCurrency
+    description: $description
+    # createdAt / updatedAt → @default(expr: "request.time")
+  })
+}
+
+# ── TEAM / REWARDS / ACHIEVEMENTS (sistema) ──────────────────────────────────
+# Restricted to server-side trusted workflows until role-based checks are added.
+mutation UpdateTeam($id: UUID!, $name: String, $description: String, $virtualCurrency: Int) @auth(level: NO_ACCESS) {
+  team_update(
+    key: { id: $id }
+    data: {
+      name: $name
+      description: $description
+      virtualCurrency: $virtualCurrency
+      updatedAt_expr: "request.time"
+    }
+  )
+}
+
+mutation CreateAchievement($userUid: String!, $name: String!, $description: String, $iconURL: String, $unlockedAt: Timestamp!) @auth(level: NO_ACCESS) {
+  achievement_insert(data: {
+    userUid: $userUid
+    name: $name
+    description: $description
+    iconURL: $iconURL
+    unlockedAt: $unlockedAt
+  })
+}
+
+mutation UpdateAchievement($id: UUID!, $name: String, $description: String, $iconURL: String) @auth(level: NO_ACCESS) {
+  achievement_update(
+    key: { id: $id }
+    data: {
+      name: $name
+      description: $description
+      iconURL: $iconURL
+      updatedAt_expr: "request.time"
+    }
+  )
+}
+
+mutation CreateReward($name: String!, $cost: Int!, $experienceGranted: Int!, $type: String!, $isTeamReward: Boolean!, $description: String, $iconURL: String) @auth(level: NO_ACCESS) {
+  reward_insert(data: {
+    name: $name
+    cost: $cost
+    experienceGranted: $experienceGranted
+    type: $type
+    isTeamReward: $isTeamReward
+    description: $description
+    iconURL: $iconURL
+  })
+}
+
+mutation UpdateReward($id: UUID!, $name: String, $cost: Int, $experienceGranted: Int, $description: String, $iconURL: String) @auth(level: NO_ACCESS) {
+  reward_update(
+    key: { id: $id }
+    data: {
+      name: $name
+      cost: $cost
+      experienceGranted: $experienceGranted
+      description: $description
+      iconURL: $iconURL
+      updatedAt_expr: "request.time"
+    }
+  )
+}
+
+mutation CreateUserReward($userUid: String!, $rewardId: UUID!, $dateObtained: Timestamp!) @auth(level: NO_ACCESS) {
+  userReward_insert(data: {
+    userUid: $userUid
+    rewardId: $rewardId
+    dateObtained: $dateObtained
+  })
+}
+
+mutation RedeemUserReward($userUid: String!, $rewardId: UUID!) @auth(level: NO_ACCESS) {
+  userReward_update(
+    key: { userUid: $userUid, rewardId: $rewardId }
+    data: {
+      redeemedAt_expr: "request.time"
+      updatedAt_expr: "request.time"
+    }
+  )
+}
+
+mutation CreateTeamReward($teamId: UUID!, $rewardId: UUID!, $dateObtained: Timestamp!) @auth(level: NO_ACCESS) {
+  teamReward_insert(data: {
+    teamId: $teamId
+    rewardId: $rewardId
+    dateObtained: $dateObtained
+  })
+}
+
+mutation UpdateTeamReward($teamId: UUID!, $rewardId: UUID!) @auth(level: NO_ACCESS) {
+  teamReward_update(
+    key: { teamId: $teamId, rewardId: $rewardId }
+    data: {
+      updatedAt_expr: "request.time"
+    }
+  )
+}
+
+mutation AddTeamMember($userUid: String!, $teamId: UUID!, $role: String!) @auth(level: NO_ACCESS) {
+  teamMembership_insert(data: {
+    userUid: $userUid
+    teamId: $teamId
+    role: $role
+  })
+}
+
+mutation UpdateTeamMemberRole($userUid: String!, $teamId: UUID!, $role: String!) @auth(level: NO_ACCESS) {
+  teamMembership_update(
+    key: { userUid: $userUid, teamId: $teamId }
+    data: { role: $role }
+  )
 }

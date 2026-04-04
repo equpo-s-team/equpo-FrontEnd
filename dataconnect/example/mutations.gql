@@ -16,10 +16,7 @@ mutation CreateUser($displayName: String!, $photoURL: String) @auth(level: USER)
 mutation TouchUserLastActive @auth(level: USER) {
   user_update(
     key: { uid_expr: "auth.uid" }
-    data: {
-      lastActive_expr: "request.time"
-      updatedAt_expr: "request.time"
-    }
+    data: { lastActive_expr: "request.time", updatedAt_expr: "request.time" }
   )
 }
 

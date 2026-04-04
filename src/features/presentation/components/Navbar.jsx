@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthSwitch from "../../auth/components/AuthSwitch.tsx";
+import AuthSwitch from "../../../../../../Downloads/equpo-FrontEnd-refactor/equpo-FrontEnd-refactor/src/features/auth/components/AuthSwitch.tsx";
 
 export default function Navbar() {
     const [showAuth, setShowAuth] = useState(false);

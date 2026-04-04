@@ -2,23 +2,7 @@ extend type Achievement {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID!
-    @default(expr: "uuidV4()")
-    @fdc_generated(from: "Achievement", purpose: IMPLICIT_KEY_FIELD)
-  """
-  ✨ Implicit foreign key field based on `Achievement`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
-  """
-  userUid: String! @fdc_generated(from: "Achievement.user", purpose: IMPLICIT_REF_FIELD)
-}
-extend type AssignedUser {
-  """
-  ✨ Implicit foreign key field based on `AssignedUser`.`task`. It must match the value of `Task`.`id`. See `@ref` for how to customize it.
-  """
-  taskId: UUID! @fdc_generated(from: "AssignedUser.task", purpose: IMPLICIT_REF_FIELD)
-  """
-  ✨ Implicit foreign key field based on `AssignedUser`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
-  """
-  userUid: String! @fdc_generated(from: "AssignedUser.user", purpose: IMPLICIT_REF_FIELD)
+  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Achievement", purpose: IMPLICIT_KEY_FIELD)
 }
 extend type Group {
   """
@@ -103,6 +87,16 @@ extend type TeamReward {
   ✨ Implicit foreign key field based on `TeamReward`.`reward`. It must match the value of `Reward`.`id`. See `@ref` for how to customize it.
   """
   rewardId: UUID! @fdc_generated(from: "TeamReward.reward", purpose: IMPLICIT_REF_FIELD)
+}
+extend type UserAchievement {
+  """
+  ✨ Implicit foreign key field based on `UserAchievement`.`user`. It must match the value of `User`.`uid`. See `@ref` for how to customize it.
+  """
+  userUid: String! @fdc_generated(from: "UserAchievement.user", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `UserAchievement`.`achievement`. It must match the value of `Achievement`.`id`. See `@ref` for how to customize it.
+  """
+  achievementId: UUID! @fdc_generated(from: "UserAchievement.achievement", purpose: IMPLICIT_REF_FIELD)
 }
 extend type UserReward {
   """

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Videollamada</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Sidebar de Conversaciones -->
+        <aside class="chat-sidebar">
+            <div class="sidebar-header">
+                <h2>Mensajes</h2>
+                <div class="sidebar-actions">
+                    <button class="btn-icon" title="Nueva conversación">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="search-box-chat">
+                <input type="text" id="search-chat" placeholder="Buscar conversación...">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <div class="conversations-list" id="conversations-list">
+                <!-- Las conversaciones se cargarán aquí -->
+                <div class="conversation-item active">
+                    <div class="conversation-avatar">
+                        <img src="https://via.placeholder.com/50" alt="Chat">
+                        <span class="status-indicator online"></span>
+                    </div>
+                    <div class="conversation-info">
+                        <h3>Carlos López</h3>
+                        <p class="last-message">¿Cómo estás?</p>
+                        <span class="message-time">14:30</span>
+                    </div>
+                    <span class="unread-badge">2</span>
+                </div>
+
+                <div class="conversation-item">
+                    <div class="conversation-avatar">
+                        <img src="https://via.placeholder.com/50" alt="Chat">
+                        <span class="status-indicator offline"></span>
+                    </div>
+                    <div class="conversation-info">
+                        <h3>María García</h3>
+                        <p class="last-message">Te envié los archivos</p>
+                        <span class="message-time">10:15</span>
+                    </div>
+                </div>
+
+                <div class="conversation-item">
+                    <div class="conversation-avatar">
+                        <img src="https://via.placeholder.com/50" alt="Chat">
+                        <span class="status-indicator online"></span>
+                    </div>
+                    <div class="conversation-info">
+                        <h3>Equipo Desarrollo</h3>
+                        <p class="last-message">Juan: Listo, ya está deployado</p>
+                        <span class="message-time">Ayer</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Área Principal del Chat -->
+        <main class="chat-main">
+            <!-- Header del Chat -->
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <img src="https://via.placeholder.com/45" alt="Contact" class="header-avatar">
+                    <div class="header-details">
+                        <h2 id="chat-contact-name">Carlos López</h2>
+                        <p id="chat-contact-status">En línea</p>
+                    </div>
+                </div>
+
+                <div class="chat-header-actions">
+                    <button class="btn-icon" title="Llamada de voz">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button class="btn-icon" title="Videollamada">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="btn-icon" title="Información">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mensajes -->
+            <div class="messages-container" id="messages-container">
+                <div class="message-group">
+                    <p class="message-date">Hoy</p>
+                </div>
+
+                <div class="message received">
+                    <div class="message-avatar">
+                        <img src="https://via.placeholder.com/40" alt="User">
+                    </div>
+                    <div class="message-content">
+                        <p class="message-text">¡Hola! ¿Cómo estás?</p>
+                        <span class="message-time">14:25</span>
+                    </div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        <p class="message-text">¡Hey! Muy bien, ¿y tú?</p>
+                        <span class="message-time">14:26</span>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-avatar">
+                        <img src="https://via.placeholder.com/40" alt="User">
+                    </div>
+                    <div class="message-content">
+                        <p class="message-text">Excelente, todo está progresando bien</p>
+                        <span class="message-time">14:27</span>
+                    </div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-content">
+                        <p class="message-text">Me alegra saberlo 😊</p>
+                        <span class="message-time">14:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input de Mensaje -->
+            <div class="message-input-area">
+                <button class="btn-attach" title="Adjuntar archivo">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+
+                <div class="message-input-wrapper">
+                    <input 
+                        type="text" 
+                        id="message-input" 
+                        class="message-input" 
+                        placeholder="Escribe un mensaje..."
+                        autocomplete="off">
+                </div>
+
+                <button class="btn-emoji" title="Emojis">
+                    <i class="fas fa-face-smile"></i>
+                </button>
+
+                <button class="btn-send" id="btn-send-message" title="Enviar">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Llamada (ZegoCloud) -->
+    <div id="call-modal" class="call-modal hidden">
+        <div class="call-modal-content">
+            <div class="call-video-area">
+                <video id="remote-video" autoplay></video>
+                <video id="local-video" autoplay muted></video>
+            </div>
+
+            <div class="call-info">
+                <h3 id="call-contact-name">Carlos López</h3>
+                <p id="call-duration">00:00</p>
+            </div>
+
+            <div class="call-controls">
+                <button class="btn-call-control" id="btn-toggle-micro" title="Micrófono">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="btn-call-control" id="btn-toggle-camera" title="Cámara">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="btn-call-control btn-end" id="btn-end-call" title="Terminar llamada">
+                    <i class="fas fa-phone"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+    <script src="/js/zego-config.js"></script>
+    <script src="/js/chat.js"></script>
+</body>
+</html>

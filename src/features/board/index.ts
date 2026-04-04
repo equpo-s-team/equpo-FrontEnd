@@ -8,4 +8,4 @@ export type {
   TaskStatus,
   TeamTask,
   UpdateTaskPayload,
-} from './types/taskSchemaDC.ts';
+} from './types/taskSchema.ts';

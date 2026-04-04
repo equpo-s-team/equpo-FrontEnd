@@ -1,5 +1,10 @@
 import { type FirebaseApp, initializeApp } from 'firebase/app';
-import { type AppCheck, CustomProvider, initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import {
+  type AppCheck,
+  CustomProvider,
+  initializeAppCheck,
+  ReCaptchaV3Provider,
+} from 'firebase/app-check';
 import { type Auth, getAuth } from 'firebase/auth';
 import log from 'loglevel';
 
@@ -39,11 +44,12 @@ const initAppCheck = (): void => {
     _appCheck = initializeAppCheck(app, {
       provider: IS_DEV
         ? new CustomProvider({
-          getToken: () => Promise.resolve({
-            token: 'debug',
-            expireTimeMillis: Date.now() + 3_600_000,
-          }),
-        })
+            getToken: () =>
+              Promise.resolve({
+                token: 'debug',
+                expireTimeMillis: Date.now() + 3_600_000,
+              }),
+          })
         : new ReCaptchaV3Provider(RECAPTCHA_KEY),
       isTokenAutoRefreshEnabled: true,
     });
@@ -51,7 +57,7 @@ const initAppCheck = (): void => {
     if (IS_DEV) {
       log.info(
         '[Firebase] App Check en modo DEBUG. ' +
-        'Registra el token de consola en Firebase Console → App Check.',
+          'Registra el token de consola en Firebase Console → App Check.',
       );
     }
   } catch (err) {

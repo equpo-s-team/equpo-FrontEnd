@@ -1,13 +1,4 @@
-//import {Paperclip, MessageSquare} from 'lucide-react';
-import { useRef } from 'react';
-
-import {
-    COLUMN_CONFIG,
-    PRIORITY_CONFIG,
-    TAG_COLOR_CONFIG,
-    TAG_LABEL_TO_COLOR,
-    USER_GRADIENT
-} from "./columnConfig.js";
+import { COLUMN_CONFIG, PRIORITY_CONFIG, USER_GRADIENT } from './columnConfig.js';
 
 const STATUS_TO_PROGRESS = {
   todo: 0,
@@ -38,37 +29,16 @@ function UserAvatar({ userId, size = 'sm' }) {
   );
 }
 
-export default function BoardCard({ card, accent, columnId, onMoveCard, onCardClick, position }) {
+export default function BoardCard({ card, accent, columnId, onMoveCard, position }) {
   const cfg = COLUMN_CONFIG[accent];
   const prio = PRIORITY_CONFIG[card.priority];
   const progress = STATUS_TO_PROGRESS[columnId] ?? 0;
 
-  // ── Click vs drag tracking ──
-  const pointerRef = useRef({ x: 0, y: 0, t: 0, dragged: false });
-
-  const handlePointerDown = (e) => {
-    pointerRef.current = { x: e.clientX, y: e.clientY, t: Date.now(), dragged: false };
-  };
-
+  // Handle drag start to set data
   const handleDragStart = (e) => {
-    pointerRef.current.dragged = true;
     e.dataTransfer.setData('text/card-id', card.id);
     e.dataTransfer.setData('text/from-column', columnId);
     e.dataTransfer.effectAllowed = 'move';
-  };
-
-  const handlePointerUp = () => {
-    const { x, y, t, dragged } = pointerRef.current;
-    if (dragged) return;
-
-    const dx = Math.abs(x - (window.event?.clientX ?? x));
-    const dy = Math.abs(y - (window.event?.clientY ?? y));
-    const dt = Date.now() - t;
-
-    // Short, low-displacement press → single click
-    if (dx < 6 && dy < 6 && dt < 300) {
-      onCardClick?.(card);
-    }
   };
 
   // Handle drag end
@@ -102,8 +72,6 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
       role="button"
       tabIndex={0}
       draggable
-      onMouseDown={handlePointerDown}
-      onMouseUp={handlePointerUp}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDrop={handleDrop}

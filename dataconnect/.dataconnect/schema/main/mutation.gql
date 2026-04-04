@@ -9,15 +9,6 @@ extend type Mutation {
     data: Achievement_Data!
   ): Achievement_KeyOutput! @fdc_generated(from: "Achievement", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `AssignedUser` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
-  """
-  assignedUser_insert(
-    """
-    Data object to insert into the table.
-    """
-    data: AssignedUser_Data!
-  ): AssignedUser_KeyOutput! @fdc_generated(from: "AssignedUser", purpose: INSERT_SINGLE)
-  """
   ✨ Insert a single `Group` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   group_insert(
@@ -99,6 +90,15 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
   """
+  ✨ Insert a single `UserAchievement` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userAchievement_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserAchievement_Data!
+  ): UserAchievement_KeyOutput! @fdc_generated(from: "UserAchievement", purpose: INSERT_SINGLE)
+  """
   ✨ Insert a single `UserReward` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   userReward_insert(
@@ -116,15 +116,6 @@ extend type Mutation {
     """
     data: [Achievement_Data!]!
   ): [Achievement_KeyOutput!]! @fdc_generated(from: "Achievement", purpose: INSERT_MULTIPLE)
-  """
-  ✨ Insert `AssignedUser` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
-  """
-  assignedUser_insertMany(
-    """
-    List of data objects to insert into the table.
-    """
-    data: [AssignedUser_Data!]!
-  ): [AssignedUser_KeyOutput!]! @fdc_generated(from: "AssignedUser", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert `Group` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
@@ -207,6 +198,15 @@ extend type Mutation {
     data: [User_Data!]!
   ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
   """
+  ✨ Insert `UserAchievement` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userAchievement_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserAchievement_Data!]!
+  ): [UserAchievement_KeyOutput!]! @fdc_generated(from: "UserAchievement", purpose: INSERT_MULTIPLE)
+  """
   ✨ Insert `UserReward` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   userReward_insertMany(
@@ -224,15 +224,6 @@ extend type Mutation {
     """
     data: Achievement_Data!
   ): Achievement_KeyOutput! @fdc_generated(from: "Achievement", purpose: UPSERT_SINGLE)
-  """
-  ✨ Insert or update a single `AssignedUser` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AssignedUser`.
-  """
-  assignedUser_upsert(
-    """
-    Data object to insert or update if it already exists.
-    """
-    data: AssignedUser_Data!
-  ): AssignedUser_KeyOutput! @fdc_generated(from: "AssignedUser", purpose: UPSERT_SINGLE)
   """
   ✨ Insert or update a single `Group` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Group`.
   """
@@ -315,6 +306,15 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
   """
+  ✨ Insert or update a single `UserAchievement` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserAchievement`.
+  """
+  userAchievement_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserAchievement_Data!
+  ): UserAchievement_KeyOutput! @fdc_generated(from: "UserAchievement", purpose: UPSERT_SINGLE)
+  """
   ✨ Insert or update a single `UserReward` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserReward`.
   """
   userReward_upsert(
@@ -332,15 +332,6 @@ extend type Mutation {
     """
     data: [Achievement_Data!]!
   ): [Achievement_KeyOutput!]! @fdc_generated(from: "Achievement", purpose: UPSERT_MULTIPLE)
-  """
-  ✨ Insert or update `AssignedUser` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `AssignedUser`.
-  """
-  assignedUser_upsertMany(
-    """
-    List of data objects to insert or update if it already exists.
-    """
-    data: [AssignedUser_Data!]!
-  ): [AssignedUser_KeyOutput!]! @fdc_generated(from: "AssignedUser", purpose: UPSERT_MULTIPLE)
   """
   ✨ Insert or update `Group` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Group`.
   """
@@ -423,6 +414,15 @@ extend type Mutation {
     data: [User_Data!]!
   ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
   """
+  ✨ Insert or update `UserAchievement` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserAchievement`.
+  """
+  userAchievement_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserAchievement_Data!]!
+  ): [UserAchievement_KeyOutput!]! @fdc_generated(from: "UserAchievement", purpose: UPSERT_MULTIPLE)
+  """
   ✨ Insert or update `UserReward` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserReward`.
   """
   userReward_upsertMany(
@@ -455,25 +455,6 @@ extend type Mutation {
     """
     data: Achievement_Data!
   ): Achievement_KeyOutput @fdc_generated(from: "Achievement", purpose: UPDATE_SINGLE)
-  """
-  ✨ Update a single `AssignedUser` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `AssignedUser` or `null` if not found.
-  """
-  assignedUser_update(
-    """
-    The key used to identify the object.
-    """
-    key: AssignedUser_Key
-
-    """
-    Fetch the first row based on the filters and ordering.
-    """
-    first: AssignedUser_FirstRow
-
-    """
-    Data object containing fields to be updated.
-    """
-    data: AssignedUser_Data!
-  ): AssignedUser_KeyOutput @fdc_generated(from: "AssignedUser", purpose: UPDATE_SINGLE)
   """
   ✨ Update a single `Group` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Group` or `null` if not found.
   """
@@ -666,6 +647,25 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
   """
+  ✨ Update a single `UserAchievement` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserAchievement` or `null` if not found.
+  """
+  userAchievement_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserAchievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserAchievement_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserAchievement_Data!
+  ): UserAchievement_KeyOutput @fdc_generated(from: "UserAchievement", purpose: UPDATE_SINGLE)
+  """
   ✨ Update a single `UserReward` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserReward` or `null` if not found.
   """
   userReward_update(
@@ -703,25 +703,6 @@ extend type Mutation {
     """
     data: Achievement_Data!
   ): Int! @fdc_generated(from: "Achievement", purpose: UPDATE_MULTIPLE)
-  """
-  ✨ Update `AssignedUser` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
-  """
-  assignedUser_updateMany(
-    """
-    Filter condition to specify which rows to update.
-    """
-    where: AssignedUser_Filter
-
-    """
-    Set to true to update all rows.
-    """
-    all: Boolean = false
-
-    """
-    Data object containing fields to update.
-    """
-    data: AssignedUser_Data!
-  ): Int! @fdc_generated(from: "AssignedUser", purpose: UPDATE_MULTIPLE)
   """
   ✨ Update `Group` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -894,6 +875,25 @@ extend type Mutation {
     data: User_Data!
   ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
   """
+  ✨ Update `UserAchievement` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userAchievement_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserAchievement_Data!
+  ): Int! @fdc_generated(from: "UserAchievement", purpose: UPDATE_MULTIPLE)
+  """
   ✨ Update `UserReward` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
   userReward_updateMany(
@@ -931,20 +931,6 @@ extend type Mutation {
     """
     first: Achievement_FirstRow
   ): Achievement_KeyOutput @fdc_generated(from: "Achievement", purpose: DELETE_SINGLE)
-  """
-  ✨ Delete a single `AssignedUser` based on `id`, `key` or `first` and return its key (or `null` if not found).
-  """
-  assignedUser_delete(
-    """
-    The key used to identify the object.
-    """
-    key: AssignedUser_Key
-
-    """
-    Fetch the first row based on the filters and ordering.
-    """
-    first: AssignedUser_FirstRow
-  ): AssignedUser_KeyOutput @fdc_generated(from: "AssignedUser", purpose: DELETE_SINGLE)
   """
   ✨ Delete a single `Group` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
@@ -1092,6 +1078,20 @@ extend type Mutation {
     first: User_FirstRow
   ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
   """
+  ✨ Delete a single `UserAchievement` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userAchievement_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserAchievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserAchievement_FirstRow
+  ): UserAchievement_KeyOutput @fdc_generated(from: "UserAchievement", purpose: DELETE_SINGLE)
+  """
   ✨ Delete a single `UserReward` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
   userReward_delete(
@@ -1119,20 +1119,6 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "Achievement", purpose: DELETE_MULTIPLE)
-  """
-  ✨ Delete `AssignedUser` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
-  """
-  assignedUser_deleteMany(
-    """
-    Filter condition to specify which rows to delete.
-    """
-    where: AssignedUser_Filter
-
-    """
-    Set to true to delete all rows.
-    """
-    all: Boolean = false
-  ): Int! @fdc_generated(from: "AssignedUser", purpose: DELETE_MULTIPLE)
   """
   ✨ Delete `Group` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
@@ -1259,6 +1245,20 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `UserAchievement` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userAchievement_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserAchievement", purpose: DELETE_MULTIPLE)
   """
   ✨ Delete `UserReward` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """

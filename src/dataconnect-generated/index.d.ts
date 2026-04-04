@@ -1,4 +1,12 @@
-import { ConnectorConfig, DataConnect, QueryRef, QueryPromise, ExecuteQueryOptions, MutationRef, MutationPromise } from 'firebase/data-connect';
+import {
+  type ConnectorConfig,
+  type DataConnect,
+  type ExecuteQueryOptions,
+  type MutationPromise,
+  type MutationRef,
+  type QueryPromise,
+  type QueryRef,
+} from 'firebase/data-connect';
 
 export const connectorConfig: ConnectorConfig;
 
@@ -6,9 +14,6 @@ export type TimestampString = string;
 export type UUIDString = string;
 export type Int64String = string;
 export type DateString = string;
-
-
-
 
 export interface Achievement_Key {
   id: UUIDString;
@@ -111,8 +116,13 @@ interface CreateUserRef {
 }
 export const createUserRef: CreateUserRef;
 
-export function createUser(vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
-export function createUser(dc: DataConnect, vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
+export function createUser(
+  vars: CreateUserVariables,
+): MutationPromise<CreateUserData, CreateUserVariables>;
+export function createUser(
+  dc: DataConnect,
+  vars: CreateUserVariables,
+): MutationPromise<CreateUserData, CreateUserVariables>;
 
 interface TouchUserLastActiveRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -124,7 +134,9 @@ interface TouchUserLastActiveRef {
 export const touchUserLastActiveRef: TouchUserLastActiveRef;
 
 export function touchUserLastActive(): MutationPromise<TouchUserLastActiveData, undefined>;
-export function touchUserLastActive(dc: DataConnect): MutationPromise<TouchUserLastActiveData, undefined>;
+export function touchUserLastActive(
+  dc: DataConnect,
+): MutationPromise<TouchUserLastActiveData, undefined>;
 
 interface GetUserRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -136,5 +148,7 @@ interface GetUserRef {
 export const getUserRef: GetUserRef;
 
 export function getUser(options?: ExecuteQueryOptions): QueryPromise<GetUserData, undefined>;
-export function getUser(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetUserData, undefined>;
-
+export function getUser(
+  dc: DataConnect,
+  options?: ExecuteQueryOptions,
+): QueryPromise<GetUserData, undefined>;

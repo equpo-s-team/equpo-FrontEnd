@@ -113,7 +113,7 @@ export default function BoardCard({card, accent, columnId, onMoveCard, position}
             </p>
 
             {/* Tags */}
-            {card.categories.length > 0 && (
+            {card.categories?.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-3">
                     {card.categories.map(tag => <TagChip key={tag} label={tag}/>)}
                 </div>

@@ -54,7 +54,7 @@ export default function UserDropdown({selected, onChange}) {
                         {shownAvatars.map((u, i) => (
                             <div
                                 key={u.id}
-                                className="w-[18px] h-[18px] rounded-full text-[7px] font-bold text-white flex items-center justify-center border-[1.5px] border-primary"
+                                className="w-4.5 h-4.5 rounded-full text-[7px] font-bold text-white flex items-center justify-center border-[1.5px] border-primary"
                                 style={{background: USER_GRADIENT[u.id], marginLeft: i > 0 ? '-4px' : 0}}
                             >
                                 {u.id}

@@ -54,7 +54,7 @@ export default function BoardColumn({column, cards, onMoveCard, columnIndex}) {
             className={`
         bg-primary rounded-[14px] flex flex-col
         border-[1.5px] ${cfg.border} ${cfg.shadow}
-        min-h-[420px] md:min-h-[480px]
+        min-h-104 md:min-h-120
         relative overflow-hidden
         transition-all duration-300
         shrink-0 w-[82vw] sm:w-[72vw] md:w-auto

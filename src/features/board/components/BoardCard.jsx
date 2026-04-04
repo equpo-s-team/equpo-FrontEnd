@@ -7,6 +7,13 @@ import {
     USER_GRADIENT
 } from "./columnConfig.js";
 
+const STATUS_TO_PROGRESS = {
+    'todo': 0,
+    'in-progress': 40,
+    'in-qa': 85,
+    'done': 100
+};
+
 function TagChip({label}) {
     const color = TAG_LABEL_TO_COLOR[label] || 'blue';
     const cfg = TAG_COLOR_CONFIG[color] || TAG_COLOR_CONFIG.blue;
@@ -96,18 +103,18 @@ export default function BoardCard({card, accent, columnId, onMoveCard, position}
 
             {/* Title */}
             <p className="text-[13.5px] font-semibold text-grey-800 leading-snug mb-1.5 line-clamp-2">
-                {card.title}
+                {card.name}
             </p>
 
             {/* Description */}
             <p className="text-[12px] text-grey-500 leading-relaxed mb-2.5 line-clamp-2">
-                {card.desc}
+                {card.description}
             </p>
 
             {/* Tags */}
-            {card.tags.length > 0 && (
+            {card.categories.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                    {card.tags.map(tag => <TagChip key={tag} label={tag}/>)}
+                    {card.categories.map(tag => <TagChip key={tag} label={tag}/>)}
                 </div>
             )}
 
@@ -115,15 +122,15 @@ export default function BoardCard({card, accent, columnId, onMoveCard, position}
             <div className="mb-3">
                 <div className="flex justify-between items-center mb-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400">Progreso</span>
-                    <span className={`font-maxwell text-[10px] font-bold ${cfg.progressColor}`}>{card.progress}%</span>
+                    <span className={`font-maxwell text-[10px] font-bold ${cfg.progressColor}`}>{progress}%</span>
                 </div>
                 <div className="h-1 bg-secondary rounded-full overflow-hidden">
                     <div
                         className={`h-full rounded-full relative ${cfg.progressFill} transition-[width] duration-500 ease-out`}
-                        style={{width: `${card.progress}%`}}
+                        style={{width: `${progress}%`}}
                     >
                         {/* glow tip */}
-                        {card.progress > 0 && (
+                        {progress > 0 && (
                             <div className="absolute right-0 top-0 bottom-0 w-1.5 blur-[2px] rounded-full"
                                  style={{background: 'inherit'}}
                             />
@@ -143,7 +150,7 @@ export default function BoardCard({card, accent, columnId, onMoveCard, position}
                     ))}
                 </div>
 
-                {/* Meta */}
+                {/* Meta (Actualizaciones futuras, para agregar el attachments y comments)
                 <div className="flex items-center gap-2.5 text-[11px] text-grey-400">
           <span className="flex items-center gap-1">
             <Paperclip size={11}/>
@@ -154,6 +161,8 @@ export default function BoardCard({card, accent, columnId, onMoveCard, position}
                         {card.comments}
           </span>
                 </div>
+
+                 */}
             </div>
         </div>
     );

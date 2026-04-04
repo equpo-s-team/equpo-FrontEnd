@@ -1,91 +1,109 @@
-import {SectionLabel} from './WhatIsEqupo.jsx';
-import {Check} from 'lucide-react';
+import { Check } from 'lucide-react';
+
+import { SectionLabel } from './WhatIsEqupo.jsx';
 
 export default function CTAFinal() {
-    return (
-        <section
-            id="cta-final"
-            className="relative py-28 px-[5vw] overflow-hidden"
-            style={{
-                background: 'linear-gradient(150deg, #f0fdf6 0%, #eff8ff 45%, #fdf5ff 80%, #fff5f7 100%)',
-            }}
+  return (
+    <section
+      id="cta-final"
+      className="relative py-28 px-[5vw] overflow-hidden"
+      style={{
+        background: 'linear-gradient(150deg, #f0fdf6 0%, #eff8ff 45%, #fdf5ff 80%, #fff5f7 100%)',
+      }}
+    >
+      <div
+        className="absolute -top-40 -right-40 w-[550px] h-[550px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(156,237,193,0.25), transparent 65%)' }}
+      />
+      <div
+        className="absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(96,175,255,0.20), transparent 65%)' }}
+      />
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse, rgba(217,154,238,0.12), transparent 70%)' }}
+      />
+
+      <div
+        className="absolute top-[10%] left-[5%] w-[180px] h-[180px] rounded-full border pointer-events-none"
+        style={{ borderColor: 'rgba(156,237,193,0.3)' }}
+      />
+      <div
+        className="absolute bottom-[10%] right-[8%] w-[120px] h-[120px] rounded-full border pointer-events-none"
+        style={{ borderColor: 'rgba(96,175,255,0.25)' }}
+      />
+
+      <div className="relative z-10 max-w-[820px] mx-auto text-center">
+        <SectionLabel
+          gradient="linear-gradient(90deg, #9CEDC1, #60AFFF)"
+          textGrad="linear-gradient(90deg, #38b97a, #2e8fd4)"
+          className="justify-center"
         >
-            <div className="absolute -top-40 -right-40 w-[550px] h-[550px] rounded-full pointer-events-none"
-                 style={{background: 'radial-gradient(circle, rgba(156,237,193,0.25), transparent 65%)'}}/>
-            <div className="absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full pointer-events-none"
-                 style={{background: 'radial-gradient(circle, rgba(96,175,255,0.20), transparent 65%)'}}/>
-            <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
-                style={{background: 'radial-gradient(ellipse, rgba(217,154,238,0.12), transparent 70%)'}}/>
+          Haz que colaborar se sienta bien
+        </SectionLabel>
 
-            <div className="absolute top-[10%] left-[5%] w-[180px] h-[180px] rounded-full border pointer-events-none"
-                 style={{borderColor: 'rgba(156,237,193,0.3)'}}/>
-            <div
-                className="absolute bottom-[10%] right-[8%] w-[120px] h-[120px] rounded-full border pointer-events-none"
-                style={{borderColor: 'rgba(96,175,255,0.25)'}}/>
+        <h2 className="font-maxwell text-display-md text-grey-900 mb-4">
+          Crea un equipo que se mueve en la misma dirección.
+        </h2>
 
-            <div className="relative z-10 max-w-[820px] mx-auto text-center">
-                <SectionLabel
-                    gradient="linear-gradient(90deg, #9CEDC1, #60AFFF)"
-                    textGrad="linear-gradient(90deg, #38b97a, #2e8fd4)"
-                    className="justify-center"
-                >
-                    Haz que colaborar se sienta bien
-                </SectionLabel>
+        <p className="font-body text-[1.05rem] leading-[1.75] text-grey-500 max-w-[560px] mx-auto mb-9">
+          Dale a tu equipo un espacio donde organizarse sea fácil, colaborar sea natural y el
+          progreso se vea —literalmente— reflejado en el ambiente compartido.
+        </p>
 
-                <h2 className="font-maxwell text-display-md text-grey-900 mb-4">
-                    Crea un equipo que se mueve en la misma dirección.
-                </h2>
+        <a
+          href="#"
+          className="font-maxwell text-white text-[1.05rem] px-10 py-4 rounded-2xl no-underline inline-block mb-4 hover:-translate-y-1 transition-all"
+          style={{
+            background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 50%, #7c3fbf 100%)',
+            backgroundSize: '200% 100%',
+            boxShadow: '0 10px 40px rgba(56,185,122,0.35), 0 4px 16px rgba(46,143,212,0.25)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundPosition = '100% 0';
+            e.currentTarget.style.boxShadow =
+              '0 16px 50px rgba(56,185,122,0.45), 0 6px 20px rgba(46,143,212,0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundPosition = '0% 0';
+            e.currentTarget.style.boxShadow =
+              '0 10px 40px rgba(56,185,122,0.35), 0 4px 16px rgba(46,143,212,0.25)';
+          }}
+        >
+          Crear mi primer equipo
+        </a>
 
-                <p className="font-body text-[1.05rem] leading-[1.75] text-grey-500 max-w-[560px] mx-auto mb-9">
-                    Dale a tu equipo un espacio donde organizarse sea fácil, colaborar sea natural y el progreso
-                    se vea —literalmente— reflejado en el ambiente compartido.
-                </p>
+        <p className="font-body text-[.82rem] text-grey-400 mb-10">
+          "Empieza hoy. Ajusta detalles después. Tu equipo lo agradecerá."
+        </p>
 
-                <a
-                    href="#"
-                    className="font-maxwell text-white text-[1.05rem] px-10 py-4 rounded-2xl no-underline inline-block mb-4 hover:-translate-y-1 transition-all"
-                    style={{
-                        background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 50%, #7c3fbf 100%)',
-                        backgroundSize: '200% 100%',
-                        boxShadow: '0 10px 40px rgba(56,185,122,0.35), 0 4px 16px rgba(46,143,212,0.25)',
-                    }}
-                    onMouseEnter={e => {
-                        e.currentTarget.style.backgroundPosition = '100% 0';
-                        e.currentTarget.style.boxShadow = '0 16px 50px rgba(56,185,122,0.45), 0 6px 20px rgba(46,143,212,0.3)';
-                    }}
-                    onMouseLeave={e => {
-                        e.currentTarget.style.backgroundPosition = '0% 0';
-                        e.currentTarget.style.boxShadow = '0 10px 40px rgba(56,185,122,0.35), 0 4px 16px rgba(46,143,212,0.25)';
-                    }}
-                >
-                    Crear mi primer equipo
-                </a>
-
-                <p className="font-body text-[.82rem] text-grey-400 mb-10">
-                    "Empieza hoy. Ajusta detalles después. Tu equipo lo agradecerá."
-                </p>
-
-                <ul className="list-none flex justify-center flex-wrap gap-6">
-                    {[
-                        {label: 'Configuración rápida', grad: 'linear-gradient(135deg,#9CEDC1,#60AFFF)'},
-                        {label: 'Para equipos pequeños o grandes', grad: 'linear-gradient(135deg,#60AFFF,#86F0FD)'},
-                        {
-                            label: 'Diseñado para mejorar hábitos colectivos',
-                            grad: 'linear-gradient(135deg,#d99aee,#5961F9)'
-                        },
-                    ].map((item) => (
-                        <li key={item.label} className="flex items-center gap-2 font-body text-[.85rem] text-grey-600">
-                            <span
-                                className="w-5 h-5 rounded-full flex items-center justify-center text-white flex-shrink-0"
-                                style={{background: item.grad}}>
-                                <Check size={12}/>
-                            </span>
-                            {item.label}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </section>
-    );
+        <ul className="list-none flex justify-center flex-wrap gap-6">
+          {[
+            { label: 'Configuración rápida', grad: 'linear-gradient(135deg,#9CEDC1,#60AFFF)' },
+            {
+              label: 'Para equipos pequeños o grandes',
+              grad: 'linear-gradient(135deg,#60AFFF,#86F0FD)',
+            },
+            {
+              label: 'Diseñado para mejorar hábitos colectivos',
+              grad: 'linear-gradient(135deg,#d99aee,#5961F9)',
+            },
+          ].map((item) => (
+            <li
+              key={item.label}
+              className="flex items-center gap-2 font-body text-[.85rem] text-grey-600"
+            >
+              <span
+                className="w-5 h-5 rounded-full flex items-center justify-center text-white flex-shrink-0"
+                style={{ background: item.grad }}
+              >
+                <Check size={12} />
+              </span>
+              {item.label}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
 }

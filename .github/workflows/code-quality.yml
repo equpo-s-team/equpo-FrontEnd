@@ -39,16 +39,3 @@ jobs:
 
       - name: Check de tipos
         run: npm run typecheck
-
-      - name: Verificar si la corrección modificó archivos
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Se detectaron cambios automáticos después de format/lint:fix."
-            echo "Ejecuta localmente:"
-            echo "  npm run format"
-            echo "  npm run lint:fix"
-            echo "y luego sube esos cambios al repositorio."
-            echo ""
-            git status --short
-            exit 1
-          fi

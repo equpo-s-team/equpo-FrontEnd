@@ -2,7 +2,7 @@ import {useState} from 'react';
 import AppHeader from './components/AppHeader.jsx';
 import FilterBar from './components/FilterBar.jsx';
 import BoardColumn from './components/BoardColumn.jsx';
-import {COLUMNS, INITIAL_CARDS} from "./kanbanData.js";
+import {COLUMNS, INITIAL_CARDS} from "./components/kanbanData.js";
 
 export default function TeamBoard() {
     const [cards, setCards] = useState(INITIAL_CARDS);

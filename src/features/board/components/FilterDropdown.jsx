@@ -91,7 +91,7 @@ export default function FilterDropdown({
           bg-primary border-[1.5px] border-grey-200
           rounded-[10px] shadow-card-lg
           overflow-hidden animate-fade-down
-          min-w-[185px]
+          min-w-60
         ">
                     {type === 'tags' ? (
                         <div className="p-3">

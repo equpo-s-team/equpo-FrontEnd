@@ -1,5 +1,73 @@
 extend type Achievement {
   """
+  ✨ List `UserAchievement` objects in a one-to-many relationship (where `UserAchievement`.`achievement` is this object).
+  """
+  userAchievements_on_achievement(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserAchievement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserAchievement_Having
+  ): [UserAchievement!]! @fdc_generated(from: "UserAchievement.achievement", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `User` objects using `UserAchievement` as the join table (a `UserAchievement` object exists where its `achievement` is this and its `user` is that).
+  """
+  users_via_UserAchievement(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserAchievement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserAchievement_Having
+  ): [User!]! @fdc_generated(from: "UserAchievement", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
   _metadata: _Metadata @fdc_generated(from: "Achievement", purpose: METADATA_FIELD)
@@ -53,15 +121,6 @@ extend type Achievement {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Achievement.name", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Achievement` table where the `unlockedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  unlockedAt_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Achievement.unlockedAt", purpose: QUERY_COUNT)
-  """
   ✨ Count the number of rows in the `Achievement` table where the `updatedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   updatedAt_count(
@@ -71,22 +130,9 @@ extend type Achievement {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Achievement.updatedAt", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Achievement` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  userUid_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Achievement.userUid", purpose: QUERY_COUNT)
-  """
   ✨ Minimum of the `createdAt` field in the `Achievement` table.
   """
   createdAt_min: Timestamp @fdc_generated(from: "Achievement.createdAt", purpose: QUERY_MIN)
-  """
-  ✨ Minimum of the `unlockedAt` field in the `Achievement` table.
-  """
-  unlockedAt_min: Timestamp @fdc_generated(from: "Achievement.unlockedAt", purpose: QUERY_MIN)
   """
   ✨ Minimum of the `updatedAt` field in the `Achievement` table.
   """
@@ -96,10 +142,6 @@ extend type Achievement {
   """
   createdAt_max: Timestamp @fdc_generated(from: "Achievement.createdAt", purpose: QUERY_MAX)
   """
-  ✨ Maximum of the `unlockedAt` field in the `Achievement` table.
-  """
-  unlockedAt_max: Timestamp @fdc_generated(from: "Achievement.unlockedAt", purpose: QUERY_MAX)
-  """
   ✨ Maximum of the `updatedAt` field in the `Achievement` table.
   """
   updatedAt_max: Timestamp @fdc_generated(from: "Achievement.updatedAt", purpose: QUERY_MAX)
@@ -107,38 +149,6 @@ extend type Achievement {
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "Achievement.id", purpose: ENTITY_ID)
-}
-extend type AssignedUser {
-  """
-  Implicit metadata field that cannot be written. It provides extra information about query results.
-  """
-  _metadata: _Metadata @fdc_generated(from: "AssignedUser", purpose: METADATA_FIELD)
-  """
-  ✨ Count the number of rows in the `AssignedUser` table.
-  """
-  _count: Int! @fdc_generated(from: "AssignedUser.", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `AssignedUser` table where the `taskId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  taskId_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "AssignedUser.taskId", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `AssignedUser` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  userUid_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "AssignedUser.userUid", purpose: QUERY_COUNT)
-  """
-  A generated field that is used for caching results in SDKs.
-  """
-  _id: ID! @fdc_generated(from: "AssignedUser.taskId,userUid", purpose: ENTITY_ID)
 }
 extend type Group {
   """
@@ -625,77 +635,9 @@ extend type Reward {
 }
 extend type Task {
   """
-  ✨ List `AssignedUser` objects in a one-to-many relationship (where `AssignedUser`.`task` is this object).
-  """
-  assignedUsers_on_task(
-    """
-    Filter condition to narrow down the query results.
-    """
-    where: AssignedUser_Filter
-
-    """
-    Order the query results by specific fields.
-    """
-    orderBy: [AssignedUser_Order!]
-
-    """
-    Number of rows to skip before starting to return the results.
-    """
-    offset: Int
-
-    """
-    Maximum number of rows to return (defaults to 100 rows).
-    """
-    limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: AssignedUser_Having
-  ): [AssignedUser!]! @fdc_generated(from: "AssignedUser.task", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
-  """
   ✨ List `TaskCategory` objects in a one-to-one relationship (where `TaskCategory`.`task` is this object).
   """
   taskCategory_on_task: TaskCategory @fdc_generated(from: "TaskCategory.task", purpose: QUERY_SINGLE_ONE_TO_ONE)
-  """
-  ✨ List `User` objects using `AssignedUser` as the join table (a `AssignedUser` object exists where its `task` is this and its `user` is that).
-  """
-  users_via_AssignedUser(
-    """
-    Filter condition to narrow down the query results.
-    """
-    where: AssignedUser_Filter
-
-    """
-    Order the query results by specific fields.
-    """
-    orderBy: [AssignedUser_Order!]
-
-    """
-    Number of rows to skip before starting to return the results.
-    """
-    offset: Int
-
-    """
-    Maximum number of rows to return (defaults to 100 rows).
-    """
-    limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: AssignedUser_Having
-  ): [User!]! @fdc_generated(from: "AssignedUser", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -722,15 +664,6 @@ extend type Task {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Task.assignedUserUid", purpose: QUERY_COUNT)
-  """
-  ✨ Count the number of rows in the `Task` table where the `category` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
-  """
-  category_count(
-    """
-    Set to true to count the number of distinct values.
-    """
-    distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Task.category", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Task` table where the `dueDate` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -1305,74 +1238,6 @@ extend type TeamReward {
 }
 extend type User {
   """
-  ✨ List `Achievement` objects in a one-to-many relationship (where `Achievement`.`user` is this object).
-  """
-  achievements_on_user(
-    """
-    Filter condition to narrow down the query results.
-    """
-    where: Achievement_Filter
-
-    """
-    Order the query results by specific fields.
-    """
-    orderBy: [Achievement_Order!]
-
-    """
-    Number of rows to skip before starting to return the results.
-    """
-    offset: Int
-
-    """
-    Maximum number of rows to return (defaults to 100 rows).
-    """
-    limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: Achievement_Having
-  ): [Achievement!]! @fdc_generated(from: "Achievement.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
-  """
-  ✨ List `AssignedUser` objects in a one-to-many relationship (where `AssignedUser`.`user` is this object).
-  """
-  assignedUsers_on_user(
-    """
-    Filter condition to narrow down the query results.
-    """
-    where: AssignedUser_Filter
-
-    """
-    Order the query results by specific fields.
-    """
-    orderBy: [AssignedUser_Order!]
-
-    """
-    Number of rows to skip before starting to return the results.
-    """
-    offset: Int
-
-    """
-    Maximum number of rows to return (defaults to 100 rows).
-    """
-    limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: AssignedUser_Having
-  ): [AssignedUser!]! @fdc_generated(from: "AssignedUser.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
-  """
   ✨ List `GroupMembership` objects in a one-to-many relationship (where `GroupMembership`.`user` is this object).
   """
   groupMemberships_on_user(
@@ -1509,6 +1374,40 @@ extend type User {
     having: TeamMembership_Having
   ): [TeamMembership!]! @fdc_generated(from: "TeamMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
+  ✨ List `UserAchievement` objects in a one-to-many relationship (where `UserAchievement`.`user` is this object).
+  """
+  userAchievements_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserAchievement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserAchievement_Having
+  ): [UserAchievement!]! @fdc_generated(from: "UserAchievement.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
   ✨ List `UserReward` objects in a one-to-many relationship (where `UserReward`.`user` is this object).
   """
   userRewards_on_user(
@@ -1542,6 +1441,40 @@ extend type User {
     """
     having: UserReward_Having
   ): [UserReward!]! @fdc_generated(from: "UserReward.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Achievement` objects using `UserAchievement` as the join table (a `UserAchievement` object exists where its `user` is this and its `achievement` is that).
+  """
+  achievements_via_UserAchievement(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [UserAchievement_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: UserAchievement_Having
+  ): [Achievement!]! @fdc_generated(from: "UserAchievement", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
   """
   ✨ List `Group` objects using `GroupMembership` as the join table (a `GroupMembership` object exists where its `user` is this and its `group` is that).
   """
@@ -1610,40 +1543,6 @@ extend type User {
     """
     having: UserReward_Having
   ): [Reward!]! @fdc_generated(from: "UserReward", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
-  """
-  ✨ List `Task` objects using `AssignedUser` as the join table (a `AssignedUser` object exists where its `user` is this and its `task` is that).
-  """
-  tasks_via_AssignedUser(
-    """
-    Filter condition to narrow down the query results.
-    """
-    where: AssignedUser_Filter
-
-    """
-    Order the query results by specific fields.
-    """
-    orderBy: [AssignedUser_Order!]
-
-    """
-    Number of rows to skip before starting to return the results.
-    """
-    offset: Int
-
-    """
-    Maximum number of rows to return (defaults to 100 rows).
-    """
-    limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: AssignedUser_Having
-  ): [Task!]! @fdc_generated(from: "AssignedUser", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
   """
   ✨ List `Team` objects using `TeamMembership` as the join table (a `TeamMembership` object exists where its `user` is this and its `team` is that).
   """
@@ -1873,6 +1772,55 @@ extend type User {
   A generated field that is used for caching results in SDKs.
   """
   _id: ID! @fdc_generated(from: "User.uid", purpose: ENTITY_ID)
+}
+extend type UserAchievement {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "UserAchievement", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `UserAchievement` table.
+  """
+  _count: Int! @fdc_generated(from: "UserAchievement.", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserAchievement` table where the `achievementId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  achievementId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserAchievement.achievementId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserAchievement` table where the `unlockedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  unlockedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserAchievement.unlockedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `UserAchievement` table where the `userUid` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userUid_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "UserAchievement.userUid", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `unlockedAt` field in the `UserAchievement` table.
+  """
+  unlockedAt_min: Timestamp @fdc_generated(from: "UserAchievement.unlockedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `unlockedAt` field in the `UserAchievement` table.
+  """
+  unlockedAt_max: Timestamp @fdc_generated(from: "UserAchievement.unlockedAt", purpose: QUERY_MAX)
+  """
+  A generated field that is used for caching results in SDKs.
+  """
+  _id: ID! @fdc_generated(from: "UserAchievement.userUid,achievementId", purpose: ENTITY_ID)
 }
 extend type UserReward {
   """

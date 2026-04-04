@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Videollamada</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <i class="fas fa-video"></i>
+                <span>Videollamada</span>
+            </div>
+            
+            <div class="navbar-menu">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-home"></i> Inicio
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users"></i> Contactos
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-history"></i> Historial
+                </a>
+            </div>
+
+            <div class="navbar-end">
+                <div class="search-box">
+                    <input type="text" placeholder="Buscar contacto...">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                <div class="navbar-notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+
+                <div class="navbar-profile">
+                    <img src="https://via.placeholder.com/40" alt="Perfil" class="profile-avatar">
+                    <div class="dropdown-menu">
+                        <a href="#">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-cog"></i> Configuración
+                        </a>
+                        <hr>
+                        <a href="login.html" class="logout">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <div class="container-main">
+            <!-- Sidebar Izquierdo -->
+            <aside class="sidebar">
+                <div class="quick-actions">
+                    <h3>Acciones Rápidas</h3>
+                    <button class="action-btn primary">
+                        <i class="fas fa-phone"></i>
+                        <span>Nueva Llamada</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-share-screen"></i>
+                        <span>Compartir Pantalla</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-users"></i>
+                        <span>Crear Grupo</span>
+                    </button>
+                </div>
+
+                <!-- Contactos Frecuentes -->
+                <div class="frequent-contacts">
+                    <h3>Contactos Frecuentes</h3>
+                    <div class="contacts-list">
+                        <div class="contact-item">
+                            <img src="https://via.placeholder.com/45" alt="Contacto">
+                            <div class="contact-info">
+                                <h4>Carlos López</h4>
+                                <p class="status online">En línea</p>
+                            </div>
+                            <button class="contact-action">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                        </div>
+                        <div class="contact-item">
+                            <img src="https://via.placeholder.com/45" alt="Contacto">
+                            <div class="contact-info">
+                                <h4>María García</h4>
+                                <p class="status offline">Desconectado</p>
+                            </div>
+                            <button class="contact-action">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                        </div>
+                        <div class="contact-item">
+                            <img src="https://via.placeholder.com/45" alt="Contacto">
+                            <div class="contact-info">
+                                <h4>Juan Martínez</h4>
+                                <p class="status online">En línea</p>
+                            </div>
+                            <button class="contact-action">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Centro Principal -->
+            <section class="main-section">
+                <!-- Header -->
+                <div class="welcome-header">
+                    <div class="welcome-content">
+                        <h1>¡Bienvenido de nuevo!</h1>
+                        <p id="user-greeting">Buenos días, Usuario</p>
+                    </div>
+                    <div class="header-weather">
+                        <p><i class="fas fa-sun"></i> 22°C - Despejado</p>
+                    </div>
+                </div>
+
+                <!-- Estadísticas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>24</h3>
+                            <p>Llamadas Hoy</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>3.5h</h3>
+                            <p>Tiempo Total</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>45</h3>
+                            <p>Contactos</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>12</h3>
+                            <p>Conferencias</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secciones de Contenido -->
+                <div class="content-sections">
+                    <!-- Llamadas Recientes -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2>Llamadas Recientes</h2>
+                            <a href="#" class="link-more">Ver todas</a>
+                        </div>
+                        <div class="calls-list">
+                            <div class="call-item">
+                                <div class="call-avatar">
+                                    <img src="https://via.placeholder.com/50" alt="Usuario">
+                                </div>
+                                <div class="call-details">
+                                    <h4>Carlos López</h4>
+                                    <p>Llamada de 15 minutos</p>
+                                    <span class="time">Hoy a las 14:30</span>
+                                </div>
+                                <button class="call-action" title="Llamar">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                            </div>
+
+                            <div class="call-item">
+                                <div class="call-avatar">
+                                    <img src="https://via.placeholder.com/50" alt="Usuario">
+                                </div>
+                                <div class="call-details">
+                                    <h4>María García</h4>
+                                    <p>Videollamada de 45 minutos</p>
+                                    <span class="time">Hoy a las 11:15</span>
+                                </div>
+                                <button class="call-action" title="Llamar">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                            </div>
+
+                            <div class="call-item">
+                                <div class="call-avatar">
+                                    <img src="https://via.placeholder.com/50" alt="Usuario">
+                                </div>
+                                <div class="call-details">
+                                    <h4>Equipo de Desarrollo</h4>
+                                    <p>Conferencia - 5 participantes</p>
+                                    <span class="time">Ayer a las 10:00</span>
+                                </div>
+                                <button class="call-action" title="Llamar">
+                                    <i class="fas fa-phone"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Próximas Reuniones -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2>Próximas Reuniones</h2>
+                            <a href="#" class="link-more">Calendario</a>
+                        </div>
+                        <div class="meetings-list">
+                            <div class="meeting-item">
+                                <div class="meeting-time">
+                                    <span class="time-hour">15:00</span>
+                                </div>
+                                <div class="meeting-details">
+                                    <h4>Reunión con Clientes</h4>
+                                    <p>Con: Juan Martínez, Carlos López</p>
+                                </div>
+                                <button class="meeting-action primary">
+                                    <i class="fas fa-video"></i> Unirse
+                                </button>
+                            </div>
+
+                            <div class="meeting-item">
+                                <div class="meeting-time">
+                                    <span class="time-hour">16:30</span>
+                                </div>
+                                <div class="meeting-details">
+                                    <h4>Revisión de Proyecto</h4>
+                                    <p>Con: Equipo de Desarrollo</p>
+                                </div>
+                                <button class="meeting-action">
+                                    <i class="fas fa-calendar"></i> En 1h 30m
+                                </button>
+                            </div>
+
+                            <div class="meeting-item">
+                                <div class="meeting-time">
+                                    <span class="time-hour">18:00</span>
+                                </div>
+                                <div class="meeting-details">
+                                    <h4>Standup Diario</h4>
+                                    <p>Con: Todo el Equipo</p>
+                                </div>
+                                <button class="meeting-action">
+                                    <i class="fas fa-calendar"></i> En 3h
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actividad Reciente -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2>Actividad de Contactos</h2>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Paula Rodríguez</strong> se agregó a tu lista de contactos</p>
+                                <span class="activity-time">Hace 2 horas</span>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Roberto Sánchez</strong> inició una videollamada</p>
+                                <span class="activity-time">Hace 30 minutos</span>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-share-screen"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Ana Fernández</strong> compartió su pantalla contigo</p>
+                                <span class="activity-time">Hace 15 minutos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sidebar Derecho -->
+            <aside class="sidebar-right">
+                <div class="online-users">
+                    <h3>
+                        <i class="fas fa-circle" style="color: #48bb78; font-size: 0.5rem;"></i>
+                        En Línea (8)
+                    </h3>
+                    <div class="users-list">
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">Carlos</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">María</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">Juan</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">Paula</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">Roberto</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">Ana</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">Pedro</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                        <div class="user-bubble">
+                            <img src="https://via.placeholder.com/50" alt="Usuario">
+                            <span class="user-name">Laura</span>
+                            <span class="user-status">En línea</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recomendaciones -->
+                <div class="recommendations">
+                    <h3>Sugerencias</h3>
+                    <div class="suggestions-list">
+                        <div class="suggestion-item">
+                            <img src="https://via.placeholder.com/40" alt="Usuario">
+                            <div class="suggestion-info">
+                                <h4>Diego Flores</h4>
+                                <p>2 contactos comunes</p>
+                            </div>
+                            <button class="btn-add">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="suggestion-item">
+                            <img src="https://via.placeholder.com/40" alt="Usuario">
+                            <div class="suggestion-info">
+                                <h4>Sofía Martínez</h4>
+                                <p>3 contactos comunes</p>
+                            </div>
+                            <button class="btn-add">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Videollamada. Todos los derechos reservados.</p>
+        <div class="footer-links">
+            <a href="#">Privacidad</a>
+            <a href="#">Términos</a>
+            <a href="#">Ayuda</a>
+        </div>
+    </footer>
+
+    <script src="/js/index.js"></script>
+</body>
+</html>

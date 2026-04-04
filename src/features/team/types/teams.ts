@@ -25,9 +25,13 @@ export interface CreateTeamRewardPayload {
 }
 
 export interface CreateAchievementPayload {
-    userUid: string;
     name: string;
     description?: string | null;
     iconURL?: string | null;
+}
+
+export interface UnlockAchievementPayload {
+    userUid: string;
+    achievementId: string;
     unlockedAt?: string;
 }

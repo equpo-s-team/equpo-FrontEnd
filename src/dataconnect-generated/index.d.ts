@@ -85,6 +85,12 @@ export interface TouchUserLastActiveData {
   user_update?: User_Key | null;
 }
 
+export interface UserAchievement_Key {
+  userUid: string;
+  achievementId: UUIDString;
+  __typename?: 'UserAchievement_Key';
+}
+
 export interface UserReward_Key {
   userUid: string;
   rewardId: UUIDString;

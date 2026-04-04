@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { teamsApi } from '../api/teamsApi';
 import type { UpdateTeamMemberRolePayload } from '../types/teams';
 
@@ -15,8 +16,8 @@ export function useUpdateMemberRole() {
       userUid: string;
       payload: UpdateTeamMemberRolePayload;
     }) => teamsApi.updateMemberRole(teamId, userUid, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['team', variables.teamId, 'members'] });
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({ queryKey: ['team', variables.teamId, 'members'] });
     },
   });
 }

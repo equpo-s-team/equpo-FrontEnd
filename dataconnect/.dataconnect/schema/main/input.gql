@@ -5,12 +5,6 @@ It has the same format as `Achievement_Key`, but is only used as mutation return
 """
 scalar Achievement_KeyOutput
 """
-✨ `AssignedUser_KeyOutput` returns the primary key fields of table type `AssignedUser`.
-
-It has the same format as `AssignedUser_Key`, but is only used as mutation return value.
-"""
-scalar AssignedUser_KeyOutput
-"""
 ✨ `Group_KeyOutput` returns the primary key fields of table type `Group`.
 
 It has the same format as `Group_Key`, but is only used as mutation return value.
@@ -65,6 +59,12 @@ It has the same format as `User_Key`, but is only used as mutation return value.
 """
 scalar User_KeyOutput
 """
+✨ `UserAchievement_KeyOutput` returns the primary key fields of table type `UserAchievement`.
+
+It has the same format as `UserAchievement_Key`, but is only used as mutation return value.
+"""
+scalar UserAchievement_KeyOutput
+"""
 ✨ `UserReward_KeyOutput` returns the primary key fields of table type `UserReward`.
 
 It has the same format as `UserReward_Key`, but is only used as mutation return value.
@@ -82,18 +82,6 @@ input Achievement_Data {
   ✨ `_expr` server value variant of `id` (✨ Generated from Field `Achievement`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
-  """
-  ✨ Generated from Field `Achievement`.`userUid` of type `String!`
-  """
-  userUid: String
-  """
-  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `Achievement`.`userUid` of type `String!`)
-  """
-  userUid_expr: String_Expr @fdc_forbiddenInVariables
-  """
-  ✨ Generated from Field `Achievement`.`user` of type `User!`
-  """
-  user: User_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`
   """
@@ -135,22 +123,6 @@ input Achievement_Data {
   """
   name_expr: String_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`
-  """
-  unlockedAt: Timestamp
-  """
-  ✨ `_expr` server value variant of `unlockedAt` (✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`)
-  """
-  unlockedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
-  """
-  ✨ `_time` server value variant of `unlockedAt` (✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`)
-  """
-  unlockedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
-  """
-  ✨ `_update` server value variant of `unlockedAt` (✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`)
-  """
-  unlockedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
-  """
   ✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`
   """
   updatedAt: Timestamp
@@ -188,14 +160,6 @@ input Achievement_Filter {
   """
   id: UUID_Filter
   """
-  ✨ Generated from Field `Achievement`.`userUid` of type `String!`
-  """
-  userUid: String_Filter
-  """
-  ✨ Generated from Field `Achievement`.`user` of type `User!`
-  """
-  user: User_Filter
-  """
   ✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`
   """
   createdAt: Timestamp_Filter
@@ -212,13 +176,17 @@ input Achievement_Filter {
   """
   name: String_Filter
   """
-  ✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`
-  """
-  unlockedAt: Timestamp_Filter
-  """
   ✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`
   """
   updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Achievement`.`userAchievements_on_achievement` of type `[UserAchievement!]!`
+  """
+  userAchievements_on_achievement: UserAchievement_ListFilter
+  """
+  ✨ Generated from Field `Achievement`.`users_via_UserAchievement` of type `[User!]!`
+  """
+  users_via_UserAchievement: User_ListFilter
 }
 """
 ✨ Generated first-row input type for table 'Achievement'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
@@ -278,25 +246,13 @@ input Achievement_Having {
   """
   name_count: Int_Filter
   """
-  ✨ Generated from Field `Achievement`.`unlockedAt_count` of type `Int!`
-  """
-  unlockedAt_count: Int_Filter
-  """
   ✨ Generated from Field `Achievement`.`updatedAt_count` of type `Int!`
   """
   updatedAt_count: Int_Filter
   """
-  ✨ Generated from Field `Achievement`.`userUid_count` of type `Int!`
-  """
-  userUid_count: Int_Filter
-  """
   ✨ Generated from Field `Achievement`.`createdAt_min` of type `Timestamp`
   """
   createdAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `Achievement`.`unlockedAt_min` of type `Timestamp`
-  """
-  unlockedAt_min: Timestamp_Filter
   """
   ✨ Generated from Field `Achievement`.`updatedAt_min` of type `Timestamp`
   """
@@ -305,10 +261,6 @@ input Achievement_Having {
   ✨ Generated from Field `Achievement`.`createdAt_max` of type `Timestamp`
   """
   createdAt_max: Timestamp_Filter
-  """
-  ✨ Generated from Field `Achievement`.`unlockedAt_max` of type `Timestamp`
-  """
-  unlockedAt_max: Timestamp_Filter
   """
   ✨ Generated from Field `Achievement`.`updatedAt_max` of type `Timestamp`
   """
@@ -334,7 +286,7 @@ input Achievement_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -348,14 +300,6 @@ input Achievement_Order {
   ✨ Generated from Field `Achievement`.`id` of type `UUID!`
   """
   id: OrderDirection
-  """
-  ✨ Generated from Field `Achievement`.`userUid` of type `String!`
-  """
-  userUid: OrderDirection
-  """
-  ✨ Generated from Field `Achievement`.`user` of type `User!`
-  """
-  user: User_Order
   """
   ✨ Generated from Field `Achievement`.`createdAt` of type `Timestamp!`
   """
@@ -372,10 +316,6 @@ input Achievement_Order {
   ✨ Generated from Field `Achievement`.`name` of type `String!`
   """
   name: OrderDirection
-  """
-  ✨ Generated from Field `Achievement`.`unlockedAt` of type `Timestamp!`
-  """
-  unlockedAt: OrderDirection
   """
   ✨ Generated from Field `Achievement`.`updatedAt` of type `Timestamp!`
   """
@@ -405,25 +345,13 @@ input Achievement_Order {
   """
   name_count: OrderDirection
   """
-  ✨ Generated from Field `Achievement`.`unlockedAt_count` of type `Int!`
-  """
-  unlockedAt_count: OrderDirection
-  """
   ✨ Generated from Field `Achievement`.`updatedAt_count` of type `Int!`
   """
   updatedAt_count: OrderDirection
   """
-  ✨ Generated from Field `Achievement`.`userUid_count` of type `Int!`
-  """
-  userUid_count: OrderDirection
-  """
   ✨ Generated from Field `Achievement`.`createdAt_min` of type `Timestamp`
   """
   createdAt_min: OrderDirection
-  """
-  ✨ Generated from Field `Achievement`.`unlockedAt_min` of type `Timestamp`
-  """
-  unlockedAt_min: OrderDirection
   """
   ✨ Generated from Field `Achievement`.`updatedAt_min` of type `Timestamp`
   """
@@ -433,188 +361,9 @@ input Achievement_Order {
   """
   createdAt_max: OrderDirection
   """
-  ✨ Generated from Field `Achievement`.`unlockedAt_max` of type `Timestamp`
-  """
-  unlockedAt_max: OrderDirection
-  """
   ✨ Generated from Field `Achievement`.`updatedAt_max` of type `Timestamp`
   """
   updatedAt_max: OrderDirection
-}
-"""
-✨ Generated data input type for table 'AssignedUser'. It includes all necessary fields for creating or upserting rows into table.
-"""
-input AssignedUser_Data {
-  """
-  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
-  """
-  taskId: UUID
-  """
-  ✨ `_expr` server value variant of `taskId` (✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`)
-  """
-  taskId_expr: UUID_Expr @fdc_forbiddenInVariables
-  """
-  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
-  """
-  userUid: String
-  """
-  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `AssignedUser`.`userUid` of type `String!`)
-  """
-  userUid_expr: String_Expr @fdc_forbiddenInVariables
-  """
-  ✨ Generated from Field `AssignedUser`.`task` of type `Task!`
-  """
-  task: Task_Key @fdc_forbiddenInVariables
-  """
-  ✨ Generated from Field `AssignedUser`.`user` of type `User!`
-  """
-  user: User_Key @fdc_forbiddenInVariables
-}
-"""
-✨ Generated filter input type for table 'AssignedUser'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input AssignedUser_Filter {
-  """
-  Apply multiple filter conditions using `AND` logic.
-  """
-  _and: [AssignedUser_Filter!]
-  """
-  Negate the result of the provided filter condition.
-  """
-  _not: AssignedUser_Filter
-  """
-  Apply multiple filter conditions using `OR` logic.
-  """
-  _or: [AssignedUser_Filter!]
-  """
-  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
-  """
-  taskId: UUID_Filter
-  """
-  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
-  """
-  userUid: String_Filter
-  """
-  ✨ Generated from Field `AssignedUser`.`task` of type `Task!`
-  """
-  task: Task_Filter
-  """
-  ✨ Generated from Field `AssignedUser`.`user` of type `User!`
-  """
-  user: User_Filter
-}
-"""
-✨ Generated first-row input type for table 'AssignedUser'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
-"""
-input AssignedUser_FirstRow {
-  """
-  Order the result by the specified fields.
-  """
-  orderBy: [AssignedUser_Order!]
-  """
-  Filters rows based on the specified conditions.
-  """
-  where: AssignedUser_Filter
-}
-"""
-✨ Generated having input type for table 'AssignedUser'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input AssignedUser_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [AssignedUser_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: AssignedUser_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [AssignedUser_Having!]
-  """
-  ✨ Generated from Field `AssignedUser`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `AssignedUser`.`taskId_count` of type `Int!`
-  """
-  taskId_count: Int_Filter
-  """
-  ✨ Generated from Field `AssignedUser`.`userUid_count` of type `Int!`
-  """
-  userUid_count: Int_Filter
-}
-"""
-✨ Generated key input type for table 'AssignedUser'. It represents the primary key fields used to uniquely identify a row in the table.
-"""
-input AssignedUser_Key {
-  """
-  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
-  """
-  taskId: UUID
-  """
-  ✨ `_expr` server value variant of `taskId` (✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`)
-  """
-  taskId_expr: UUID_Expr @fdc_forbiddenInVariables
-  """
-  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
-  """
-  userUid: String
-  """
-  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `AssignedUser`.`userUid` of type `String!`)
-  """
-  userUid_expr: String_Expr @fdc_forbiddenInVariables
-}
-"""
-✨ Generated list filter input type for table 'AssignedUser'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
-"""
-input AssignedUser_ListFilter {
-  """
-  The desired number of objects that match the condition (defaults to at least one).
-  """
-  count: Int_Filter = { gt: 0 }
-  """
-  Condition of the related objects to filter for.
-  """
-  exist: AssignedUser_Filter
-}
-"""
-✨ Generated order input type for table 'AssignedUser'. This input defines the sorting order of rows in query results based on one or more fields.
-"""
-input AssignedUser_Order {
-  """
-  ✨ Generated from Field `AssignedUser`.`taskId` of type `UUID!`
-  """
-  taskId: OrderDirection
-  """
-  ✨ Generated from Field `AssignedUser`.`userUid` of type `String!`
-  """
-  userUid: OrderDirection
-  """
-  ✨ Generated from Field `AssignedUser`.`task` of type `Task!`
-  """
-  task: Task_Order
-  """
-  ✨ Generated from Field `AssignedUser`.`user` of type `User!`
-  """
-  user: User_Order
-  """
-  ✨ Generated from Field `AssignedUser`.`_count` of type `Int!`
-  """
-  _count: OrderDirection
-  """
-  ✨ Generated from Field `AssignedUser`.`taskId_count` of type `Int!`
-  """
-  taskId_count: OrderDirection
-  """
-  ✨ Generated from Field `AssignedUser`.`userUid_count` of type `Int!`
-  """
-  userUid_count: OrderDirection
 }
 """
 ✨ Generated data input type for table 'Group'. It includes all necessary fields for creating or upserting rows into table.
@@ -764,7 +513,7 @@ input Group_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -943,7 +692,7 @@ input GroupMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1310,7 +1059,7 @@ input Reward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1502,14 +1251,6 @@ input Task_Data {
   """
   teamId: Team_Key @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Task`.`category` of type `String`
-  """
-  category: String
-  """
-  ✨ `_expr` server value variant of `category` (✨ Generated from Field `Task`.`category` of type `String`)
-  """
-  category_expr: String_Expr @fdc_forbiddenInVariables
-  """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
   dueDate: Timestamp
@@ -1603,10 +1344,6 @@ input Task_Filter {
   """
   teamId: Team_Filter
   """
-  ✨ Generated from Field `Task`.`category` of type `String`
-  """
-  category: String_Filter
-  """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
   dueDate: Timestamp_Filter
@@ -1627,17 +1364,9 @@ input Task_Filter {
   """
   status: String_Filter
   """
-  ✨ Generated from Field `Task`.`assignedUsers_on_task` of type `[AssignedUser!]!`
-  """
-  assignedUsers_on_task: AssignedUser_ListFilter
-  """
   ✨ Generated from Field `Task`.`taskCategory_on_task` of type `TaskCategory`
   """
   taskCategory_on_task: TaskCategory_Filter
-  """
-  ✨ Generated from Field `Task`.`users_via_AssignedUser` of type `[User!]!`
-  """
-  users_via_AssignedUser: User_ListFilter
 }
 """
 ✨ Generated first-row input type for table 'Task'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
@@ -1684,10 +1413,6 @@ input Task_Having {
   ✨ Generated from Field `Task`.`assignedUserUid_count` of type `Int!`
   """
   assignedUserUid_count: Int_Filter
-  """
-  ✨ Generated from Field `Task`.`category_count` of type `Int!`
-  """
-  category_count: Int_Filter
   """
   ✨ Generated from Field `Task`.`dueDate_count` of type `Int!`
   """
@@ -1745,7 +1470,7 @@ input Task_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1784,10 +1509,6 @@ input Task_Order {
   """
   teamId: Team_Order
   """
-  ✨ Generated from Field `Task`.`category` of type `String`
-  """
-  category: OrderDirection
-  """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
   dueDate: OrderDirection
@@ -1819,10 +1540,6 @@ input Task_Order {
   ✨ Generated from Field `Task`.`assignedUserUid_count` of type `Int!`
   """
   assignedUserUid_count: OrderDirection
-  """
-  ✨ Generated from Field `Task`.`category_count` of type `Int!`
-  """
-  category_count: OrderDirection
   """
   ✨ Generated from Field `Task`.`dueDate_count` of type `Int!`
   """
@@ -1980,7 +1697,7 @@ input TaskCategory_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2291,7 +2008,7 @@ input Team_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2582,7 +2299,7 @@ input TeamMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2877,7 +2594,7 @@ input TeamReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3130,14 +2847,6 @@ input User_Filter {
   """
   virtualCurrency: Int_Filter
   """
-  ✨ Generated from Field `User`.`achievements_on_user` of type `[Achievement!]!`
-  """
-  achievements_on_user: Achievement_ListFilter
-  """
-  ✨ Generated from Field `User`.`assignedUsers_on_user` of type `[AssignedUser!]!`
-  """
-  assignedUsers_on_user: AssignedUser_ListFilter
-  """
   ✨ Generated from Field `User`.`groupMemberships_on_user` of type `[GroupMembership!]!`
   """
   groupMemberships_on_user: GroupMembership_ListFilter
@@ -3154,9 +2863,17 @@ input User_Filter {
   """
   teamMemberships_on_user: TeamMembership_ListFilter
   """
+  ✨ Generated from Field `User`.`userAchievements_on_user` of type `[UserAchievement!]!`
+  """
+  userAchievements_on_user: UserAchievement_ListFilter
+  """
   ✨ Generated from Field `User`.`userRewards_on_user` of type `[UserReward!]!`
   """
   userRewards_on_user: UserReward_ListFilter
+  """
+  ✨ Generated from Field `User`.`achievements_via_UserAchievement` of type `[Achievement!]!`
+  """
+  achievements_via_UserAchievement: Achievement_ListFilter
   """
   ✨ Generated from Field `User`.`groups_via_GroupMembership` of type `[Group!]!`
   """
@@ -3165,10 +2882,6 @@ input User_Filter {
   ✨ Generated from Field `User`.`rewards_via_UserReward` of type `[Reward!]!`
   """
   rewards_via_UserReward: Reward_ListFilter
-  """
-  ✨ Generated from Field `User`.`tasks_via_AssignedUser` of type `[Task!]!`
-  """
-  tasks_via_AssignedUser: Task_ListFilter
   """
   ✨ Generated from Field `User`.`teams_via_TeamMembership` of type `[Team!]!`
   """
@@ -3340,7 +3053,7 @@ input User_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3498,6 +3211,229 @@ input User_Order {
   ✨ Generated from Field `User`.`virtualCurrency_max` of type `Int`
   """
   virtualCurrency_max: OrderDirection
+}
+"""
+✨ Generated data input type for table 'UserAchievement'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input UserAchievement_Data {
+  """
+  ✨ Generated from Field `UserAchievement`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `UserAchievement`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserAchievement`.`achievementId` of type `UUID!`
+  """
+  achievementId: UUID
+  """
+  ✨ `_expr` server value variant of `achievementId` (✨ Generated from Field `UserAchievement`.`achievementId` of type `UUID!`)
+  """
+  achievementId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserAchievement`.`achievement` of type `Achievement!`
+  """
+  achievement: Achievement_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserAchievement`.`user` of type `User!`
+  """
+  user: User_Key @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt` of type `Timestamp!`
+  """
+  unlockedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `unlockedAt` (✨ Generated from Field `UserAchievement`.`unlockedAt` of type `Timestamp!`)
+  """
+  unlockedAt_expr: Timestamp_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_time` server value variant of `unlockedAt` (✨ Generated from Field `UserAchievement`.`unlockedAt` of type `Timestamp!`)
+  """
+  unlockedAt_time: Timestamp_Relative @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `unlockedAt` (✨ Generated from Field `UserAchievement`.`unlockedAt` of type `Timestamp!`)
+  """
+  unlockedAt_update: [Timestamp_Update!] @fdc_forbiddenInVariables
+}
+"""
+✨ Generated filter input type for table 'UserAchievement'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input UserAchievement_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [UserAchievement_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: UserAchievement_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [UserAchievement_Filter!]
+  """
+  ✨ Generated from Field `UserAchievement`.`userUid` of type `String!`
+  """
+  userUid: String_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`achievementId` of type `UUID!`
+  """
+  achievementId: UUID_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`achievement` of type `Achievement!`
+  """
+  achievement: Achievement_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`user` of type `User!`
+  """
+  user: User_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt` of type `Timestamp!`
+  """
+  unlockedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'UserAchievement'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input UserAchievement_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [UserAchievement_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: UserAchievement_Filter
+}
+"""
+✨ Generated having input type for table 'UserAchievement'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input UserAchievement_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [UserAchievement_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: UserAchievement_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [UserAchievement_Having!]
+  """
+  ✨ Generated from Field `UserAchievement`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`achievementId_count` of type `Int!`
+  """
+  achievementId_count: Int_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt_count` of type `Int!`
+  """
+  unlockedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`userUid_count` of type `Int!`
+  """
+  userUid_count: Int_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt_min` of type `Timestamp`
+  """
+  unlockedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt_max` of type `Timestamp`
+  """
+  unlockedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'UserAchievement'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input UserAchievement_Key {
+  """
+  ✨ Generated from Field `UserAchievement`.`userUid` of type `String!`
+  """
+  userUid: String
+  """
+  ✨ `_expr` server value variant of `userUid` (✨ Generated from Field `UserAchievement`.`userUid` of type `String!`)
+  """
+  userUid_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `UserAchievement`.`achievementId` of type `UUID!`
+  """
+  achievementId: UUID
+  """
+  ✨ `_expr` server value variant of `achievementId` (✨ Generated from Field `UserAchievement`.`achievementId` of type `UUID!`)
+  """
+  achievementId_expr: UUID_Expr @fdc_forbiddenInVariables
+}
+"""
+✨ Generated list filter input type for table 'UserAchievement'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input UserAchievement_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: UserAchievement_Filter
+}
+"""
+✨ Generated order input type for table 'UserAchievement'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input UserAchievement_Order {
+  """
+  ✨ Generated from Field `UserAchievement`.`userUid` of type `String!`
+  """
+  userUid: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`achievementId` of type `UUID!`
+  """
+  achievementId: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`achievement` of type `Achievement!`
+  """
+  achievement: Achievement_Order
+  """
+  ✨ Generated from Field `UserAchievement`.`user` of type `User!`
+  """
+  user: User_Order
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt` of type `Timestamp!`
+  """
+  unlockedAt: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`_count` of type `Int!`
+  """
+  _count: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`achievementId_count` of type `Int!`
+  """
+  achievementId_count: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt_count` of type `Int!`
+  """
+  unlockedAt_count: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`userUid_count` of type `Int!`
+  """
+  userUid_count: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt_min` of type `Timestamp`
+  """
+  unlockedAt_min: OrderDirection
+  """
+  ✨ Generated from Field `UserAchievement`.`unlockedAt_max` of type `Timestamp`
+  """
+  unlockedAt_max: OrderDirection
 }
 """
 ✨ Generated data input type for table 'UserReward'. It includes all necessary fields for creating or upserting rows into table.
@@ -3763,7 +3699,7 @@ input UserReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """

@@ -1,4 +1,4 @@
-import { Member, OverdueTask, VelocityData } from './types.ts';
+import { type KpiMetrics, type Member, type OverdueTask, type VelocityData } from './types.ts';
 
 export const members: Member[] = [
   {

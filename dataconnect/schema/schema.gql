@@ -55,13 +55,17 @@ type TaskCategory @table(key: ["task"]) {
 }
 
 type Achievement @table {
-  user: User!
   name: String!
-  unlockedAt: Timestamp!
   createdAt: Timestamp! @default(expr: "request.time")
   updatedAt: Timestamp! @default(expr: "request.time")
   description: String
   iconURL: String
+}
+
+type UserAchievement @table(key: ["user", "achievement"]) {
+  user: User!
+  achievement: Achievement!
+  unlockedAt: Timestamp! @default(expr: "request.time")
 }
 
 type Reward @table {

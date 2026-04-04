@@ -3,6 +3,7 @@ import {
     AddTeamMemberPayload,
     CreateAchievementPayload, CreateTeamPayload,
     CreateTeamRewardPayload, UpdateTeamMemberRolePayload,
+    UnlockAchievementPayload,
     UpdateTeamPayload
 } from "@/features/team/types/teams.ts";
 
@@ -19,4 +20,6 @@ export const teamsApi = {
       request(`/teams/${teamId}/rewards`, 'POST', payload),
   createAchievement: (teamId: string, payload: CreateAchievementPayload) =>
       request(`/teams/${teamId}/achievements`, 'POST', payload),
+  unlockAchievement: (teamId: string, payload: UnlockAchievementPayload) =>
+      request(`/teams/${teamId}/achievements/unlocks`, 'POST', payload),
 };

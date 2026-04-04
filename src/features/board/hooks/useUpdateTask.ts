@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { tasksApi } from '../api/tasksApi';
 import type { UpdateTaskPayload } from '../types';
 
@@ -15,9 +16,9 @@ export function useUpdateTask() {
       taskId: string;
       payload: UpdateTaskPayload;
     }) => tasksApi.update(teamId, taskId, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['tasks', variables.teamId] });
-      queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] });
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({ queryKey: ['tasks', variables.teamId] });
+      await queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] });
     },
   });
 }

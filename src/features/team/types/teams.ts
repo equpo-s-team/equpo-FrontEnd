@@ -1,37 +1,37 @@
 export interface CreateTeamPayload {
-    name: string;
-    virtualCurrency: number;
-    description?: string | null;
+  name: string;
+  virtualCurrency: number;
+  description?: string | null;
 }
 
 export interface UpdateTeamPayload {
-    name?: string;
-    virtualCurrency?: number;
-    description?: string | null;
+  name?: string;
+  virtualCurrency?: number;
+  description?: string | null;
 }
 
 export interface AddTeamMemberPayload {
-    userUid: string;
-    role?: 'collaborator' | 'spectator' | 'member';
+  userUid: string;
+  role?: 'collaborator' | 'spectator' | 'member';
 }
 
 export interface UpdateTeamMemberRolePayload {
-    role: 'collaborator' | 'spectator' | 'member';
+  role: 'collaborator' | 'spectator' | 'member';
 }
 
 export interface CreateTeamRewardPayload {
-    rewardId: string;
-    dateObtained?: string;
+  rewardId: string;
+  dateObtained?: string;
 }
 
 export interface CreateAchievementPayload {
-    name: string;
-    description?: string | null;
-    iconURL?: string | null;
+  name: string;
+  description?: string | null;
+  iconURL?: string | null;
 }
 
 export interface UnlockAchievementPayload {
-    userUid: string;
-    achievementId: string;
-    unlockedAt?: string;
+  userUid: string;
+  achievementId: string;
+  unlockedAt?: string;
 }

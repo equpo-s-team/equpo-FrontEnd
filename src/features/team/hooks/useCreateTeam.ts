@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { teamsApi } from '../api/teamsApi';
 import type { CreateTeamPayload } from '../types/teams';
 
@@ -7,8 +8,8 @@ export function useCreateTeam() {
 
   return useMutation({
     mutationFn: (payload: CreateTeamPayload) => teamsApi.create(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['teams'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['teams'] });
     },
   });
 }

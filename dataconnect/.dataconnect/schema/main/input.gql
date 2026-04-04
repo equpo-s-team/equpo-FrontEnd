@@ -286,7 +286,7 @@ input Achievement_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -513,7 +513,7 @@ input Group_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -692,7 +692,7 @@ input GroupMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1083,7 +1083,7 @@ input Reward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1542,7 +1542,7 @@ input Task_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1801,7 +1801,7 @@ input TaskCategory_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2116,7 +2116,7 @@ input Team_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2407,7 +2407,7 @@ input TeamMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2702,7 +2702,7 @@ input TeamReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3161,7 +3161,7 @@ input User_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3488,7 +3488,7 @@ input UserAchievement_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3807,7 +3807,7 @@ input UserReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """

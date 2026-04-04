@@ -1,5 +1,5 @@
 import { request } from '@/lib/api/core.ts';
-import type { CreateTaskPayload, GetTeamTasksOptions, TaskListMeta, TeamTask, UpdateTaskPayload } from '../types/tasks.ts';
+import type { CreateTaskPayload, GetTeamTasksOptions, TaskListMeta, TeamTask, UpdateTaskPayload } from '../types/taskSchema.ts';
 
 export const tasksApi = {
   create: (teamId: string, payload: CreateTaskPayload) =>

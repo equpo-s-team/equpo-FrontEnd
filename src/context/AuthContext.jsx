@@ -2,7 +2,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 import { getUser } from '@/dataconnect-generated';
-import { auth } from '@/firebase';
+import { auth } from '@/firebase.ts';
 
 const AuthContext = createContext(null);
 

@@ -36,6 +36,8 @@ const DatePicker: React.FC<DatePickerProps> = ({ onRangeChange }) => {
   });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const onRangeChangeRef = useRef(onRangeChange);
+  onRangeChangeRef.current = onRangeChange;
 
   // Format date
   const formatDate = (date: Date | null) => {
@@ -79,9 +81,9 @@ const DatePicker: React.FC<DatePickerProps> = ({ onRangeChange }) => {
     // Notify parent
     if (startDate && endDate) {
       const days = Math.round((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
-      onRangeChange(startDate, endDate, days);
+      onRangeChangeRef.current(startDate, endDate, days);
     }
-  }, [startDate, endDate, onRangeChange]);
+  }, [startDate, endDate]);
 
   // Handle preset click
   const handlePreset = (days: number) => {

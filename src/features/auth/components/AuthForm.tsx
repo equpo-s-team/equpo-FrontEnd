@@ -228,7 +228,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         onFieldBlur={handleFieldBlur}
         onTogglePassword={() => setShowPassword(!showPassword)}
         onToggleConfirmPassword={() => setShowConfirmPassword(!showConfirmPassword)}
-        onGoogleSignIn={() => { void handleGoogleSignIn(); }}
+        onGoogleSignIn={() => {
+          void handleGoogleSignIn();
+        }}
       />
     );
   };
@@ -338,7 +340,11 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         </div>
       )}
 
-      <form onSubmit={(e) => { void handleSubmit(e); }}>
+      <form
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={authMode}

@@ -19,7 +19,10 @@ export const TaskPayloadSchema = z.object({
 
 export const CreateTaskPayloadSchema = TaskPayloadSchema;
 
-export const UpdateTaskPayloadSchema = TaskPayloadSchema.partial();
+export const UpdateTaskPayloadSchema = TaskPayloadSchema.partial().extend({
+    name: z.string().min(1).max(100),
+    description: z.string().max(500),
+});
 
 export const AssignedUserSchema = z.object({
     uid: z.string(),

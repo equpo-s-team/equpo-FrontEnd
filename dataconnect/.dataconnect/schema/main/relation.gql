@@ -728,14 +728,14 @@ extend type Task {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Task.status", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Task` table where the `teamIdId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `Task` table where the `teamId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  teamIdId_count(
+  teamId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Task.teamIdId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "Task.teamId", purpose: QUERY_COUNT)
   """
   ✨ Sum the `recurringCount` field in the `Task` table.
   """
@@ -843,9 +843,9 @@ extend type Team {
     having: Group_Having
   ): [Group!]! @fdc_generated(from: "Group.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
-  ✨ List `Task` objects in a one-to-many relationship (where `Task`.`teamId` is this object).
+  ✨ List `Task` objects in a one-to-many relationship (where `Task`.`team` is this object).
   """
-  tasks_on_teamId(
+  tasks_on_team(
     """
     Filter condition to narrow down the query results.
     """
@@ -875,7 +875,7 @@ extend type Team {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: Task_Having
-  ): [Task!]! @fdc_generated(from: "Task.teamId", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [Task!]! @fdc_generated(from: "Task.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `TeamMembership` objects in a one-to-many relationship (where `TeamMembership`.`team` is this object).
   """

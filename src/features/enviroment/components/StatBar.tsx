@@ -18,11 +18,13 @@ export default function StatBar({
   const pct = Math.round((value / max) * 100);
 
   return (
-    <div className="
+    <div
+      className="
       bg-white/20 border border-white/[0.08]
       backdrop-blur-md rounded-[12px]
       px-3.5 py-3 min-w-[130px]
-    ">
+    "
+    >
       <div className="flex items-center gap-1.5 mb-1.5">
         <span className="text-white/40">{icon}</span>
         <span className="text-[10px] font-bold uppercase tracking-[0.6px] text-white/40">

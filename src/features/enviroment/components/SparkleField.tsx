@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
 import { Sparkle, Sparkles } from 'lucide-react';
+import { useMemo } from 'react';
+
 import type { SparkleParticle } from '../types/hud';
 
 function generateParticles(count: number): SparkleParticle[] {
@@ -20,7 +21,7 @@ export default function SparkleField() {
 
   return (
     <div className="absolute inset-0 z-[2] pointer-events-none overflow-hidden">
-      {particles.map(p => (
+      {particles.map((p) => (
         <div
           key={p.id}
           className="absolute"
@@ -32,17 +33,9 @@ export default function SparkleField() {
           }}
         >
           {p.type === 'sparkle' ? (
-            <Sparkle
-              size={p.size}
-              className="text-white"
-              strokeWidth={1.2}
-            />
+            <Sparkle size={p.size} className="text-white" strokeWidth={1.2} />
           ) : (
-            <Sparkles
-              size={p.size}
-              className="text-white"
-              strokeWidth={1.2}
-            />
+            <Sparkles size={p.size} className="text-white" strokeWidth={1.2} />
           )}
         </div>
       ))}

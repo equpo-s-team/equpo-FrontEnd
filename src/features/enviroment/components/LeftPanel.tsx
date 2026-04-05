@@ -1,6 +1,7 @@
 import { Heart, Zap } from 'lucide-react';
-import StatBar from './StatBar.tsx';
+
 import type { PlayerStats } from '../types/hud';
+import StatBar from './StatBar.tsx';
 
 interface LeftPanelProps {
   stats: PlayerStats;

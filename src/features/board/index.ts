@@ -1,11 +1,11 @@
-export {tasksApi} from './api/tasksApi.ts';
+export { tasksApi } from './api/tasksApi.ts';
 export type {
-    TaskPriority,
-    TaskStatus,
-    RecurringInterval,
-    CreateTaskPayload,
-    UpdateTaskPayload,
-    TeamTask,
-    TaskListMeta,
-    GetTeamTasksOptions,
-} from './types/taskSchemaDC.ts';
+  CreateTaskPayload,
+  GetTeamTasksOptions,
+  RecurringInterval,
+  TaskListMeta,
+  TaskPriority,
+  TaskStatus,
+  TeamTask,
+  UpdateTaskPayload,
+} from './types/taskSchema.ts';

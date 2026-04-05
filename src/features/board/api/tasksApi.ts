@@ -1,5 +1,12 @@
 import { request } from '@/lib/api/core.ts';
-import type { CreateTaskPayload, GetTeamTasksOptions, TaskListMeta, TeamTask, UpdateTaskPayload } from '../types/taskSchema.ts';
+
+import type {
+  CreateTaskPayload,
+  GetTeamTasksOptions,
+  TaskListMeta,
+  TeamTask,
+  UpdateTaskPayload,
+} from '../types/taskSchema.ts';
 
 export const tasksApi = {
   create: (teamId: string, payload: CreateTaskPayload) =>
@@ -16,9 +23,7 @@ export const tasksApi = {
     }
 
     const queryString = query.toString();
-    const path = queryString
-      ? `/teams/${teamId}/tasks?${queryString}`
-      : `/teams/${teamId}/tasks`;
+    const path = queryString ? `/teams/${teamId}/tasks?${queryString}` : `/teams/${teamId}/tasks`;
 
     return request<{ tasks: TeamTask[]; meta: TaskListMeta }>(path, 'GET');
   },

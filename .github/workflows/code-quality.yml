@@ -1,0 +1,41 @@
+name: Code Quality
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/**
+  pull_request:
+
+jobs:
+  quality:
+    name: Formato, lint y typecheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Corrección automática
+        run: |
+          npm run format
+          npm run lint:fix
+
+      - name: Check de formato
+        run: npm run format:check
+
+      - name: Check de lint
+        run: npm run lint
+
+      - name: Check de tipos
+        run: npm run typecheck

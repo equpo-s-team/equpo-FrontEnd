@@ -1522,6 +1522,14 @@ input Task_Having {
   """
   recurringCount_avg: Float_Filter
   """
+  ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
+  """
+  recurringCount_sum: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount_avg` of type `Float`
+  """
+  recurringCount_avg: Float_Filter
+  """
   ✨ Generated from Field `Task`.`dueDate_min` of type `Timestamp`
   """
   dueDate_min: Timestamp_Filter
@@ -1664,6 +1672,14 @@ input Task_Order {
   ✨ Generated from Field `Task`.`teamId_count` of type `Int!`
   """
   teamId_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
+  """
+  recurringCount_sum: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount_avg` of type `Float`
+  """
+  recurringCount_avg: OrderDirection
   """
   ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
   """

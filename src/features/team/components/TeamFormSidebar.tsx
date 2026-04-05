@@ -80,6 +80,12 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
       finalMemberUids.push(pendingUid);
     }
 
+    const finalMemberUids = [...memberUids];
+    const pendingUid = newMemberUid.trim();
+    if (pendingUid && !finalMemberUids.includes(pendingUid) && !team?.members.some(m => m.userUid === pendingUid)) {
+      finalMemberUids.push(pendingUid);
+    }
+
     onSubmit({
       name: name.trim(),
       description: description.trim(),

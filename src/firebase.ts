@@ -6,6 +6,7 @@ import {
   ReCaptchaV3Provider,
 } from 'firebase/app-check';
 import { type Auth, getAuth } from 'firebase/auth';
+import { type Firestore, getFirestore } from 'firebase/firestore';
 import log from 'loglevel';
 
 const firebaseConfig = {
@@ -23,6 +24,10 @@ const app: FirebaseApp = initializeApp(firebaseConfig);
 // ── Auth ──────────────────────────────────────────────────────────────────────
 
 export const auth: Auth = getAuth(app);
+
+// ── Firestore ─────────────────────────────────────────────────────────────────
+
+export const db: Firestore = getFirestore(app);
 
 // ── Data Connect ──────────────────────────────────────────────────────────────
 // Descomenta SOLO cuando hayas corrido `firebase dataconnect:sdk:generate`

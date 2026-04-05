@@ -44,9 +44,9 @@ extend type Task {
   """
   assignedUserUid: String @fdc_generated(from: "Task.assignedUser", purpose: IMPLICIT_REF_FIELD)
   """
-  ✨ Implicit foreign key field based on `Task`.`teamId`. It must match the value of `Team`.`id`. See `@ref` for how to customize it.
+  ✨ Implicit foreign key field based on `Task`.`team`. It must match the value of `Team`.`id`. See `@ref` for how to customize it.
   """
-  teamIdId: UUID! @fdc_generated(from: "Task.teamId", purpose: IMPLICIT_REF_FIELD)
+  teamId: UUID! @fdc_generated(from: "Task.team", purpose: IMPLICIT_REF_FIELD)
 }
 extend type TaskCategory {
   """

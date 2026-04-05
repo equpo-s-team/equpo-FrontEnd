@@ -1,14 +1,14 @@
-import {
-  type AddTeamMemberPayload,
-  type CreateAchievementPayload,
-  type CreateTeamPayload,
-  type CreateTeamRewardPayload,
-  type UnlockAchievementPayload,
-  type UpdateTeamMemberRolePayload,
-  type UpdateTeamPayload,
-} from '@/features/team/types/teams.ts';
-
 import { request } from '../../../lib/api/core.ts';
+import type { Team } from '@/features/team/types/teamsTypes.ts';
+import type {
+    AddTeamMemberPayload,
+    CreateAchievementPayload,
+    CreateTeamPayload,
+    CreateTeamRewardPayload,
+    UpdateTeamMemberRolePayload,
+    UnlockAchievementPayload,
+    UpdateTeamPayload,
+} from '@/features/team/types/teamSchemas.ts';
 
 export const teamsApi = {
     getUser: (userUid: string) =>

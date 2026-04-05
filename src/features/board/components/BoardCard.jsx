@@ -72,6 +72,7 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
   // Handle drop on same column (reordering)
   const handleDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const draggedCardId = e.dataTransfer.getData('text/card-id');
     const fromColumnId = e.dataTransfer.getData('text/from-column');
 

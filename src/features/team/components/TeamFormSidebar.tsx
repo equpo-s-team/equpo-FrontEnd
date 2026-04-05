@@ -5,7 +5,7 @@ interface TeamFormSidebarProps {
   mode: 'create' | 'edit';
   team?: Team;
   onClose: () => void;
-  onSubmit: (payload: { name: string; description: string }) => void;
+  onSubmit: (payload: { name: string; description: string; memberUids: string[] }) => void;
 }
 
 const COLORS = [
@@ -29,6 +29,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({ mode, team, on
   const [description, setDescription] = useState(team?.description || '');
   const [errors, setErrors] = useState<{ name?: string; description?: string }>({});
   const [isVisible, setIsVisible] = useState(false);
+  const [newMemberUid, setNewMemberUid] = useState('');
+  const [memberUids, setMemberUids] = useState<string[]>([]);
 
   useEffect(() => {
     requestAnimationFrame(() => setIsVisible(true));
@@ -39,6 +41,21 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({ mode, team, on
     setTimeout(onClose, 300);
   };
 
+  const handleAddMember = () => {
+    const uid = newMemberUid.trim();
+    if (!uid) return;
+    if (memberUids.includes(uid) || team?.members.some(m => m.userUid === uid)) {
+      setNewMemberUid('');
+      return;
+    }
+    setMemberUids(prev => [...prev, uid]);
+    setNewMemberUid('');
+  };
+
+  const handleRemoveNewMember = (uid: string) => {
+    setMemberUids(prev => prev.filter(m => m !== uid));
+  };
+
   const handleSubmit = () => {
     const errs: typeof errors = {};
     if (!name.trim()) errs.name = 'El nombre es obligatorio';
@@ -47,6 +64,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({ mode, team, on
     onSubmit({
       name: name.trim(),
       description: description.trim(),
+      memberUids,
     });
   };
 
@@ -125,21 +143,71 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({ mode, team, on
             {errors.description && <p className="text-[11px] text-[#F65A70] mt-1">{errors.description}</p>}
           </div>
 
-          {/* Members list — only on Edit */}
-          {!isCreate && team && team.members.length > 0 && (
+          {/* Add Members */}
+          <div>
+            <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-1.5 block">Invitar usuarios (por UID)</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newMemberUid}
+                onChange={e => setNewMemberUid(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddMember(); } }}
+                placeholder="Ej: lOks...90s"
+                className="flex-1 px-4 py-2 rounded-xl border text-sm text-grey-800 outline-none transition-all"
+                style={{ borderColor: 'rgba(0,0,0,0.1)' }}
+                onFocus={e => e.currentTarget.style.boxShadow = `0 0 0 3px ${cfg.glow}`}
+                onBlur={e => e.currentTarget.style.boxShadow = 'none'}
+              />
+              <button
+                type="button"
+                onClick={handleAddMember}
+                className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
+                style={{ background: cfg.gradient }}
+              >
+                Añadir
+              </button>
+            </div>
+          </div>
+
+          {/* Members list — Pending & Current */}
+          {(memberUids.length > 0 || (team && team.members.length > 0)) && (
             <div>
-              <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-2 block">Miembros actuales</label>
+              <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-2 block">Miembros</label>
               <div className="flex flex-col gap-2">
-                {team.members.map(m => (
+                
+                {/* Nuevos invitados (temporales) */}
+                {memberUids.map(uid => (
+                  <div key={uid} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-blue-50 border border-blue-100">
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0"
+                      style={{ background: cfg.gradient }}
+                    >
+                      {uid.substring(0, 2).toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-grey-700 truncate">{uid}</p>
+                      <p className="text-[10px] text-blue-500">Pendiente de añadir...</p>
+                    </div>
+                    <button 
+                      onClick={() => handleRemoveNewMember(uid)}
+                      className="text-grey-400 hover:text-[#F65A70] font-bold px-2 py-0.5"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+
+                {/* Miembros actuales */}
+                {!isCreate && team && team.members.map(m => (
                   <div key={m.userUid} className="flex items-center gap-3 px-3 py-2 rounded-xl bg-grey-50 border border-grey-100">
                     <div
                       className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0"
                       style={{ background: cfg.gradient }}
                     >
-                      {m.userUid.substring(0, 2).toUpperCase()}
+                      {(m.displayName || m.userUid).substring(0, 2).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-grey-700 truncate">{m.userUid}</p>
+                      <p className="text-xs font-semibold text-grey-700 truncate">{m.displayName || m.userUid}</p>
                     </div>
                     <span
                       className="text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize shrink-0"

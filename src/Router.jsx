@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider } from '@/context/TeamContext.jsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
+import GamePage from '@/features/enviroment/GamePage.tsx';
 import AppLayout from '@/features/layout/components/AppLayout.jsx';
 import {
   SidebarProvider,
@@ -12,7 +13,6 @@ import {
 import LandingPage from '@/features/presentation/page.jsx';
 import { ReportPage } from '@/features/reports/page.tsx';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
-import GamePage from "@/features/enviroment/GamePage.tsx";
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -20,7 +20,7 @@ function Dashboard() {
   const renderContent = () => {
     switch (activeItem) {
       case 'my-space':
-        return <GamePage/>;
+        return <GamePage />;
       case 'missiones':
         return <TeamBoard />;
       case 'chat':

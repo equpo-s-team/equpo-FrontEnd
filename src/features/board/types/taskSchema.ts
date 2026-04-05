@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const TaskPrioritySchema = z.enum(['high', 'medium', 'low']);
 export const TaskStatusSchema = z.enum(['todo', 'in-progress', 'in-qa', 'done']);
-export const RecurringIntervalSchema = z.enum(['days', 'weeks', 'months']);
+export const RecurringIntervalSchema = z.enum(['days', 'weeks', 'months', 'years']);
 
 export const TaskPayloadSchema = z.object({
   name: z.string().min(1).max(100),
@@ -13,6 +13,7 @@ export const TaskPayloadSchema = z.object({
   categories: z.array(z.string()),
   isRecurring: z.boolean(),
   recurringInterval: RecurringIntervalSchema,
+  recurringCount: z.number().int().min(1).max(365).nullable(),
   assignedUserUid: z.string().nullable(),
   assignedGroupId: z.string().nullable(),
 });
@@ -39,6 +40,7 @@ export const TeamTaskSchema = z.object({
   status: TaskStatusSchema,
   isRecurring: z.boolean(),
   recurringInterval: RecurringIntervalSchema.nullable(),
+  recurringCount: z.number().nullable(),
   assignedGroupId: z.string().nullable(),
   updatedAt: z.string(),
   categories: z.array(z.string()),

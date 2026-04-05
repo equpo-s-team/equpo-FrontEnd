@@ -32,8 +32,7 @@ extend type Achievement {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: UserAchievement_Having
-  ): [UserAchievement!]!
-    @fdc_generated(from: "UserAchievement.achievement", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [UserAchievement!]! @fdc_generated(from: "UserAchievement.achievement", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `User` objects using `UserAchievement` as the join table (a `UserAchievement` object exists where its `achievement` is this and its `user` is that).
   """
@@ -185,8 +184,7 @@ extend type Group {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: GroupMembership_Having
-  ): [GroupMembership!]!
-    @fdc_generated(from: "GroupMembership.group", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [GroupMembership!]! @fdc_generated(from: "GroupMembership.group", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `Task` objects in a one-to-many relationship (where `Task`.`assignedGroup` is this object).
   """
@@ -639,8 +637,7 @@ extend type Task {
   """
   ✨ List `TaskCategory` objects in a one-to-one relationship (where `TaskCategory`.`task` is this object).
   """
-  taskCategory_on_task: TaskCategory
-    @fdc_generated(from: "TaskCategory.task", purpose: QUERY_SINGLE_ONE_TO_ONE)
+  taskCategory_on_task: TaskCategory @fdc_generated(from: "TaskCategory.task", purpose: QUERY_SINGLE_ONE_TO_ONE)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -704,6 +701,15 @@ extend type Task {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Task.priority", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Task` table where the `recurringCount` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  recurringCount_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Task.recurringCount", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Task` table where the `recurringInterval` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   recurringInterval_count(
@@ -722,22 +728,48 @@ extend type Task {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Task.status", purpose: QUERY_COUNT)
   """
-  ✨ Count the number of rows in the `Task` table where the `teamIdId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  ✨ Count the number of rows in the `Task` table where the `teamId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
-  teamIdId_count(
+  teamId_count(
     """
     Set to true to count the number of distinct values.
     """
     distinct: Boolean = false
-  ): Int! @fdc_generated(from: "Task.teamIdId", purpose: QUERY_COUNT)
+  ): Int! @fdc_generated(from: "Task.teamId", purpose: QUERY_COUNT)
+  """
+  ✨ Sum the `recurringCount` field in the `Task` table.
+  """
+  recurringCount_sum(
+    """
+    Set to true to sum the distinct values.
+    """
+    distinct: Boolean = false
+  ): Int @fdc_generated(from: "Task.recurringCount", purpose: QUERY_SUM)
+  """
+  ✨ Average the `recurringCount` field in the `Task` table.
+  """
+  recurringCount_avg(
+    """
+    Set to true to average the distinct values.
+    """
+    distinct: Boolean = false
+  ): Float @fdc_generated(from: "Task.recurringCount", purpose: QUERY_AVG)
   """
   ✨ Minimum of the `dueDate` field in the `Task` table.
   """
   dueDate_min: Timestamp @fdc_generated(from: "Task.dueDate", purpose: QUERY_MIN)
   """
+  ✨ Minimum of the `recurringCount` field in the `Task` table.
+  """
+  recurringCount_min: Int @fdc_generated(from: "Task.recurringCount", purpose: QUERY_MIN)
+  """
   ✨ Maximum of the `dueDate` field in the `Task` table.
   """
   dueDate_max: Timestamp @fdc_generated(from: "Task.dueDate", purpose: QUERY_MAX)
+  """
+  ✨ Maximum of the `recurringCount` field in the `Task` table.
+  """
+  recurringCount_max: Int @fdc_generated(from: "Task.recurringCount", purpose: QUERY_MAX)
   """
   A generated field that is used for caching results in SDKs.
   """
@@ -811,9 +843,9 @@ extend type Team {
     having: Group_Having
   ): [Group!]! @fdc_generated(from: "Group.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
-  ✨ List `Task` objects in a one-to-many relationship (where `Task`.`teamId` is this object).
+  ✨ List `Task` objects in a one-to-many relationship (where `Task`.`team` is this object).
   """
-  tasks_on_teamId(
+  tasks_on_team(
     """
     Filter condition to narrow down the query results.
     """
@@ -843,7 +875,7 @@ extend type Team {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: Task_Having
-  ): [Task!]! @fdc_generated(from: "Task.teamId", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [Task!]! @fdc_generated(from: "Task.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `TeamMembership` objects in a one-to-many relationship (where `TeamMembership`.`team` is this object).
   """
@@ -877,8 +909,7 @@ extend type Team {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: TeamMembership_Having
-  ): [TeamMembership!]!
-    @fdc_generated(from: "TeamMembership.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [TeamMembership!]! @fdc_generated(from: "TeamMembership.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `TeamReward` objects in a one-to-many relationship (where `TeamReward`.`team` is this object).
   """
@@ -1274,8 +1305,7 @@ extend type User {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: GroupMembership_Having
-  ): [GroupMembership!]!
-    @fdc_generated(from: "GroupMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [GroupMembership!]! @fdc_generated(from: "GroupMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `Task` objects in a one-to-many relationship (where `Task`.`assignedUser` is this object).
   """
@@ -1377,8 +1407,7 @@ extend type User {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: TeamMembership_Having
-  ): [TeamMembership!]!
-    @fdc_generated(from: "TeamMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [TeamMembership!]! @fdc_generated(from: "TeamMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `UserAchievement` objects in a one-to-many relationship (where `UserAchievement`.`user` is this object).
   """
@@ -1412,8 +1441,7 @@ extend type User {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: UserAchievement_Having
-  ): [UserAchievement!]!
-    @fdc_generated(from: "UserAchievement.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [UserAchievement!]! @fdc_generated(from: "UserAchievement.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `UserReward` objects in a one-to-many relationship (where `UserReward`.`user` is this object).
   """

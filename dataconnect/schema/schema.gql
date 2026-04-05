@@ -34,9 +34,10 @@ type Task @table {
   status: String!
   isRecurring: Boolean
   recurringInterval: String
+  recurringCount: Int
   assignedUser: User
   assignedGroup: Group
-  teamId: Team!
+  team: Team! 
 }
 
 type Group @table {

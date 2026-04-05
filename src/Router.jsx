@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
+import { TeamProvider } from '@/context/TeamContext.jsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import AppLayout from '@/features/layout/components/AppLayout.jsx';
 import {
@@ -46,7 +47,13 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  return isAuth ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace />;
+  return isAuth ? (
+    <TeamProvider>
+      <SidebarProvider>{children}</SidebarProvider>
+    </TeamProvider>
+  ) : (
+    <Navigate to="/" replace />
+  );
 }
 
 function TeamsRoute({ children }) {

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { teamsApi } from '../api/teamsApi';
 
 export function useTeams() {

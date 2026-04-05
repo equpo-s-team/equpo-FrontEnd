@@ -14,15 +14,17 @@ export const NewTeamCard: React.FC<NewTeamCardProps> = ({ onClick }) => {
         boxShadow: '0 4px 24px rgba(96,175,255,0.1)',
         minHeight: 220,
       }}
-      onMouseEnter={e => {
+      onMouseEnter={(e) => {
         (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 40px rgba(96,175,255,0.25)';
         (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-3px)';
-        (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, rgba(96,175,255,0.5) 0%, rgba(156,237,193,0.5) 100%)';
+        (e.currentTarget as HTMLButtonElement).style.background =
+          'linear-gradient(135deg, rgba(96,175,255,0.5) 0%, rgba(156,237,193,0.5) 100%)';
       }}
-      onMouseLeave={e => {
+      onMouseLeave={(e) => {
         (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 24px rgba(96,175,255,0.1)';
         (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
-        (e.currentTarget as HTMLButtonElement).style.background = 'linear-gradient(135deg, rgba(96,175,255,0.3) 0%, rgba(156,237,193,0.3) 100%)';
+        (e.currentTarget as HTMLButtonElement).style.background =
+          'linear-gradient(135deg, rgba(96,175,255,0.3) 0%, rgba(156,237,193,0.3) 100%)';
       }}
     >
       <div
@@ -46,7 +48,10 @@ export const NewTeamCard: React.FC<NewTeamCardProps> = ({ onClick }) => {
         </div>
 
         <div className="text-center">
-          <p className="text-sm font-bold text-grey-700 mb-1" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+          <p
+            className="text-sm font-bold text-grey-700 mb-1"
+            style={{ fontFamily: 'DM Sans, sans-serif' }}
+          >
             Crear nuevo equipo
           </p>
           <p className="text-xs text-grey-400">Nombre, descripción y miembros</p>

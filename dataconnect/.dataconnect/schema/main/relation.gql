@@ -32,7 +32,8 @@ extend type Achievement {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: UserAchievement_Having
-  ): [UserAchievement!]! @fdc_generated(from: "UserAchievement.achievement", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [UserAchievement!]!
+    @fdc_generated(from: "UserAchievement.achievement", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `User` objects using `UserAchievement` as the join table (a `UserAchievement` object exists where its `achievement` is this and its `user` is that).
   """
@@ -184,7 +185,8 @@ extend type Group {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: GroupMembership_Having
-  ): [GroupMembership!]! @fdc_generated(from: "GroupMembership.group", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [GroupMembership!]!
+    @fdc_generated(from: "GroupMembership.group", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `Task` objects in a one-to-many relationship (where `Task`.`assignedGroup` is this object).
   """
@@ -637,7 +639,8 @@ extend type Task {
   """
   ✨ List `TaskCategory` objects in a one-to-one relationship (where `TaskCategory`.`task` is this object).
   """
-  taskCategory_on_task: TaskCategory @fdc_generated(from: "TaskCategory.task", purpose: QUERY_SINGLE_ONE_TO_ONE)
+  taskCategory_on_task: TaskCategory
+    @fdc_generated(from: "TaskCategory.task", purpose: QUERY_SINGLE_ONE_TO_ONE)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -874,7 +877,8 @@ extend type Team {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: TeamMembership_Having
-  ): [TeamMembership!]! @fdc_generated(from: "TeamMembership.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [TeamMembership!]!
+    @fdc_generated(from: "TeamMembership.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `TeamReward` objects in a one-to-many relationship (where `TeamReward`.`team` is this object).
   """
@@ -1270,7 +1274,8 @@ extend type User {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: GroupMembership_Having
-  ): [GroupMembership!]! @fdc_generated(from: "GroupMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [GroupMembership!]!
+    @fdc_generated(from: "GroupMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `Task` objects in a one-to-many relationship (where `Task`.`assignedUser` is this object).
   """
@@ -1372,7 +1377,8 @@ extend type User {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: TeamMembership_Having
-  ): [TeamMembership!]! @fdc_generated(from: "TeamMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [TeamMembership!]!
+    @fdc_generated(from: "TeamMembership.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `UserAchievement` objects in a one-to-many relationship (where `UserAchievement`.`user` is this object).
   """
@@ -1406,7 +1412,8 @@ extend type User {
     Filter condition to apply to the groups of aggregate queries.
     """
     having: UserAchievement_Having
-  ): [UserAchievement!]! @fdc_generated(from: "UserAchievement.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  ): [UserAchievement!]!
+    @fdc_generated(from: "UserAchievement.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `UserReward` objects in a one-to-many relationship (where `UserReward`.`user` is this object).
   """

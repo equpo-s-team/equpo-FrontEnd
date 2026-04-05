@@ -27,8 +27,16 @@ export const TeamsHub: React.FC = () => {
   };
 
   const handleEdit = (teamId: string, payload: { name: string; description: string; memberUids: string[] }) => {
+    const updatePayload: Record<string, string | null> = {};
+    if (activeTeam && payload.name !== activeTeam.name) {
+      updatePayload.name = payload.name;
+    }
+    if (activeTeam && payload.description !== (activeTeam.description || '')) {
+      updatePayload.description = payload.description || null;
+    }
+
     updateTeam.mutate(
-      { teamId, payload: { name: payload.name, description: payload.description || null }, memberUids: payload.memberUids },
+      { teamId, payload: updatePayload, memberUids: payload.memberUids },
       { onSuccess: () => closeModal() },
     );
   };

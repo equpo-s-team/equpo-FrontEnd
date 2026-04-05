@@ -286,7 +286,7 @@ input Achievement_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -513,7 +513,7 @@ input Group_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -692,7 +692,7 @@ input GroupMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1059,7 +1059,7 @@ input Reward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1231,13 +1231,13 @@ input Task_Data {
   """
   assignedUserUid_expr: String_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  ✨ Generated from Field `Task`.`teamId` of type `UUID!`
   """
-  teamIdId: UUID
+  teamId: UUID
   """
-  ✨ `_expr` server value variant of `teamIdId` (✨ Generated from Field `Task`.`teamIdId` of type `UUID!`)
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `Task`.`teamId` of type `UUID!`)
   """
-  teamIdId_expr: UUID_Expr @fdc_forbiddenInVariables
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
   """
@@ -1247,9 +1247,9 @@ input Task_Data {
   """
   assignedUser: User_Key @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  ✨ Generated from Field `Task`.`team` of type `Team!`
   """
-  teamId: Team_Key @fdc_forbiddenInVariables
+  team: Team_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
@@ -1282,6 +1282,18 @@ input Task_Data {
   ✨ `_expr` server value variant of `priority` (✨ Generated from Field `Task`.`priority` of type `String!`)
   """
   priority_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Task`.`recurringCount` of type `Int`
+  """
+  recurringCount: Int
+  """
+  ✨ `_expr` server value variant of `recurringCount` (✨ Generated from Field `Task`.`recurringCount` of type `Int`)
+  """
+  recurringCount_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `recurringCount` (✨ Generated from Field `Task`.`recurringCount` of type `Int`)
+  """
+  recurringCount_update: [Int_Update!] @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Task`.`recurringInterval` of type `String`
   """
@@ -1328,9 +1340,9 @@ input Task_Filter {
   """
   assignedUserUid: String_Filter
   """
-  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  ✨ Generated from Field `Task`.`teamId` of type `UUID!`
   """
-  teamIdId: UUID_Filter
+  teamId: UUID_Filter
   """
   ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
   """
@@ -1340,9 +1352,9 @@ input Task_Filter {
   """
   assignedUser: User_Filter
   """
-  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  ✨ Generated from Field `Task`.`team` of type `Team!`
   """
-  teamId: Team_Filter
+  team: Team_Filter
   """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
@@ -1355,6 +1367,10 @@ input Task_Filter {
   ✨ Generated from Field `Task`.`priority` of type `String!`
   """
   priority: String_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount` of type `Int`
+  """
+  recurringCount: Int_Filter
   """
   ✨ Generated from Field `Task`.`recurringInterval` of type `String`
   """
@@ -1430,6 +1446,10 @@ input Task_Having {
   """
   priority_count: Int_Filter
   """
+  ✨ Generated from Field `Task`.`recurringCount_count` of type `Int!`
+  """
+  recurringCount_count: Int_Filter
+  """
   ✨ Generated from Field `Task`.`recurringInterval_count` of type `Int!`
   """
   recurringInterval_count: Int_Filter
@@ -1438,17 +1458,33 @@ input Task_Having {
   """
   status_count: Int_Filter
   """
-  ✨ Generated from Field `Task`.`teamIdId_count` of type `Int!`
+  ✨ Generated from Field `Task`.`teamId_count` of type `Int!`
   """
-  teamIdId_count: Int_Filter
+  teamId_count: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
+  """
+  recurringCount_sum: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount_avg` of type `Float`
+  """
+  recurringCount_avg: Float_Filter
   """
   ✨ Generated from Field `Task`.`dueDate_min` of type `Timestamp`
   """
   dueDate_min: Timestamp_Filter
   """
+  ✨ Generated from Field `Task`.`recurringCount_min` of type `Int`
+  """
+  recurringCount_min: Int_Filter
+  """
   ✨ Generated from Field `Task`.`dueDate_max` of type `Timestamp`
   """
   dueDate_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount_max` of type `Int`
+  """
+  recurringCount_max: Int_Filter
 }
 """
 ✨ Generated key input type for table 'Task'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -1470,7 +1506,7 @@ input Task_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1493,9 +1529,9 @@ input Task_Order {
   """
   assignedUserUid: OrderDirection
   """
-  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  ✨ Generated from Field `Task`.`teamId` of type `UUID!`
   """
-  teamIdId: OrderDirection
+  teamId: OrderDirection
   """
   ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
   """
@@ -1505,9 +1541,9 @@ input Task_Order {
   """
   assignedUser: User_Order
   """
-  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  ✨ Generated from Field `Task`.`team` of type `Team!`
   """
-  teamId: Team_Order
+  team: Team_Order
   """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
@@ -1520,6 +1556,10 @@ input Task_Order {
   ✨ Generated from Field `Task`.`priority` of type `String!`
   """
   priority: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount` of type `Int`
+  """
+  recurringCount: OrderDirection
   """
   ✨ Generated from Field `Task`.`recurringInterval` of type `String`
   """
@@ -1557,6 +1597,10 @@ input Task_Order {
   """
   priority_count: OrderDirection
   """
+  ✨ Generated from Field `Task`.`recurringCount_count` of type `Int!`
+  """
+  recurringCount_count: OrderDirection
+  """
   ✨ Generated from Field `Task`.`recurringInterval_count` of type `Int!`
   """
   recurringInterval_count: OrderDirection
@@ -1565,17 +1609,33 @@ input Task_Order {
   """
   status_count: OrderDirection
   """
-  ✨ Generated from Field `Task`.`teamIdId_count` of type `Int!`
+  ✨ Generated from Field `Task`.`teamId_count` of type `Int!`
   """
-  teamIdId_count: OrderDirection
+  teamId_count: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
+  """
+  recurringCount_sum: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount_avg` of type `Float`
+  """
+  recurringCount_avg: OrderDirection
   """
   ✨ Generated from Field `Task`.`dueDate_min` of type `Timestamp`
   """
   dueDate_min: OrderDirection
   """
+  ✨ Generated from Field `Task`.`recurringCount_min` of type `Int`
+  """
+  recurringCount_min: OrderDirection
+  """
   ✨ Generated from Field `Task`.`dueDate_max` of type `Timestamp`
   """
   dueDate_max: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount_max` of type `Int`
+  """
+  recurringCount_max: OrderDirection
 }
 """
 ✨ Generated data input type for table 'TaskCategory'. It includes all necessary fields for creating or upserting rows into table.
@@ -1697,7 +1757,7 @@ input TaskCategory_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -1870,9 +1930,9 @@ input Team_Filter {
   """
   groups_on_team: Group_ListFilter
   """
-  ✨ Generated from Field `Team`.`tasks_on_teamId` of type `[Task!]!`
+  ✨ Generated from Field `Team`.`tasks_on_team` of type `[Task!]!`
   """
-  tasks_on_teamId: Task_ListFilter
+  tasks_on_team: Task_ListFilter
   """
   ✨ Generated from Field `Team`.`teamMemberships_on_team` of type `[TeamMembership!]!`
   """
@@ -2008,7 +2068,7 @@ input Team_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2299,7 +2359,7 @@ input TeamMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -2594,7 +2654,7 @@ input TeamReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3053,7 +3113,7 @@ input User_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3380,7 +3440,7 @@ input UserAchievement_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """
@@ -3699,7 +3759,7 @@ input UserReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = { gt: 0 }
+  count: Int_Filter = {gt:0}
   """
   Condition of the related objects to filter for.
   """

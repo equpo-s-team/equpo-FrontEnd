@@ -1,10 +1,12 @@
 export interface CreateTeamPayload {
   name: string;
+  virtualCurrency: number;
   description?: string | null;
 }
 
 export interface UpdateTeamPayload {
   name?: string;
+  virtualCurrency?: number;
   description?: string | null;
 }
 

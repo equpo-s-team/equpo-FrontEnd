@@ -8,6 +8,8 @@ import type {
   UnlockAchievementPayload,
   UpdateTeamMemberRolePayload,
   UpdateTeamPayload,
+  TeamGroup,
+  TeamMember,
 } from '@/features/team/types/teamSchemas.ts';
 import type { Team } from '@/features/team/types/teamsTypes.ts';
 import { request } from '@/lib/api/core.ts';

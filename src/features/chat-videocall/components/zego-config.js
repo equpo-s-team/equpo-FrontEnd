@@ -9,10 +9,10 @@
  */
 
 // Configuración de ZegoCloud
-const ZEGO_CONFIG = {
+export const ZEGO_CONFIG = {
     // IMPORTANTE: Reemplaza con tus credenciales reales
-    APP_ID: 0, // Tu APP ID de ZegoCloud
-    SERVER_SECRET: '', // Tu SERVER SECRET de ZegoCloud
+    APP_ID: 1784682065, // Tu APP ID de ZegoCloud
+    SERVER_SECRET: '791007b5b0461a7ff37d15c671086e0e', // Tu SERVER SECRET de ZegoCloud
     SCENE_ID: 0, // Tu SCENE ID
     
     // Configuración de video/audio

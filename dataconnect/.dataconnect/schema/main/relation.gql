@@ -543,6 +543,15 @@ extend type Reward {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Reward.name", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `Reward` table where the `teamId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  teamId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Reward.teamId", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `Reward` table where the `type` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   type_count(
@@ -635,9 +644,39 @@ extend type Reward {
 }
 extend type Task {
   """
-  ✨ List `TaskCategory` objects in a one-to-one relationship (where `TaskCategory`.`task` is this object).
+  ✨ List `TaskCategory` objects in a one-to-many relationship (where `TaskCategory`.`task` is this object).
   """
-  taskCategory_on_task: TaskCategory @fdc_generated(from: "TaskCategory.task", purpose: QUERY_SINGLE_ONE_TO_ONE)
+  taskCategories_on_task(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: TaskCategory_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [TaskCategory_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: TaskCategory_Having
+  ): [TaskCategory!]! @fdc_generated(from: "TaskCategory.task", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -805,7 +844,7 @@ extend type TaskCategory {
   """
   A generated field that is used for caching results in SDKs.
   """
-  _id: ID! @fdc_generated(from: "TaskCategory.taskId", purpose: ENTITY_ID)
+  _id: ID! @fdc_generated(from: "TaskCategory.taskId,name", purpose: ENTITY_ID)
 }
 extend type Team {
   """
@@ -842,6 +881,40 @@ extend type Team {
     """
     having: Group_Having
   ): [Group!]! @fdc_generated(from: "Group.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Reward` objects in a one-to-many relationship (where `Reward`.`team` is this object).
+  """
+  rewards_on_team(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: Reward_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [Reward_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: Reward_Having
+  ): [Reward!]! @fdc_generated(from: "Reward.team", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
   """
   ✨ List `Task` objects in a one-to-many relationship (where `Task`.`team` is this object).
   """

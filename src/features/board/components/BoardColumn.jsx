@@ -11,6 +11,7 @@ function ColIndicator({ accent }) {
 function DropZone({ onDrop, position }) {
   const handleDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const cardId = e.dataTransfer.getData('text/card-id');
     const fromColumnId = e.dataTransfer.getData('text/from-column');
 

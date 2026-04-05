@@ -49,7 +49,17 @@ function toIsoString(value: FirestoreDateValue): string {
 }
 
 export function useTasks(teamId: string, options: GetTeamTasksOptions = {}) {
-  const queryKey = ['tasks', teamId, options] as const;
+  // Stabilize options so that the default `{}` doesn't create a new reference
+  // every render, which would make queryKey referentially unstable.
+  const stableOptions = useMemo(
+    () => options,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [options.page, options.limit],
+  );
+  const queryKey = useMemo(
+    () => ['tasks', teamId, stableOptions] as const,
+    [teamId, stableOptions],
+  );
   const queryClient = useQueryClient();
 
   const firestoreQuery = useMemo<Query<FirestoreTaskDoc> | null>(() => {

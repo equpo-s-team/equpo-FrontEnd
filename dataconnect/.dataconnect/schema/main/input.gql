@@ -1231,13 +1231,13 @@ input Task_Data {
   """
   assignedUserUid_expr: String_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  ✨ Generated from Field `Task`.`teamId` of type `UUID!`
   """
-  teamIdId: UUID
+  teamId: UUID
   """
-  ✨ `_expr` server value variant of `teamIdId` (✨ Generated from Field `Task`.`teamIdId` of type `UUID!`)
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `Task`.`teamId` of type `UUID!`)
   """
-  teamIdId_expr: UUID_Expr @fdc_forbiddenInVariables
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
   """
@@ -1247,9 +1247,9 @@ input Task_Data {
   """
   assignedUser: User_Key @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  ✨ Generated from Field `Task`.`team` of type `Team!`
   """
-  teamId: Team_Key @fdc_forbiddenInVariables
+  team: Team_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
@@ -1340,9 +1340,9 @@ input Task_Filter {
   """
   assignedUserUid: String_Filter
   """
-  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  ✨ Generated from Field `Task`.`teamId` of type `UUID!`
   """
-  teamIdId: UUID_Filter
+  teamId: UUID_Filter
   """
   ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
   """
@@ -1352,9 +1352,9 @@ input Task_Filter {
   """
   assignedUser: User_Filter
   """
-  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  ✨ Generated from Field `Task`.`team` of type `Team!`
   """
-  teamId: Team_Filter
+  team: Team_Filter
   """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
@@ -1458,9 +1458,9 @@ input Task_Having {
   """
   status_count: Int_Filter
   """
-  ✨ Generated from Field `Task`.`teamIdId_count` of type `Int!`
+  ✨ Generated from Field `Task`.`teamId_count` of type `Int!`
   """
-  teamIdId_count: Int_Filter
+  teamId_count: Int_Filter
   """
   ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
   """
@@ -1529,9 +1529,9 @@ input Task_Order {
   """
   assignedUserUid: OrderDirection
   """
-  ✨ Generated from Field `Task`.`teamIdId` of type `UUID!`
+  ✨ Generated from Field `Task`.`teamId` of type `UUID!`
   """
-  teamIdId: OrderDirection
+  teamId: OrderDirection
   """
   ✨ Generated from Field `Task`.`assignedGroup` of type `Group`
   """
@@ -1541,9 +1541,9 @@ input Task_Order {
   """
   assignedUser: User_Order
   """
-  ✨ Generated from Field `Task`.`teamId` of type `Team!`
+  ✨ Generated from Field `Task`.`team` of type `Team!`
   """
-  teamId: Team_Order
+  team: Team_Order
   """
   ✨ Generated from Field `Task`.`dueDate` of type `Timestamp!`
   """
@@ -1609,9 +1609,9 @@ input Task_Order {
   """
   status_count: OrderDirection
   """
-  ✨ Generated from Field `Task`.`teamIdId_count` of type `Int!`
+  ✨ Generated from Field `Task`.`teamId_count` of type `Int!`
   """
-  teamIdId_count: OrderDirection
+  teamId_count: OrderDirection
   """
   ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
   """
@@ -1930,9 +1930,9 @@ input Team_Filter {
   """
   groups_on_team: Group_ListFilter
   """
-  ✨ Generated from Field `Team`.`tasks_on_teamId` of type `[Task!]!`
+  ✨ Generated from Field `Team`.`tasks_on_team` of type `[Task!]!`
   """
-  tasks_on_teamId: Task_ListFilter
+  tasks_on_team: Task_ListFilter
   """
   ✨ Generated from Field `Team`.`teamMemberships_on_team` of type `[TeamMembership!]!`
   """

@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import AuthSwitch from "@/features/auth/components/AuthSwitch.tsx";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import AuthSwitch from '@/features/auth/components/AuthSwitch.tsx';
 
 export default function Navbar() {
   const [showAuth, setShowAuth] = useState(false);

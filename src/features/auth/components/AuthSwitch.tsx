@@ -22,11 +22,11 @@ export const Component = ({ onClose }: AuthSwitchProps) => {
     }, 300);
   };
 
-    const handleSuccess = (userData: {email: string; name?: string}) => {
-        log.log('Authentication successful:', userData);
-        setIsClosing(true);
-        navigate('/teams');
-    };
+  const handleSuccess = (userData: { email: string; name?: string }) => {
+    log.log('Authentication successful:', userData);
+    setIsClosing(true);
+    void navigate('/teams');
+  };
 
   return (
     <AnimatePresence mode="wait">

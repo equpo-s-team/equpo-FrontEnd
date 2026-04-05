@@ -19,16 +19,16 @@ export const TeamsHub: React.FC = () => {
   const openEdit = (id: string) => setModal({ mode: 'edit', teamId: id });
   const closeModal = () => setModal({ mode: null });
 
-  const handleCreate = (payload: { name: string; description: string }) => {
+  const handleCreate = (payload: { name: string; description: string; memberUids: string[] }) => {
     createTeam.mutate(
-      { name: payload.name, description: payload.description || null },
+      { name: payload.name, description: payload.description || null, memberUids: payload.memberUids },
       { onSuccess: () => closeModal() },
     );
   };
 
-  const handleEdit = (teamId: string, payload: { name: string; description: string }) => {
+  const handleEdit = (teamId: string, payload: { name: string; description: string; memberUids: string[] }) => {
     updateTeam.mutate(
-      { teamId, payload: { name: payload.name, description: payload.description || null } },
+      { teamId, payload: { name: payload.name, description: payload.description || null }, memberUids: payload.memberUids },
       { onSuccess: () => closeModal() },
     );
   };

@@ -11,6 +11,8 @@ import {
 import { request } from '../../../lib/api/core.ts';
 
 export const teamsApi = {
+    getUser: (userUid: string) =>
+        request<{ user: { uid: string; displayName?: string; photoURL?: string } }>(`/users/${userUid}`, 'GET'),
     getMyTeams: () =>
         request<{ teams: Team[] }>('/teams/me', 'GET'),
     create: (payload: CreateTeamPayload) =>

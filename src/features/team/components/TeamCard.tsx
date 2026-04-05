@@ -87,16 +87,19 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
           <div className="flex items-center gap-2">
             {/* Avatar stack */}
             <div className="flex -space-x-2">
-              {team.members.slice(0, 4).map((m, i) => (
-                <div
-                  key={m.userUid}
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold border-2 border-white"
-                  style={{ background: cfg.gradient, zIndex: 10 - i }}
-                  title={m.userUid}
-                >
-                  {m.userUid.substring(0, 2).toUpperCase()}
-                </div>
-              ))}
+              {team.members.slice(0, 4).map((m, i) => {
+                const initial = (m.displayName || m.userUid).substring(0, 2).toUpperCase();
+                return (
+                  <div
+                    key={m.userUid}
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold border-2 border-white"
+                    style={{ background: cfg.gradient, zIndex: 10 - i }}
+                    title={m.displayName || m.userUid}
+                  >
+                    {initial}
+                  </div>
+                );
+              })}
               {team.members.length > 4 && (
                 <div className="w-7 h-7 rounded-full bg-grey-100 border-2 border-white flex items-center justify-center text-[10px] text-grey-500 font-semibold">
                   +{team.members.length - 4}

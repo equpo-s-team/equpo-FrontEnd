@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider } from '@/context/TeamContext.jsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
+import GamePage from '@/features/enviroment/GamePage.tsx';
 import AppLayout from '@/features/layout/components/AppLayout.jsx';
 import {
   SidebarProvider,
@@ -19,7 +20,7 @@ function Dashboard() {
   const renderContent = () => {
     switch (activeItem) {
       case 'my-space':
-        return <div>Mi Espacio</div>;
+        return <GamePage />;
       case 'missiones':
         return <TeamBoard />;
       case 'chat':

@@ -5,6 +5,7 @@ import AppLayout from '@/features/layout/components/AppLayout.jsx';
 import TeamBoard from "@/features/board/TeamBoard.jsx";
 import LandingPage from "@/features/presentation/page.jsx";
 import {ReportPage} from "@/features/reports/page.tsx";
+import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
 
 function Dashboard() {
     const {activeItem} = useSidebar();
@@ -16,7 +17,9 @@ function Dashboard() {
             case 'missiones':
                 return <TeamBoard/>;
             case 'chat':
-                return <div>Mi Espacio</div>;
+                return <VideoCallPage/>;
+            case 'video-call':
+                return <VideoCallPage/>;
             case 'reports':
                 return <ReportPage/>;
             case 'settings':

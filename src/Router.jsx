@@ -1,90 +1,100 @@
-import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
-import {useAuth} from '@/context/AuthContext';
-import {SidebarProvider, useSidebar} from '@/components/navbar/SidebarContext.jsx';
-import AppLayout from '@/components/AppLayout.jsx';
-import Navbar from '@/components/landing/Navbar.jsx';
-import Hero from '@/components/landing/Hero';
-import WhatIsEqupo from '@/components/landing/WhatIsEqupo';
-import Nucleus from '@/components/landing/Nucleus';
-import Features from '@/components/landing/Features';
-import CTAFinal from '@/components/landing/CTAFinal';
-import Footer from '@/components/landing/Footer';
-import KanbanBoard from "@/components/board/KanbanBoard.jsx";
-import Reports from "@/components/reports/Reportes.js";
-import AdminEquipo from "@/components/admin/AdminEquipo.js";
+import React from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+import { useAuth } from '@/context/AuthContext';
+import { TeamProvider } from '@/context/TeamContext.jsx';
+import TeamBoard from '@/features/board/TeamBoard.jsx';
+import GamePage from '@/features/enviroment/GamePage.tsx';
+import AppLayout from '@/features/layout/components/AppLayout.jsx';
+import {
+  SidebarProvider,
+  useSidebar,
+} from '@/features/layout/components/navbar/SidebarContext.jsx';
+import LandingPage from '@/features/presentation/page.jsx';
+import { ReportPage } from '@/features/reports/page.tsx';
+import TeamsHub from '@/features/team/TeamsHub.tsx';
 
 function Dashboard() {
-    const {activeItem} = useSidebar();
+  const { activeItem } = useSidebar();
 
-    const renderContent = () => {
-        switch (activeItem) {
-            case 'my-space':
-                return <div>Mi Espacio</div>;
-            case 'missiones':
-                return <KanbanBoard/>;
-            case 'chat':
-                return <div>Mi Espacio</div>;
-            case 'reports':
-                return <Reports/>;
-            case 'settings':
-                return <AdminEquipo/>;
-            default:
-                return <div>Mi Espacio</div>;
-        }
-    };
-
-    return (
-        <AppLayout>
-            {renderContent()}
-        </AppLayout>
-    );
-}
-
-function PublicLayout() {
-    return (
-        <div className="font-body">
-            <Navbar/>
-            <Hero/>
-            <WhatIsEqupo/>
-            <Nucleus/>
-            <Features/>
-            <CTAFinal/>
-            <Footer/>
-        </div>
-    );
-}
-
-function ProtectedRoute({children}) {
-    const {isAuth, isLoading} = useAuth();
-
-    if (isLoading) {
-        return <div className="flex items-center justify-center min-h-screen">
-            <div className="text-gray-600">Loading...</div>
-        </div>;
+  const renderContent = () => {
+    switch (activeItem) {
+      case 'my-space':
+        return <GamePage />;
+      case 'missiones':
+        return <TeamBoard />;
+      case 'chat':
+        return <div>Mi Espacio</div>;
+      case 'reports':
+        return <ReportPage />;
+      case 'settings':
+        return <div>Mi Espacio</div>;
+      default:
+        return <div>Mi Espacio</div>;
     }
+  };
 
-    return isAuth ? (
-        <SidebarProvider>
-            {children}
-        </SidebarProvider>
-    ) : <Navigate to="/" replace/>;
+  return <AppLayout>{renderContent()}</AppLayout>;
 }
 
+function ProtectedRoute({ children }) {
+  const { isAuth, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  return isAuth ? (
+    <TeamProvider>
+      <SidebarProvider>{children}</SidebarProvider>
+    </TeamProvider>
+  ) : (
+    <Navigate to="/" replace />
+  );
+}
+
+function TeamsRoute({ children }) {
+  const { isAuth, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  return isAuth ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace />;
+}
 
 export default function Router() {
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<PublicLayout/>}/>
-                <Route
-                    path="/dashboard"
-                    element={
-                        <ProtectedRoute>
-                            <Dashboard/>
-                        </ProtectedRoute>
-                    }
-                />
-            </Routes>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+
+        <Route
+          path="/teams"
+          element={
+            <TeamsRoute>
+              <TeamsHub />
+            </TeamsRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }

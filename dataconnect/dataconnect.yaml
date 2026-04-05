@@ -1,13 +1,13 @@
-specVersion: "v1"
-serviceId: "equpo-service"
-location: "us-east4"
+specVersion: 'v1'
+serviceId: 'equpo-service'
+location: 'us-east4'
 schemas:
-  - source: "./schema"
+  - source: './schema'
     datasource:
       postgresql:
-        database: "equpo-database"
+        database: 'equpo-database'
         cloudSql:
-          instanceId: "equpo-instance"
+          instanceId: 'equpo-instance'
           # schemaValidation: "STRICT"     # STRICT mode makes Postgres schema match Data Connect exactly.
-          schemaValidation: "COMPATIBLE" # COMPATIBLE mode makes Postgres schema compatible with Data Connect.
-connectorDirs: ["./example"]
+          schemaValidation: 'COMPATIBLE' # COMPATIBLE mode makes Postgres schema compatible with Data Connect.
+connectorDirs: ['./example']

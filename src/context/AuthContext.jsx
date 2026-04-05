@@ -1,46 +1,78 @@
-import { createContext, useContext, useState, useEffect } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from '@/firebase';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+
+import { getUser } from '@/dataconnect-generated';
+import { auth } from '@/firebase.ts';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUser({
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                });
-            } else {
-                setUser(null);
-            }
-            setIsLoading(false);
-        });
+  const fetchDatabaseUser = useCallback(async () => {
+    try {
+      const result = await getUser();
+      return result.data?.users?.[0] ?? null;
+    } catch (error) {
+      log.error('Error fetching database user:', error);
+      return null;
+    }
+  }, []);
 
-        return unsubscribe;
-    }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // First set basic Firebase user data
+        const userData = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        };
 
-    const value = {
-        user,
-        isLoading,
-        isAuth: !!user,
-    };
+        // Fetch database user data for current auth user
+        const databaseUser = await fetchDatabaseUser();
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+        if (databaseUser) {
+          // Merge Firebase user data with database user data
+          setUser({
+            ...userData,
+            level: databaseUser.level,
+            experiencePoints: databaseUser.experiencePoints,
+            virtualCurrency: databaseUser.virtualCurrency,
+            lastActive: databaseUser.lastActive,
+            createdAt: databaseUser.createdAt,
+            updatedAt: databaseUser.updatedAt,
+          });
+        } else {
+          // No database user found, return Firebase data only
+          setUser(userData);
+        }
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return unsubscribe;
+  }, [fetchDatabaseUser]);
+
+  const value = {
+    user,
+    isLoading,
+    isAuth: !!user,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-    const ctx = useContext(AuthContext);
-    if (!ctx) throw new Error('useAuth must be used inside AuthProvider');
-    return ctx;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used inside AuthProvider');
+  return ctx;
 }
 
 export function logOut() {
-    return signOut(auth);
+  return signOut(auth);
 }

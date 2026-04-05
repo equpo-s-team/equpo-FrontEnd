@@ -1,0 +1,1276 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `Achievement` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  achievement_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Achievement_Data!
+  ): Achievement_KeyOutput! @fdc_generated(from: "Achievement", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Group` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  group_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Group_Data!
+  ): Group_KeyOutput! @fdc_generated(from: "Group", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `GroupMembership` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  groupMembership_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: GroupMembership_Data!
+  ): GroupMembership_KeyOutput! @fdc_generated(from: "GroupMembership", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Reward` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  reward_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Reward_Data!
+  ): Reward_KeyOutput! @fdc_generated(from: "Reward", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Task` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  task_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Task_Data!
+  ): Task_KeyOutput! @fdc_generated(from: "Task", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `TaskCategory` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  taskCategory_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: TaskCategory_Data!
+  ): TaskCategory_KeyOutput! @fdc_generated(from: "TaskCategory", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Team` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  team_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Team_Data!
+  ): Team_KeyOutput! @fdc_generated(from: "Team", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `TeamMembership` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  teamMembership_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: TeamMembership_Data!
+  ): TeamMembership_KeyOutput! @fdc_generated(from: "TeamMembership", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `TeamReward` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  teamReward_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: TeamReward_Data!
+  ): TeamReward_KeyOutput! @fdc_generated(from: "TeamReward", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `UserAchievement` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userAchievement_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserAchievement_Data!
+  ): UserAchievement_KeyOutput! @fdc_generated(from: "UserAchievement", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `UserReward` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userReward_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: UserReward_Data!
+  ): UserReward_KeyOutput! @fdc_generated(from: "UserReward", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `Achievement` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  achievement_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Achievement_Data!]!
+  ): [Achievement_KeyOutput!]! @fdc_generated(from: "Achievement", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Group` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  group_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Group_Data!]!
+  ): [Group_KeyOutput!]! @fdc_generated(from: "Group", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `GroupMembership` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  groupMembership_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [GroupMembership_Data!]!
+  ): [GroupMembership_KeyOutput!]! @fdc_generated(from: "GroupMembership", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Reward` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  reward_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Reward_Data!]!
+  ): [Reward_KeyOutput!]! @fdc_generated(from: "Reward", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Task` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  task_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Task_Data!]!
+  ): [Task_KeyOutput!]! @fdc_generated(from: "Task", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `TaskCategory` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  taskCategory_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [TaskCategory_Data!]!
+  ): [TaskCategory_KeyOutput!]! @fdc_generated(from: "TaskCategory", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Team` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  team_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Team_Data!]!
+  ): [Team_KeyOutput!]! @fdc_generated(from: "Team", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `TeamMembership` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  teamMembership_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [TeamMembership_Data!]!
+  ): [TeamMembership_KeyOutput!]! @fdc_generated(from: "TeamMembership", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `TeamReward` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  teamReward_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [TeamReward_Data!]!
+  ): [TeamReward_KeyOutput!]! @fdc_generated(from: "TeamReward", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  user_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `UserAchievement` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userAchievement_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserAchievement_Data!]!
+  ): [UserAchievement_KeyOutput!]! @fdc_generated(from: "UserAchievement", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `UserReward` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  userReward_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [UserReward_Data!]!
+  ): [UserReward_KeyOutput!]! @fdc_generated(from: "UserReward", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `Achievement` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Achievement`.
+  """
+  achievement_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Achievement_Data!
+  ): Achievement_KeyOutput! @fdc_generated(from: "Achievement", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Group` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Group`.
+  """
+  group_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Group_Data!
+  ): Group_KeyOutput! @fdc_generated(from: "Group", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `GroupMembership` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `GroupMembership`.
+  """
+  groupMembership_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: GroupMembership_Data!
+  ): GroupMembership_KeyOutput! @fdc_generated(from: "GroupMembership", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Reward` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Reward`.
+  """
+  reward_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Reward_Data!
+  ): Reward_KeyOutput! @fdc_generated(from: "Reward", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Task` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Task`.
+  """
+  task_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Task_Data!
+  ): Task_KeyOutput! @fdc_generated(from: "Task", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `TaskCategory` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TaskCategory`.
+  """
+  taskCategory_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: TaskCategory_Data!
+  ): TaskCategory_KeyOutput! @fdc_generated(from: "TaskCategory", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Team` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Team`.
+  """
+  team_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Team_Data!
+  ): Team_KeyOutput! @fdc_generated(from: "Team", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `TeamMembership` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TeamMembership`.
+  """
+  teamMembership_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: TeamMembership_Data!
+  ): TeamMembership_KeyOutput! @fdc_generated(from: "TeamMembership", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `TeamReward` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TeamReward`.
+  """
+  teamReward_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: TeamReward_Data!
+  ): TeamReward_KeyOutput! @fdc_generated(from: "TeamReward", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: User_Data!
+  ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `UserAchievement` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserAchievement`.
+  """
+  userAchievement_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserAchievement_Data!
+  ): UserAchievement_KeyOutput! @fdc_generated(from: "UserAchievement", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `UserReward` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserReward`.
+  """
+  userReward_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: UserReward_Data!
+  ): UserReward_KeyOutput! @fdc_generated(from: "UserReward", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `Achievement` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Achievement`.
+  """
+  achievement_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Achievement_Data!]!
+  ): [Achievement_KeyOutput!]! @fdc_generated(from: "Achievement", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Group` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Group`.
+  """
+  group_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Group_Data!]!
+  ): [Group_KeyOutput!]! @fdc_generated(from: "Group", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `GroupMembership` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `GroupMembership`.
+  """
+  groupMembership_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [GroupMembership_Data!]!
+  ): [GroupMembership_KeyOutput!]! @fdc_generated(from: "GroupMembership", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Reward` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Reward`.
+  """
+  reward_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Reward_Data!]!
+  ): [Reward_KeyOutput!]! @fdc_generated(from: "Reward", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Task` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Task`.
+  """
+  task_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Task_Data!]!
+  ): [Task_KeyOutput!]! @fdc_generated(from: "Task", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `TaskCategory` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TaskCategory`.
+  """
+  taskCategory_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [TaskCategory_Data!]!
+  ): [TaskCategory_KeyOutput!]! @fdc_generated(from: "TaskCategory", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Team` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Team`.
+  """
+  team_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Team_Data!]!
+  ): [Team_KeyOutput!]! @fdc_generated(from: "Team", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `TeamMembership` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TeamMembership`.
+  """
+  teamMembership_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [TeamMembership_Data!]!
+  ): [TeamMembership_KeyOutput!]! @fdc_generated(from: "TeamMembership", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `TeamReward` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `TeamReward`.
+  """
+  teamReward_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [TeamReward_Data!]!
+  ): [TeamReward_KeyOutput!]! @fdc_generated(from: "TeamReward", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  """
+  user_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [User_Data!]!
+  ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `UserAchievement` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserAchievement`.
+  """
+  userAchievement_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserAchievement_Data!]!
+  ): [UserAchievement_KeyOutput!]! @fdc_generated(from: "UserAchievement", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `UserReward` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `UserReward`.
+  """
+  userReward_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [UserReward_Data!]!
+  ): [UserReward_KeyOutput!]! @fdc_generated(from: "UserReward", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `Achievement` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Achievement` or `null` if not found.
+  """
+  achievement_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Achievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Achievement_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Achievement_Data!
+  ): Achievement_KeyOutput @fdc_generated(from: "Achievement", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Group` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Group` or `null` if not found.
+  """
+  group_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Group_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Group_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Group_Data!
+  ): Group_KeyOutput @fdc_generated(from: "Group", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `GroupMembership` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `GroupMembership` or `null` if not found.
+  """
+  groupMembership_update(
+    """
+    The key used to identify the object.
+    """
+    key: GroupMembership_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: GroupMembership_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: GroupMembership_Data!
+  ): GroupMembership_KeyOutput @fdc_generated(from: "GroupMembership", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Reward` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Reward` or `null` if not found.
+  """
+  reward_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Reward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Reward_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Reward_Data!
+  ): Reward_KeyOutput @fdc_generated(from: "Reward", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Task` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Task` or `null` if not found.
+  """
+  task_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Task_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Task_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Task_Data!
+  ): Task_KeyOutput @fdc_generated(from: "Task", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `TaskCategory` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `TaskCategory` or `null` if not found.
+  """
+  taskCategory_update(
+    """
+    The key used to identify the object.
+    """
+    key: TaskCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TaskCategory_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: TaskCategory_Data!
+  ): TaskCategory_KeyOutput @fdc_generated(from: "TaskCategory", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Team` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Team` or `null` if not found.
+  """
+  team_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Team_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Team_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Team_Data!
+  ): Team_KeyOutput @fdc_generated(from: "Team", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `TeamMembership` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `TeamMembership` or `null` if not found.
+  """
+  teamMembership_update(
+    """
+    The key used to identify the object.
+    """
+    key: TeamMembership_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TeamMembership_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: TeamMembership_Data!
+  ): TeamMembership_KeyOutput @fdc_generated(from: "TeamMembership", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `TeamReward` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `TeamReward` or `null` if not found.
+  """
+  teamReward_update(
+    """
+    The key used to identify the object.
+    """
+    key: TeamReward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TeamReward_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: TeamReward_Data!
+  ): TeamReward_KeyOutput @fdc_generated(from: "TeamReward", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
+  """
+  user_update(
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: User_Data!
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `UserAchievement` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserAchievement` or `null` if not found.
+  """
+  userAchievement_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserAchievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserAchievement_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserAchievement_Data!
+  ): UserAchievement_KeyOutput @fdc_generated(from: "UserAchievement", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `UserReward` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `UserReward` or `null` if not found.
+  """
+  userReward_update(
+    """
+    The key used to identify the object.
+    """
+    key: UserReward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserReward_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: UserReward_Data!
+  ): UserReward_KeyOutput @fdc_generated(from: "UserReward", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `Achievement` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  achievement_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Achievement_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Achievement_Data!
+  ): Int! @fdc_generated(from: "Achievement", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Group` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  group_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Group_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Group_Data!
+  ): Int! @fdc_generated(from: "Group", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `GroupMembership` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  groupMembership_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: GroupMembership_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: GroupMembership_Data!
+  ): Int! @fdc_generated(from: "GroupMembership", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Reward` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  reward_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Reward_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Reward_Data!
+  ): Int! @fdc_generated(from: "Reward", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Task` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  task_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Task_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Task_Data!
+  ): Int! @fdc_generated(from: "Task", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `TaskCategory` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  taskCategory_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: TaskCategory_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: TaskCategory_Data!
+  ): Int! @fdc_generated(from: "TaskCategory", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Team` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  team_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Team_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Team_Data!
+  ): Int! @fdc_generated(from: "Team", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `TeamMembership` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  teamMembership_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: TeamMembership_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: TeamMembership_Data!
+  ): Int! @fdc_generated(from: "TeamMembership", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `TeamReward` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  teamReward_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: TeamReward_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: TeamReward_Data!
+  ): Int! @fdc_generated(from: "TeamReward", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `User` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  user_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: User_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: User_Data!
+  ): Int! @fdc_generated(from: "User", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `UserAchievement` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userAchievement_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserAchievement_Data!
+  ): Int! @fdc_generated(from: "UserAchievement", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `UserReward` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  userReward_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: UserReward_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: UserReward_Data!
+  ): Int! @fdc_generated(from: "UserReward", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `Achievement` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  achievement_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Achievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Achievement_FirstRow
+  ): Achievement_KeyOutput @fdc_generated(from: "Achievement", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Group` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  group_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Group_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Group_FirstRow
+  ): Group_KeyOutput @fdc_generated(from: "Group", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `GroupMembership` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  groupMembership_delete(
+    """
+    The key used to identify the object.
+    """
+    key: GroupMembership_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: GroupMembership_FirstRow
+  ): GroupMembership_KeyOutput @fdc_generated(from: "GroupMembership", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Reward` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  reward_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Reward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Reward_FirstRow
+  ): Reward_KeyOutput @fdc_generated(from: "Reward", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Task` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  task_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Task_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Task_FirstRow
+  ): Task_KeyOutput @fdc_generated(from: "Task", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `TaskCategory` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  taskCategory_delete(
+    """
+    The key used to identify the object.
+    """
+    key: TaskCategory_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TaskCategory_FirstRow
+  ): TaskCategory_KeyOutput @fdc_generated(from: "TaskCategory", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Team` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  team_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Team_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Team_FirstRow
+  ): Team_KeyOutput @fdc_generated(from: "Team", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `TeamMembership` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  teamMembership_delete(
+    """
+    The key used to identify the object.
+    """
+    key: TeamMembership_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TeamMembership_FirstRow
+  ): TeamMembership_KeyOutput @fdc_generated(from: "TeamMembership", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `TeamReward` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  teamReward_delete(
+    """
+    The key used to identify the object.
+    """
+    key: TeamReward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: TeamReward_FirstRow
+  ): TeamReward_KeyOutput @fdc_generated(from: "TeamReward", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `User` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  user_delete(
+    """
+    The key used to identify the object.
+    """
+    key: User_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: User_FirstRow
+  ): User_KeyOutput @fdc_generated(from: "User", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `UserAchievement` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userAchievement_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserAchievement_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserAchievement_FirstRow
+  ): UserAchievement_KeyOutput @fdc_generated(from: "UserAchievement", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `UserReward` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  userReward_delete(
+    """
+    The key used to identify the object.
+    """
+    key: UserReward_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: UserReward_FirstRow
+  ): UserReward_KeyOutput @fdc_generated(from: "UserReward", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `Achievement` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  achievement_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Achievement_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Achievement", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Group` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  group_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Group_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Group", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `GroupMembership` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  groupMembership_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: GroupMembership_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "GroupMembership", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Reward` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  reward_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Reward_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Reward", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Task` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  task_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Task_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Task", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `TaskCategory` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  taskCategory_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: TaskCategory_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "TaskCategory", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Team` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  team_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Team_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Team", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `TeamMembership` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  teamMembership_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: TeamMembership_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "TeamMembership", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `TeamReward` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  teamReward_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: TeamReward_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "TeamReward", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `User` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  user_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: User_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "User", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `UserAchievement` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userAchievement_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserAchievement_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserAchievement", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `UserReward` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  userReward_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: UserReward_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "UserReward", purpose: DELETE_MULTIPLE)
+}

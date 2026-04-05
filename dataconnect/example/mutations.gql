@@ -1,38 +1,35 @@
 ### ── USER (cliente) ───────────────────────────────────────────────────────────
 mutation CreateUser($displayName: String!, $photoURL: String) @auth(level: USER) {
-    user_upsert(
-        data: {
-            uid_expr: "auth.uid"
-            displayName: $displayName
-            level: 0
-            experiencePoints: 0
-            virtualCurrency: 0
-            photoURL: $photoURL
-            # createdAt / updatedAt / lastActive default to request.time on create
-        }
-    )
+  user_upsert(
+    data: {
+      uid_expr: "auth.uid"
+      displayName: $displayName
+      level: 0
+      experiencePoints: 0
+      virtualCurrency: 0
+      photoURL: $photoURL
+      # createdAt / updatedAt / lastActive default to request.time on create
+    }
+  )
 }
 
 mutation TouchUserLastActive @auth(level: USER) {
-    user_update(
-        key: { uid_expr: "auth.uid" }
-        data: {
-            lastActive_expr: "request.time"
-            updatedAt_expr: "request.time"
-        }
-    )
+  user_update(
+    key: { uid_expr: "auth.uid" }
+    data: { lastActive_expr: "request.time", updatedAt_expr: "request.time" }
+  )
 }
 
 query GetUser @auth(level: USER) {
-    users(where: { uid: { eq_expr: "auth.uid" } }, limit: 1) {
-        uid
-        displayName
-        level
-        experiencePoints
-        virtualCurrency
-        lastActive
-        createdAt
-        updatedAt
-        photoURL
-    }
+  users(where: { uid: { eq_expr: "auth.uid" } }, limit: 1) {
+    uid
+    displayName
+    level
+    experiencePoints
+    virtualCurrency
+    lastActive
+    createdAt
+    updatedAt
+    photoURL
+  }
 }

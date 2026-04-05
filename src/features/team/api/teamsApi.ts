@@ -3,6 +3,8 @@ import {
   type CreateAchievementPayload,
   type CreateTeamPayload,
   type CreateTeamRewardPayload,
+  type TeamGroup,
+  type TeamMember,
   type UnlockAchievementPayload,
   type UpdateTeamMemberRolePayload,
   type UpdateTeamPayload,
@@ -24,4 +26,8 @@ export const teamsApi = {
     request(`/teams/${teamId}/achievements`, 'POST', payload),
   unlockAchievement: (teamId: string, payload: UnlockAchievementPayload) =>
     request(`/teams/${teamId}/achievements/unlocks`, 'POST', payload),
+  listMembers: (teamId: string) =>
+    request<{ members: TeamMember[] }>(`/teams/${teamId}/members`, 'GET'),
+  listGroups: (teamId: string) =>
+    request<{ groups: TeamGroup[] }>(`/teams/${teamId}/groups`, 'GET'),
 };

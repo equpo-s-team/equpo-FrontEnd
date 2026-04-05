@@ -55,9 +55,9 @@ export default function TeamBoard() {
   const { teamId } = useTeam();
   const { data, isLoading } = useTasks(teamId);
 
-  // Fall back to mock data when there's no API data yet
+  // Use real synced data, or return empty columns when fetching/empty
   const apiTasks = data?.tasks;
-  const cards = apiTasks?.length ? groupTasksByColumn(apiTasks) : INITIAL_CARDS;
+  const cards = apiTasks?.length ? groupTasksByColumn(apiTasks) : { todo: [], progress: [], qa: [], done: [] };
 
   // ── local drag-and-drop state (operates on top of API data or mock) ──
   const [localCards, setLocalCards] = useState(null);

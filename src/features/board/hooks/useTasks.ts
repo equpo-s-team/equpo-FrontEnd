@@ -58,7 +58,7 @@ export function useTasks(teamId: string, options: GetTeamTasksOptions = {}) {
     }
 
     return query(
-      collection(db, 'teams', teamId, 'tasks'),
+      collection(db, teamId),
       orderBy('dueDate', 'asc'),
     ) as Query<FirestoreTaskDoc>;
   }, [teamId]);

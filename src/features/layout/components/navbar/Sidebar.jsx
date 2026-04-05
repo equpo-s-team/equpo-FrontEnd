@@ -4,7 +4,7 @@ import SidebarSection from './SidebarSection.jsx';
 import SidebarUser from './SidebarUser.jsx';
 import SidebarToggle from './SidebarToggle.jsx';
 import {useSidebar} from "./SidebarContext.jsx";
-import {Home, Star, MessageCircle, ChartColumnBig, Settings} from "lucide-react";
+import {Home, Star, MessageCircle, ChartColumnBig, Settings, Video} from "lucide-react";
 
 export default function Sidebar() {
     const {collapsed} = useSidebar();
@@ -26,6 +26,7 @@ export default function Sidebar() {
                     <SidebarItem id="my-space" icon={Home} label="Mi Espacio"/>
                     <SidebarItem id="missiones" icon={Star} label="Misiones" badge="3"/>
                     <SidebarItem id="chat" icon={MessageCircle} label="Chat" badge="12"/>
+                    <SidebarItem id="video-call" icon={Video} label="Video Llamada"/>
                 </SidebarSection>
 
                 <SidebarSection label="Moderation">

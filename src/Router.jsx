@@ -11,6 +11,7 @@ import CTAFinal from '@/components/landing/CTAFinal';
 import Footer from '@/components/landing/Footer';
 import KanbanBoard from "@/components/board/KanbanBoard.jsx";
 import Reports from "@/components/reports/Reportes.js";
+import AdminEquipo from "@/components/admin/AdminEquipo.js";
 
 function Dashboard() {
     const {activeItem} = useSidebar();
@@ -26,7 +27,7 @@ function Dashboard() {
             case 'reports':
                 return <Reports/>;
             case 'settings':
-                return <div>Mi Espacio</div>;
+                return <AdminEquipo/>;
             default:
                 return <div>Mi Espacio</div>;
         }

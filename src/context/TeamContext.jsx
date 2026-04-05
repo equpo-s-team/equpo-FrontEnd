@@ -7,7 +7,7 @@ import { createContext, useContext, useState } from 'react';
  * For development, a fallback mock teamId is used to enable testing.
  */
 
-const MOCK_TEAM_ID = '45d416d6-6397-44d5-8862-07fb532e742c';
+const MOCK_TEAM_ID = '706a6771-4f84-4359-a949-938a54f40c1a';
 
 const TeamContext = createContext(null);
 

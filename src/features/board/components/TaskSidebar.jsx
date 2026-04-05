@@ -10,7 +10,7 @@ import { useUpdateTask } from '../hooks/useUpdateTask';
 
 const PRIORITY_OPTIONS = [
   { value: 'high', label: 'Alta', dot: 'bg-red' },
-  { value: 'medium', label: 'Media', dot: 'bg-orange' },
+  { value: 'medium', label: 'Media', dot: 'bg-orange-dark' },
   { value: 'low', label: 'Baja', dot: 'bg-green' },
 ];
 
@@ -112,7 +112,10 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     if (isRecurring && (!recurringCount || recurringCount < 1))
       e.recurringCount = 'Ingresa un número válido';
 
-    const catArray = categories.split(',').map((c) => c.trim()).filter(Boolean);
+    const catArray = categories
+      .split(',')
+      .map((c) => c.trim())
+      .filter(Boolean);
     if (catArray.some((c) => c.length > 12)) {
       e.categories = 'Cada categoría no puede exceder los 12 caracteres';
     }
@@ -191,9 +194,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   }
 
   // ── Compute changes & validity ──
-  const originalDueDate = task?.dueDate
-    ? new Date(task.dueDate).toISOString().split('T')[0]
-    : '';
+  const originalDueDate = task?.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : '';
 
   const hasChanges =
     mode !== 'edit' ||
@@ -203,7 +204,11 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     priority !== (task?.priority ?? 'medium') ||
     assignedUserUid !== (task?.assignedUsers?.[0]?.uid ?? '') ||
     assignedGroupId !== (task?.assignedGroupId ?? '') ||
-    categories.split(',').map(c => c.trim()).filter(Boolean).join(', ') !== (task?.categories ?? []).join(', ') ||
+    categories
+      .split(',')
+      .map((c) => c.trim())
+      .filter(Boolean)
+      .join(', ') !== (task?.categories ?? []).join(', ') ||
     isRecurring !== (task?.isRecurring ?? false) ||
     recurringInterval !== (task?.recurringInterval ?? 'days') ||
     recurringCount !== (task?.recurringCount ?? 1);
@@ -214,7 +219,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     Boolean(dueDate) &&
     Boolean(priority) &&
     Object.keys(errors).length === 0 &&
-    (!isRecurring || (recurringCount >= 1));
+    (!isRecurring || recurringCount >= 1);
 
   const isSubmitDisabled = isSubmitting || !isFormValid || !hasChanges;
 
@@ -391,7 +396,10 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                 setCategories(val);
 
                 // Real-time validation
-                const catArray = val.split(',').map((c) => c.trim()).filter(Boolean);
+                const catArray = val
+                  .split(',')
+                  .map((c) => c.trim())
+                  .filter(Boolean);
                 if (catArray.some((c) => c.length > 12)) {
                   setErrors((prev) => ({
                     ...prev,

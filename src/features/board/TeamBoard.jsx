@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.jsx';
+import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
 import AppHeader from './components/AppHeader.jsx';
 import BoardColumn from './components/BoardColumn.jsx';
 import FilterBar from './components/FilterBar.jsx';
 import { COLUMNS } from './components/kanbanData.js';
 import TaskSidebar from './components/TaskSidebar.jsx';
+import { useTaskFilters } from './hooks/useTaskFilters';
 import { useTasks } from './hooks/useTasks';
 import { useUpdateTask } from './hooks/useUpdateTask';
 
@@ -55,19 +58,46 @@ function groupTasksByColumn(tasks) {
 export default function TeamBoard() {
   const { teamId } = useTeam();
   const { data, isLoading } = useTasks(teamId);
+  const { data: members = [] } = useTeamMembers(teamId);
+  const { data: groups = [] } = useTeamGroups(teamId);
 
-  // Use real synced data, or return empty columns when fetching/empty
+  // ── Filter logic ──
+  const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
+
   const apiTasks = data?.tasks;
-  const cards = apiTasks?.length ? groupTasksByColumn(apiTasks) : { todo: [], progress: [], qa: [], done: [] };
+
+  // Extract unique categories from ALL tasks (before filtering) so the filter
+  // dropdown always shows the full list of available categories.
+  const allCategories = useMemo(() => {
+    if (!apiTasks?.length) return [];
+    const set = new Set();
+    for (const task of apiTasks) {
+      for (const cat of task.categories ?? []) set.add(cat);
+    }
+    return [...set].sort();
+  }, [apiTasks]);
+
+  // Apply filters → group into columns
+  const filteredTasks = useMemo(
+    () => (apiTasks?.length ? applyFilters(apiTasks) : []),
+    [apiTasks, applyFilters],
+  );
+  const cards = useMemo(
+    () =>
+      filteredTasks.length
+        ? groupTasksByColumn(filteredTasks)
+        : { todo: [], progress: [], qa: [], done: [] },
+    [filteredTasks],
+  );
 
   // ── local drag-and-drop state (operates on top of API data or mock) ──
   const [localCards, setLocalCards] = useState(null);
   const displayCards = localCards ?? cards;
 
-  // Reset local overrides whenever API data changes
-  const [prevApiTasks, setPrevApiTasks] = useState(apiTasks);
-  if (apiTasks !== prevApiTasks) {
-    setPrevApiTasks(apiTasks);
+  // Reset local overrides whenever the underlying data / filters change
+  const [prevFilteredTasks, setPrevFilteredTasks] = useState(filteredTasks);
+  if (filteredTasks !== prevFilteredTasks) {
+    setPrevFilteredTasks(filteredTasks);
     setLocalCards(null);
   }
 
@@ -97,8 +127,7 @@ export default function TeamBoard() {
       // Same-column reorder: use the SAME array (card already removed above)
       const clampedPosition = Math.max(0, Math.min(position, fromCards.length));
       // If the card was before the target position, the target shifts down by 1
-      const adjustedPosition =
-        cardIndex < clampedPosition ? clampedPosition - 1 : clampedPosition;
+      const adjustedPosition = cardIndex < clampedPosition ? clampedPosition - 1 : clampedPosition;
 
       // Skip if the card would land back in the same spot
       if (adjustedPosition === cardIndex) return;
@@ -167,7 +196,15 @@ export default function TeamBoard() {
   return (
     <div className="min-h-screen bg-offwhite font-body">
       <AppHeader />
-      <FilterBar />
+      <FilterBar
+        filters={filters}
+        setFilter={setFilter}
+        resetFilters={resetFilters}
+        activeFilterCount={activeFilterCount}
+        allCategories={allCategories}
+        members={members}
+        groups={groups}
+      />
 
       {isLoading && (
         <div className="px-8 py-6 text-center text-grey-400 text-sm">Cargando tareas...</div>

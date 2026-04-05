@@ -1,17 +1,24 @@
-import {
-  type AddTeamMemberPayload,
-  type CreateAchievementPayload,
-  type CreateTeamPayload,
-  type CreateTeamRewardPayload,
-  type UnlockAchievementPayload,
-  type UpdateTeamMemberRolePayload,
-  type UpdateTeamPayload,
-} from '@/features/team/types/teams.ts';
-
-import { request } from '../../../lib/api/core.ts';
+import type {
+  AddTeamMemberPayload,
+  CreateAchievementPayload,
+  CreateTeamPayload,
+  CreateTeamRewardPayload,
+  UnlockAchievementPayload,
+  UpdateTeamMemberRolePayload,
+  UpdateTeamPayload,
+} from '@/features/team/types/teamSchemas.ts';
+import type { Team } from '@/features/team/types/teamsTypes.ts';
+import { request } from '@/lib/api/core.ts';
 
 export const teamsApi = {
-  create: (payload: CreateTeamPayload) => request('/teams', 'POST', payload),
+  getUser: (userUid: string) =>
+    request<{ user: { uid: string; displayName?: string; photoURL?: string } }>(
+      `/users/${userUid}`,
+      'GET',
+    ),
+  getMyTeams: () => request<{ teams: Team[] }>('/teams/me', 'GET'),
+  create: (payload: CreateTeamPayload) =>
+    request<{ team: { id: string } }>('/teams', 'POST', payload),
   update: (teamId: string, payload: UpdateTeamPayload) =>
     request(`/teams/${teamId}`, 'PATCH', payload),
   addMember: (teamId: string, payload: AddTeamMemberPayload) =>

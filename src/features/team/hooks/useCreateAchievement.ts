@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { teamsApi } from '../api/teamsApi';
-import type { CreateAchievementPayload } from '../types/teams';
+import type { CreateAchievementPayload } from '../types/teamSchemas';
 
 export function useCreateAchievement() {
   const queryClient = useQueryClient();

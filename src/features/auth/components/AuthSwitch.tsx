@@ -25,7 +25,7 @@ export const Component = ({ onClose }: AuthSwitchProps) => {
   const handleSuccess = (userData: { email: string; name?: string }) => {
     log.log('Authentication successful:', userData);
     setIsClosing(true);
-    void navigate('/dashboard');
+    void navigate('/teams');
   };
 
   return (

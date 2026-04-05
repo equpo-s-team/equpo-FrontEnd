@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import AuthSwitch from '../../../../../../Downloads/equpo-FrontEnd-refactor/equpo-FrontEnd-refactor/src/features/auth/components/AuthSwitch.tsx';
+import AuthSwitch from '@/features/auth/components/AuthSwitch.tsx';
 
 export default function Navbar() {
   const [showAuth, setShowAuth] = useState(false);
@@ -31,7 +31,7 @@ export default function Navbar() {
             Funciones
           </a>
           <Link
-            to="/dashboard"
+            to="/teams"
             className="text-sm font-medium text-purple-foreground bg-dark px-[1.3rem] py-[.55rem] rounded-lg hover:bg-dark-mid transition-all hover:-translate-y-px no-underline"
           >
             Empezar

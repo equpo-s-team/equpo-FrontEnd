@@ -101,11 +101,10 @@ export default function Features() {
 }
 
 function FeatureCard({ feat, delay }) {
-    const delayClass = ['reveal-d1', 'reveal-d2', 'reveal-d3'][delay] ?? 'reveal-d1';
 
     return (
         <div
-            className={`group relative rounded-[20px] p-7 cursor-default reveal ${delayClass} transition-all duration-300 hover:-translate-y-1`}
+            className={`group relative rounded-[20px] p-7 cursor-default transition-all duration-300 hover:-translate-y-1`}
             style={{
                 background: 'white',
                 border: `1.5px solid ${feat.border}`,

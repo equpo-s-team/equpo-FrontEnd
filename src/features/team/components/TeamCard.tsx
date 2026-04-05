@@ -1,6 +1,5 @@
-import React from 'react';
-import { ScoreRing } from './ScoreRing.tsx';
-import {Team} from "@/features/team/index.ts";
+import React, { useMemo } from 'react';
+import type { Team } from '@/features/team/types/teamsTypes.ts';
 
 interface TeamCardProps {
   team: Team;
@@ -8,16 +7,24 @@ interface TeamCardProps {
   onEdit: (id: string) => void;
 }
 
-const COLOR_CONFIG = {
-  blue:   { gradient: 'linear-gradient(135deg, #60AFFF 0%, #86F0FD 100%)', glow: 'rgba(96,175,255,0.18)', border: 'rgba(96,175,255,0.3)',   dot: '#60AFFF' },
-  purple: { gradient: 'linear-gradient(135deg, #9b7fe1 0%, #5961F9 100%)', glow: 'rgba(155,127,225,0.18)', border: 'rgba(155,127,225,0.3)', dot: '#9b7fe1' },
-  green:  { gradient: 'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)', glow: 'rgba(156,237,193,0.18)', border: 'rgba(156,237,193,0.3)', dot: '#9CEDC1' },
-  red:    { gradient: 'linear-gradient(135deg, #F65A70 0%, #FFAF93 100%)', glow: 'rgba(246,90,112,0.18)',  border: 'rgba(246,90,112,0.3)',  dot: '#F65A70' },
-  orange: { gradient: 'linear-gradient(135deg, #FF94AE 0%, #FCE98D 100%)', glow: 'rgba(255,148,174,0.18)', border: 'rgba(255,148,174,0.3)', dot: '#FF94AE' },
-};
+const COLOR_PALETTE = [
+  { gradient: 'linear-gradient(135deg, #60AFFF 0%, #86F0FD 100%)', glow: 'rgba(96,175,255,0.18)', border: 'rgba(96,175,255,0.3)', dot: '#60AFFF' },
+  { gradient: 'linear-gradient(135deg, #9b7fe1 0%, #5961F9 100%)', glow: 'rgba(155,127,225,0.18)', border: 'rgba(155,127,225,0.3)', dot: '#9b7fe1' },
+  { gradient: 'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)', glow: 'rgba(156,237,193,0.18)', border: 'rgba(156,237,193,0.3)', dot: '#9CEDC1' },
+  { gradient: 'linear-gradient(135deg, #F65A70 0%, #FFAF93 100%)', glow: 'rgba(246,90,112,0.18)', border: 'rgba(246,90,112,0.3)', dot: '#F65A70' },
+  { gradient: 'linear-gradient(135deg, #FF94AE 0%, #FCE98D 100%)', glow: 'rgba(255,148,174,0.18)', border: 'rgba(255,148,174,0.3)', dot: '#FF94AE' },
+];
+
+function hashToIndex(id: string): number {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash * 31 + id.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash) % COLOR_PALETTE.length;
+}
 
 export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => {
-  const cfg = COLOR_CONFIG[team.color];
+  const cfg = useMemo(() => COLOR_PALETTE[hashToIndex(team.id)], [team.id]);
 
   return (
     <div
@@ -38,7 +45,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
       {/* Glass inner */}
       <div className="rounded-2xl bg-white/80 backdrop-blur-md p-5 flex flex-col gap-4" style={{ backdropFilter: 'blur(16px)' }}>
 
-        {/* Top row: color accent bar + score */}
+        {/* Top row: name + currency badge */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             {/* Color indicator */}
@@ -57,12 +64,22 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
               </p>
             </div>
           </div>
-          <ScoreRing score={team.score} color={team.color} size={52} />
+
+          {/* Virtual currency badge */}
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl"
+            style={{ background: cfg.glow.replace('0.18', '0.1'), border: `1px solid ${cfg.border}` }}
+          >
+            <span className="text-sm" role="img" aria-label="moneda">💰</span>
+            <span className="text-xs font-bold" style={{ color: cfg.dot }}>
+              {team.virtualCurrency.toLocaleString()}
+            </span>
+          </div>
         </div>
 
         {/* Description */}
         <p className="text-xs text-grey-500 leading-relaxed line-clamp-2" style={{ fontFamily: 'DM Sans, sans-serif' }}>
-          {team.description}
+          {team.description || 'Sin descripción'}
         </p>
 
         {/* Members row */}
@@ -72,12 +89,12 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
             <div className="flex -space-x-2">
               {team.members.slice(0, 4).map((m, i) => (
                 <div
-                  key={m.id + i}
+                  key={m.userUid}
                   className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold border-2 border-white"
                   style={{ background: cfg.gradient, zIndex: 10 - i }}
-                  title={m.name}
+                  title={m.userUid}
                 >
-                  {m.avatarInitials}
+                  {m.userUid.substring(0, 2).toUpperCase()}
                 </div>
               ))}
               {team.members.length > 4 && (
@@ -89,11 +106,11 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
             <span className="text-[11px] text-grey-400">{team.members.length} miembros</span>
           </div>
 
-          {/* Score label */}
+          {/* Leader indicator */}
           <div className="flex items-center gap-1">
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: cfg.dot, boxShadow: `0 0 6px ${cfg.dot}` }} />
             <span className="text-[11px] font-medium" style={{ color: cfg.dot }}>
-              {team.score >= 80 ? 'Excelente' : team.score >= 60 ? 'Bien' : 'En proceso'}
+              {team.members.length >= 5 ? 'Grande' : team.members.length >= 3 ? 'Mediano' : 'Pequeño'}
             </span>
           </div>
         </div>

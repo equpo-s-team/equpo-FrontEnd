@@ -1,25 +1,30 @@
 import { request } from '../../../lib/api/core.ts';
-import {
+import type { Team } from '@/features/team/types/teamsTypes.ts';
+import type {
     AddTeamMemberPayload,
-    CreateAchievementPayload, CreateTeamPayload,
-    CreateTeamRewardPayload, UpdateTeamMemberRolePayload,
+    CreateAchievementPayload,
+    CreateTeamPayload,
+    CreateTeamRewardPayload,
+    UpdateTeamMemberRolePayload,
     UnlockAchievementPayload,
-    UpdateTeamPayload
-} from "@/features/team/types/teams.ts";
+    UpdateTeamPayload,
+} from '@/features/team/types/teamSchemas.ts';
 
 export const teamsApi = {
-  create: (payload: CreateTeamPayload) =>
-      request('/teams', 'POST', payload),
-  update: (teamId: string, payload: UpdateTeamPayload) =>
-      request(`/teams/${teamId}`, 'PATCH', payload),
-  addMember: (teamId: string, payload: AddTeamMemberPayload) =>
-      request(`/teams/${teamId}/members`, 'POST', payload),
-  updateMemberRole: (teamId: string, userUid: string, payload: UpdateTeamMemberRolePayload) =>
-      request(`/teams/${teamId}/members/${userUid}/role`, 'PATCH', payload),
-  createReward: (teamId: string, payload: CreateTeamRewardPayload) =>
-      request(`/teams/${teamId}/rewards`, 'POST', payload),
-  createAchievement: (teamId: string, payload: CreateAchievementPayload) =>
-      request(`/teams/${teamId}/achievements`, 'POST', payload),
-  unlockAchievement: (teamId: string, payload: UnlockAchievementPayload) =>
-      request(`/teams/${teamId}/achievements/unlocks`, 'POST', payload),
+    getMyTeams: () =>
+        request<{ teams: Team[] }>('/teams/me', 'GET'),
+    create: (payload: CreateTeamPayload) =>
+        request('/teams', 'POST', payload),
+    update: (teamId: string, payload: UpdateTeamPayload) =>
+        request(`/teams/${teamId}`, 'PATCH', payload),
+    addMember: (teamId: string, payload: AddTeamMemberPayload) =>
+        request(`/teams/${teamId}/members`, 'POST', payload),
+    updateMemberRole: (teamId: string, userUid: string, payload: UpdateTeamMemberRolePayload) =>
+        request(`/teams/${teamId}/members/${userUid}/role`, 'PATCH', payload),
+    createReward: (teamId: string, payload: CreateTeamRewardPayload) =>
+        request(`/teams/${teamId}/rewards`, 'POST', payload),
+    createAchievement: (teamId: string, payload: CreateAchievementPayload) =>
+        request(`/teams/${teamId}/achievements`, 'POST', payload),
+    unlockAchievement: (teamId: string, payload: UnlockAchievementPayload) =>
+        request(`/teams/${teamId}/achievements/unlocks`, 'POST', payload),
 };

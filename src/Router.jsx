@@ -11,6 +11,7 @@ import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
 import AppLayout from '@/lib/layout/components/AppLayout.jsx';
 import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
+import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -33,24 +34,26 @@ function Dashboard() {
     return <Navigate to="/teams" replace />;
   }
 
-  const renderContent = () => {
-    switch (activeItem) {
-      case 'my-space':
-        return <GamePage />;
-      case 'missiones':
-        return <TeamBoard />;
-      case 'my-missions':
-        return <MyMissions />;
-      case 'chat':
-        return <div>Mi Espacio</div>;
-      case 'reports':
-        return <Reports />;
-      case 'settings':
-        return <div>Mi Espacio</div>;
-      default:
-        return <div>Mi Espacio</div>;
-    }
-  };
+    const renderContent = () => {
+        switch (activeItem) {
+          case 'my-space':
+            return <GamePage />;
+          case 'missiones':
+            return <TeamBoard />;
+            case 'my-missions':
+            return <MyMissions />;
+            case 'chat':
+                return <VideoCallPage/>;
+            case 'video-call':
+                return <VideoCallPage/>;
+          case 'reports':
+            return <Reports />;
+            case 'settings':
+                return <div>Mi Espacio</div>;
+            default:
+                return <div>Mi Espacio</div>;
+        }
+    };
 
   return <AppLayout>{renderContent()}</AppLayout>;
 }

@@ -1283,6 +1283,18 @@ input Task_Data {
   """
   priority_expr: String_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `Task`.`recurringCount` of type `Int`
+  """
+  recurringCount: Int
+  """
+  ✨ `_expr` server value variant of `recurringCount` (✨ Generated from Field `Task`.`recurringCount` of type `Int`)
+  """
+  recurringCount_expr: Int_Expr @fdc_forbiddenInVariables
+  """
+  ✨ `_update` server value variant of `recurringCount` (✨ Generated from Field `Task`.`recurringCount` of type `Int`)
+  """
+  recurringCount_update: [Int_Update!] @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `Task`.`recurringInterval` of type `String`
   """
   recurringInterval: String
@@ -1355,6 +1367,10 @@ input Task_Filter {
   ✨ Generated from Field `Task`.`priority` of type `String!`
   """
   priority: String_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount` of type `Int`
+  """
+  recurringCount: Int_Filter
   """
   ✨ Generated from Field `Task`.`recurringInterval` of type `String`
   """
@@ -1430,6 +1446,10 @@ input Task_Having {
   """
   priority_count: Int_Filter
   """
+  ✨ Generated from Field `Task`.`recurringCount_count` of type `Int!`
+  """
+  recurringCount_count: Int_Filter
+  """
   ✨ Generated from Field `Task`.`recurringInterval_count` of type `Int!`
   """
   recurringInterval_count: Int_Filter
@@ -1442,13 +1462,29 @@ input Task_Having {
   """
   teamIdId_count: Int_Filter
   """
+  ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
+  """
+  recurringCount_sum: Int_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount_avg` of type `Float`
+  """
+  recurringCount_avg: Float_Filter
+  """
   ✨ Generated from Field `Task`.`dueDate_min` of type `Timestamp`
   """
   dueDate_min: Timestamp_Filter
   """
+  ✨ Generated from Field `Task`.`recurringCount_min` of type `Int`
+  """
+  recurringCount_min: Int_Filter
+  """
   ✨ Generated from Field `Task`.`dueDate_max` of type `Timestamp`
   """
   dueDate_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Task`.`recurringCount_max` of type `Int`
+  """
+  recurringCount_max: Int_Filter
 }
 """
 ✨ Generated key input type for table 'Task'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -1521,6 +1557,10 @@ input Task_Order {
   """
   priority: OrderDirection
   """
+  ✨ Generated from Field `Task`.`recurringCount` of type `Int`
+  """
+  recurringCount: OrderDirection
+  """
   ✨ Generated from Field `Task`.`recurringInterval` of type `String`
   """
   recurringInterval: OrderDirection
@@ -1557,6 +1597,10 @@ input Task_Order {
   """
   priority_count: OrderDirection
   """
+  ✨ Generated from Field `Task`.`recurringCount_count` of type `Int!`
+  """
+  recurringCount_count: OrderDirection
+  """
   ✨ Generated from Field `Task`.`recurringInterval_count` of type `Int!`
   """
   recurringInterval_count: OrderDirection
@@ -1569,13 +1613,29 @@ input Task_Order {
   """
   teamIdId_count: OrderDirection
   """
+  ✨ Generated from Field `Task`.`recurringCount_sum` of type `Int`
+  """
+  recurringCount_sum: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount_avg` of type `Float`
+  """
+  recurringCount_avg: OrderDirection
+  """
   ✨ Generated from Field `Task`.`dueDate_min` of type `Timestamp`
   """
   dueDate_min: OrderDirection
   """
+  ✨ Generated from Field `Task`.`recurringCount_min` of type `Int`
+  """
+  recurringCount_min: OrderDirection
+  """
   ✨ Generated from Field `Task`.`dueDate_max` of type `Timestamp`
   """
   dueDate_max: OrderDirection
+  """
+  ✨ Generated from Field `Task`.`recurringCount_max` of type `Int`
+  """
+  recurringCount_max: OrderDirection
 }
 """
 ✨ Generated data input type for table 'TaskCategory'. It includes all necessary fields for creating or upserting rows into table.

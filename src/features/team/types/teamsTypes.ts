@@ -2,6 +2,7 @@ export interface TeamMember {
   userUid: string;
   role: 'leader' | 'collaborator' | 'spectator' | 'member';
   joinedAt: string;
+  displayName?: string | null;
 }
 
 export interface Team {

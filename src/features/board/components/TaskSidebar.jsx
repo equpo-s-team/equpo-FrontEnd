@@ -117,10 +117,17 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
 
   // ── Build payload ──
   function buildPayload() {
+    const seenCategories = new Set();
     const catArray = categories
       .split(',')
       .map((c) => c.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .filter((category) => {
+        const key = category.toLowerCase();
+        if (seenCategories.has(key)) return false;
+        seenCategories.add(key);
+        return true;
+      });
 
     return {
       name: name.trim(),

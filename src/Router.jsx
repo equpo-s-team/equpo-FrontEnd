@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
@@ -9,6 +10,7 @@ import {
 } from '@/features/layout/components/navbar/SidebarContext.jsx';
 import LandingPage from '@/features/presentation/page.jsx';
 import { ReportPage } from '@/features/reports/page.tsx';
+import TeamsHub from '@/features/team/TeamsHub.tsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -47,11 +49,35 @@ function ProtectedRoute({ children }) {
   return isAuth ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace />;
 }
 
+function TeamsRoute({ children }) {
+  const { isAuth, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  return isAuth ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace />;
+}
+
 export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+
+        <Route
+          path="/teams"
+          element={
+            <TeamsRoute>
+              <TeamsHub />
+            </TeamsRoute>
+          }
+        />
+
         <Route
           path="/dashboard"
           element={

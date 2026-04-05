@@ -5,9 +5,10 @@ import { useTeam } from '@/context/TeamContext.jsx';
 import AppHeader from './components/AppHeader.jsx';
 import BoardColumn from './components/BoardColumn.jsx';
 import FilterBar from './components/FilterBar.jsx';
-import { COLUMNS, INITIAL_CARDS } from './components/kanbanData.js';
+import { COLUMNS } from './components/kanbanData.js';
 import TaskSidebar from './components/TaskSidebar.jsx';
 import { useTasks } from './hooks/useTasks';
+import { useUpdateTask } from './hooks/useUpdateTask';
 
 /** Map backend status values to column IDs used in the UI */
 const STATUS_TO_COLUMN = {
@@ -70,7 +71,9 @@ export default function TeamBoard() {
     setLocalCards(null);
   }
 
-  const moveCard = (cardId, fromColumnId, toColumnId, position) => {
+  const updateTask = useUpdateTask();
+
+  const moveCard = async (cardId, fromColumnId, toColumnId, position) => {
     if (fromColumnId === toColumnId && position === 0) return;
 
     const source = { ...displayCards };
@@ -89,13 +92,36 @@ export default function TeamBoard() {
       adjustedPosition = clampedPosition - 1;
     }
 
-    toCards.splice(adjustedPosition, 0, card);
+    const nextStatus = COLUMN_TO_STATUS[toColumnId] ?? 'todo';
+    const nextCard = {
+      ...card,
+      status: nextStatus,
+      _raw: {
+        ...(card._raw ?? {}),
+        status: nextStatus,
+      },
+    };
+
+    toCards.splice(adjustedPosition, 0, nextCard);
 
     setLocalCards({
       ...source,
       [fromColumnId]: fromCards,
       [toColumnId]: toCards,
     });
+
+    // If the column changed, sync the new status to the backend
+    if (fromColumnId !== toColumnId) {
+      try {
+        await updateTask.mutateAsync({
+          teamId,
+          taskId: cardId,
+          payload: { status: nextStatus },
+        });
+      } catch (err) {
+        console.error('Failed to update task status:', err);
+      }
+    }
   };
 
   // ── Sidebar state ──

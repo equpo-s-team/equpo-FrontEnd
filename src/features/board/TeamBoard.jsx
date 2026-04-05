@@ -74,23 +74,11 @@ export default function TeamBoard() {
   const updateTask = useUpdateTask();
 
   const moveCard = async (cardId, fromColumnId, toColumnId, position) => {
-    if (fromColumnId === toColumnId && position === 0) return;
-
     const source = { ...displayCards };
     const fromCards = [...(source[fromColumnId] ?? [])];
     const cardIndex = fromCards.findIndex((c) => c.id === cardId);
     const card = fromCards[cardIndex];
     if (!card) return;
-
-    fromCards.splice(cardIndex, 1);
-
-    const toCards = [...(source[toColumnId] ?? [])];
-    const clampedPosition = Math.max(0, Math.min(position, toCards.length));
-
-    let adjustedPosition = clampedPosition;
-    if (fromColumnId === toColumnId && cardIndex < clampedPosition) {
-      adjustedPosition = clampedPosition - 1;
-    }
 
     const nextStatus = COLUMN_TO_STATUS[toColumnId] ?? 'todo';
     const nextCard = {
@@ -102,13 +90,33 @@ export default function TeamBoard() {
       },
     };
 
-    toCards.splice(adjustedPosition, 0, nextCard);
+    // Remove the card from its current position
+    fromCards.splice(cardIndex, 1);
 
-    setLocalCards({
-      ...source,
-      [fromColumnId]: fromCards,
-      [toColumnId]: toCards,
-    });
+    if (fromColumnId === toColumnId) {
+      // Same-column reorder: use the SAME array (card already removed above)
+      const clampedPosition = Math.max(0, Math.min(position, fromCards.length));
+      // If the card was before the target position, the target shifts down by 1
+      const adjustedPosition =
+        cardIndex < clampedPosition ? clampedPosition - 1 : clampedPosition;
+
+      // Skip if the card would land back in the same spot
+      if (adjustedPosition === cardIndex) return;
+
+      fromCards.splice(adjustedPosition, 0, nextCard);
+      setLocalCards({ ...source, [fromColumnId]: fromCards });
+    } else {
+      // Cross-column move: insert into a separate target array
+      const toCards = [...(source[toColumnId] ?? [])];
+      const clampedPosition = Math.max(0, Math.min(position, toCards.length));
+      toCards.splice(clampedPosition, 0, nextCard);
+
+      setLocalCards({
+        ...source,
+        [fromColumnId]: fromCards,
+        [toColumnId]: toCards,
+      });
+    }
 
     // If the column changed, sync the new status to the backend
     if (fromColumnId !== toColumnId) {

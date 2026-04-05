@@ -56,6 +56,7 @@ export interface Reward_Key {
 
 export interface TaskCategory_Key {
   taskId: UUIDString;
+  name: string;
   __typename?: 'TaskCategory_Key';
 }
 

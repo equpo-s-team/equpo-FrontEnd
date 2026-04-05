@@ -1,64 +1,52 @@
 import React, { useState } from 'react';
-import {CreateTeamPayload, EditTeamPayload, ModalState, Team, TeamColor} from "@/features/team/index.ts";
-import {CURRENT_USER, MOCK_TEAMS} from "@/features/team/mockData.ts";
-import {NewTeamCard} from "@/features/team/NewTeamCard.tsx";
-import {CreateTeamModal} from "@/features/team/CreateTeamModal.tsx";
-import {TeamCard} from "@/features/team/TeamCard.tsx";
-import {EditTeamModal} from "@/features/team/EditTeamModal.tsx";
-import {UserProfileModal} from "@/features/team/UserProfileModal.tsx";
+import type { ModalState } from '@/features/team/types/teamsTypes';
+import { useTeams } from '@/features/team/hooks/useTeams';
+import { useCreateTeam } from '@/features/team/hooks/useCreateTeam';
+import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
+import { NewTeamCard } from '@/features/team/components/NewTeamCard';
+import { TeamCard } from '@/features/team/components/TeamCard';
+import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 
 export const TeamsHub: React.FC = () => {
-  const [teams, setTeams] = useState<Team[]>(MOCK_TEAMS);
+  const { data: teams = [], isLoading, error } = useTeams();
+  const createTeam = useCreateTeam();
+  const updateTeam = useUpdateTeam();
+
   const [modal, setModal] = useState<ModalState>({ mode: null });
   const [search, setSearch] = useState('');
 
   const openCreate = () => setModal({ mode: 'create' });
   const openEdit = (id: string) => setModal({ mode: 'edit', teamId: id });
-  const openProfile = () => setModal({ mode: 'profile' });
   const closeModal = () => setModal({ mode: null });
 
-  const handleCreate = (payload: CreateTeamPayload & { color: TeamColor }) => {
-    const newTeam: Team = {
-      id: String(Date.now()),
-      name: payload.name,
-      description: payload.description,
-      color: payload.color,
-      score: 0,
-      createdAt: new Date().toISOString(),
-      members: payload.memberEmails.map((email, i) => ({
-        id: `new-${i}`,
-        name: email.split('@')[0],
-        email,
-        role: 'member',
-        avatarInitials: email.substring(0, 2).toUpperCase(),
-        avatarGradient: 'avatar-at',
-        joinedAt: new Date().toISOString(),
-      })),
-    };
-    setTeams(prev => [...prev, newTeam]);
-    closeModal();
+  const handleCreate = (payload: { name: string; description: string }) => {
+    createTeam.mutate(
+      { name: payload.name, description: payload.description || null },
+      { onSuccess: () => closeModal() },
+    );
   };
 
-  const handleEdit = (id: string, payload: EditTeamPayload) => {
-    setTeams(prev => prev.map(t => t.id === id ? { ...t, ...payload } : t));
-    closeModal();
+  const handleEdit = (teamId: string, payload: { name: string; description: string }) => {
+    updateTeam.mutate(
+      { teamId, payload: { name: payload.name, description: payload.description || null } },
+      { onSuccess: () => closeModal() },
+    );
   };
 
   const handleEnter = (id: string) => {
-    // Navigate to /dashboard — wire to your router as needed
     console.log('Entering team', id);
     window.location.href = '/dashboard';
   };
 
   const filtered = teams.filter(t =>
     t.name.toLowerCase().includes(search.toLowerCase()) ||
-    t.description.toLowerCase().includes(search.toLowerCase())
+    (t.description || '').toLowerCase().includes(search.toLowerCase()),
   );
 
   const activeTeam = modal.teamId ? teams.find(t => t.id === modal.teamId) : undefined;
 
-  const totalMembers = new Set(teams.flatMap(t => t.members.map(m => m.id))).size;
-  const avgScore = teams.length ? Math.round(teams.reduce((s, t) => s + t.score, 0) / teams.length) : 0;
+  const totalMembers = new Set(teams.flatMap(t => t.members.map(m => m.userUid))).size;
+  const totalCurrency = teams.reduce((s, t) => s + t.virtualCurrency, 0);
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden" style={{ fontFamily: 'DM Sans, sans-serif' }}>
@@ -79,7 +67,6 @@ export const TeamsHub: React.FC = () => {
 
         {/* ── Top bar ── */}
         <div className="flex items-center justify-between mb-10">
-          {/* Logo / Brand */}
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center"
@@ -87,26 +74,8 @@ export const TeamsHub: React.FC = () => {
             >
               <span className="text-white text-sm font-bold">✦</span>
             </div>
-            <span className="font-bold text-grey-800 text-lg" style={{ letterSpacing: '-0.03em' }}>Orbitly</span>
+            <span className="font-bold text-grey-800 text-lg" style={{ letterSpacing: '-0.03em' }}>Equpo</span>
           </div>
-
-          {/* User avatar + profile trigger */}
-          <button
-            onClick={openProfile}
-            className="flex items-center gap-3 px-4 py-2 rounded-2xl border border-grey-150 bg-white/70 hover:bg-white transition-all backdrop-blur-sm hover:shadow-md group"
-          >
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
-              style={{ background: 'linear-gradient(135deg, #60AFFF, #5961F9)', boxShadow: '0 2px 10px rgba(96,175,255,0.4)' }}
-            >
-              {CURRENT_USER.avatarInitials}
-            </div>
-            <div className="text-left hidden sm:block">
-              <p className="text-xs font-semibold text-grey-700 leading-tight">{CURRENT_USER.name}</p>
-              <p className="text-[10px] text-grey-400">{CURRENT_USER.role}</p>
-            </div>
-            <span className="text-grey-300 text-xs group-hover:text-grey-500 transition-colors">›</span>
-          </button>
         </div>
 
         {/* ── Hero section ── */}
@@ -133,7 +102,7 @@ export const TeamsHub: React.FC = () => {
           {[
             { label: 'Equipos activos', value: teams.length, color: '#60AFFF', glow: 'rgba(96,175,255,0.25)' },
             { label: 'Miembros únicos', value: totalMembers, color: '#9b7fe1', glow: 'rgba(155,127,225,0.25)' },
-            { label: 'Score promedio', value: `${avgScore}%`, color: '#9CEDC1', glow: 'rgba(156,237,193,0.25)' },
+            { label: 'Moneda virtual total', value: totalCurrency.toLocaleString(), color: '#9CEDC1', glow: 'rgba(156,237,193,0.25)' },
           ].map(stat => (
             <div
               key={stat.label}
@@ -177,10 +146,26 @@ export const TeamsHub: React.FC = () => {
           </button>
         </div>
 
-        {/* ── Teams grid ── */}
-        {filtered.length === 0 && search ? (
+        {/* ── Content ── */}
+        {isLoading ? (
+          <div className="text-center py-20">
+            <div
+              className="inline-block w-10 h-10 rounded-full border-4 border-grey-200 animate-spin"
+              style={{ borderTopColor: '#60AFFF' }}
+            />
+            <p className="text-grey-400 text-sm mt-4">Cargando tus equipos…</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-[#F65A70] text-sm">Error al cargar los equipos. Intenta de nuevo.</p>
+          </div>
+        ) : filtered.length === 0 && search ? (
           <div className="text-center py-20">
             <p className="text-grey-400 text-sm">No se encontraron equipos para "<strong>{search}</strong>"</p>
+          </div>
+        ) : filtered.length === 0 && !search ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <NewTeamCard onClick={openCreate} />
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -197,20 +182,23 @@ export const TeamsHub: React.FC = () => {
         )}
       </div>
 
-      {/* ── Modals ── */}
-      {modal.mode === 'create' && (
-        <CreateTeamModal onClose={closeModal} onCreate={handleCreate} />
+      {/* ── Sidebar ── */}
+      {(modal.mode === 'create' || modal.mode === 'edit') && (
+        <TeamFormSidebar
+          mode={modal.mode}
+          team={modal.mode === 'edit' ? activeTeam : undefined}
+          onClose={closeModal}
+          onSubmit={(payload) => {
+            if (modal.mode === 'create') {
+              handleCreate(payload);
+            } else if (modal.mode === 'edit' && activeTeam) {
+              handleEdit(activeTeam.id, payload);
+            }
+          }}
+        />
       )}
 
-      {modal.mode === 'edit' && activeTeam && (
-        <EditTeamModal team={activeTeam} onClose={closeModal} onSave={handleEdit} />
-      )}
-
-      {modal.mode === 'profile' && (
-        <UserProfileModal user={CURRENT_USER} onClose={closeModal} />
-      )}
-
-      {/* CSS for orb animation (fallback if Tailwind keyframes aren't loaded) */}
+      {/* CSS for orb animation */}
       <style>{`
         @keyframes floatOrb {
           0%, 100% { transform: translateY(0px); }

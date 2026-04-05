@@ -65,7 +65,12 @@ export const COLUMN_CONFIG = {
 
 export const PRIORITY_CONFIG = {
   high: { label: 'Alta', bg: 'bg-red/10', text: 'text-red', border: 'border-red/30' },
-  medium: { label: 'Media', bg: 'bg-orange/10', text: 'text-orange', border: 'border-orange/30' },
+  medium: {
+    label: 'Media',
+    bg: 'bg-orange-dark/10',
+    text: 'text-orange-dark',
+    border: 'border-orange-dark/30',
+  },
   low: { label: 'Baja', bg: 'bg-green/10', text: 'text-green', border: 'border-green/30' },
 };
 

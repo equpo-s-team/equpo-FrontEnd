@@ -33,3 +33,14 @@ export interface UnlockAchievementPayload {
   achievementId: string;
   unlockedAt?: string;
 }
+
+export interface TeamMember {
+  uid: string;
+  displayName: string | null;
+  role: string;
+}
+
+export interface TeamGroup {
+  id: string;
+  groupName: string;
+}

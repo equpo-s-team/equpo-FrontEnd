@@ -61,10 +61,16 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({ mode, team, on
     if (!name.trim()) errs.name = 'El nombre es obligatorio';
     if (Object.keys(errs).length) { setErrors(errs); return; }
 
+    const finalMemberUids = [...memberUids];
+    const pendingUid = newMemberUid.trim();
+    if (pendingUid && !finalMemberUids.includes(pendingUid) && !team?.members.some(m => m.userUid === pendingUid)) {
+      finalMemberUids.push(pendingUid);
+    }
+
     onSubmit({
       name: name.trim(),
       description: description.trim(),
-      memberUids,
+      memberUids: finalMemberUids,
     });
   };
 

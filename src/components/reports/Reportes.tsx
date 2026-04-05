@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import { NeonBackground }  from './Componentes/NeonBackground'
-import { ReportHeader }    from './Componentes/ReportHeader'
 import { DateRangePicker } from './Componentes/DateRangePicker'
 import { KpiStrip }        from './Componentes/KpiStrip'
 import { MemberList }      from './Componentes/MemberList'
 import { StatusDonut }     from './Componentes/StatusDonut'
-import { VelocityChart }   from './Componentes/VelocityChart'
 import { OverdueTable }    from './Componentes/OverdueTable'
 import { getKpiForDays }   from './data'
-import { TEAM_MEMBERS, OVERDUE_TASKS, WEEKLY_VELOCITY, VELOCITY_STATS } from './data'
+import { TEAM_MEMBERS, OVERDUE_TASKS } from './data'
 
 export default function Reports() {
   const [activeDays, setActiveDays] = useState(30)
@@ -18,9 +16,7 @@ export default function Reports() {
     <div className="relative min-h-screen bg-white text-grey-800 overflow-x-hidden font-body">
       <NeonBackground />
 
-      <main className="relative z-10 max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-9 pb-18">
-
-        <ReportHeader />
+      <main className="relative z-10 max-w-full mx-auto px-4 sm:px-6 lg:px-9 pb-18">
 
         {/* Page title + date picker */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7">
@@ -36,22 +32,25 @@ export default function Reports() {
             <DateRangePicker onRangeChange={setActiveDays} />
           </div>
         </div>
+        <div className="flex flex-row w-full gap-8">
+          <div className="flex-col w-3/5">
+              {/* KPI strip */}
+              <div className="mb-8 w-full">
+                  <KpiStrip data={kpi} />
+              </div>
 
-        {/* KPI strip */}
-        <div className="mb-8">
-          <KpiStrip data={kpi} />
-        </div>
+              {/* Main grid: member list + donut */}
+              <div className="w-full lg:grid-cols-[1fr_370px] gap-5 mb-5">
+                  <MemberList members={TEAM_MEMBERS} />
 
-        {/* Main grid: member list + donut */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_370px] gap-5 mb-5">
-          <MemberList members={TEAM_MEMBERS} />
-          <StatusDonut data={kpi} />
-        </div>
-
-        {/* Bottom grid: velocity + overdue */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <VelocityChart weeks={WEEKLY_VELOCITY} stats={VELOCITY_STATS} />
-          <OverdueTable tasks={OVERDUE_TASKS} />
+              </div>
+          </div>
+            
+          <div className="flex flex-col pt-6 w-2/5 h-[85vh] gap-8">
+              <StatusDonut data={kpi} />
+              {/* Bottom grid: overdue */}
+              <OverdueTable tasks={OVERDUE_TASKS} />
+          </div>
         </div>
 
       </main>

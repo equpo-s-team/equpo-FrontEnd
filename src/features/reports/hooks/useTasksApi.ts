@@ -3,11 +3,11 @@ import { z } from 'zod';
 
 import { tasksApi } from '../../board/api/tasksApi.ts';
 import {
-  TaskListMetaSchema,
-  TeamTaskSchema,
   type GetTeamTasksOptions,
   type TaskListMeta,
+  TaskListMetaSchema,
   type TeamTask,
+  TeamTaskSchema,
 } from '../../board/types';
 
 const TaskListResponseSchema = z.object({

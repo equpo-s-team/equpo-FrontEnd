@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react';
 
 import { KpiStrip, MemberList, OverdueTable, StatusDonut } from '@/features/reports/components';
 import AppHeader from '@/features/reports/components/AppHeader.tsx';
@@ -18,7 +18,17 @@ const EMPTY_KPI: KpiData = {
   total: 0,
 };
 
-const AVATAR_CLASSES: string[] = ['av-at', 'av-jr', 'av-ml', 'av-cs', 'av-lv', 'av-dm', 'av-rp', 'av-kn', 'av-so'];
+const AVATAR_CLASSES: string[] = [
+  'av-at',
+  'av-jr',
+  'av-ml',
+  'av-cs',
+  'av-lv',
+  'av-dm',
+  'av-rp',
+  'av-kn',
+  'av-so',
+];
 const BAR_GRADIENTS: string[] = [
   'linear-gradient(90deg,#60AFFF,#5961F9)',
   'linear-gradient(90deg,#9CEDC1,#86F0FD)',
@@ -53,7 +63,10 @@ function getInitials(displayName: string | null, fallback: string) {
     return fallback.slice(0, 2).toUpperCase();
   }
 
-  return words.slice(0, 2).map((word) => word[0]?.toUpperCase() ?? '').join('');
+  return words
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .join('');
 }
 
 function mapMembersToRows(members: ReportsMember[]): ReportMemberRow[] {
@@ -82,7 +95,7 @@ function mapOverdueToRows(tasks: ReportsOverdueTask[]): OverdueTaskRow[] {
 }
 
 export default function Reports() {
-  const [activeDays, setActiveDays] = useState(30)
+  const [activeDays, setActiveDays] = useState(30);
 
   const kpiQuery = useReportsKpi(DEFAULT_TEAM_ID, { days: activeDays });
   const overviewQuery = useReportsOverview(DEFAULT_TEAM_ID, {
@@ -95,20 +108,21 @@ export default function Reports() {
   const kpi = kpiQuery.data?.kpi ?? EMPTY_KPI;
   const members = useMemo(
     () => mapMembersToRows(overviewQuery.data?.members ?? []),
-    [overviewQuery.data?.members]
+    [overviewQuery.data?.members],
   );
   const overdueTasks = useMemo(
     () => mapOverdueToRows(overviewQuery.data?.overdueTasks ?? []),
-    [overviewQuery.data?.overdueTasks]
+    [overviewQuery.data?.overdueTasks],
   );
 
   const isLoading = kpiQuery.isPending || overviewQuery.isPending;
   const isError = kpiQuery.isError || overviewQuery.isError;
-  const errorMessage = kpiQuery.error instanceof Error
-    ? kpiQuery.error.message
-    : overviewQuery.error instanceof Error
-      ? overviewQuery.error.message
-      : 'No se pudieron cargar los reportes.';
+  const errorMessage =
+    kpiQuery.error instanceof Error
+      ? kpiQuery.error.message
+      : overviewQuery.error instanceof Error
+        ? overviewQuery.error.message
+        : 'No se pudieron cargar los reportes.';
 
   return (
     <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-white text-grey-800 font-body">
@@ -125,7 +139,9 @@ export default function Reports() {
           </div>
         )}
 
-        <div className={`relative flex min-h-0 flex-1 flex-row gap-2 ${isLoading ? 'opacity-70' : ''}`}>
+        <div
+          className={`relative flex min-h-0 flex-1 flex-row gap-2 ${isLoading ? 'opacity-70' : ''}`}
+        >
           <div className="flex h-full min-h-0 w-3/5 flex-col gap-2">
             <KpiStrip data={kpi} />
             <div className="min-h-0 flex-1">
@@ -139,10 +155,8 @@ export default function Reports() {
               <OverdueTable tasks={overdueTasks} />
             </div>
           </div>
-
         </div>
-
       </main>
     </div>
-  )
+  );
 }

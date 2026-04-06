@@ -8,4 +8,3 @@ export const DATE_PRESETS: DatePreset[] = [
   { label: 'Este ano', days: 365 },
   { label: 'Personalizado', days: 0 },
 ];
-

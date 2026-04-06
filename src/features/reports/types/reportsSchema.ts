@@ -78,5 +78,3 @@ export type ReportsKpiResponse = z.infer<typeof ReportsKpiResponseSchema>;
 export type ReportsOverviewResponse = z.infer<typeof ReportsOverviewResponseSchema>;
 export type GetReportsKpiOptions = z.infer<typeof GetReportsKpiOptionsSchema>;
 export type GetReportsOverviewOptions = z.infer<typeof GetReportsOverviewOptionsSchema>;
-
-

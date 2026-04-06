@@ -34,10 +34,7 @@ export function useFirestoreSubscription<T, TDoc extends DocumentData = Document
         queryClient.setQueryData(queryKeyRef.current, transformRef.current(snapshot));
       },
       (error) => {
-        console.error(
-          `Firestore subscription error [${queryKeyRef.current.join('/')}]:`,
-          error,
-        );
+        console.error(`Firestore subscription error [${queryKeyRef.current.join('/')}]:`, error);
       },
     );
 

@@ -1,5 +1,5 @@
-import { KpiCard } from './KpiCard.tsx'
 import type { KpiData } from '../types/types.ts';
+import { KpiCard } from './KpiCard.tsx'
 
 interface KpiStripProps {
   data: KpiData

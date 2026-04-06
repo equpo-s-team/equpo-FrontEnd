@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { reportsApi } from '../api/reportsApi.ts';
 import {
   type GetReportsKpiOptions,
-  ReportsKpiResponseSchema,
   type ReportsKpiResponse,
+  ReportsKpiResponseSchema,
 } from '../types/reportsSchema.ts';
 
 export function useReportsKpi(

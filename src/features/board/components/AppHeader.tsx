@@ -16,7 +16,7 @@ export default function AppHeader() {
           className="w-2.5 h-2.5 rounded-full bg-blue animate-pulse-neon"
           style={{ boxShadow: '0 0 8px #60AFFF, 0 0 18px rgba(96,175,255,0.4)' }}
         />
-        Misiones del Equipo
+        Misiones Grupales
       </div>
     </header>
   );

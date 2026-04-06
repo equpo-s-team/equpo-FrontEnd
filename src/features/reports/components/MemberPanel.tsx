@@ -1,8 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-import { members } from '@/features/reports/components/data.ts';
+import type { ReportMemberRow } from '../types/types.ts';
 
-const MemberPanel: React.FC = () => {
+interface MemberPanelProps {
+  members: ReportMemberRow[];
+}
+
+const MemberPanel = ({ members }: MemberPanelProps) => {
   const memberListRef = useRef<HTMLDivElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
 
@@ -18,21 +22,24 @@ const MemberPanel: React.FC = () => {
   useEffect(() => {
     checkFade();
     const list = memberListRef.current;
-    if (list) {
-      list.addEventListener('scroll', checkFade);
-      return () => list.removeEventListener('scroll', checkFade);
+    if (!list) {
+      return;
     }
+
+    list.addEventListener('scroll', checkFade);
+    return () => list.removeEventListener('scroll', checkFade);
   }, []);
 
-  const totalCompleted = members.reduce((acc, m) => acc + m.completed, 0);
-  const widths = members.map((m) => (m.completed / totalCompleted) * 100);
+  const totalCompleted = members.reduce((acc, member) => acc + member.completed, 0);
+  const safeTotalCompleted = totalCompleted === 0 ? 1 : totalCompleted;
+  const widths = members.map((member) => (member.completed / safeTotalCompleted) * 100);
 
   return (
     <div className="panel neon-blue">
       <div className="panel-header">
-        <span className="panel-title">Contribución por miembro</span>
+        <span className="panel-title">Contribucion por miembro</span>
         <span style={{ fontSize: '.71rem', color: 'var(--grey-400)' }}>
-          9 miembros · scroll para ver más
+          {members.length} miembros · scroll para ver mas
         </span>
       </div>
 
@@ -43,8 +50,8 @@ const MemberPanel: React.FC = () => {
             className="dist-seg"
             style={{
               width: `${widths[idx]}%`,
-              background: member.gradient,
-              boxShadow: `0 0 8px ${member.color}`,
+              background: member.barGradient,
+              boxShadow: `0 0 8px ${member.pctColor}`,
             }}
           ></div>
         ))}
@@ -55,7 +62,7 @@ const MemberPanel: React.FC = () => {
           <div key={member.id} className="leg-item">
             <div
               className="leg-dot"
-              style={{ background: member.color, boxShadow: `0 0 7px ${member.color}` }}
+              style={{ background: member.pctColor, boxShadow: `0 0 7px ${member.pctColor}` }}
             ></div>
             {member.name.split(' ')[0]}
           </div>
@@ -65,12 +72,11 @@ const MemberPanel: React.FC = () => {
       <div className="member-scroll-wrap">
         <div className="member-list" ref={memberListRef}>
           {members.map((member) => {
-            const percentage = Math.round((member.completed / member.total) * 100);
+            const percentage =
+              member.total > 0 ? Math.round((member.completed / member.total) * 100) : 0;
             return (
               <div key={member.id} className="member-row">
-                <div className={`avatar av-${member.initials.toLowerCase()}`}>
-                  {member.initials}
-                </div>
+                <div className={`avatar ${member.avatarClass}`}>{member.initials}</div>
                 <div>
                   <div className="member-name">{member.name}</div>
                   <div className="member-role">{member.role}</div>
@@ -87,13 +93,13 @@ const MemberPanel: React.FC = () => {
                       className="progress-fill"
                       style={{
                         width: `${percentage}%`,
-                        background: member.gradient,
-                        boxShadow: `0 0 8px ${member.color}`,
+                        background: member.barGradient,
+                        boxShadow: `0 0 8px ${member.pctColor}`,
                       }}
                     ></div>
                   </div>
                 </div>
-                <div className="pct" style={{ color: member.color }}>
+                <div className="pct" style={{ color: member.pctColor }}>
                   {percentage}%
                 </div>
               </div>

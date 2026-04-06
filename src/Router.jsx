@@ -1,18 +1,14 @@
-import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider } from '@/context/TeamContext.jsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
-import AppLayout from '@/features/layout/components/AppLayout.jsx';
-import {
-  SidebarProvider,
-  useSidebar,
-} from '@/features/layout/components/navbar/SidebarContext.jsx';
 import LandingPage from '@/features/presentation/page.jsx';
-import { ReportPage } from '@/features/reports/page.tsx';
+import Reports from '@/features/reports/Reports.tsx';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
+import AppLayout from '@/lib/layout/components/AppLayout.jsx';
+import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -26,7 +22,7 @@ function Dashboard() {
       case 'chat':
         return <div>Mi Espacio</div>;
       case 'reports':
-        return <ReportPage />;
+        return <Reports />;
       case 'settings':
         return <div>Mi Espacio</div>;
       default:

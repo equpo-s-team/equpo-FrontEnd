@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import type { DateRange } from '../types'
+import { useCallback, useState } from 'react'
+import type { DateRange } from '../types/types.ts';
 
 const MONTHS_ES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',

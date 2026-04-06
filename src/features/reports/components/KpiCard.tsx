@@ -1,5 +1,3 @@
-import { useAnimatedNumber } from '../Hooks/useAnimatedNumber.ts'
-
 type KpiVariant = 'todo' | 'progress' | 'qa' | 'done' | 'overdue'
 
 interface KpiCardProps {
@@ -50,7 +48,6 @@ const BADGE_CLASSES: Record<'up' | 'down' | 'warn', string> = {
 }
 
 export function KpiCard({ variant, label, value, sub, badge, badgeType }: KpiCardProps) {
-  const animated = useAnimatedNumber(value)
   const styles = VARIANT_STYLES[variant]
 
   return (
@@ -69,7 +66,7 @@ export function KpiCard({ variant, label, value, sub, badge, badgeType }: KpiCar
       <div className="relative z-10">
         <p className="text-[0.7rem] font-medium text-grey-500 mb-2.5">{label}</p>
         <p className="text-[2.1rem] font-semibold tracking-[-0.04em] text-grey-900 leading-none">
-          {animated}
+          {value}
         </p>
         <p className="text-[0.72rem] text-grey-400 mt-1.5">{sub}</p>
         <span className={`inline-flex items-center gap-1 text-[0.67rem] font-semibold px-2 py-0.5 rounded-full mt-2 ${BADGE_CLASSES[badgeType]}`}>

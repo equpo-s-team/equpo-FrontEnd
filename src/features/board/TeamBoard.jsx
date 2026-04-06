@@ -4,7 +4,7 @@ import { useTeam } from '@/context/TeamContext.jsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
-import AppHeader from './components/AppHeader.jsx';
+import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
 import FilterBar from './components/FilterBar.jsx';
 import { COLUMNS } from './components/kanbanData.js';

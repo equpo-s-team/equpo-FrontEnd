@@ -9,7 +9,7 @@ import {
 
 export function useReportsOverview(
   teamId: string | undefined,
-  options: GetReportsOverviewOptions = {}
+  options: GetReportsOverviewOptions = {},
 ) {
   return useQuery<ReportsOverviewResponse>({
     queryKey: ['reports', teamId, 'overview', options],
@@ -24,4 +24,3 @@ export function useReportsOverview(
     enabled: !!teamId,
   });
 }
-

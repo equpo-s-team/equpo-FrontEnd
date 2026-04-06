@@ -1,24 +1,33 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react';
 
 import { DATE_PRESETS } from '../data/datePresets.ts';
 import { fmtISO, useDateRange } from '../hooks';
 import type { DatePreset } from '../types/types.ts';
 
 const MONTHS_ES = [
-  'Enero','Febrero','Marzo','Abril','Mayo','Junio',
-  'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
-]
-const DAYS_ES = ['Lu','Ma','Mi','Ju','Vi','Sá','Do']
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
+];
+const DAYS_ES = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
 
 interface DateRangePickerProps {
-  onRangeChange?: (days: number) => void
+  onRangeChange?: (days: number) => void;
 }
 
 export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
-  const [open, setOpen] = useState(false)
-  const [activePreset, setActivePreset] = useState<DatePreset>(DATE_PRESETS[1])
-  const wrapRef = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false);
+  const [activePreset, setActivePreset] = useState<DatePreset>(DATE_PRESETS[1]);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   const {
     range,
@@ -30,58 +39,59 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
     prevMonth,
     nextMonth,
     clearRange,
-  } = useDateRange(30)
+  } = useDateRange(30);
 
   // Close on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
-        setOpen(false)
+        setOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   function handlePreset(preset: DatePreset) {
-    setActivePreset(preset)
+    setActivePreset(preset);
     if (preset.days > 0) {
-      applyPreset(preset.days)
-      onRangeChange?.(preset.days)
+      applyPreset(preset.days);
+      onRangeChange?.(preset.days);
     }
   }
 
   function handleApply() {
-    setOpen(false)
+    setOpen(false);
     if (range.start && range.end) {
-      const days = Math.round((range.end.getTime() - range.start.getTime()) / 86_400_000) + 1
-      onRangeChange?.(days)
+      const days = Math.round((range.end.getTime() - range.start.getTime()) / 86_400_000) + 1;
+      onRangeChange?.(days);
     }
   }
 
   // Build calendar days
-  const today = new Date(); today.setHours(0,0,0,0)
-  const firstDay = new Date(calMonth.getFullYear(), calMonth.getMonth(), 1)
-  let startDow = firstDay.getDay()
-  startDow = startDow === 0 ? 6 : startDow - 1
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const firstDay = new Date(calMonth.getFullYear(), calMonth.getMonth(), 1);
+  let startDow = firstDay.getDay();
+  startDow = startDow === 0 ? 6 : startDow - 1;
 
-  const daysInMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 0).getDate()
+  const daysInMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 0).getDate();
 
-  const isRangeStart = (d: Date) => range.start?.toDateString() === d.toDateString()
-  const isRangeEnd   = (d: Date) => range.end?.toDateString() === d.toDateString()
-  const isInRange    = (d: Date) =>
-    range.start && range.end && d > range.start && d < range.end
+  const isRangeStart = (d: Date) => range.start?.toDateString() === d.toDateString();
+  const isRangeEnd = (d: Date) => range.end?.toDateString() === d.toDateString();
+  const isInRange = (d: Date) => range.start && range.end && d > range.start && d < range.end;
 
   return (
     <div ref={wrapRef} className="relative">
       {/* Trigger */}
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className={`flex items-center gap-2.5 bg-white border rounded-xl px-4 py-2.5 cursor-pointer
           shadow-sm transition-all duration-200 select-none text-left
-          ${open
-            ? 'border-[rgba(96,175,255,0.6)] shadow-[0_0_0_3px_rgba(96,175,255,0.15),0_0_18px_rgba(96,175,255,0.12)]'
-            : 'border-grey-200 hover:border-[rgba(96,175,255,0.5)] hover:shadow-[0_0_0_3px_rgba(96,175,255,0.1)]'
+          ${
+            open
+              ? 'border-[rgba(96,175,255,0.6)] shadow-[0_0_0_3px_rgba(96,175,255,0.15),0_0_18px_rgba(96,175,255,0.12)]'
+              : 'border-grey-200 hover:border-[rgba(96,175,255,0.5)] hover:shadow-[0_0_0_3px_rgba(96,175,255,0.1)]'
           }`}
       >
         <span className="text-sm">📅</span>
@@ -108,14 +118,15 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
       >
         {/* Presets */}
         <div className="grid grid-cols-3 gap-1.5 p-4 pb-3 border-b border-grey-100">
-          {DATE_PRESETS.map(preset => (
+          {DATE_PRESETS.map((preset) => (
             <button
               key={preset.label}
               onClick={() => handlePreset(preset)}
               className={`py-2 px-1 rounded-lg border text-center text-xs font-medium transition-all duration-150
-                ${activePreset.label === preset.label
-                  ? 'bg-grey-900 text-white border-grey-900 shadow-[0_0_14px_rgba(26,24,21,0.2)]'
-                  : 'bg-grey-50 text-grey-600 border-grey-150 hover:bg-white hover:border-[rgba(96,175,255,0.4)] hover:text-grey-900'
+                ${
+                  activePreset.label === preset.label
+                    ? 'bg-grey-900 text-white border-grey-900 shadow-[0_0_14px_rgba(26,24,21,0.2)]'
+                    : 'bg-grey-50 text-grey-600 border-grey-150 hover:bg-white hover:border-[rgba(96,175,255,0.4)] hover:text-grey-900'
                 }`}
             >
               {preset.label}
@@ -132,10 +143,10 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
             <input
               type="date"
               value={fmtISO(range.start)}
-              onChange={e => {
+              onChange={(e) => {
                 if (e.target.value) {
-                  setRange({ ...range, start: new Date(e.target.value + 'T00:00:00') })
-                  setActivePreset(DATE_PRESETS[5])
+                  setRange({ ...range, start: new Date(e.target.value + 'T00:00:00') });
+                  setActivePreset(DATE_PRESETS[5]);
                 }
               }}
               className="w-full px-2.5 py-2 border border-grey-200 rounded-lg
@@ -147,10 +158,10 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
             <input
               type="date"
               value={fmtISO(range.end)}
-              onChange={e => {
+              onChange={(e) => {
                 if (e.target.value) {
-                  setRange({ ...range, end: new Date(e.target.value + 'T00:00:00') })
-                  setActivePreset(DATE_PRESETS[5])
+                  setRange({ ...range, end: new Date(e.target.value + 'T00:00:00') });
+                  setActivePreset(DATE_PRESETS[5]);
                 }
               }}
               className="w-full px-2.5 py-2 border border-grey-200 rounded-lg
@@ -185,8 +196,11 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
 
           <div className="grid grid-cols-7 gap-0.5">
             {/* Day headers */}
-            {DAYS_ES.map(d => (
-              <div key={d} className="text-center text-[0.61rem] font-semibold uppercase tracking-wider text-grey-400 py-1">
+            {DAYS_ES.map((d) => (
+              <div
+                key={d}
+                className="text-center text-[0.61rem] font-semibold uppercase tracking-wider text-grey-400 py-1"
+              >
                 {d}
               </div>
             ))}
@@ -198,30 +212,37 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
 
             {/* Day cells */}
             {Array.from({ length: daysInMonth }).map((_, i) => {
-              const d = i + 1
-              const date = new Date(calMonth.getFullYear(), calMonth.getMonth(), d)
-              const isTd  = date.toDateString() === today.toDateString()
-              const isS   = isRangeStart(date)
-              const isE   = isRangeEnd(date)
-              const inR   = isInRange(date)
+              const d = i + 1;
+              const date = new Date(calMonth.getFullYear(), calMonth.getMonth(), d);
+              const isTd = date.toDateString() === today.toDateString();
+              const isS = isRangeStart(date);
+              const isE = isRangeEnd(date);
+              const inR = isInRange(date);
 
-              let cls = 'aspect-square flex items-center justify-center text-[0.72rem] rounded-lg cursor-pointer transition-all duration-100 '
+              let cls =
+                'aspect-square flex items-center justify-center text-[0.72rem] rounded-lg cursor-pointer transition-all duration-100 ';
 
               if (isS || isE) {
-                cls += 'bg-grey-900 text-white font-semibold shadow-[0_0_10px_rgba(96,175,255,0.3)]'
+                cls +=
+                  'bg-grey-900 text-white font-semibold shadow-[0_0_10px_rgba(96,175,255,0.3)]';
               } else if (inR) {
-                cls += 'bg-[rgba(96,175,255,0.09)] text-[#60AFFF]'
+                cls += 'bg-[rgba(96,175,255,0.09)] text-[#60AFFF]';
               } else if (isTd) {
-                cls += 'font-bold text-[#5961F9]'
+                cls += 'font-bold text-[#5961F9]';
               } else {
-                cls += 'text-grey-700 hover:bg-grey-100'
+                cls += 'text-grey-700 hover:bg-grey-100';
               }
 
               return (
-                <div key={d} className={cls} onClick={() => handleCalDayClick(date)}>
+                <button
+                  key={d}
+                  type="button"
+                  className={cls}
+                  onClick={() => handleCalDayClick(date)}
+                >
                   {d}
-                </div>
-              )
+                </button>
+              );
             })}
           </div>
         </div>
@@ -247,5 +268,5 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

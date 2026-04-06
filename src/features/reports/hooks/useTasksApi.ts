@@ -34,4 +34,3 @@ export function useTasksApi(teamId: string | undefined, options: GetTeamTasksOpt
     enabled: !!teamId,
   });
 }
-

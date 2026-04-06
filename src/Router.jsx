@@ -1,28 +1,28 @@
-import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import {useAuth} from '@/context/AuthContext';
-import {TeamProvider} from '@/context/TeamContext.jsx';
+import { useAuth } from '@/context/AuthContext';
+import { TeamProvider } from '@/context/TeamContext.jsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
-import Reports from "@/features/reports/Reports.tsx";
+import Reports from '@/features/reports/Reports.tsx';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
-import AppLayout from "@/lib/layout/components/AppLayout.jsx";
-import {SidebarProvider, useSidebar} from "@/lib/layout/components/navbar/SidebarContext.jsx";
+import AppLayout from '@/lib/layout/components/AppLayout.jsx';
+import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 
 function Dashboard() {
-  const {activeItem} = useSidebar();
+  const { activeItem } = useSidebar();
 
   const renderContent = () => {
     switch (activeItem) {
       case 'my-space':
-        return <GamePage/>;
+        return <GamePage />;
       case 'missiones':
-        return <TeamBoard/>;
+        return <TeamBoard />;
       case 'chat':
         return <div>Mi Espacio</div>;
       case 'reports':
-        return <Reports/>;
+        return <Reports />;
       case 'settings':
         return <div>Mi Espacio</div>;
       default:
@@ -33,8 +33,8 @@ function Dashboard() {
   return <AppLayout>{renderContent()}</AppLayout>;
 }
 
-function ProtectedRoute({children}) {
-  const {isAuth, isLoading} = useAuth();
+function ProtectedRoute({ children }) {
+  const { isAuth, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -49,12 +49,12 @@ function ProtectedRoute({children}) {
       <SidebarProvider>{children}</SidebarProvider>
     </TeamProvider>
   ) : (
-    <Navigate to="/" replace/>
+    <Navigate to="/" replace />
   );
 }
 
-function TeamsRoute({children}) {
-  const {isAuth, isLoading} = useAuth();
+function TeamsRoute({ children }) {
+  const { isAuth, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -64,20 +64,20 @@ function TeamsRoute({children}) {
     );
   }
 
-  return isAuth ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace/>;
+  return isAuth ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace />;
 }
 
 export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage/>}/>
+        <Route path="/" element={<LandingPage />} />
 
         <Route
           path="/teams"
           element={
             <TeamsRoute>
-              <TeamsHub/>
+              <TeamsHub />
             </TeamsRoute>
           }
         />
@@ -86,7 +86,7 @@ export default function Router() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard/>
+              <Dashboard />
             </ProtectedRoute>
           }
         />

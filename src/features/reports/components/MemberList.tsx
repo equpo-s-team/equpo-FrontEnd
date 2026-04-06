@@ -4,7 +4,7 @@ import { useScrollFade } from '@/features/reports/hooks/useScrollFade.ts';
 import type { ReportMemberRow } from '../types/types.ts';
 
 interface MemberListProps {
-  members: ReportMemberRow[]
+  members: ReportMemberRow[];
 }
 
 export function MemberList({ members }: MemberListProps) {
@@ -52,5 +52,5 @@ export function MemberList({ members }: MemberListProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

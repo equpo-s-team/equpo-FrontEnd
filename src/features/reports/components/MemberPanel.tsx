@@ -72,7 +72,8 @@ const MemberPanel = ({ members }: MemberPanelProps) => {
       <div className="member-scroll-wrap">
         <div className="member-list" ref={memberListRef}>
           {members.map((member) => {
-            const percentage = member.total > 0 ? Math.round((member.completed / member.total) * 100) : 0;
+            const percentage =
+              member.total > 0 ? Math.round((member.completed / member.total) * 100) : 0;
             return (
               <div key={member.id} className="member-row">
                 <div className={`avatar ${member.avatarClass}`}>{member.initials}</div>

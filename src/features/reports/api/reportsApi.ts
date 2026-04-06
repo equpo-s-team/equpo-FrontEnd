@@ -6,11 +6,7 @@ import type {
   ReportsKpiResponse,
   ReportsOverviewResponse,
 } from '../types/reportsSchema.ts';
-import type {
-  GetTeamTasksOptions,
-  TaskListMeta,
-  TeamTask,
-} from '../types/taskSchema.ts';
+import type { GetTeamTasksOptions, TaskListMeta, TeamTask } from '../types/taskSchema.ts';
 
 function buildQueryParams(params: Record<string, number | undefined>) {
   const query = new URLSearchParams();
@@ -35,9 +31,7 @@ export const reportsApi = {
     }
 
     const queryString = query.toString();
-    const path = queryString
-      ? `/teams/${teamId}/tasks?${queryString}`
-      : `/teams/${teamId}/tasks`;
+    const path = queryString ? `/teams/${teamId}/tasks?${queryString}` : `/teams/${teamId}/tasks`;
 
     return request<{ tasks: TeamTask[]; meta: TaskListMeta }>(path, 'GET');
   },

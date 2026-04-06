@@ -10,7 +10,6 @@ export default function AppHeader() {
       px-4 md:px-8
     "
     >
-      {/* Logo */}
       <div className="flex items-center gap-2.5 font-maxwell tracking-tight text-grey-900 text-base md:text-lg font-bold select-none">
         <span
           className="w-2.5 h-2.5 rounded-full bg-blue animate-pulse-neon"

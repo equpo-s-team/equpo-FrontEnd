@@ -13,7 +13,7 @@ export default function Sidebar() {
   return (
     <aside
       className={`
-    hidden lg:flex flex-col fixed left-0 top-0 h-screen z-40 rounded-r-2xl
+    hidden lg:flex flex-col fixed left-0 top-0 h-screen z-50 rounded-r-2xl
     bg-primary border-r border-secondary transition-all duration-300 ease-in-out
     ${collapsed ? 'w-[68px]' : 'w-[220px]'}
     shadow-neonPurple

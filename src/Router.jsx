@@ -1,7 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
-import { TeamProvider } from '@/context/TeamContext.jsx';
+import { TeamProvider, useTeam } from '@/context/TeamContext.jsx';
+import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
@@ -12,6 +13,21 @@ import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/Side
 
 function Dashboard() {
   const { activeItem } = useSidebar();
+  const { teamId } = useTeam();
+  const { data: teams = [], isLoading } = useTeams();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-secondary">
+        <div className="w-10 h-10 rounded-full border-4 border-grey-200 animate-spin" style={{ borderTopColor: '#60AFFF' }} />
+      </div>
+    );
+  }
+
+  const activeTeam = teams.find((t) => t.id === teamId);
+  if (!activeTeam) {
+    return <Navigate to="/teams" replace />;
+  }
 
   const renderContent = () => {
     switch (activeItem) {
@@ -82,8 +98,9 @@ export default function Router() {
           }
         />
 
+        <Route path="/dashboard" element={<Navigate to="/teams" replace />} />
         <Route
-          path="/dashboard"
+          path="/dashboard/:teamId"
           element={
             <ProtectedRoute>
               <Dashboard />

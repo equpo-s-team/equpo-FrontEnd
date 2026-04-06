@@ -1,18 +1,26 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 /**
  * Provides the current teamId for the active team dashboard.
  *
- * In production, the teamId is set when the user selects a team.
- * For development, a fallback mock teamId is used to enable testing.
+ * It will track the teamId parameter from the current route.
+ * A fallback mock teamId is also included for dev boundaries if necessary.
  */
 
-const MOCK_TEAM_ID = '706a6771-4f84-4359-a949-938a54f40c1a';
 
 const TeamContext = createContext(null);
 
 export function TeamProvider({ children }) {
-  const [teamId, setTeamId] = useState(MOCK_TEAM_ID);
+  const { teamId: urlTeamId } = useParams();
+  const [teamId, setTeamId] = useState(urlTeamId);
+
+  // Synchronize teamId from URL if it changes
+  useEffect(() => {
+    if (urlTeamId) {
+      setTeamId(urlTeamId);
+    }
+  }, [urlTeamId]);
 
   return <TeamContext.Provider value={{ teamId, setTeamId }}>{children}</TeamContext.Provider>;
 }

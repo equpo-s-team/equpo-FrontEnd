@@ -1,14 +1,14 @@
 import type { OverdueTaskRow, Priority } from '../types/types.ts';
 
 interface OverdueTableProps {
-  tasks: OverdueTaskRow[]
+  tasks: OverdueTaskRow[];
 }
 
 const PRIORITY_STYLES: Record<Priority, string> = {
   Alta: 'bg-[rgba(246,90,112,0.1)] text-[#c94155]',
   Media: 'bg-[rgba(255,148,174,0.15)] text-[#b85570]',
   Baja: 'bg-[rgba(156,237,193,0.2)] text-[#2e9660]',
-}
+};
 
 export function OverdueTable({ tasks }: OverdueTableProps) {
   return (
@@ -18,11 +18,15 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
     >
       <div
         className="absolute bottom-0 left-0 w-44 h-44 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(255,148,174,0.10) 0%, transparent 65%)' }}
+        style={{
+          background: 'radial-gradient(circle, rgba(255,148,174,0.10) 0%, transparent 65%)',
+        }}
       />
 
       <div className="relative z-10 mb-5 flex shrink-0 items-center justify-between">
-        <h2 className="text-[0.88rem] font-semibold text-grey-800 tracking-[-0.01em]">Tareas vencidas</h2>
+        <h2 className="text-[0.88rem] font-semibold text-grey-800 tracking-[-0.01em]">
+          Tareas vencidas
+        </h2>
         <button className="text-[0.74rem] text-[#c94155] font-medium hover:opacity-70 transition-opacity">
           Ver todas →
         </button>
@@ -59,5 +63,5 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }

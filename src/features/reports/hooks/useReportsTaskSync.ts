@@ -26,7 +26,7 @@ export function useReportsTaskSync(teamId: string | undefined) {
       },
       (error) => {
         console.error(`Reports tasks sync error [teamId: ${teamId}]:`, error);
-      }
+      },
     );
 
     return () => unsubscribe();

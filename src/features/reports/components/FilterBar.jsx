@@ -27,7 +27,6 @@ export default function FilterBar({ setActiveDays }) {
         <DateRangePicker onRangeChange={setActiveDays} />
 
         <div className="w-px h-5 bg-grey-200 shrink-0" />
-
       </div>
 
       {/* Mobile filter toggle */}
@@ -44,7 +43,9 @@ export default function FilterBar({ setActiveDays }) {
         </span>
         <button
           onClick={() => setMobileOpen((o) => !o)}
-          className={"flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] border-[1.5px] font-body transition-all duration-200"}
+          className={
+            'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] border-[1.5px] font-body transition-all duration-200'
+          }
         >
           <SlidersHorizontal size={13} />
         </button>

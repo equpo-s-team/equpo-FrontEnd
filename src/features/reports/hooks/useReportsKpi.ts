@@ -7,10 +7,7 @@ import {
   ReportsKpiResponseSchema,
 } from '../types/reportsSchema.ts';
 
-export function useReportsKpi(
-  teamId: string | undefined,
-  options: GetReportsKpiOptions = {}
-) {
+export function useReportsKpi(teamId: string | undefined, options: GetReportsKpiOptions = {}) {
   return useQuery<ReportsKpiResponse>({
     queryKey: ['reports', teamId, 'kpi', options],
     queryFn: async () => {
@@ -24,4 +21,3 @@ export function useReportsKpi(
     enabled: !!teamId,
   });
 }
-

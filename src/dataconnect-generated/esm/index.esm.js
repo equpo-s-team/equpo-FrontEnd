@@ -1,15 +1,22 @@
-import { queryRef, executeQuery, validateArgsWithOptions, mutationRef, executeMutation, validateArgs } from 'firebase/data-connect';
+import {
+  queryRef,
+  executeQuery,
+  validateArgsWithOptions,
+  mutationRef,
+  executeMutation,
+  validateArgs,
+} from 'firebase/data-connect';
 
 export const connectorConfig = {
   connector: 'example',
   service: 'equpo-service',
-  location: 'us-east4'
+  location: 'us-east4',
 };
 export const createUserRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
   return mutationRef(dcInstance, 'CreateUser', inputVars);
-}
+};
 createUserRef.operationName = 'CreateUser';
 
 export function createUser(dcOrVars, vars) {
@@ -18,10 +25,10 @@ export function createUser(dcOrVars, vars) {
 }
 
 export const touchUserLastActiveRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  const { dc: dcInstance } = validateArgs(connectorConfig, dc, undefined);
   dcInstance._useGeneratedSdk();
   return mutationRef(dcInstance, 'TouchUserLastActive');
-}
+};
 touchUserLastActiveRef.operationName = 'TouchUserLastActive';
 
 export function touchUserLastActive(dc) {
@@ -30,15 +37,17 @@ export function touchUserLastActive(dc) {
 }
 
 export const getUserRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  const { dc: dcInstance } = validateArgs(connectorConfig, dc, undefined);
   dcInstance._useGeneratedSdk();
   return queryRef(dcInstance, 'GetUser');
-}
+};
 getUserRef.operationName = 'GetUser';
 
 export function getUser(dcOrOptions, options) {
-  
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
+  const {
+    dc: dcInstance,
+    vars: inputVars,
+    options: inputOpts,
+  } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined, false, false);
   return executeQuery(getUserRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }
-

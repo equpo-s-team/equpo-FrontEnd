@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { type KpiMetrics } from '@/features/reports/components/types.ts';
+import { type KpiMetrics } from '@/features/reports/types/types.ts';
 
 interface DonutStatusProps {
   metrics: KpiMetrics;

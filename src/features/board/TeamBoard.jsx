@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.jsx';
 
-import AppHeader from './components/AppHeader.jsx';
+import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
 import FilterBar from './components/FilterBar.jsx';
 import { COLUMNS } from './components/kanbanData.js';

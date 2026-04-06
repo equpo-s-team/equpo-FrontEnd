@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from 'react'
-import type { DatePreset } from '../types'
-import { useDateRange, fmtDate, fmtISO } from '../Hooks/useDateRange.ts'
-import { DATE_PRESETS } from '../data'
+import { useEffect, useRef, useState } from 'react'
+
+import { DATE_PRESETS } from '../data/datePresets.ts';
+import { fmtISO, useDateRange } from '../hooks';
+import type { DatePreset } from '../types/types.ts';
 
 const MONTHS_ES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',

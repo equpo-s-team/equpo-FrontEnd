@@ -1,4 +1,4 @@
-import type { KpiData } from '../types'
+import type { KpiData } from '../types/types.ts'
 
 interface StatusDonutProps {
   data: KpiData
@@ -12,18 +12,45 @@ const STATUS_ITEMS = [
 ] as const
 
 export function StatusDonut({ data }: StatusDonutProps) {
-  const total = data.todo + data.progress + data.qa + data.done + data.overdue
-  const donePct = total > 0 ? Math.round((data.done / total) * 100) : 0
+  const safeValue = (value: number): number => {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 0
+  }
 
-  // SVG donut - r=52, circumference ≈ 326.7
+  const totals = {
+    todo: safeValue(data.todo),
+    progress: safeValue(data.progress),
+    qa: safeValue(data.qa),
+    done: safeValue(data.done),
+    overdue: safeValue(data.overdue),
+  }
+
+  const total =
+    totals.todo +
+    totals.progress +
+    totals.qa +
+    totals.done +
+    totals.overdue
+
+  const ratio = (value: number): number => {
+    if (total <= 0) {
+      return 0
+    }
+
+    const r = value / total
+    return Number.isFinite(r) && r > 0 ? r : 0
+  }
+
+  const donePct = total > 0 ? Math.round((totals.done / total) * 100) : 0
+
   const C = 2 * Math.PI * 52
   type SegKey = 'done' | 'progress' | 'qa' | 'todo' | 'overdue'
   const segs: { key: SegKey; grad: string; offset: number; dash: number }[] = [
-    { key: 'done',     grad: 'url(#gD)', offset: 0,    dash: (data.done / total) * C     },
-    { key: 'progress', grad: 'url(#gP)', offset: -(data.done / total) * C - 2,            dash: (data.progress / total) * C },
-    { key: 'qa',       grad: 'url(#gQ)', offset: -((data.done + data.progress) / total) * C - 4,  dash: (data.qa / total) * C       },
-    { key: 'todo',     grad: 'url(#gT)', offset: -((data.done + data.progress + data.qa) / total) * C - 6, dash: (data.todo / total) * C },
-    { key: 'overdue',  grad: 'url(#gO)', offset: -((data.done + data.progress + data.qa + data.todo) / total) * C - 8, dash: (data.overdue / total) * C },
+    { key: 'done',     grad: 'url(#gD)', offset: 0,    dash: ratio(totals.done) * C },
+    { key: 'progress', grad: 'url(#gP)', offset: -ratio(totals.done) * C - 2, dash: ratio(totals.progress) * C },
+    { key: 'qa',       grad: 'url(#gQ)', offset: -ratio(totals.done + totals.progress) * C - 4, dash: ratio(totals.qa) * C },
+    { key: 'todo',     grad: 'url(#gT)', offset: -ratio(totals.done + totals.progress + totals.qa) * C - 6, dash: ratio(totals.todo) * C },
+    { key: 'overdue',  grad: 'url(#gO)', offset: -ratio(totals.done + totals.progress + totals.qa + totals.todo) * C - 8, dash: ratio(totals.overdue) * C },
   ]
 
   return (
@@ -42,7 +69,7 @@ export function StatusDonut({ data }: StatusDonutProps) {
         <span className="text-[0.71rem] text-grey-400">{total} tareas</span>
       </div>
 
-      <div className="flex flex-col items-center gap-5 relative z-10">
+      <div className="flex flex-row items-center gap-5 relative z-10">
         {/* SVG Donut */}
         <div className="relative w-[156px] h-[156px] flex-shrink-0">
           <svg viewBox="0 0 156 156" width="156" height="156" style={{ transform: 'rotate(-90deg)' }}>
@@ -85,9 +112,9 @@ export function StatusDonut({ data }: StatusDonutProps) {
               <div>
                 <p className="text-[0.66rem] text-grey-500">{item.label}</p>
                 <p className="text-[0.83rem] font-semibold text-grey-800">
-                  {data[item.key as keyof KpiData]}{' '}
+                  {totals[item.key as keyof typeof totals]}{' '}
                   <span className="text-[0.66rem] font-normal text-grey-400">
-                    {total > 0 ? Math.round((data[item.key as keyof KpiData] / total) * 100) : 0}%
+                    {total > 0 ? Math.round((totals[item.key as keyof typeof totals] / total) * 100) : 0}%
                   </span>
                 </p>
               </div>
@@ -103,9 +130,9 @@ export function StatusDonut({ data }: StatusDonutProps) {
             <div className="flex-1">
               <p className="text-[0.66rem] text-grey-500">Vencidas</p>
               <p className="text-[0.83rem] font-semibold text-[#c94155]">
-                {data.overdue}{' '}
+                {totals.overdue}{' '}
                 <span className="text-[0.66rem] font-normal text-grey-400">
-                  {total > 0 ? Math.round((data.overdue / total) * 100) : 0}%
+                  {total > 0 ? Math.round((totals.overdue / total) * 100) : 0}%
                 </span>
               </p>
             </div>

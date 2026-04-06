@@ -1,5 +1,5 @@
 import { KpiCard } from './KpiCard.tsx'
-import type { KpiData } from '../types'
+import type { KpiData } from '../types/types.ts';
 
 interface KpiStripProps {
   data: KpiData
@@ -8,9 +8,6 @@ interface KpiStripProps {
 export function KpiStrip({ data }: KpiStripProps) {
   return (
     <section>
-      <p className="text-[0.67rem] font-semibold uppercase tracking-[0.1em] text-grey-400 mb-3.5">
-        Resumen de estados
-      </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
         <KpiCard variant="todo"     label="Por hacer"    value={data.todo}     sub="tareas pendientes"    badge="↑ 3 nuevas"  badgeType="up"   />
         <KpiCard variant="progress" label="En progreso"  value={data.progress} sub="en desarrollo activo" badge="↑ +12%"      badgeType="up"   />

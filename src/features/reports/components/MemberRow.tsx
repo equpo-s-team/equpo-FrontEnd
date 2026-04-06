@@ -1,7 +1,7 @@
-import type { TeamMember } from '../types'
+import type { ReportMemberRow } from '../types/types.ts';
 
 interface MemberRowProps {
-  member: TeamMember
+  member: ReportMemberRow
 }
 
 const AVATAR_STYLES: Record<string, { background: string; boxShadow: string }> = {
@@ -17,11 +17,13 @@ const AVATAR_STYLES: Record<string, { background: string; boxShadow: string }> =
 }
 
 export function MemberRow({ member }: MemberRowProps) {
-  const pct = Math.round((member.completed / member.total) * 100)
+  const rawPct =
+    member.total > 0 ? Math.round((member.completed / member.total) * 100) : 0;
+  const pct = Number.isFinite(rawPct) ? rawPct : 0;
   const avatarStyle = AVATAR_STYLES[member.avatarClass] ?? {
     background: 'linear-gradient(135deg,#B0ADA7,#908E88)',
     boxShadow: 'none',
-  }
+  };
 
   return (
     <div className="grid items-center gap-3 py-3 border-b border-grey-100 last:border-0 rounded-lg transition-all hover:bg-grey-50 hover:px-1

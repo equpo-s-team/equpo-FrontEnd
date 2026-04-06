@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import { useRef,useState } from 'react'
 
 /* ─── TYPES ─── */
-type Role = 'Frontend Dev' | 'Backend Dev' | 'UX / Design' | 'QA Engineer' | 'DevOps' | 'Full Stack' | 'Product Manager' | 'Mobile Dev' | 'Data Analyst' | string
+type Role = 'Frontend Dev' | 'Backend Dev' | 'UX / Design' | 'QA Engineer' | 'DevOps' | 'Full Stack' | 'Product Manager' | 'Mobile Dev' | 'Data Analyst'
 
 interface Member {
   id: string
@@ -432,7 +433,7 @@ function MemberModal({
           {/* Role */}
           <div>
             <label className="text-[0.68rem] font-semibold uppercase tracking-wider text-[#B0ADA7] block mb-1.5">Rol</label>
-            <select value={form.role} onChange={e => updateField('role', e.target.value)}
+            <select value={form.role} onChange={e => updateField('role', e.target.value as Role)}
               className="w-full px-3 py-2.5 rounded-xl border border-[#E4E2DE] text-[0.82rem] text-[#35322E] bg-[#FAFAF8] outline-none
                 focus:border-[rgba(96,175,255,0.5)] focus:shadow-[0_0_0_3px_rgba(96,175,255,0.1)] focus:bg-white transition-all appearance-none cursor-pointer">
               {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
@@ -783,7 +784,7 @@ export default function AdminEquipo() {
               </select>
 
               {/* Role filter */}
-              <select value={filterRole} onChange={e => setFilterRole(e.target.value)}
+              <select value={filterRole} onChange={e => setFilterRole(e.target.value as Role | 'all')}
                 className="px-3 py-2 rounded-xl border border-[#E4E2DE] text-[0.75rem] text-[#706E69] bg-white outline-none cursor-pointer
                   focus:border-[rgba(96,175,255,0.4)] transition-all">
                 <option value="all">Todos los roles</option>

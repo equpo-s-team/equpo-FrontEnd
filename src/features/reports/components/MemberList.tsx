@@ -1,7 +1,7 @@
-import type { ReportMemberRow } from '../types/types.ts';
-
-import { useScrollFade } from '@/features/reports/hooks/useScrollFade.ts';
 import { MemberRow } from '@/features/reports/components/MemberRow.tsx';
+import { useScrollFade } from '@/features/reports/hooks/useScrollFade.ts';
+
+import type { ReportMemberRow } from '../types/types.ts';
 
 interface MemberListProps {
   members: ReportMemberRow[]

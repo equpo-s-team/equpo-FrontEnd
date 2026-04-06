@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 
-import AppHeader from '@/features/reports/components/AppHeader.tsx';
 import { KpiStrip, MemberList, OverdueTable, StatusDonut } from '@/features/reports/components';
+import AppHeader from '@/features/reports/components/AppHeader.tsx';
 import FilterBar from '@/features/reports/components/FilterBar.tsx';
-import { useReportsKpi, useReportsOverview } from '@/features/reports/hooks';
+import { useReportsKpi, useReportsOverview, useReportsTaskSync } from '@/features/reports/hooks';
 import type { ReportsMember, ReportsOverdueTask } from '@/features/reports/types';
 import type { KpiData, OverdueTaskRow, ReportMemberRow } from '@/features/reports/types';
 
@@ -89,6 +89,8 @@ export default function Reports() {
     days: activeDays,
     overdueLimit: 10,
   });
+
+  useReportsTaskSync(DEFAULT_TEAM_ID);
 
   const kpi = kpiQuery.data?.kpi ?? EMPTY_KPI;
   const members = useMemo(

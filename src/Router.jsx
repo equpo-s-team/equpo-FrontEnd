@@ -5,8 +5,8 @@ import {TeamProvider} from '@/context/TeamContext.jsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
-import TeamsHub from '@/features/team/TeamsHub.tsx';
 import Reports from "@/features/reports/Reports.tsx";
+import TeamsHub from '@/features/team/TeamsHub.tsx';
 import AppLayout from "@/lib/layout/components/AppLayout.jsx";
 import {SidebarProvider, useSidebar} from "@/lib/layout/components/navbar/SidebarContext.jsx";
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef,useState } from 'react'
 
 /* ─── TYPES ─── */
 type Role = 'Frontend Dev' | 'Backend Dev' | 'UX / Design' | 'QA Engineer' | 'DevOps' | 'Full Stack' | 'Product Manager' | 'Mobile Dev' | 'Data Analyst' | string

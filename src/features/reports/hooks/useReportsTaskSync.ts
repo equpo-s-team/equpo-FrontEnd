@@ -22,7 +22,7 @@ export function useReportsTaskSync(teamId: string | undefined) {
         }
 
         // On subsequent updates, invalidate the reports cache
-        queryClient.invalidateQueries({ queryKey: ['reports', teamId] });
+        void queryClient.invalidateQueries({ queryKey: ['reports', teamId] });
       },
       (error) => {
         console.error(`Reports tasks sync error [teamId: ${teamId}]:`, error);

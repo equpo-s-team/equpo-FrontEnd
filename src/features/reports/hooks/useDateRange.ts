@@ -67,7 +67,7 @@ export function useDateRange(defaultDays = 30): UseDateRangeReturn {
 
   const applyPreset = useCallback((days: number) => {
     if (days === 0) return
-    setRange({ start: daysAgo(days - 1), end: today })
+    setRange({ start: daysAgo(days - 1), end: startOfDay(new Date()) })
     setPickingStart(true)
   }, [])
 

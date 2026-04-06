@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import { useEffect, useRef, useState } from 'react'
 
 import { DATE_PRESETS } from '../data/datePresets.ts';

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { logOut, useAuth } from '@/context/AuthContext.jsx';
-import { useTeam } from '@/context/TeamContext.jsx';
+import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
 import { useSidebar } from './SidebarContext.jsx';

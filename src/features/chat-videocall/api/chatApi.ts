@@ -1,5 +1,4 @@
 import { request } from '@/lib/api/core.ts';
-
 import type { ZegoTokenResponse } from '../types/chat';
 
 export const chatApi = {

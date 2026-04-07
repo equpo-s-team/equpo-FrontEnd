@@ -2,28 +2,71 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ── Helpers ──
+    function isTeamMember(teamId) {
+      return exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
+    }
+
+    function isChatRoomMember(teamId, roomId) {
+      return exists(/databases/$(database)/documents/teams/$(teamId)/chatRooms/$(roomId)/members/$(request.auth.uid));
+    }
+
     match /teams/{teamId} {
-      // The team document itself can be read by its members
-      allow read: if exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
-      
-      // Tasks subcollection can be read by team members
+      allow read: if isTeamMember(teamId);
+
+      // ── Tasks (existing - unchanged) ──
       match /tasks/{taskId} {
-        allow read: if exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
-        // Note: write access is guarded by the backend POST/PATCH endpoints.
-        // We only allow read directly from Firestore for real-time syncing.
-        allow write: if false; 
-      }
-      
-      // Members subcollection can be read by team members
-      match /members/{memberId} {
-        allow read: if exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
+        allow read: if isTeamMember(teamId);
         allow write: if false;
       }
+
+      // ── Members (existing - unchanged) ──
+      match /members/{memberId} {
+        allow read: if isTeamMember(teamId);
+        allow write: if false;
+      }
+
+      // ── Chat Rooms ──
+      match /chatRooms/{roomId} {
+        allow read: if isChatRoomMember(teamId, roomId);
+        allow write: if false;
+
+        // ── Chat Room Members ──
+        match /members/{memberId} {
+          allow read: if isChatRoomMember(teamId, roomId);
+          allow write: if false;
+        }
+
+        // ── Messages ──
+        match /messages/{messageId} {
+          allow read: if isChatRoomMember(teamId, roomId);
+
+          // Create: member can send messages with own senderUid only
+          allow create: if isChatRoomMember(teamId, roomId)
+            && request.resource.data.senderUid == request.auth.uid
+            && request.resource.data.text is string
+            && request.resource.data.text.size() > 0
+            && request.resource.data.text.size() <= 4000
+            && request.resource.data.type in ['text'];
+
+          // Update: only author can edit (text only, immutable fields locked)
+          allow update: if isChatRoomMember(teamId, roomId)
+            && resource.data.senderUid == request.auth.uid
+            && request.resource.data.senderUid == resource.data.senderUid
+            && request.resource.data.createdAt == resource.data.createdAt
+            && request.resource.data.type == resource.data.type;
+
+          // Delete: only the author can delete their own messages
+          allow delete: if isChatRoomMember(teamId, roomId)
+            && resource.data.senderUid == request.auth.uid;
+        }
+      }
     }
-    
-    // Fallback rule for tasks written directly to a root collection named after the teamId
+
+    // Fallback rule (existing - unchanged)
     match /{teamId}/{taskId} {
-      allow read: if teamId != "teams" && exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
+      allow read: if teamId != "teams" && isTeamMember(teamId);
       allow write: if false;
     }
   }

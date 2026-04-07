@@ -15,11 +15,11 @@ export default function MetricPill({ icon, label, value, accent }: MetricPillPro
       px-3 py-2
     "
     >
-      <span className={accent ? 'text-blue' : 'text-white/40'}>{icon}</span>
-      <span className="text-[10px] font-bold uppercase tracking-[0.5px] text-white/40 whitespace-nowrap">
+      <span className={accent ? 'text-grey-700' : 'text-grey-600'}>{icon}</span>
+      <span className="text-[10px] font-bold uppercase tracking-[0.5px] text-grey-700 whitespace-nowrap">
         {label}
       </span>
-      <span className="text-[13px] font-bold text-white whitespace-nowrap">{value}</span>
+      <span className="text-[13px] font-bold text-grey-800 whitespace-nowrap">{value}</span>
     </div>
   );
 }

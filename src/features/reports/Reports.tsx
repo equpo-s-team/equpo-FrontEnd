@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react';
 
+import { useTeam } from '@/context/TeamContext.tsx';
 import { KpiStrip, MemberList, OverdueTable, StatusDonut } from '@/features/reports/components';
 import AppHeader from '@/features/reports/components/AppHeader.tsx';
 import FilterBar from '@/features/reports/components/FilterBar.tsx';
 import { useReportsKpi, useReportsOverview, useReportsTaskSync } from '@/features/reports/hooks';
 import type { ReportsMember, ReportsOverdueTask } from '@/features/reports/types';
 import type { KpiData, OverdueTaskRow, ReportMemberRow } from '@/features/reports/types';
-
-const DEFAULT_TEAM_ID = '706a6771-4f84-4359-a949-938a54f40c1a';
 
 const EMPTY_KPI: KpiData = {
   todo: 0,
@@ -95,15 +94,16 @@ function mapOverdueToRows(tasks: ReportsOverdueTask[]): OverdueTaskRow[] {
 }
 
 export default function Reports() {
+  const { teamId } = useTeam();
   const [activeDays, setActiveDays] = useState(30);
 
-  const kpiQuery = useReportsKpi(DEFAULT_TEAM_ID, { days: activeDays });
-  const overviewQuery = useReportsOverview(DEFAULT_TEAM_ID, {
+  const kpiQuery = useReportsKpi(teamId, { days: activeDays });
+  const overviewQuery = useReportsOverview(teamId, {
     days: activeDays,
     overdueLimit: 10,
   });
 
-  useReportsTaskSync(DEFAULT_TEAM_ID);
+  useReportsTaskSync(teamId);
 
   const kpi = kpiQuery.data?.kpi ?? EMPTY_KPI;
   const members = useMemo(

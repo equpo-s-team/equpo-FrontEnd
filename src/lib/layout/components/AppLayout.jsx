@@ -12,7 +12,7 @@ export default function AppLayout({ children }) {
         className={`
                     transition-all duration-300 ease-in-out
                     lg:${collapsed ? 'ml-[68px]' : 'ml-[220px]'}
-                    pb-20 lg:pb-0 rounded-l-2xl
+                    pb-20 lg:pb-0 rounded-l-2xl min-h-screen
                 `}
         style={{
           marginLeft:

@@ -12,6 +12,8 @@ import TeamsHub from '@/features/team/TeamsHub.tsx';
 import AppLayout from '@/lib/layout/components/AppLayout.jsx';
 import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
+import ChatPage from "@/features/chat-videocall/ChatPage.tsx";
+import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -43,7 +45,7 @@ function Dashboard() {
             case 'my-missions':
             return <MyMissions />;
             case 'chat':
-                return <VideoCallPage/>;
+              return <ChatPage />;
             case 'video-call':
                 return <VideoCallPage/>;
           case 'reports':
@@ -55,7 +57,11 @@ function Dashboard() {
         }
     };
 
-  return <AppLayout>{renderContent()}</AppLayout>;
+  return (
+    <ChatProvider>
+      <AppLayout>{renderContent()}</AppLayout>
+    </ChatProvider>
+  );
 }
 
 function ProtectedRoute({ children }) {

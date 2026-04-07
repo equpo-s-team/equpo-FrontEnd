@@ -2,11 +2,11 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.jsx';
-import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
 import Reports from '@/features/reports/Reports.tsx';
+import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
 import AppLayout from '@/lib/layout/components/AppLayout.jsx';
 import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
@@ -19,7 +19,10 @@ function Dashboard() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-secondary">
-        <div className="w-10 h-10 rounded-full border-4 border-grey-200 animate-spin" style={{ borderTopColor: '#60AFFF' }} />
+        <div
+          className="w-10 h-10 rounded-full border-4 border-grey-200 animate-spin"
+          style={{ borderTopColor: '#60AFFF' }}
+        />
       </div>
     );
   }

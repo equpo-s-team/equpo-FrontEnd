@@ -1,6 +1,5 @@
 import log from 'loglevel';
 import React, { useState } from 'react';
-
 import { useNavigate } from 'react-router-dom';
 
 import { NewTeamCard } from '@/features/team/components/NewTeamCard';
@@ -56,7 +55,7 @@ export const TeamsHub: React.FC = () => {
 
   const handleEnter = (id: string) => {
     log.log('Entering team', id);
-    navigate(`/dashboard/${id}`);
+    void navigate(`/dashboard/${id}`);
   };
 
   const filtered = teams.filter(

@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom';
  * A fallback mock teamId is also included for dev boundaries if necessary.
  */
 
-
 const TeamContext = createContext(null);
 
 export function TeamProvider({ children }) {

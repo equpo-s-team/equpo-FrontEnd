@@ -2,9 +2,10 @@ import { ArrowRightLeft, ChessKnight } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useSidebar } from './SidebarContext.jsx';
 import { useTeam } from '@/context/TeamContext.jsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
+
+import { useSidebar } from './SidebarContext.jsx';
 
 export default function SidebarLogo() {
   const { collapsed } = useSidebar();
@@ -38,7 +39,10 @@ export default function SidebarLogo() {
             </p>
             <span className="inline-flex items-center gap-1 mt-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0" />
-              <p className="text-cyan text-sm font-body font-medium tracking-wide whitespace-nowrap truncate max-w-[110px]" title={teamName}>
+              <p
+                className="text-cyan text-sm font-body font-medium tracking-wide whitespace-nowrap truncate max-w-[110px]"
+                title={teamName}
+              >
                 {teamName}
               </p>
             </span>
@@ -55,6 +59,7 @@ export default function SidebarLogo() {
 
             {isOpen && (
               <>
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
                 <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 z-50 overflow-hidden py-1">
                   <p className="px-3 py-2 text-[10px] font-bold text-grey-400 uppercase tracking-wider">
@@ -75,7 +80,9 @@ export default function SidebarLogo() {
                         }`}
                       >
                         <span className="truncate flex-1">{t.name}</span>
-                        {t.id === teamId && <span className="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0" />}
+                        {t.id === teamId && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0" />
+                        )}
                       </button>
                     ))}
                   </div>

@@ -12,6 +12,15 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/teams/$(teamId)/chatRooms/$(roomId)/members/$(request.auth.uid));
     }
 
+    function isTeamLeader(teamId) {
+      return exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid))
+        && get(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid)).data.role == 'leader';
+    }
+
+    function canReadChatRoom(teamId, roomId) {
+      return isTeamLeader(teamId) || isChatRoomMember(teamId, roomId);
+    }
+
     match /teams/{teamId} {
       allow read: if isTeamMember(teamId);
 
@@ -29,18 +38,18 @@ service cloud.firestore {
 
       // ── Chat Rooms ──
       match /chatRooms/{roomId} {
-        allow read: if isChatRoomMember(teamId, roomId);
+        allow read: if canReadChatRoom(teamId, roomId);
         allow write: if false;
 
         // ── Chat Room Members ──
         match /members/{memberId} {
-          allow read: if isChatRoomMember(teamId, roomId);
+          allow read: if canReadChatRoom(teamId, roomId);
           allow write: if false;
         }
 
         // ── Messages ──
         match /messages/{messageId} {
-          allow read: if isChatRoomMember(teamId, roomId);
+          allow read: if canReadChatRoom(teamId, roomId);
 
           // Create: member can send messages with own senderUid only
           allow create: if isChatRoomMember(teamId, roomId)

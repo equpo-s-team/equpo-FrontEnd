@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { useTeam } from '@/context/TeamContext.jsx';
+import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 

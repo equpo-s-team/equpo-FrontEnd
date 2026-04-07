@@ -1,6 +1,6 @@
 import { MessageCircle, Search, Users } from 'lucide-react';
 
-import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 import type { ChatRoom } from '../types/chat';
 

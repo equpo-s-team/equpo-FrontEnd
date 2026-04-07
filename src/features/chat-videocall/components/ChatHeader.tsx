@@ -1,7 +1,7 @@
 import { Info, MoreVertical, Users,Video } from 'lucide-react';
 import React from 'react';
 
-import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 export default function ChatHeader() {
   const { activeRoom, startVideoCallSession } = useChatContext();

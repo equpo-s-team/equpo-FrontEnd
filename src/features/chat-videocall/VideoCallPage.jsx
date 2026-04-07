@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
-import { useTeam } from '@/context/TeamContext';
+import { useTeam } from '@/context/TeamContext.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
-import { useSidebar } from '@/features/layout/components/navbar/SidebarContext.jsx';
+import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 
 import { chatApi } from './api/chatApi';
 

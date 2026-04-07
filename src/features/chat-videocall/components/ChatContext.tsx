@@ -1,6 +1,6 @@
 import React, { createContext, useCallback,useContext, useState } from 'react';
 
-import { useTeam } from '@/context/TeamContext';
+import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 
 import { useChatRooms } from '../hooks/useChatRooms';
@@ -65,8 +65,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   // ── Groups → ChatRooms ──────────────────────────────────────────────────────
   const { data: groups = [] } = useTeamGroups(teamId);
-  const groupIds = groups.map((g) => g.id);
-  const { data: rooms = [] } = useChatRooms(teamId, groupIds);
+  const { data: rooms = [] } = useChatRooms(teamId, groups);
 
   // ── Active Room ─────────────────────────────────────────────────────────────
   const [activeRoom, setActiveRoom] = useState<ChatRoom | null>(null);

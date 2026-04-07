@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { useTeam } from '@/context/TeamContext';
+import { useTeam } from '@/context/TeamContext.tsx';
 // @ts-expect-error — TaskSidebar is .jsx; Vite resolves it at runtime
 import TaskSidebar from '@/features/board/components/TaskSidebar';
 import type { TeamTask } from '@/features/board/types';

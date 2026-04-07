@@ -58,9 +58,7 @@ function Dashboard() {
     };
 
   return (
-    <ChatProvider>
       <AppLayout>{renderContent()}</AppLayout>
-    </ChatProvider>
   );
 }
 
@@ -77,7 +75,9 @@ function ProtectedRoute({ children }) {
 
   return isAuth ? (
     <TeamProvider>
-      <SidebarProvider>{children}</SidebarProvider>
+      <SidebarProvider>
+        <ChatProvider>{children}</ChatProvider>
+      </SidebarProvider>
     </TeamProvider>
   ) : (
     <Navigate to="/" replace />

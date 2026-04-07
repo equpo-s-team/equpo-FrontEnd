@@ -44,6 +44,11 @@ interface UseSplineRealtimePlayersParams {
   isSceneReady: boolean;
 }
 
+interface SplinePresenceSnapshot {
+  connectedUsers: number;
+  connectedUserUids: string[];
+}
+
 const UPDATE_INTERVAL_MS = 100;
 const MAX_FUTURE_TIMESTAMP_DRIFT_MS = 2_000;
 const SLOT_CLAIM_STALE_MS = 30_000;
@@ -424,12 +429,16 @@ export function useSplineRealtimePlayers({
   localUid,
   isEnabled,
   isSceneReady,
-}: UseSplineRealtimePlayersParams): void {
+}: UseSplineRealtimePlayersParams): SplinePresenceSnapshot {
   const clientId = useMemo(() => crypto.randomUUID(), []);
+  const [connectedUsers, setConnectedUsers] = useState(0);
+  const [connectedUserUids, setConnectedUserUids] = useState<string[]>([]);
   const [slotDiscoveryTick, setSlotDiscoveryTick] = useState(0);
 
   useEffect(() => {
     if (!app || !isSceneReady || !isEnabled || !teamId || !localUid) {
+      setConnectedUsers(0);
+      setConnectedUserUids([]);
       return;
     }
 
@@ -464,22 +473,24 @@ export function useSplineRealtimePlayers({
       });
 
       if (!snapshot.exists()) {
+        setConnectedUsers(0);
+        setConnectedUserUids([]);
         return;
       }
 
       const source: unknown = snapshot.val();
 
       if (typeof source !== 'object' || !source) {
+        setConnectedUsers(0);
+        setConnectedUserUids([]);
         return;
       }
 
       const entries = Object.entries(source as Record<string, unknown>);
+      let nextConnectedUsers = 0;
+      const nextConnectedUserUids: string[] = [];
 
       for (const [uid, entry] of entries) {
-        if (uid === localUid) {
-          continue;
-        }
-
         const fallbackState: PlayerRealtimeState = {
           active: false,
           visible: false,
@@ -490,6 +501,15 @@ export function useSplineRealtimePlayers({
           slotId: null,
         };
         const data = toRealtimeState(entry, fallbackState);
+
+        if (data.active && isPresenceFresh(data.updatedAt)) {
+          nextConnectedUsers += 1;
+          nextConnectedUserUids.push(uid);
+        }
+
+        if (uid === localUid) {
+          continue;
+        }
 
         if (!data.slotId) {
           continue;
@@ -513,6 +533,9 @@ export function useSplineRealtimePlayers({
         object.rotation.y = data.rotation.y;
         object.rotation.z = data.rotation.z;
       }
+
+      setConnectedUsers((current) => (current === nextConnectedUsers ? current : nextConnectedUsers));
+      setConnectedUserUids(nextConnectedUserUids);
     }, (error) => {
       console.error(`RTDB presence read error for team ${teamId}:`, error);
     });
@@ -521,6 +544,8 @@ export function useSplineRealtimePlayers({
       slotObjects.forEach((object) => {
         object.visible = false;
       });
+      setConnectedUsers(0);
+      setConnectedUserUids([]);
       unsubscribe();
     };
   }, [app, clientId, isEnabled, isSceneReady, localUid, slotDiscoveryTick, teamId]);
@@ -680,5 +705,10 @@ export function useSplineRealtimePlayers({
       });
     };
   }, [app, clientId, isEnabled, isSceneReady, localUid, slotDiscoveryTick, teamId]);
+
+  return {
+    connectedUsers,
+    connectedUserUids,
+  };
 }
 

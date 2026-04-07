@@ -2,11 +2,9 @@ export interface SessionInfo {
   elapsedSeconds: number;
   connectedUsers: number;
   maxUsers: number;
-  fps: number;
-  ping: number;
-  items: number;
-  score: number;
-  level: number;
+  completedPercent: number;
+  overduePercent: number;
+  connectedMembers: ConnectedUser[];
 }
 
 export interface PlayerStats {
@@ -17,6 +15,7 @@ export interface PlayerStats {
 }
 
 export interface ConnectedUser {
+  uid: string;
   id: string;
   name: string;
   gradient: string;

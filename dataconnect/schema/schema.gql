@@ -37,7 +37,7 @@ type Task @table {
   recurringCount: Int
   assignedUser: User
   assignedGroup: Group
-  team: Team! 
+  team: Team!
 }
 
 type Group @table {

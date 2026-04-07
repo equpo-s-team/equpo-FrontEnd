@@ -4,44 +4,36 @@ export const mockSession: SessionInfo = {
   elapsedSeconds: 1254,
   connectedUsers: 4,
   maxUsers: 8,
-  fps: 60,
-  ping: 24,
-  items: 156,
-  score: 12500,
-  level: 12,
+  completedPercent: 62,
+  overduePercent: 8,
+  connectedMembers: [],
 };
 
 export const mockSessionLowFPS: SessionInfo = {
   elapsedSeconds: 3600,
   connectedUsers: 7,
   maxUsers: 8,
-  fps: 45,
-  ping: 55,
-  items: 342,
-  score: 45800,
-  level: 23,
+  completedPercent: 74,
+  overduePercent: 12,
+  connectedMembers: [],
 };
 
 export const mockSessionHighPing: SessionInfo = {
   elapsedSeconds: 180,
   connectedUsers: 2,
   maxUsers: 4,
-  fps: 144,
-  ping: 120,
-  items: 23,
-  score: 1500,
-  level: 3,
+  completedPercent: 24,
+  overduePercent: 28,
+  connectedMembers: [],
 };
 
 export const mockSessionEmpty: SessionInfo = {
   elapsedSeconds: 0,
   connectedUsers: 0,
   maxUsers: 8,
-  fps: 60,
-  ping: 12,
-  items: 0,
-  score: 0,
-  level: 1,
+  completedPercent: 0,
+  overduePercent: 0,
+  connectedMembers: [],
 };
 
 export const mockPlayerStats: PlayerStats = {

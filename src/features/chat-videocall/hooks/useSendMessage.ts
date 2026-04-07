@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db, auth } from '@/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+
+import { auth,db } from '@/firebase';
 
 interface SendMessageArgs {
   teamId: string;

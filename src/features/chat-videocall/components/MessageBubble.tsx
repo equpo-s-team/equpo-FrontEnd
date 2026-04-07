@@ -1,7 +1,9 @@
+import { Check,Pencil, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
-import { Pencil, Trash2, X, Check } from 'lucide-react';
-import { auth } from '@/firebase';
+
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+import { auth } from '@/firebase';
+
 import type { ChatMessage } from '../types/chat';
 
 interface MessageBubbleProps {

@@ -27,7 +27,7 @@ interface AuthUser {
  * reactivity even when the user is not on the Team Missions screen.
  */
 export function useMyTasks(teamId: string | undefined) {
-  const { user } = useAuth() as { user: AuthUser | null };
+  const { user } = (useAuth as () => { user: AuthUser | null })();
   const queryClient = useQueryClient();
 
   // Full team task list (already Firestore-backed via useTasks)

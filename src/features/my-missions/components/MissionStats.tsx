@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
+
 import type { TeamTask } from '@/features/board/types';
 
 interface MissionStatsProps {
@@ -79,31 +80,43 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
 
         <hr className="border-grey-100 my-1" />
 
-        <div
-          className={`flex items-center justify-between ${overdueTasks.length > 0 ? 'cursor-pointer group' : ''}`}
-          onClick={() => overdueTasks.length > 0 && setIsOverdueExpanded(!isOverdueExpanded)}
-        >
-          <div className="flex items-center gap-2 select-none">
-            <span
-              className={`w-2.5 h-2.5 rounded-full bg-red ${overdueTasks.length > 0 ? 'animate-pulse shadow-[0_0_8px_rgba(246,90,112,0.6)]' : ''}`}
-            />
-            <span className="text-xs font-semibold text-grey-600 font-body group-hover:text-grey-900 transition-colors">
-              Vencidas
-            </span>
-            {overdueTasks.length > 0 && (
-              isOverdueExpanded ? (
+        {overdueTasks.length > 0 ? (
+          <div
+            role="button"
+            tabIndex={0}
+            className="flex items-center justify-between cursor-pointer group"
+            onClick={() => setIsOverdueExpanded(!isOverdueExpanded)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsOverdueExpanded(!isOverdueExpanded);
+              }
+            }}
+          >
+            <div className="flex items-center gap-2 select-none">
+              <span className="w-2.5 h-2.5 rounded-full bg-red animate-pulse shadow-[0_0_8px_rgba(246,90,112,0.6)]" />
+              <span className="text-xs font-semibold text-grey-600 font-body group-hover:text-grey-900 transition-colors">
+                Vencidas
+              </span>
+              {isOverdueExpanded ? (
                 <ChevronUp className="w-3 h-3 text-grey-400 group-hover:text-grey-600 transition-colors" />
               ) : (
                 <ChevronDown className="w-3 h-3 text-grey-400 group-hover:text-grey-600 transition-colors" />
-              )
-            )}
+              )}
+            </div>
+            <span className="text-xs font-bold font-body text-red">
+              {overdueTasks.length}
+            </span>
           </div>
-          <span
-            className={`text-xs font-bold font-body ${overdueTasks.length > 0 ? 'text-red' : 'text-grey-800'}`}
-          >
-            {overdueTasks.length}
-          </span>
-        </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 select-none">
+              <span className="w-2.5 h-2.5 rounded-full bg-red" />
+              <span className="text-xs font-semibold text-grey-600 font-body">Vencidas</span>
+            </div>
+            <span className="text-xs font-bold font-body text-grey-800">0</span>
+          </div>
+        )}
 
         {/* Expandable breakdown for overdue tasks */}
         {isOverdueExpanded && overdueTasks.length > 0 && (

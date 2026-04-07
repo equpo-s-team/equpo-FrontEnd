@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
-import { getTaskColorClass } from '../utils/timelineStyles';
 
 import type { TeamTask } from '@/features/board/types';
+
+import { getTaskColorClass } from '../utils/timelineStyles';
 
 interface MonthTimelineProps {
   selectedDate: Date;

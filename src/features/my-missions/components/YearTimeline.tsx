@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
-import { getTaskDotClass } from '../utils/timelineStyles';
 
 import type { TeamTask } from '@/features/board/types';
+
+import { getTaskDotClass } from '../utils/timelineStyles';
 
 interface YearTimelineProps {
   selectedDate: Date;
@@ -126,6 +127,15 @@ export default function YearTimeline({
                 onClick={() => {
                   const d = new Date(year, data.monthIndex, 1);
                   onDateChange(d);
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const d = new Date(year, data.monthIndex, 1);
+                    onDateChange(d);
+                  }
                 }}
                 className={`
                   p-4 rounded-2xl border-[1.5px] cursor-pointer transition-all duration-200

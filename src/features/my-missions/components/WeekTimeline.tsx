@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
-import { getTaskClasses } from '../utils/timelineStyles';
 
 import type { TeamTask } from '@/features/board/types';
+
+import { getTaskClasses } from '../utils/timelineStyles';
 
 const HOUR_HEIGHT = 64; // px per hour slot
 const START_HOUR = 6;

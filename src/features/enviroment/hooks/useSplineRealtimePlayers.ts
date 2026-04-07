@@ -53,6 +53,7 @@ const UPDATE_INTERVAL_MS = 100;
 const MAX_FUTURE_TIMESTAMP_DRIFT_MS = 2_000;
 const SLOT_CLAIM_STALE_MS = 30_000;
 const SLOT_DISCOVERY_RETRY_MS = 750;
+const LOCAL_CONTROLLED_SLOT_ID: SlotId = 'Character_02';
 const warnedMissingSlots = new Set<SlotId>();
 let hasLoggedSlotPermissionError = false;
 
@@ -554,8 +555,11 @@ export function useSplineRealtimePlayers({
     let localObject: SplineSceneObject | null = null;
     let isDisposed = false;
 
+    let rafId: number | null = null;
+
     const initialize = async () => {
-      const claimedSlotId = await claimSlot(teamId, localUid, clientId, [...slotObjects.keys()]);
+      const availableSlots = [...slotObjects.keys()].filter(id => id !== LOCAL_CONTROLLED_SLOT_ID);
+      const claimedSlotId = await claimSlot(teamId, localUid, clientId, availableSlots);
 
       if (isDisposed || !claimedSlotId) {
         return;
@@ -563,10 +567,30 @@ export function useSplineRealtimePlayers({
 
       localSlotId = claimedSlotId;
 
-      localObject = slotObjects.get(claimedSlotId) ?? null;
+      const claimedObject = slotObjects.get(claimedSlotId) ?? null;
+      const controlledObject = slotObjects.get(LOCAL_CONTROLLED_SLOT_ID) ?? null;
+      localObject = controlledObject ?? claimedObject;
 
       if (!localObject) {
         return;
+      }
+
+      if (controlledObject && claimedObject && controlledObject !== claimedObject) {
+         controlledObject.visible = false;
+         claimedObject.visible = true;
+         
+         const syncLocalVisuals = () => {
+             claimedObject.position.x = controlledObject.position.x;
+             claimedObject.position.y = controlledObject.position.y;
+             claimedObject.position.z = controlledObject.position.z;
+             claimedObject.rotation.x = controlledObject.rotation.x;
+             claimedObject.rotation.y = controlledObject.rotation.y;
+             claimedObject.rotation.z = controlledObject.rotation.z;
+             rafId = globalThis.requestAnimationFrame(syncLocalVisuals);
+         };
+         syncLocalVisuals();
+      } else if (controlledObject) {
+         controlledObject.visible = true;
       }
 
       const presenceRef = getPresenceRef(teamId, localUid);
@@ -641,6 +665,10 @@ export function useSplineRealtimePlayers({
 
       if (intervalId !== null) {
         globalThis.clearInterval(intervalId);
+      }
+      
+      if (rafId !== null) {
+        globalThis.cancelAnimationFrame(rafId);
       }
 
       if (localObject) {

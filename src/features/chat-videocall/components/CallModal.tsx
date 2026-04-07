@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Mic, MicOff, Video, VideoOff, PhoneOff } from 'lucide-react';
-import {useChatContext} from "@/features/chat-videocall/components/ChatContext.tsx";
+import { useSidebar } from '@/features/layout/components/navbar/SidebarContext.jsx';
+import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 function useCallTimer(isActive: boolean) {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
-    if (!isActive) { setSeconds(0); return; }
-    const id = setInterval(() => setSeconds(s => s + 1), 1000);
+    if (!isActive) {
+      setSeconds(0);
+      return;
+    }
+    const id = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(id);
   }, [isActive]);
 
@@ -17,32 +21,64 @@ function useCallTimer(isActive: boolean) {
 }
 
 export default function CallModal() {
-  const { callState, callSession, activeConversation, endCall, toggleMute, toggleCamera, isMuted, isCameraOff } = useChatContext();
+  const {
+    callState,
+    callSession,
+    activeRoom,
+    startVideoCallSession,
+    endCall,
+    toggleMute,
+    toggleCamera,
+    isMuted,
+    isCameraOff,
+  } = useChatContext();
+  const { setActiveItem } = useSidebar();
+  const hasOpenedVideoRef = useRef(false);
   const timer = useCallTimer(callState === 'in-call');
-
-  if (callState === 'idle' || !callSession || !activeConversation) return null;
-
-  const isVideo = callSession.type === 'video';
+  const isVideo = callSession?.type === 'video';
   const isCalling = callState === 'calling';
+
+  const roomInitials = activeRoom
+    ? activeRoom.name
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    : '';
+
+  useEffect(() => {
+    if (!isVideo || !isCalling || !activeRoom || hasOpenedVideoRef.current) return;
+
+    hasOpenedVideoRef.current = true;
+    startVideoCallSession({ mode: 'new' });
+    endCall();
+    setActiveItem('video-call');
+  }, [isCalling, isVideo, activeRoom, startVideoCallSession, endCall, setActiveItem]);
+
+  useEffect(() => {
+    if (!isCalling) hasOpenedVideoRef.current = false;
+  }, [isCalling]);
+
+  if (callState === 'idle' || !callSession || !activeRoom) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-grey-900/80 backdrop-blur-sm">
       <div className="relative w-full max-w-md mx-4 rounded-3xl overflow-hidden bg-grey-900 shadow-card-lg border border-grey-700">
-        
         {/* Video area */}
         {isVideo && (
           <div className="aspect-video bg-grey-800 relative flex items-center justify-center">
-            {/* Remote video placeholder */}
-            <div className={`
-              w-24 h-24 rounded-3xl bg-gradient-to-br ${activeConversation.avatarGradient}
+            <div
+              className={`
+              w-24 h-24 rounded-3xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9]
               flex items-center justify-center
               text-white font-body font-bold text-2xl
               ${isCalling ? 'animate-pulse' : ''}
-            `}>
-              {activeConversation.initials}
+            `}
+            >
+              {roomInitials}
             </div>
 
-            {/* Local video (PiP) */}
             <div className="absolute bottom-3 right-3 w-24 h-16 bg-grey-700 rounded-xl border border-grey-600 overflow-hidden flex items-center justify-center">
               {isCameraOff ? (
                 <VideoOff size={18} className="text-grey-400" />
@@ -56,20 +92,22 @@ export default function CallModal() {
         {/* Audio-only call avatar */}
         {!isVideo && (
           <div className="py-12 flex flex-col items-center gap-4">
-            <div className={`
-              w-24 h-24 rounded-3xl bg-gradient-to-br ${activeConversation.avatarGradient}
+            <div
+              className={`
+              w-24 h-24 rounded-3xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9]
               flex items-center justify-center
               text-white font-body font-bold text-2xl
               ${isCalling ? 'animate-pulse' : ''}
-            `}>
-              {activeConversation.initials}
+            `}
+            >
+              {roomInitials}
             </div>
           </div>
         )}
 
         {/* Info */}
         <div className="px-6 py-4 text-center">
-          <h3 className="font-body font-bold text-white text-lg">{activeConversation.name}</h3>
+          <h3 className="font-body font-bold text-white text-lg">{activeRoom.name}</h3>
           <p className="font-body text-sm text-grey-400 mt-1">
             {isCalling ? (
               <span className="flex items-center justify-center gap-1.5">
@@ -122,7 +160,12 @@ export default function CallModal() {
   );
 }
 
-function CallControlButton({ onClick, active, label, children }: {
+function CallControlButton({
+  onClick,
+  active,
+  label,
+  children,
+}: {
   onClick: () => void;
   active: boolean;
   label: string;
@@ -135,9 +178,10 @@ function CallControlButton({ onClick, active, label, children }: {
       className={`
         w-12 h-12 rounded-2xl flex items-center justify-center
         transition-all duration-200 hover:scale-105 active:scale-95
-        ${active
-          ? 'bg-grey-600 text-white'
-          : 'bg-grey-700 text-grey-300 hover:bg-grey-600 hover:text-white'
+        ${
+          active
+            ? 'bg-grey-600 text-white'
+            : 'bg-grey-700 text-grey-300 hover:bg-grey-600 hover:text-white'
         }
       `}
     >

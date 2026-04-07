@@ -14,6 +14,8 @@ import LandingPage from '@/features/presentation/page.jsx';
 import { ReportPage } from '@/features/reports/page.tsx';
 import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
+import ChatPage from "@/features/chat-videocall/ChatPage.tsx";
+import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 
 function Dashboard() {
@@ -26,7 +28,7 @@ function Dashboard() {
       case 'missiones':
         return <TeamBoard />;
       case 'chat':
-        return <VideoCallPage />;
+        return <ChatPage />;
       case 'video-call':
         return <VideoCallPage />;
       case 'reports':
@@ -38,7 +40,11 @@ function Dashboard() {
     }
   };
 
-  return <AppLayout>{renderContent()}</AppLayout>;
+  return (
+    <ChatProvider>
+      <AppLayout>{renderContent()}</AppLayout>
+    </ChatProvider>
+  );
 }
 
 function ProtectedRoute({ children }) {

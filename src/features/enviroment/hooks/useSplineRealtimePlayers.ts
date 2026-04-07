@@ -53,12 +53,8 @@ const UPDATE_INTERVAL_MS = 100;
 const MAX_FUTURE_TIMESTAMP_DRIFT_MS = 2_000;
 const SLOT_CLAIM_STALE_MS = 30_000;
 const SLOT_DISCOVERY_RETRY_MS = 750;
-const LOCAL_CONTROLLED_SLOT_ID: SlotId = 'Character_02';
 const warnedMissingSlots = new Set<SlotId>();
-const ENABLE_SLOT_DEBUG_LOGS = import.meta.env.DEV;
 let hasLoggedSlotPermissionError = false;
-let hasLoggedSlotResolutionDiagnostics = false;
-let hasLoggedSlotRetryDiagnostics = false;
 
 function isPresenceFresh(updatedAt: number): boolean {
   const now = Date.now();
@@ -260,7 +256,6 @@ function getSlotRef(teamId: string, slotId: SlotId) {
 function getSlotObjects(app: SplineRuntimeApp): Map<SlotId, SplineSceneObject> {
   const objects = new Map<SlotId, SplineSceneObject>();
   const catalogObjects = getCatalogSlotObjects(app);
-  const diagnostics: string[] = [];
 
   for (const slotId of SPLINE_SLOT_IDS) {
     let object: SplineSceneObject | null = null;
@@ -269,18 +264,6 @@ function getSlotObjects(app: SplineRuntimeApp): Map<SlotId, SplineSceneObject> {
       const resolvedObject = resolveSplineObject(app, slotId);
       const catalogObject = catalogObjects.get(slotId) ?? null;
       object = resolvedObject ?? catalogObject;
-
-      if (ENABLE_SLOT_DEBUG_LOGS) {
-        const runtimeObject = asSplineRuntimeObject(object);
-        const resolutionSource = resolvedObject ? 'resolver' : catalogObject ? 'catalog' : 'none';
-        const mappedId = SPLINE_SLOT_OBJECT_IDS[slotId];
-        const objectName = runtimeObject?.name ?? 'n/a';
-        const objectUuid = runtimeObject?.uuid ?? runtimeObject?.id ?? 'n/a';
-
-        diagnostics.push(
-          `[${slotId}] source=${resolutionSource} mappedId=${mappedId} objectName=${objectName} objectId=${objectUuid}`,
-        );
-      }
     } catch (error) {
       console.error(`Failed to resolve spline object for slot ${slotId}:`, error);
       object = null;
@@ -299,16 +282,6 @@ function getSlotObjects(app: SplineRuntimeApp): Map<SlotId, SplineSceneObject> {
 
     object.visible = false;
     objects.set(slotId, object);
-  }
-
-  if (ENABLE_SLOT_DEBUG_LOGS && !hasLoggedSlotResolutionDiagnostics) {
-    hasLoggedSlotResolutionDiagnostics = true;
-    console.groupCollapsed('[SplineRealtime][diag] Slot resolution snapshot');
-    for (const line of diagnostics) {
-      console.debug(line);
-    }
-    console.debug(`[summary] resolved=${objects.size} total=${SPLINE_SLOT_IDS.length}`);
-    console.groupEnd();
   }
 
   return objects;
@@ -444,14 +417,6 @@ export function useSplineRealtimePlayers({
 
     const slotObjects = getSlotObjects(app);
     if (slotObjects.size === 0) {
-      if (ENABLE_SLOT_DEBUG_LOGS && !hasLoggedSlotRetryDiagnostics) {
-        hasLoggedSlotRetryDiagnostics = true;
-        console.info(
-          `[SplineRealtime][diag] No slot objects resolved yet. teamId=${teamId}. ` +
-            `Retrying every ${SLOT_DISCOVERY_RETRY_MS}ms.`,
-        );
-      }
-
       const retryId = globalThis.setTimeout(() => {
         setSlotDiscoveryTick((tick) => tick + 1);
       }, SLOT_DISCOVERY_RETRY_MS);
@@ -464,14 +429,6 @@ export function useSplineRealtimePlayers({
     const presenceRootRef = getPresenceRootRef(teamId);
 
     const unsubscribe = onValue(presenceRootRef, (snapshot) => {
-      slotObjects.forEach((object, slotId) => {
-        if (slotId === LOCAL_CONTROLLED_SLOT_ID) {
-          return;
-        }
-
-        object.visible = false;
-      });
-
       if (!snapshot.exists()) {
         setConnectedUsers(0);
         setConnectedUserUids([]);
@@ -487,6 +444,32 @@ export function useSplineRealtimePlayers({
       }
 
       const entries = Object.entries(source as Record<string, unknown>);
+      let mySlotId: SlotId | null = null;
+
+      for (const [uid, entry] of entries) {
+        if (uid === localUid) {
+          const fallbackState: PlayerRealtimeState = {
+            active: false,
+            visible: false,
+            position: { x: 0, y: 0, z: 0 },
+            rotation: { x: 0, y: 0, z: 0 },
+            clientId,
+            updatedAt: 0,
+            slotId: null,
+          };
+          const data = toRealtimeState(entry, fallbackState);
+          mySlotId = data.slotId;
+          break;
+        }
+      }
+
+      slotObjects.forEach((object, slotId) => {
+        if (slotId === mySlotId) {
+          return;
+        }
+
+        object.visible = false;
+      });
       let nextConnectedUsers = 0;
       const nextConnectedUserUids: string[] = [];
 
@@ -557,14 +540,6 @@ export function useSplineRealtimePlayers({
 
     const slotObjects = getSlotObjects(app);
     if (slotObjects.size === 0) {
-      if (ENABLE_SLOT_DEBUG_LOGS && !hasLoggedSlotRetryDiagnostics) {
-        hasLoggedSlotRetryDiagnostics = true;
-        console.info(
-          `[SplineRealtime][diag] Local publisher waiting for slot objects. teamId=${teamId}. ` +
-            `Retrying every ${SLOT_DISCOVERY_RETRY_MS}ms.`,
-        );
-      }
-
       const retryId = globalThis.setTimeout(() => {
         setSlotDiscoveryTick((tick) => tick + 1);
       }, SLOT_DISCOVERY_RETRY_MS);
@@ -588,9 +563,7 @@ export function useSplineRealtimePlayers({
 
       localSlotId = claimedSlotId;
 
-      const claimedObject = slotObjects.get(claimedSlotId) ?? null;
-      const controlledObject = slotObjects.get(LOCAL_CONTROLLED_SLOT_ID) ?? null;
-      localObject = controlledObject ?? claimedObject;
+      localObject = slotObjects.get(claimedSlotId) ?? null;
 
       if (!localObject) {
         return;

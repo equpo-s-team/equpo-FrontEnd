@@ -1,12 +1,12 @@
 import Spline from '@splinetool/react-spline';
-import type { Application } from '@splinetool/runtime';
+import type { Application, SplineEvent } from '@splinetool/runtime';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
+import type { PlayerStats, SessionInfo } from '@/features/enviroment/types/hud.ts';
 
 import HUD from './components/HUD.tsx';
-import { useHudData } from './hooks/useHudData.ts';
 import { useSplineRealtimePlayers } from './hooks/useSplineRealtimePlayers.ts';
 
 export default function GamePage() {
@@ -14,7 +14,6 @@ export default function GamePage() {
   const { teamId } = useTeam();
   const [splineApp, setSplineApp] = useState<Application | null>(null);
   const [isSplineRendered, setIsSplineRendered] = useState(false);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const localUid = useMemo(() => user?.uid ?? null, [user?.uid]);
 
   const handleSplineLoad = useCallback((app: Application) => {
@@ -27,7 +26,7 @@ export default function GamePage() {
       return;
     }
 
-    const handleRendered = () => {
+    const handleRendered = (_event: SplineEvent) => {
       setIsSplineRendered(true);
       splineApp.removeEventListener('rendered', handleRendered);
     };
@@ -39,24 +38,7 @@ export default function GamePage() {
     };
   }, [splineApp]);
 
-  useEffect(() => {
-    setElapsedSeconds(0);
-
-    if (!isAuth || !teamId) {
-      return;
-    }
-
-    const startAt = Date.now();
-    const timerId = globalThis.setInterval(() => {
-      setElapsedSeconds(Math.floor((Date.now() - startAt) / 1000));
-    }, 1000);
-
-    return () => {
-      globalThis.clearInterval(timerId);
-    };
-  }, [isAuth, teamId]);
-
-  const { connectedUsers, connectedUserUids } = useSplineRealtimePlayers({
+  useSplineRealtimePlayers({
     app: splineApp,
     teamId: teamId ?? null,
     localUid,
@@ -64,12 +46,23 @@ export default function GamePage() {
     isSceneReady: isSplineRendered,
   });
 
-  const { stats, session } = useHudData({
-    teamId,
-    connectedUsers,
-    connectedUserUids,
-    elapsedSeconds,
-  });
+  const stats: PlayerStats = {
+    hp: 100,
+    maxHp: 100,
+    energy: 100,
+    maxEnergy: 100,
+  };
+
+  const session: SessionInfo = {
+    elapsedSeconds: 1254,
+    connectedUsers: 1,
+    maxUsers: 8,
+    fps: 60,
+    ping: 24,
+    items: 156,
+    score: 12500,
+    level: 12,
+  };
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-grey-900">
@@ -81,6 +74,7 @@ export default function GamePage() {
         />
       </div>
 
+      {/* HUD overlay */}
       <HUD stats={stats} session={session} />
     </div>
   );

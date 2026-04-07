@@ -27,10 +27,13 @@ function getMinDate() {
   return d.toISOString().split('T')[0];
 }
 
-function toInputDate(isoString) {
+function toInputDatetime(isoString) {
   if (!isoString) return '';
   try {
-    return new Date(isoString).toISOString().split('T')[0];
+    const d = new Date(isoString);
+    // Adjust to local timezone for the datetime-local input
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - offset).toISOString().slice(0, 16);
   } catch {
     return '';
   }
@@ -76,7 +79,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     if (mode === 'edit' && task) {
       setName(task.name ?? '');
       setDescription(task.description ?? '');
-      setDueDate(toInputDate(task.dueDate));
+      setDueDate(toInputDatetime(task.dueDate));
       setPriority(task.priority ?? 'medium');
       setAssignedUserUid(task.assignedUsers?.[0]?.uid ?? '');
       setAssignedGroupId(task.assignedGroupId ?? '');
@@ -194,7 +197,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   }
 
   // ── Compute changes & validity ──
-  const originalDueDate = task?.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : '';
+  const originalDueDate = task?.dueDate ? toInputDatetime(task.dueDate) : '';
 
   const hasChanges =
     mode !== 'edit' ||
@@ -311,7 +314,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
               Fecha Límite
             </FieldLabel>
             <input
-              type="date"
+              type="datetime-local"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               min={getMinDate()}

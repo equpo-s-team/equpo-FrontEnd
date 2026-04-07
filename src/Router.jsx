@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
+import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
 import Reports from '@/features/reports/Reports.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
@@ -38,6 +39,8 @@ function Dashboard() {
         return <GamePage />;
       case 'missiones':
         return <TeamBoard />;
+      case 'my-missions':
+        return <MyMissions />;
       case 'chat':
         return <div>Mi Espacio</div>;
       case 'reports':

@@ -1,5 +1,6 @@
+import { Info, MoreVertical, Users,Video } from 'lucide-react';
 import React from 'react';
-import { Video, Info, MoreVertical, Users } from 'lucide-react';
+
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
 
 export default function ChatHeader() {

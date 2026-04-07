@@ -1,7 +1,8 @@
+import { Mic, MicOff, PhoneOff,Video, VideoOff } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Mic, MicOff, Video, VideoOff, PhoneOff } from 'lucide-react';
-import { useSidebar } from '@/features/layout/components/navbar/SidebarContext.jsx';
+
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
+import { useSidebar } from '@/features/layout/components/navbar/SidebarContext.jsx';
 
 function useCallTimer(isActive: boolean) {
   const [seconds, setSeconds] = useState(0);

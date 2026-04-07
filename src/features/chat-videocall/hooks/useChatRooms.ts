@@ -1,14 +1,33 @@
-import { useEffect } from 'react';
+import { useQuery,useQueryClient } from '@tanstack/react-query';
 import {
   collection,
   onSnapshot,
-  query,
   orderBy,
+  query,
   type Unsubscribe,
 } from 'firebase/firestore';
-import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+
 import { db } from '@/firebase';
+
 import type { ChatRoom } from '../types/chat';
+
+type FirestoreTimestampLike = {
+  toDate: () => Date;
+};
+
+function isFirestoreTimestampLike(value: unknown): value is FirestoreTimestampLike {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'toDate' in value &&
+    typeof (value as { toDate?: unknown }).toDate === 'function'
+  );
+}
+
+function toDateOrNow(value: unknown): Date {
+  return isFirestoreTimestampLike(value) ? value.toDate() : new Date();
+}
 
 /**
  * Subscribes to the chatRooms the current user belongs to within a team.
@@ -42,13 +61,18 @@ export function useChatRooms(teamId: string, groupIds: string[]) {
       (snapshot) => {
         snapshot.docs.forEach((doc) => {
           if (groupIds.includes(doc.id)) {
-            const data = doc.data();
+            const rawData = doc.data() as unknown;
+            const data =
+              typeof rawData === 'object' && rawData !== null
+                ? (rawData as Record<string, unknown>)
+                : {};
+
             rooms.set(doc.id, {
               id: doc.id,
-              name: (data.name as string) ?? '',
+              name: typeof data.name === 'string' ? data.name : '',
               type: 'group',
-              createdBy: (data.createdBy as string) ?? '',
-              createdAt: data.createdAt?.toDate?.() ?? new Date(),
+              createdBy: typeof data.createdBy === 'string' ? data.createdBy : '',
+              createdAt: toDateOrNow(data.createdAt),
             });
           }
         });

@@ -1,5 +1,7 @@
-import { Search, MessageCircle, Users } from 'lucide-react';
+import { MessageCircle, Search, Users } from 'lucide-react';
+
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+
 import type { ChatRoom } from '../types/chat';
 
 const ROOM_GRADIENTS = [

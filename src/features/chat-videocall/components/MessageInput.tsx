@@ -1,5 +1,6 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Paperclip, Smile, Send } from 'lucide-react';
+import { Paperclip, Send,Smile } from 'lucide-react';
+import React, { useCallback,useRef, useState } from 'react';
+
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
 
 export default function MessageInput() {

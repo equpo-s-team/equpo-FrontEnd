@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
 import { MessageCircle } from 'lucide-react';
-import MessageBubble from './MessageBubble';
+import { useEffect, useRef } from 'react';
+
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+
 import type { ChatMessage } from '../types/chat';
+import MessageBubble from './MessageBubble';
 
 function DateDivider({ label }: { label: string }) {
   return (

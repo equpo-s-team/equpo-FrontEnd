@@ -1,17 +1,40 @@
-import { useEffect, useRef } from 'react';
+import { useQuery,useQueryClient } from '@tanstack/react-query';
 import {
   collection,
-  onSnapshot,
-  query,
-  orderBy,
   limit,
+  onSnapshot,
+  orderBy,
+  query,
   type Unsubscribe,
 } from 'firebase/firestore';
-import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
+
 import { db } from '@/firebase';
+
 import type { ChatMessage } from '../types/chat';
 
 const PAGE_SIZE = 50;
+
+type FirestoreTimestampLike = {
+  toDate: () => Date;
+};
+
+function isFirestoreTimestampLike(value: unknown): value is FirestoreTimestampLike {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'toDate' in value &&
+    typeof (value as { toDate?: unknown }).toDate === 'function'
+  );
+}
+
+function toDateOrNow(value: unknown): Date {
+  return isFirestoreTimestampLike(value) ? value.toDate() : new Date();
+}
+
+function toDateOrUndefined(value: unknown): Date | undefined {
+  return isFirestoreTimestampLike(value) ? value.toDate() : undefined;
+}
 
 /**
  * Real-time Firestore subscription for messages in a chat room.
@@ -44,16 +67,21 @@ export function useRoomMessages(teamId: string, roomId: string | null) {
       (snapshot) => {
         const messages: ChatMessage[] = snapshot.docs
           .map((doc) => {
-            const data = doc.data();
+            const rawData = doc.data() as unknown;
+            const data =
+              typeof rawData === 'object' && rawData !== null
+                ? (rawData as Record<string, unknown>)
+                : {};
+
             return {
               id: doc.id,
-              senderUid: (data.senderUid as string) ?? '',
-              senderName: (data.senderName as string) ?? '',
-              text: (data.text as string) ?? '',
-              createdAt: data.createdAt?.toDate?.() ?? new Date(),
-              type: (data.type as 'text' | 'system') ?? 'text',
+              senderUid: typeof data.senderUid === 'string' ? data.senderUid : '',
+              senderName: typeof data.senderName === 'string' ? data.senderName : '',
+              text: typeof data.text === 'string' ? data.text : '',
+              createdAt: toDateOrNow(data.createdAt),
+              type: data.type === 'system' ? 'system' : 'text',
               deleted: Boolean(data.deleted),
-              editedAt: data.editedAt?.toDate?.() ?? undefined,
+              editedAt: toDateOrUndefined(data.editedAt),
             };
           })
           .reverse(); // Oldest first for display

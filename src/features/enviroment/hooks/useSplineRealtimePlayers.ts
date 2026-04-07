@@ -53,6 +53,7 @@ const UPDATE_INTERVAL_MS = 100;
 const MAX_FUTURE_TIMESTAMP_DRIFT_MS = 2_000;
 const SLOT_CLAIM_STALE_MS = 30_000;
 const SLOT_DISCOVERY_RETRY_MS = 750;
+const LOCAL_CONTROLLED_SLOT_ID: SlotId = 'Character_02';
 const warnedMissingSlots = new Set<SlotId>();
 let hasLoggedSlotPermissionError = false;
 
@@ -566,7 +567,9 @@ export function useSplineRealtimePlayers({
 
       localSlotId = claimedSlotId;
 
-      localObject = slotObjects.get(claimedSlotId) ?? null;
+      const claimedObject = slotObjects.get(claimedSlotId) ?? null;
+      const controlledObject = slotObjects.get(LOCAL_CONTROLLED_SLOT_ID) ?? null;
+      localObject = controlledObject ?? claimedObject;
 
       if (!localObject) {
         return;

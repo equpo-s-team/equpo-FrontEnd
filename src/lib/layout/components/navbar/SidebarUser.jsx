@@ -2,10 +2,11 @@ import { Ellipsis, SquareArrowRightExit, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useSidebar } from './SidebarContext.jsx';
-import { useAuth, logOut } from '@/context/AuthContext.jsx';
+import { logOut, useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.jsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
+
+import { useSidebar } from './SidebarContext.jsx';
 
 export default function SidebarUser() {
   const { collapsed } = useSidebar();
@@ -18,11 +19,12 @@ export default function SidebarUser() {
   const activeTeam = teams.find((t) => t.id === teamId);
   // Default to member if not found for whatever reason
   const teamRole = activeTeam?.members?.find((m) => m.userUid === user?.uid)?.role || 'Miembro';
-  
+
   // Create a friendlier display version of the role
-  const displayRole = typeof teamRole === 'string' && teamRole.length > 0 
-    ? teamRole.charAt(0).toUpperCase() + teamRole.slice(1)
-    : 'Miembro';
+  const displayRole =
+    typeof teamRole === 'string' && teamRole.length > 0
+      ? teamRole.charAt(0).toUpperCase() + teamRole.slice(1)
+      : 'Miembro';
 
   const userName = user?.displayName || user?.email?.split('@')[0] || 'Usuario';
   const initial = userName.charAt(0).toUpperCase();
@@ -37,7 +39,12 @@ export default function SidebarUser() {
     >
       <div className="relative flex-shrink-0">
         {user?.photoURL ? (
-          <img src={user.photoURL} alt={userName} className="w-8 h-8 rounded-lg object-cover" referrerPolicy="no-referrer" />
+          <img
+            src={user.photoURL}
+            alt={userName}
+            className="w-8 h-8 rounded-lg object-cover"
+            referrerPolicy="no-referrer"
+          />
         ) : (
           <div className="w-8 h-8 rounded-lg bg-gradient-blue-bg flex items-center justify-center text-secondary text-xs font-maxwell font-bold select-none">
             {initial}
@@ -48,7 +55,10 @@ export default function SidebarUser() {
 
       {!collapsed && (
         <div className="flex-1 min-w-0">
-          <p className="text-primary-foreground text-sm font-body font-medium leading-tight truncate" title={userName}>
+          <p
+            className="text-primary-foreground text-sm font-body font-medium leading-tight truncate"
+            title={userName}
+          >
             {userName}
           </p>
           <p className="text-secondary-foreground text-[11px] font-body mt-0.5 truncate">
@@ -69,6 +79,7 @@ export default function SidebarUser() {
 
         {isOpen && (
           <>
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
             <div className="absolute bottom-[calc(100%+8px)] right-0 w-44 bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 z-50 overflow-hidden py-1">
               <button
@@ -81,9 +92,9 @@ export default function SidebarUser() {
                 <Users size={16} className="text-grey-400" />
                 <span>Mis Equipos</span>
               </button>
-              
+
               <div className="h-px w-full bg-grey-100 my-1" />
-              
+
               <button
                 onClick={() => {
                   setIsOpen(false);

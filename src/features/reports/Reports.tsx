@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 
-// @ts-expect-error - TeamContext is a JSX file missing types
-import { useTeam } from '@/context/TeamContext.jsx';
+import { useTeam } from '@/context/TeamContext.tsx';
 import { KpiStrip, MemberList, OverdueTable, StatusDonut } from '@/features/reports/components';
 import AppHeader from '@/features/reports/components/AppHeader.tsx';
 import FilterBar from '@/features/reports/components/FilterBar.tsx';

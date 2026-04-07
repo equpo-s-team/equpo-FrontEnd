@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
-import { TeamProvider, useTeam } from '@/context/TeamContext.jsx';
+import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import LandingPage from '@/features/presentation/page.jsx';

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, type ReactNode,useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 /**
@@ -8,11 +8,16 @@ import { useParams } from 'react-router-dom';
  * A fallback mock teamId is also included for dev boundaries if necessary.
  */
 
-const TeamContext = createContext(null);
+interface TeamContextType {
+  teamId: string | undefined;
+  setTeamId: (id: string | undefined) => void;
+}
 
-export function TeamProvider({ children }) {
-  const { teamId: urlTeamId } = useParams();
-  const [teamId, setTeamId] = useState(urlTeamId);
+const TeamContext = createContext<TeamContextType | null>(null);
+
+export function TeamProvider({ children }: { children: ReactNode }) {
+  const { teamId: urlTeamId } = useParams<{ teamId: string }>();
+  const [teamId, setTeamId] = useState<string | undefined>(urlTeamId);
 
   // Synchronize teamId from URL if it changes
   useEffect(() => {
@@ -24,7 +29,7 @@ export function TeamProvider({ children }) {
   return <TeamContext.Provider value={{ teamId, setTeamId }}>{children}</TeamContext.Provider>;
 }
 
-export function useTeam() {
+export function useTeam(): TeamContextType {
   const ctx = useContext(TeamContext);
   if (!ctx) throw new Error('useTeam must be used inside TeamProvider');
   return ctx;

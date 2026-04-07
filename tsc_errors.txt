@@ -1,0 +1,2 @@
+﻿src/features/chat-videocall/components/ChatContext.tsx(3,25): error TS7016: Could not find a declaration file for module '@/context/TeamContext'. 'C:/Users/pipet/WebstormProjects/equpo-FrontEnd/src/context/TeamContext.jsx' implicitly has an 'any' type.
+src/features/chat-videocall/hooks/useChatRooms.ts(38,16): error TS6133: 'groupId' is declared but its value is never read.

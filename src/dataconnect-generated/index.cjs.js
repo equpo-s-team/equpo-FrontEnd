@@ -44,7 +44,7 @@ getUserRef.operationName = 'GetUser';
 exports.getUserRef = getUserRef;
 
 exports.getUser = function getUser(dcOrOptions, options) {
-
+  
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateArgsWithOptions(connectorConfig, dcOrOptions, options, undefined,false, false);
   return executeQuery(getUserRef(dcInstance, inputVars), inputOpts && inputOpts.fetchPolicy);
 }

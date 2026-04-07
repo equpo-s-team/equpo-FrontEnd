@@ -15,7 +15,7 @@ export default function LeftPanel({ stats }: LeftPanelProps) {
         value={stats.hp}
         max={stats.maxHp}
         fillClass="bg-gradient-green-bg"
-        valueColorClass="text-kanban-done"
+        valueColorClass="text-grey-800"
         icon={<Heart size={12} strokeWidth={2} />}
       />
       <StatBar
@@ -23,7 +23,7 @@ export default function LeftPanel({ stats }: LeftPanelProps) {
         value={stats.energy}
         max={stats.maxEnergy}
         fillClass="bg-gradient-orange-bg"
-        valueColorClass="text-[#FCE98D]"
+        valueColorClass="text-grey-800"
         icon={<Zap size={12} strokeWidth={2} />}
       />
     </div>

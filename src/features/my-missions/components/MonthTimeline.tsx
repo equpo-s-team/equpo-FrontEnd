@@ -2,7 +2,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 import { getTaskColorClass } from '../utils/timelineStyles';
 
-
 import type { TeamTask } from '@/features/board/types';
 
 interface MonthTimelineProps {
@@ -18,10 +17,19 @@ interface MonthTimelineProps {
 const DAYS_OF_WEEK = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
 const MONTH_NAMES = [
-  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
 ];
-
 
 export default function MonthTimeline({
   selectedDate,
@@ -125,16 +133,10 @@ export default function MonthTimeline({
             {MONTH_NAMES[month]} {year}
           </span>
           <div className="flex items-center gap-0.5">
-            <button
-              onClick={goPrev}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goPrev} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronLeft size={14} className="text-white" />
             </button>
-            <button
-              onClick={goNext}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goNext} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronRight size={14} className="text-white" />
             </button>
           </div>

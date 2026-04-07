@@ -1,7 +1,6 @@
-import { Calendar,ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 import { getTaskClasses } from '../utils/timelineStyles';
-
 
 import type { TeamTask } from '@/features/board/types';
 
@@ -17,14 +16,21 @@ const STATUS_LABEL: Record<string, string> = {
   done: 'Completada',
 };
 
-const DAY_NAMES = [
-  'Domingo', 'Lunes', 'Martes', 'Miércoles',
-  'Jueves', 'Viernes', 'Sábado',
-];
+const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
 const MONTH_NAMES_SHORT = [
-  'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+  'Ene',
+  'Feb',
+  'Mar',
+  'Abr',
+  'May',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dic',
 ];
 
 interface DayTimelineProps {
@@ -57,7 +63,9 @@ function layoutTasks(tasks: TeamTask[]): Array<{ task: TeamTask; col: number; to
   if (tasks.length === 0) return [];
 
   // Sort by start hour, then by id for stable ordering
-  const sorted = [...tasks].sort((a, b) => getTaskHour(a) - getTaskHour(b) || a.id.localeCompare(b.id));
+  const sorted = [...tasks].sort(
+    (a, b) => getTaskHour(a) - getTaskHour(b) || a.id.localeCompare(b.id),
+  );
 
   const BLOCK_DURATION = 1.25; // hours per block
 
@@ -116,11 +124,9 @@ export default function DayTimeline({
 
   // Current time indicator
   const now = new Date();
-  const isToday =
-    now.toISOString().slice(0, 10) === selectedDate.toISOString().slice(0, 10);
+  const isToday = now.toISOString().slice(0, 10) === selectedDate.toISOString().slice(0, 10);
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const nowOffset =
-    ((nowMinutes - START_HOUR * 60) / (TOTAL_HOURS * 60)) * 100;
+  const nowOffset = ((nowMinutes - START_HOUR * 60) / (TOTAL_HOURS * 60)) * 100;
 
   return (
     <div className="flex flex-col h-full rounded-2xl bg-white border border-grey-150 shadow-card overflow-hidden">
@@ -154,20 +160,12 @@ export default function DayTimeline({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-white/90 font-body">
-            {dateLabel}
-          </span>
+          <span className="text-xs font-semibold text-white/90 font-body">{dateLabel}</span>
           <div className="flex items-center gap-0.5">
-            <button
-              onClick={goPrev}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goPrev} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronLeft size={14} className="text-white" />
             </button>
-            <button
-              onClick={goNext}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goNext} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronRight size={14} className="text-white" />
             </button>
           </div>

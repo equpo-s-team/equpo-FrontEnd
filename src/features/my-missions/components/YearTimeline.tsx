@@ -2,7 +2,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 import { getTaskDotClass } from '../utils/timelineStyles';
 
-
 import type { TeamTask } from '@/features/board/types';
 
 interface YearTimelineProps {
@@ -14,8 +13,18 @@ interface YearTimelineProps {
 }
 
 const MONTH_NAMES = [
-  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
 ];
 
 export default function YearTimeline({
@@ -93,20 +102,12 @@ export default function YearTimeline({
           })}
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-white/90 font-body capitalize">
-            {year}
-          </span>
+          <span className="text-xs font-semibold text-white/90 font-body capitalize">{year}</span>
           <div className="flex items-center gap-0.5">
-            <button
-              onClick={goPrev}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goPrev} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronLeft size={14} className="text-white" />
             </button>
-            <button
-              onClick={goNext}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goNext} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronRight size={14} className="text-white" />
             </button>
           </div>
@@ -133,7 +134,9 @@ export default function YearTimeline({
                 `}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className={`text-sm font-bold font-body ${isCurrentMonth ? 'text-blue' : 'text-grey-800'}`}>
+                  <h3
+                    className={`text-sm font-bold font-body ${isCurrentMonth ? 'text-blue' : 'text-grey-800'}`}
+                  >
                     {MONTH_NAMES[data.monthIndex]}
                   </h3>
                   {data.total > 0 && (
@@ -154,35 +157,57 @@ export default function YearTimeline({
                     {/* Tiny bars summary */}
                     <div className="h-1.5 w-full bg-grey-100 rounded-full overflow-hidden flex">
                       {data.todo.length > 0 && (
-                        <div style={{ width: `${(data.todo.length / data.total) * 100}%` }} className={`${getTaskDotClass('todo')} h-full`} />
+                        <div
+                          style={{ width: `${(data.todo.length / data.total) * 100}%` }}
+                          className={`${getTaskDotClass('todo')} h-full`}
+                        />
                       )}
                       {data.inProgress.length > 0 && (
-                        <div style={{ width: `${(data.inProgress.length / data.total) * 100}%` }} className={`${getTaskDotClass('in-progress')} h-full`} />
+                        <div
+                          style={{ width: `${(data.inProgress.length / data.total) * 100}%` }}
+                          className={`${getTaskDotClass('in-progress')} h-full`}
+                        />
                       )}
                       {data.inQa.length > 0 && (
-                        <div style={{ width: `${(data.inQa.length / data.total) * 100}%` }} className={`${getTaskDotClass('in-qa')} h-full`} />
+                        <div
+                          style={{ width: `${(data.inQa.length / data.total) * 100}%` }}
+                          className={`${getTaskDotClass('in-qa')} h-full`}
+                        />
                       )}
                       {data.done.length > 0 && (
-                        <div style={{ width: `${(data.done.length / data.total) * 100}%` }} className={`${getTaskDotClass('done')} h-full`} />
+                        <div
+                          style={{ width: `${(data.done.length / data.total) * 100}%` }}
+                          className={`${getTaskDotClass('done')} h-full`}
+                        />
                       )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 mt-4">
                       <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('todo')}`} />
-                        <span className="text-[10px] text-grey-600 font-body">{data.todo.length} Por Hacer</span>
+                        <span className="text-[10px] text-grey-600 font-body">
+                          {data.todo.length} Por Hacer
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-progress')}`} />
-                        <span className="text-[10px] text-grey-600 font-body">{data.inProgress.length} Proceso</span>
+                        <div
+                          className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-progress')}`}
+                        />
+                        <span className="text-[10px] text-grey-600 font-body">
+                          {data.inProgress.length} Proceso
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-qa')}`} />
-                        <span className="text-[10px] text-grey-600 font-body">{data.inQa.length} En QA</span>
+                        <span className="text-[10px] text-grey-600 font-body">
+                          {data.inQa.length} En QA
+                        </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('done')}`} />
-                        <span className="text-[10px] text-grey-600 font-body">{data.done.length} Completadas</span>
+                        <span className="text-[10px] text-grey-600 font-body">
+                          {data.done.length} Completadas
+                        </span>
                       </div>
                     </div>
                   </div>

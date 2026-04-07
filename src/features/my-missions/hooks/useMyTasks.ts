@@ -27,7 +27,6 @@ interface AuthUser {
  * reactivity even when the user is not on the Team Missions screen.
  */
 export function useMyTasks(teamId: string | undefined) {
-   
   const { user } = useAuth() as { user: AuthUser | null };
   const queryClient = useQueryClient();
 
@@ -35,10 +34,7 @@ export function useMyTasks(teamId: string | undefined) {
   const { data: taskData, isLoading: tasksLoading } = useTasks(teamId ?? '');
 
   // Backend-derived IDs of tasks assigned to current user (direct + group)
-  const {
-    data: validIdsData,
-    isLoading: idsLoading,
-  } = useValidTaskIds(teamId ?? '');
+  const { data: validIdsData, isLoading: idsLoading } = useValidTaskIds(teamId ?? '');
 
   // ── Real-time sync: listen for Firestore changes and invalidate valid-ids ──
   useEffect(() => {
@@ -68,10 +64,7 @@ export function useMyTasks(teamId: string | undefined) {
     return () => unsubscribe();
   }, [teamId, queryClient]);
 
-  const validIdSet = useMemo(
-    () => new Set(validIdsData?.taskIds ?? []),
-    [validIdsData],
-  );
+  const validIdSet = useMemo(() => new Set(validIdsData?.taskIds ?? []), [validIdsData]);
 
   // Filter full task list to only user's tasks
   const myTasks = useMemo(() => {
@@ -115,4 +108,3 @@ export function useMyTasks(teamId: string | undefined) {
     userUid: user?.uid ?? null,
   };
 }
-

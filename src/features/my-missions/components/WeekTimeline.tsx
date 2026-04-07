@@ -2,7 +2,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 import { getTaskClasses } from '../utils/timelineStyles';
 
-
 import type { TeamTask } from '@/features/board/types';
 
 const HOUR_HEIGHT = 64; // px per hour slot
@@ -43,7 +42,9 @@ function layoutTasks(tasks: TeamTask[]): Array<{ task: TeamTask; col: number; to
   if (tasks.length === 0) return [];
 
   // Sort by start hour, then by id for stable ordering
-  const sorted = [...tasks].sort((a, b) => getTaskHour(a) - getTaskHour(b) || a.id.localeCompare(b.id));
+  const sorted = [...tasks].sort(
+    (a, b) => getTaskHour(a) - getTaskHour(b) || a.id.localeCompare(b.id),
+  );
 
   const BLOCK_DURATION = 1.25; // hours per block
 
@@ -115,7 +116,7 @@ export default function WeekTimeline({
   };
 
   const todayKey = new Date().toISOString().slice(0, 10);
-  
+
   const now = new Date();
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
   const nowOffset = ((nowMinutes - START_HOUR * 60) / (TOTAL_HOURS * 60)) * 100;
@@ -152,16 +153,10 @@ export default function WeekTimeline({
             {weekLabel}
           </span>
           <div className="flex items-center gap-0.5">
-            <button
-              onClick={goPrev}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goPrev} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronLeft size={14} className="text-white" />
             </button>
-            <button
-              onClick={goNext}
-              className="p-1 rounded-lg hover:bg-white/20 transition-colors"
-            >
+            <button onClick={goNext} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
               <ChevronRight size={14} className="text-white" />
             </button>
           </div>
@@ -178,7 +173,10 @@ export default function WeekTimeline({
             {weekDays.map(({ date, key }) => {
               const isToday = key === todayKey;
               return (
-                <div key={`header-${key}`} className={`py-3 px-1 text-center bg-white ${isToday ? 'bg-blue/5' : ''}`}>
+                <div
+                  key={`header-${key}`}
+                  className={`py-3 px-1 text-center bg-white ${isToday ? 'bg-blue/5' : ''}`}
+                >
                   <p className="text-[10px] font-bold text-grey-400 uppercase tracking-widest font-body">
                     {DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1]}
                   </p>
@@ -203,7 +201,11 @@ export default function WeekTimeline({
               {Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => {
                 const hour = START_HOUR + i;
                 return (
-                  <div key={hour} className="absolute left-0 right-0 flex items-start" style={{ top: `${i * HOUR_HEIGHT}px` }}>
+                  <div
+                    key={hour}
+                    className="absolute left-0 right-0 flex items-start"
+                    style={{ top: `${i * HOUR_HEIGHT}px` }}
+                  >
                     <span className="w-[50px] text-right text-[10px] pr-2 text-grey-400 font-body font-medium -translate-y-1/2 bg-white">
                       {formatHour(hour)}
                     </span>
@@ -220,10 +222,16 @@ export default function WeekTimeline({
                 const laidOut = layoutTasks(dayTasks);
 
                 return (
-                  <div key={`col-${key}`} className={`relative w-full h-full ${isToday ? 'bg-blue/5' : ''}`}>
+                  <div
+                    key={`col-${key}`}
+                    className={`relative w-full h-full ${isToday ? 'bg-blue/5' : ''}`}
+                  >
                     {/* Current time indicator */}
                     {isToday && nowOffset >= 0 && nowOffset <= 100 && (
-                      <div className="absolute left-0 right-0 z-30 flex items-center pointer-events-none" style={{ top: `${nowOffset}%` }}>
+                      <div
+                        className="absolute left-0 right-0 z-30 flex items-center pointer-events-none"
+                        style={{ top: `${nowOffset}%` }}
+                      >
                         <div className="w-2 h-2 rounded-full bg-red -ml-1 shadow-neonRed" />
                         <div className="flex-1 h-[2px] bg-red/60" />
                       </div>

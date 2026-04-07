@@ -2,10 +2,7 @@ import { CalendarDays, Clock, Edit3, Flag, Tag, X } from 'lucide-react';
 
 import type { TeamTask } from '@/features/board/types';
 
-const STATUS_CONFIG: Record<
-  string,
-  { label: string; bg: string; text: string; border: string }
-> = {
+const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; border: string }> = {
   todo: {
     label: 'Por Hacer',
     bg: 'bg-kanban-todo/15',
@@ -32,10 +29,7 @@ const STATUS_CONFIG: Record<
   },
 };
 
-const PRIORITY_CONFIG: Record<
-  string,
-  { label: string; icon: string; color: string }
-> = {
+const PRIORITY_CONFIG: Record<string, { label: string; icon: string; color: string }> = {
   high: { label: 'Alta', icon: '🔴', color: 'text-red' },
   medium: { label: 'Media', icon: '🟡', color: 'text-orange-dark' },
   low: { label: 'Baja', icon: '🟢', color: 'text-green' },
@@ -87,12 +81,8 @@ export default function TaskDetailPanel({
           <div className="w-12 h-12 rounded-2xl bg-grey-100 flex items-center justify-center mx-auto mb-3">
             <Flag size={20} className="text-grey-300" />
           </div>
-          <p className="text-sm font-medium text-grey-400 font-body">
-            Selecciona una tarea
-          </p>
-          <p className="text-xs text-grey-300 font-body mt-1">
-            Haz clic en una tarea del timeline
-          </p>
+          <p className="text-sm font-medium text-grey-400 font-body">Selecciona una tarea</p>
+          <p className="text-xs text-grey-300 font-body mt-1">Haz clic en una tarea del timeline</p>
         </div>
       </div>
     );
@@ -192,9 +182,7 @@ export default function TaskDetailPanel({
             <p className="text-[10px] font-bold uppercase tracking-widest text-grey-400 mb-1.5 font-body">
               Descripción
             </p>
-            <p className="text-xs text-grey-600 font-body leading-relaxed">
-              {task.description}
-            </p>
+            <p className="text-xs text-grey-600 font-body leading-relaxed">{task.description}</p>
           </div>
         )}
 
@@ -238,9 +226,7 @@ export default function TaskDetailPanel({
                       {displayName.substring(0, 2).toUpperCase()}
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-grey-700 font-body">
-                        {displayName}
-                      </p>
+                      <p className="text-xs font-semibold text-grey-700 font-body">{displayName}</p>
                     </div>
                   </div>
                 );
@@ -252,9 +238,7 @@ export default function TaskDetailPanel({
         {/* Recurring info */}
         {task.isRecurring && (
           <div className="mt-3 p-2.5 rounded-xl bg-purple/5 border border-purple/15">
-            <p className="text-[10px] font-bold text-purple font-body">
-              🔄 Tarea Recurrente
-            </p>
+            <p className="text-[10px] font-bold text-purple font-body">🔄 Tarea Recurrente</p>
             <p className="text-[10px] text-grey-500 font-body mt-0.5">
               Cada {task.recurringCount ?? 1}{' '}
               {task.recurringInterval === 'days'

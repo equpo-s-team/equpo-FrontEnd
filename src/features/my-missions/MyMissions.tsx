@@ -22,8 +22,7 @@ function toDateKey(d: Date) {
 
 export default function MyMissions() {
   const { teamId } = useTeam();
-  const { myTasks, tasksByDate, allCategories, isLoading } =
-    useMyTasks(teamId);
+  const { myTasks, tasksByDate, allCategories, isLoading } = useMyTasks(teamId);
 
   // Prefetch team members to ensure cache has their displayNames for TaskDetailPanel
   const { data: teamMembers = [] } = useTeamMembers(teamId ?? '');
@@ -33,9 +32,7 @@ export default function MyMissions() {
   const [view, setView] = useState<'day' | 'week' | 'month' | 'year'>('day');
 
   // ── Category filter state ──
-  const [activeCategories, setActiveCategories] = useState<Set<string>>(
-    new Set(),
-  );
+  const [activeCategories, setActiveCategories] = useState<Set<string>>(new Set());
 
   const toggleCategory = useCallback((cat: string) => {
     setActiveCategories((prev) => {
@@ -77,9 +74,7 @@ export default function MyMissions() {
 
     if (activeCategories.size === 0) return tasksForDay; // no filter = show all
 
-    return tasksForDay.filter((t) =>
-      t.categories?.some((c) => activeCategories.has(c)),
-    );
+    return tasksForDay.filter((t) => t.categories?.some((c) => activeCategories.has(c)));
   }, [selectedDate, tasksByDate, activeCategories]);
 
   return (
@@ -99,8 +94,7 @@ export default function MyMissions() {
           <span
             className="w-2.5 h-2.5 rounded-full bg-purple animate-pulse-neon"
             style={{
-              boxShadow:
-                '0 0 8px #5961F9, 0 0 18px rgba(89,97,249,0.4)',
+              boxShadow: '0 0 8px #5961F9, 0 0 18px rgba(89,97,249,0.4)',
             }}
           />
           Mis Misiones

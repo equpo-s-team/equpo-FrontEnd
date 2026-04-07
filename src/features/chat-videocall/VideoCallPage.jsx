@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useSidebar } from '@/features/layout/components/navbar/SidebarContext.jsx';
+
 import { chatApi } from './api/chatApi';
 
 function getUrlParams(url) {
@@ -13,7 +14,7 @@ function getUrlParams(url) {
   return Object.fromEntries(urlSearchParams.entries());
 }
 
-export default function VideoCallPage({ roomID: roomIDProp, userName: userNameProp, onLeave }) {
+export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
   const containerRef = useRef(null);
   const zpRef = useRef(null);
 
@@ -26,13 +27,16 @@ export default function VideoCallPage({ roomID: roomIDProp, userName: userNamePr
   const roomIdFromQuery = useMemo(() => getUrlParams(window.location.href).roomID, []);
   const roomID = roomIDProp || activeVideoCall?.roomId || roomIdFromQuery;
   const userID = user?.uid || '';
-  const userName =
-    userNameProp ||
-    user?.displayName ||
-    user?.email?.split('@')[0] ||
-    `Usuario_${userID.slice(0, 6)}`;
 
-  const ZEGO_APP_ID = Number(import.meta.env.VITE_ZEGO_APP_ID);
+  const handleLeave = useCallback(() => {
+    if (zpRef.current) {
+      zpRef.current.destroy();
+      zpRef.current = null;
+    }
+    endVideoCallSession();
+    setActiveItem('chat');
+    onLeave?.();
+  }, [endVideoCallSession, onLeave, setActiveItem]);
 
   useEffect(() => {
     if (!roomID || !userID || !teamId) return;
@@ -69,9 +73,7 @@ export default function VideoCallPage({ roomID: roomIDProp, userName: userNamePr
           scenario: {
             mode: window.ZegoUIKitPrebuilt.VideoConference,
           },
-          onLeaveRoom: () => {
-            handleLeave();
-          },
+          onLeaveRoom: handleLeave,
           showPreJoinView: false,
           turnOnMicrophoneWhenJoining: true,
           turnOnCameraWhenJoining: true,
@@ -106,17 +108,7 @@ export default function VideoCallPage({ roomID: roomIDProp, userName: userNamePr
         zpRef.current.destroy();
       }
     };
-  }, [roomID, userID, teamId]);
-
-  const handleLeave = () => {
-    if (zpRef.current) {
-      zpRef.current.destroy();
-      zpRef.current = null;
-    }
-    endVideoCallSession();
-    setActiveItem('chat');
-    onLeave?.();
-  };
+  }, [handleLeave, roomID, userID, teamId]);
 
   if (error === 'forbidden' || rtcStatus === 'forbidden') {
     return (

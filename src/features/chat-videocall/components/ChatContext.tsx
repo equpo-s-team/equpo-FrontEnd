@@ -1,13 +1,15 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import type { ChatRoom, ChatMessage, CallSession, CallState, RtcConnectionStatus } from '../types/chat';
+import React, { createContext, useCallback,useContext, useState } from 'react';
+
 import { useTeam } from '@/context/TeamContext';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
+
 import { useChatRooms } from '../hooks/useChatRooms';
+import { useDeleteMessage } from '../hooks/useDeleteMessage';
+import { useEditMessage } from '../hooks/useEditMessage';
 import { useRoomMessages } from '../hooks/useRoomMessages';
 import { useSendMessage } from '../hooks/useSendMessage';
-import { useEditMessage } from '../hooks/useEditMessage';
-import { useDeleteMessage } from '../hooks/useDeleteMessage';
 import { useZegoToken } from '../hooks/useZegoToken';
+import type { CallSession, CallState, ChatMessage, ChatRoom, RtcConnectionStatus } from '../types/chat';
 
 type VideoCallJoinMode = 'new' | 'join';
 
@@ -51,8 +53,15 @@ interface ChatContextType {
 
 const ChatContext = createContext<ChatContextType | null>(null);
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return '';
+}
+
 export function ChatProvider({ children }: { children: React.ReactNode }) {
-  const { teamId } = useTeam();
+  const getTeamContext = useTeam as () => { teamId?: string };
+  const teamContext = getTeamContext();
+  const teamId = teamContext.teamId ?? '';
 
   // ── Groups → ChatRooms ──────────────────────────────────────────────────────
   const { data: groups = [] } = useTeamGroups(teamId);
@@ -149,7 +158,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         {
           onSuccess: () => setRtcStatus('connecting'),
           onError: (error) => {
-            if (error.message.includes('403') || error.message.includes('Forbidden')) {
+            const message = getErrorMessage(error);
+            if (message.includes('403') || message.includes('Forbidden')) {
               setRtcStatus('forbidden');
             } else {
               setRtcStatus('error');

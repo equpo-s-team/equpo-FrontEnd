@@ -48,6 +48,8 @@ export const realtimeDb: Database = getDatabase(app);
 
 export const realtimeDb: Database = getDatabase(app);
 
+export const realtimeDb: Database = getDatabase(app);
+
 // ── Data Connect ──────────────────────────────────────────────────────────────
 // Descomenta SOLO cuando hayas corrido `firebase dataconnect:sdk:generate`
 // import { getDataConnect } from "firebase/data-connect";

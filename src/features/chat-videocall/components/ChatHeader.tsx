@@ -66,15 +66,15 @@ export default function ChatHeader() {
       </div>
 
       </div>
-      
+
       {/* Active Call Banner */}
       {isCallActive && (
         <div className="bg-green/10 text-green px-5 py-2 text-xs font-semibold flex justify-between items-center animate-in fade-in slide-in-from-top-2">
             <span className="flex items-center gap-2">
               <PhoneCall size={14} className="animate-pulse" /> Videollamada en curso
             </span>
-            <button 
-              onClick={() => startVideoCallSession({ mode: 'join' })} 
+            <button
+              onClick={() => startVideoCallSession({ mode: 'join' })}
               className="bg-green text-white px-3 py-1 rounded-md hover:bg-green/90 transition-colors"
             >
               Unirse

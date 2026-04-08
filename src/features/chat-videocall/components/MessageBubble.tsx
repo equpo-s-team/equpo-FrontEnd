@@ -79,13 +79,13 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             />
             <button
               onClick={handleSaveEdit}
-              className="w-7 h-7 rounded-lg bg-green-DEFAULT/10 text-green-DEFAULT flex items-center justify-center hover:bg-green-DEFAULT/20 transition-colors"
+              className="w-7 h-7 rounded-lg bg-green/10 text-green flex items-center justify-center hover:bg-green/20 transition-colors"
             >
               <Check size={12} />
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className="w-7 h-7 rounded-lg bg-red-DEFAULT/10 text-red-DEFAULT flex items-center justify-center hover:bg-red-DEFAULT/20 transition-colors"
+              className="w-7 h-7 rounded-lg bg-red/10 text-red flex items-center justify-center hover:bg-red/20 transition-colors"
             >
               <X size={12} />
             </button>
@@ -97,7 +97,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             font-body text-sm leading-relaxed
             ${
               isSent
-                ? 'bg-gradient-to-br from-purple-DEFAULT to-[#5961F9] text-white rounded-br-sm'
+                ? 'bg-gradient-purple-bg text-white rounded-br-sm'
                 : 'bg-grey-100 text-grey-800 rounded-bl-sm border border-grey-150'
             }
           `}
@@ -130,7 +130,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
               </button>
               <button
                 onClick={handleDelete}
-                className="w-5 h-5 rounded flex items-center justify-center text-grey-400 hover:text-red-DEFAULT transition-colors"
+                className="w-5 h-5 rounded flex items-center justify-center text-grey-400 hover:text-red transition-colors"
                 title="Eliminar"
               >
                 <Trash2 size={10} />

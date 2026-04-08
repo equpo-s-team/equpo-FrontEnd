@@ -286,7 +286,7 @@ input Achievement_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -513,7 +513,7 @@ input Group_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -692,7 +692,7 @@ input GroupMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -743,6 +743,18 @@ input Reward_Data {
   ✨ `_expr` server value variant of `id` (✨ Generated from Field `Reward`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`teamId` of type `UUID!`
+  """
+  teamId: UUID
+  """
+  ✨ `_expr` server value variant of `teamId` (✨ Generated from Field `Reward`.`teamId` of type `UUID!`)
+  """
+  teamId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `Reward`.`team` of type `Team!`
+  """
+  team: Team_Key @fdc_forbiddenInVariables
   """
   ✨ Generated from Field `Reward`.`cost` of type `Int!`
   """
@@ -860,6 +872,14 @@ input Reward_Filter {
   ✨ Generated from Field `Reward`.`id` of type `UUID!`
   """
   id: UUID_Filter
+  """
+  ✨ Generated from Field `Reward`.`teamId` of type `UUID!`
+  """
+  teamId: UUID_Filter
+  """
+  ✨ Generated from Field `Reward`.`team` of type `Team!`
+  """
+  team: Team_Filter
   """
   ✨ Generated from Field `Reward`.`cost` of type `Int!`
   """
@@ -983,6 +1003,10 @@ input Reward_Having {
   """
   name_count: Int_Filter
   """
+  ✨ Generated from Field `Reward`.`teamId_count` of type `Int!`
+  """
+  teamId_count: Int_Filter
+  """
   ✨ Generated from Field `Reward`.`type_count` of type `Int!`
   """
   type_count: Int_Filter
@@ -1059,7 +1083,7 @@ input Reward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -1073,6 +1097,14 @@ input Reward_Order {
   ✨ Generated from Field `Reward`.`id` of type `UUID!`
   """
   id: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`teamId` of type `UUID!`
+  """
+  teamId: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`team` of type `Team!`
+  """
+  team: Team_Order
   """
   ✨ Generated from Field `Reward`.`cost` of type `Int!`
   """
@@ -1145,6 +1177,10 @@ input Reward_Order {
   ✨ Generated from Field `Reward`.`name_count` of type `Int!`
   """
   name_count: OrderDirection
+  """
+  ✨ Generated from Field `Reward`.`teamId_count` of type `Int!`
+  """
+  teamId_count: OrderDirection
   """
   ✨ Generated from Field `Reward`.`type_count` of type `Int!`
   """
@@ -1380,9 +1416,9 @@ input Task_Filter {
   """
   status: String_Filter
   """
-  ✨ Generated from Field `Task`.`taskCategory_on_task` of type `TaskCategory`
+  ✨ Generated from Field `Task`.`taskCategories_on_task` of type `[TaskCategory!]!`
   """
-  taskCategory_on_task: TaskCategory_Filter
+  taskCategories_on_task: TaskCategory_ListFilter
 }
 """
 ✨ Generated first-row input type for table 'Task'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
@@ -1506,7 +1542,7 @@ input Task_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -1650,10 +1686,6 @@ input TaskCategory_Data {
   """
   taskId_expr: UUID_Expr @fdc_forbiddenInVariables
   """
-  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
-  """
-  task: Task_Key @fdc_forbiddenInVariables
-  """
   ✨ Generated from Field `TaskCategory`.`name` of type `String!`
   """
   name: String
@@ -1661,6 +1693,10 @@ input TaskCategory_Data {
   ✨ `_expr` server value variant of `name` (✨ Generated from Field `TaskCategory`.`name` of type `String!`)
   """
   name_expr: String_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
+  """
+  task: Task_Key @fdc_forbiddenInVariables
 }
 """
 ✨ Generated filter input type for table 'TaskCategory'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
@@ -1683,13 +1719,13 @@ input TaskCategory_Filter {
   """
   taskId: UUID_Filter
   """
-  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
-  """
-  task: Task_Filter
-  """
   ✨ Generated from Field `TaskCategory`.`name` of type `String!`
   """
   name: String_Filter
+  """
+  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
+  """
+  task: Task_Filter
 }
 """
 ✨ Generated first-row input type for table 'TaskCategory'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
@@ -1749,6 +1785,14 @@ input TaskCategory_Key {
   ✨ `_expr` server value variant of `taskId` (✨ Generated from Field `TaskCategory`.`taskId` of type `UUID!`)
   """
   taskId_expr: UUID_Expr @fdc_forbiddenInVariables
+  """
+  ✨ Generated from Field `TaskCategory`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `TaskCategory`.`name` of type `String!`)
+  """
+  name_expr: String_Expr @fdc_forbiddenInVariables
 }
 """
 ✨ Generated list filter input type for table 'TaskCategory'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
@@ -1757,7 +1801,7 @@ input TaskCategory_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -1772,13 +1816,13 @@ input TaskCategory_Order {
   """
   taskId: OrderDirection
   """
-  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
-  """
-  task: Task_Order
-  """
   ✨ Generated from Field `TaskCategory`.`name` of type `String!`
   """
   name: OrderDirection
+  """
+  ✨ Generated from Field `TaskCategory`.`task` of type `Task!`
+  """
+  task: Task_Order
   """
   ✨ Generated from Field `TaskCategory`.`_count` of type `Int!`
   """
@@ -1930,6 +1974,10 @@ input Team_Filter {
   """
   groups_on_team: Group_ListFilter
   """
+  ✨ Generated from Field `Team`.`rewards_on_team` of type `[Reward!]!`
+  """
+  rewards_on_team: Reward_ListFilter
+  """
   ✨ Generated from Field `Team`.`tasks_on_team` of type `[Task!]!`
   """
   tasks_on_team: Task_ListFilter
@@ -2068,7 +2116,7 @@ input Team_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -2359,7 +2407,7 @@ input TeamMembership_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -2654,7 +2702,7 @@ input TeamReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -3113,7 +3161,7 @@ input User_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -3440,7 +3488,7 @@ input UserAchievement_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """
@@ -3759,7 +3807,7 @@ input UserReward_ListFilter {
   """
   The desired number of objects that match the condition (defaults to at least one).
   """
-  count: Int_Filter = {gt:0}
+  count: Int_Filter = { gt: 0 }
   """
   Condition of the related objects to filter for.
   """

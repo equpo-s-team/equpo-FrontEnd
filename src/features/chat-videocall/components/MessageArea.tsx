@@ -1,7 +1,7 @@
 import { MessageCircle } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
-import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 import type { ChatMessage } from '../types/chat';
 import MessageBubble from './MessageBubble';

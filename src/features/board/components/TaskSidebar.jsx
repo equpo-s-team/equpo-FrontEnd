@@ -10,7 +10,7 @@ import { useUpdateTask } from '../hooks/useUpdateTask';
 
 const PRIORITY_OPTIONS = [
   { value: 'high', label: 'Alta', dot: 'bg-red' },
-  { value: 'medium', label: 'Media', dot: 'bg-orange' },
+  { value: 'medium', label: 'Media', dot: 'bg-orange-dark' },
   { value: 'low', label: 'Baja', dot: 'bg-green' },
 ];
 
@@ -27,10 +27,13 @@ function getMinDate() {
   return d.toISOString().split('T')[0];
 }
 
-function toInputDate(isoString) {
+function toInputDatetime(isoString) {
   if (!isoString) return '';
   try {
-    return new Date(isoString).toISOString().split('T')[0];
+    const d = new Date(isoString);
+    // Adjust to local timezone for the datetime-local input
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - offset).toISOString().slice(0, 16);
   } catch {
     return '';
   }
@@ -76,7 +79,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     if (mode === 'edit' && task) {
       setName(task.name ?? '');
       setDescription(task.description ?? '');
-      setDueDate(toInputDate(task.dueDate));
+      setDueDate(toInputDatetime(task.dueDate));
       setPriority(task.priority ?? 'medium');
       setAssignedUserUid(task.assignedUsers?.[0]?.uid ?? '');
       setAssignedGroupId(task.assignedGroupId ?? '');
@@ -111,6 +114,15 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     if (!priority) e.priority = 'La prioridad es obligatoria';
     if (isRecurring && (!recurringCount || recurringCount < 1))
       e.recurringCount = 'Ingresa un número válido';
+
+    const catArray = categories
+      .split(',')
+      .map((c) => c.trim())
+      .filter(Boolean);
+    if (catArray.some((c) => c.length > 12)) {
+      e.categories = 'Cada categoría no puede exceder los 12 caracteres';
+    }
+
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -183,6 +195,36 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   function handleBackdropClick(e) {
     if (e.target === backdropRef.current) onClose();
   }
+
+  // ── Compute changes & validity ──
+  const originalDueDate = task?.dueDate ? toInputDatetime(task.dueDate) : '';
+
+  const hasChanges =
+    mode !== 'edit' ||
+    name.trim() !== (task?.name ?? '') ||
+    description.trim() !== (task?.description ?? '') ||
+    dueDate !== originalDueDate ||
+    priority !== (task?.priority ?? 'medium') ||
+    assignedUserUid !== (task?.assignedUsers?.[0]?.uid ?? '') ||
+    assignedGroupId !== (task?.assignedGroupId ?? '') ||
+    categories
+      .split(',')
+      .map((c) => c.trim())
+      .filter(Boolean)
+      .join(', ') !== (task?.categories ?? []).join(', ') ||
+    isRecurring !== (task?.isRecurring ?? false) ||
+    recurringInterval !== (task?.recurringInterval ?? 'days') ||
+    recurringCount !== (task?.recurringCount ?? 1);
+
+  const isFormValid =
+    Boolean(name.trim()) &&
+    Boolean(description.trim()) &&
+    Boolean(dueDate) &&
+    Boolean(priority) &&
+    Object.keys(errors).length === 0 &&
+    (!isRecurring || recurringCount >= 1);
+
+  const isSubmitDisabled = isSubmitting || !isFormValid || !hasChanges;
 
   return (
     <>
@@ -272,7 +314,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
               Fecha Límite
             </FieldLabel>
             <input
-              type="date"
+              type="datetime-local"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               min={getMinDate()}
@@ -352,11 +394,40 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
             <input
               type="text"
               value={categories}
-              onChange={(e) => setCategories(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setCategories(val);
+
+                // Real-time validation
+                const catArray = val
+                  .split(',')
+                  .map((c) => c.trim())
+                  .filter(Boolean);
+                if (catArray.some((c) => c.length > 12)) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    categories: 'Cada categoría no puede exceder los 12 caracteres',
+                  }));
+                } else {
+                  setErrors((prev) => {
+                    const newErr = { ...prev };
+                    delete newErr.categories;
+                    return newErr;
+                  });
+                }
+              }}
               placeholder="Backend, API, Diseño..."
-              className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none focus:border-blue transition-colors duration-150"
+              className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-[13px] font-body bg-primary outline-none transition-colors duration-150 ${
+                errors.categories
+                  ? 'border-red/50 text-red focus:border-red'
+                  : 'border-grey-200 text-grey-800 placeholder:text-grey-400 focus:border-blue'
+              }`}
             />
-            <p className="mt-1 text-[10px] text-grey-400">Separadas por coma</p>
+            {errors.categories ? (
+              <p className="mt-1 text-[10px] font-medium text-red">{errors.categories}</p>
+            ) : (
+              <p className="mt-1 text-[10px] text-grey-400">Separadas por coma</p>
+            )}
           </div>
 
           {/* Recurring Toggle */}
@@ -435,8 +506,8 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
           <button
             type="submit"
             onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="px-5 py-2.5 rounded-[10px] text-[13px] font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50"
+            disabled={isSubmitDisabled}
+            className="px-5 py-2.5 rounded-[10px] text-[13px] font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
           >
             {isSubmitting ? 'Guardando...' : mode === 'edit' ? 'Guardar Cambios' : 'Crear Tarea'}
           </button>

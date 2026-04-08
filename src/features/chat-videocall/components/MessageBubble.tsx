@@ -1,7 +1,7 @@
 import { Check,Pencil, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 
-import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { auth } from '@/firebase';
 
 import type { ChatMessage } from '../types/chat';

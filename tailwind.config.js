@@ -28,6 +28,7 @@ export default {
         orange: {
           DEFAULT: '#FF94AE',
           foreground: '#FCE98D',
+          dark: '#ffb048ff',
         },
         purple: {
           DEFAULT: '#5961F9',

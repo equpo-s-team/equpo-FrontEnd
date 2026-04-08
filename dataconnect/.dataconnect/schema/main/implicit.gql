@@ -2,7 +2,9 @@ extend type Achievement {
   """
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
-  id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Achievement", purpose: IMPLICIT_KEY_FIELD)
+  id: UUID!
+    @default(expr: "uuidV4()")
+    @fdc_generated(from: "Achievement", purpose: IMPLICIT_KEY_FIELD)
 }
 extend type Group {
   """
@@ -29,6 +31,10 @@ extend type Reward {
   ✨ Implicit primary key field. It's a UUID column default to a generated new value. See `@table` for how to customize it.
   """
   id: UUID! @default(expr: "uuidV4()") @fdc_generated(from: "Reward", purpose: IMPLICIT_KEY_FIELD)
+  """
+  ✨ Implicit foreign key field based on `Reward`.`team`. It must match the value of `Team`.`id`. See `@ref` for how to customize it.
+  """
+  teamId: UUID! @fdc_generated(from: "Reward.team", purpose: IMPLICIT_REF_FIELD)
 }
 extend type Task {
   """
@@ -92,7 +98,8 @@ extend type UserAchievement {
   """
   ✨ Implicit foreign key field based on `UserAchievement`.`achievement`. It must match the value of `Achievement`.`id`. See `@ref` for how to customize it.
   """
-  achievementId: UUID! @fdc_generated(from: "UserAchievement.achievement", purpose: IMPLICIT_REF_FIELD)
+  achievementId: UUID!
+    @fdc_generated(from: "UserAchievement.achievement", purpose: IMPLICIT_REF_FIELD)
 }
 extend type UserReward {
   """

@@ -37,7 +37,7 @@ type Task @table {
   recurringCount: Int
   assignedUser: User
   assignedGroup: Group
-  team: Team! 
+  team: Team!
 }
 
 type Group @table {
@@ -50,7 +50,7 @@ type GroupMembership @table(key: ["user", "group"]) {
   group: Group!
 }
 
-type TaskCategory @table(key: ["task"]) {
+type TaskCategory @table(key: ["task", "name"]) {
   task: Task!
   name: String!
 }
@@ -75,6 +75,7 @@ type Reward @table {
   experienceGranted: Int!
   type: String!
   isTeamReward: Boolean!
+  team: Team!
   createdAt: Timestamp! @default(expr: "request.time")
   updatedAt: Timestamp! @default(expr: "request.time")
   description: String

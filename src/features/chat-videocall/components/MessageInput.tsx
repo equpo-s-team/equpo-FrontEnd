@@ -1,7 +1,7 @@
 import { Paperclip, Send,Smile } from 'lucide-react';
 import React, { useCallback,useRef, useState } from 'react';
 
-import { useChatContext } from '@/features/chat-videocall/components/ChatContext';
+import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 export default function MessageInput() {
   const { activeRoom, sendMessage } = useChatContext();

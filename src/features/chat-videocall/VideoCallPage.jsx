@@ -65,7 +65,15 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
 
         if (cancelled || !containerRef.current || !window.ZegoUIKitPrebuilt) return;
 
-        const zp = window.ZegoUIKitPrebuilt.create(tokenResponse.token);
+        const kitToken = window.ZegoUIKitPrebuilt.generateKitTokenForProduction(
+          tokenResponse.appId,
+          tokenResponse.token,
+          roomID,
+          userID,
+          user?.displayName || 'Usuario'
+        );
+
+        const zp = window.ZegoUIKitPrebuilt.create(kitToken);
         zpRef.current = zp;
 
         zp.joinRoom({

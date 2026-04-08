@@ -11,7 +11,7 @@ function ChatLayout() {
       <ConversationList />
 
       {/* Main chat area */}
-      <main className="flex-1 flex flex-col min-w-0 min-h-screen bg-grey-50">
+      <main className="flex-1 flex flex-col min-w-0 h-screen max-h-screen bg-grey-50">
         <ChatHeader />
         <MessageArea />
         <MessageInput />

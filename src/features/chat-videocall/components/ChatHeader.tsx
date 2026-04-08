@@ -4,7 +4,7 @@ import React from 'react';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 export default function ChatHeader() {
-  const { activeRoom, startVideoCallSession } = useChatContext();
+  const { activeRoom, startCall, startVideoCallSession } = useChatContext();
 
   if (!activeRoom) return null;
 
@@ -38,7 +38,7 @@ export default function ChatHeader() {
       {/* Actions */}
       <div className="flex items-center gap-1">
         <ActionButton
-          onClick={() => startVideoCallSession({ mode: 'new' })}
+          onClick={() => startCall(true)}
           title="Videollamada"
         >
           <Video size={16} />

@@ -72,7 +72,7 @@ export default function MessageInput() {
             transition-all duration-200
             ${
               canSend
-                ? 'bg-gradient-to-br from-purple-DEFAULT to-[#5961F9] text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
+                ? 'bg-gradient-purple-bg text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
                 : 'bg-grey-200 text-grey-400 cursor-not-allowed'
             }
           `}

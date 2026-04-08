@@ -2,6 +2,9 @@ import { MessageCircle } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
+import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
+import { auth, db } from '@/firebase';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 import type { ChatMessage } from '../types/chat';
 import MessageBubble from './MessageBubble';
@@ -53,12 +56,27 @@ function groupMessagesByDate(messages: ChatMessage[]) {
 }
 
 export default function MessageArea() {
-  const { activeRoom, messages } = useChatContext();
+  const { activeRoom, messages, teamId } = useChatContext();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const currentUid = auth.currentUser?.uid;
+
+  const { typingUsers } = useTyping(teamId, activeRoom?.id || null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+
+    // Mark messages as read
+    if (activeRoom && currentUid && teamId) {
+      messages.forEach(msg => {
+        if (msg.senderUid !== currentUid && (!msg.readBy || !msg.readBy.includes(currentUid))) {
+          const msgRef = doc(db, 'teams', teamId, 'chatRooms', activeRoom.id, 'messages', msg.id);
+          updateDoc(msgRef, {
+            readBy: arrayUnion(currentUid)
+          }).catch(() => {});
+        }
+      });
+    }
+  }, [messages, activeRoom, teamId, currentUid]);
 
   if (!activeRoom) {
     return (
@@ -93,6 +111,16 @@ export default function MessageArea() {
           </div>
         </div>
       ))}
+      
+      {/* Typing Indicator */}
+      {typingUsers.length > 0 && (
+        <div className="text-xs text-grey-500 italic mt-2 ml-2">
+          {typingUsers.length === 1 
+            ? `${typingUsers[0].name} está escribiendo...` 
+            : 'Varios usuarios están escribiendo...'}
+        </div>
+      )}
+
       <div ref={bottomRef} />
     </div>
   );

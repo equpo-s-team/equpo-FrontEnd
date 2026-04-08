@@ -18,15 +18,25 @@ export interface ChatRoomMember {
 
 /* ── Message (Firestore: .../chatRooms/{groupId}/messages/{msgId}) ── */
 
+export interface ReplyToPayload {
+  id: string;
+  text: string;
+  senderName: string;
+}
+
 export interface ChatMessage {
   id: string;
   senderUid: string;
   senderName: string;
   text: string;
   createdAt: Date;
-  type: 'text' | 'system';
+  type: 'text' | 'system' | 'image' | 'file';
   deleted: boolean;
   editedAt?: Date;
+  replyTo?: ReplyToPayload;
+  readBy?: string[];
+  fileUrl?: string;
+  fileName?: string;
 }
 
 /* ── ZEGO Token Response (Backend) ── */

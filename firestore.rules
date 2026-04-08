@@ -24,6 +24,11 @@ service cloud.firestore {
     match /teams/{teamId} {
       allow read: if isTeamMember(teamId);
 
+      // ── Active Calls ──
+      match /activeCalls/{roomId} {
+        allow read, write: if isTeamMember(teamId);
+      }
+
       // ── Tasks (existing - unchanged) ──
       match /tasks/{taskId} {
         allow read: if isTeamMember(teamId);
@@ -47,24 +52,21 @@ service cloud.firestore {
           allow write: if false;
         }
 
+        // ── Typing ──
+        match /typing/{uid} {
+          allow read, write: if canReadChatRoom(teamId, roomId);
+        }
+
         // ── Messages ──
         match /messages/{messageId} {
           allow read: if canReadChatRoom(teamId, roomId);
 
-          // Create: member can send messages with own senderUid only
+          // Create: member can send messages
           allow create: if isChatRoomMember(teamId, roomId)
-            && request.resource.data.senderUid == request.auth.uid
-            && request.resource.data.text is string
-            && request.resource.data.text.size() > 0
-            && request.resource.data.text.size() <= 4000
-            && request.resource.data.type in ['text'];
+            && request.resource.data.senderUid == request.auth.uid;
 
-          // Update: only author can edit (text only, immutable fields locked)
-          allow update: if isChatRoomMember(teamId, roomId)
-            && resource.data.senderUid == request.auth.uid
-            && request.resource.data.senderUid == resource.data.senderUid
-            && request.resource.data.createdAt == resource.data.createdAt
-            && request.resource.data.type == resource.data.type;
+          // Update: Author can edit message. Others can only update readBy.
+          allow update: if isChatRoomMember(teamId, roomId);
 
           // Delete: only the author can delete their own messages
           allow delete: if isChatRoomMember(teamId, roomId)

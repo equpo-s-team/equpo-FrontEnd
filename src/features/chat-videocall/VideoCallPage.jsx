@@ -1,8 +1,10 @@
+import { ref, set, remove } from 'firebase/database';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
+import { rtdb } from '@/firebase';
 import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 
 import { chatApi } from './api/chatApi';
@@ -20,15 +22,26 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
 
   const { user } = useAuth();
   const { teamId } = useTeam();
-  const { activeVideoCall, endVideoCallSession, rtcStatus } = useChatContext();
+  const { activeVideoCall, endVideoCallSession, rtcStatus, rooms } = useChatContext();
   const { setActiveItem } = useSidebar();
   const [error, setError] = useState(null);
+  const usersInRoomRef = useRef(new Set());
+  const inactivityTimerRef = useRef(null);
 
   const roomIdFromQuery = useMemo(() => getUrlParams(window.location.href).roomID, []);
   const roomID = roomIDProp || activeVideoCall?.roomId || roomIdFromQuery;
   const userID = user?.uid || '';
 
-  const handleLeave = useCallback(() => {
+  const handleLeave = useCallback(async () => {
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+    
+    // Si somos el último usuario, borramos la llamada de la RTDB
+    if (usersInRoomRef.current.size <= 1 && teamId && roomID) {
+      remove(ref(rtdb, `teams/${teamId}/activeCalls/${roomID}`)).catch(() => {});
+    }
+    
     if (zpRef.current) {
       zpRef.current.destroy();
       zpRef.current = null;
@@ -36,7 +49,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
     endVideoCallSession();
     setActiveItem('chat');
     onLeave?.();
-  }, [endVideoCallSession, onLeave, setActiveItem]);
+  }, [endVideoCallSession, onLeave, setActiveItem, teamId, roomID]);
 
   useEffect(() => {
     if (!roomID || !userID || !teamId) return;
@@ -80,6 +93,40 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
           container: containerRef.current,
           scenario: {
             mode: window.ZegoUIKitPrebuilt.VideoConference,
+          },
+          onJoinRoom: () => {
+            usersInRoomRef.current.add(userID);
+            const roomName = rooms.find(r => r.id === roomID)?.name || 'Sala de video';
+            set(ref(rtdb, `teams/${teamId}/activeCalls/${roomID}`), {
+              callerId: userID,
+              callerName: user?.displayName || 'Usuario',
+              roomName,
+              startedAt: Date.now(),
+            }).catch(() => {});
+
+            // Arrancar timer si el usuario entra solo
+            if (usersInRoomRef.current.size <= 1) {
+              inactivityTimerRef.current = setTimeout(() => {
+                alert('Por inactividad la videollamada se ha cerrado.');
+                handleLeave();
+              }, 120000);
+            }
+          },
+          onUserJoin: (users) => {
+            users.forEach(u => usersInRoomRef.current.add(u.userID));
+            if (inactivityTimerRef.current) {
+              clearTimeout(inactivityTimerRef.current);
+              inactivityTimerRef.current = null;
+            }
+          },
+          onUserLeave: (users) => {
+            users.forEach(u => usersInRoomRef.current.delete(u.userID));
+            if (usersInRoomRef.current.size <= 1) {
+              inactivityTimerRef.current = setTimeout(() => {
+                alert('Por inactividad la videollamada se ha cerrado.');
+                handleLeave();
+              }, 120000);
+            }
           },
           onLeaveRoom: handleLeave,
           showPreJoinView: false,

@@ -91,7 +91,7 @@ export default function ConversationList() {
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-5 pb-3">
         <div className="flex items-center gap-2">
-          <MessageCircle size={18} className="text-purple-DEFAULT" />
+          <MessageCircle size={18} className="text-purple" />
           <h2 className="font-body font-bold text-grey-900 text-base">Mensajes</h2>
         </div>
       </div>

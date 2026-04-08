@@ -6,12 +6,15 @@ import {
   ReCaptchaV3Provider,
 } from 'firebase/app-check';
 import { type Auth, getAuth } from 'firebase/auth';
+import { type Database, getDatabase } from 'firebase/database';
 import { type Firestore, getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 import log from 'loglevel';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL as string,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID as string,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID as string,
@@ -25,9 +28,14 @@ const app: FirebaseApp = initializeApp(firebaseConfig);
 
 export const auth: Auth = getAuth(app);
 
-// ── Firestore ─────────────────────────────────────────────────────────────────
+// ── Firestore & Storage ───────────────────────────────────────────────────────
 
 export const db: Firestore = getFirestore(app);
+export const storage = getStorage(app);
+
+// ── Realtime Database ─────────────────────────────────────────────────────────
+
+export const rtdb: Database = getDatabase(app);
 
 // ── Data Connect ──────────────────────────────────────────────────────────────
 // Descomenta SOLO cuando hayas corrido `firebase dataconnect:sdk:generate`

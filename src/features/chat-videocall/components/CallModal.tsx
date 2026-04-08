@@ -38,6 +38,7 @@ export default function CallModal() {
   const timer = useCallTimer(callState === 'in-call');
   const isVideo = callSession?.type === 'video';
   const isCalling = callState === 'calling';
+  const isInCall = callState === 'in-call';
 
   const roomInitials = activeRoom
     ? activeRoom.name
@@ -49,13 +50,13 @@ export default function CallModal() {
     : '';
 
   useEffect(() => {
-    if (!isVideo || !isCalling || !activeRoom || hasOpenedVideoRef.current) return;
+    if (!isVideo || !isInCall || !activeRoom || hasOpenedVideoRef.current) return;
 
     hasOpenedVideoRef.current = true;
     startVideoCallSession({ mode: 'new' });
     endCall();
     setActiveItem('video-call');
-  }, [isCalling, isVideo, activeRoom, startVideoCallSession, endCall, setActiveItem]);
+  }, [isInCall, isVideo, activeRoom, startVideoCallSession, endCall, setActiveItem]);
 
   useEffect(() => {
     if (!isCalling) hasOpenedVideoRef.current = false;

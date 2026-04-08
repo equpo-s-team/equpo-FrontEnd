@@ -2,6 +2,7 @@ import React, { createContext, useCallback,useContext, useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
+import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 
 import { useChatRooms } from '../hooks/useChatRooms';
 import { useDeleteMessage } from '../hooks/useDeleteMessage';
@@ -19,6 +20,7 @@ interface VideoCallSession {
 }
 
 interface ChatContextType {
+  teamId: string;
   /* rooms */
   rooms: ChatRoom[];
   activeRoom: ChatRoom | null;
@@ -26,9 +28,12 @@ interface ChatContextType {
 
   /* messages (driven by activeRoom) */
   messages: ChatMessage[];
-  sendMessage: (text: string) => void;
+  sendMessage: (text: string, type?: 'text' | 'system' | 'image' | 'file', fileUrl?: string, fileName?: string) => void;
   editMessage: (messageId: string, newText: string) => void;
   deleteMessage: (messageId: string) => void;
+
+  replyingTo: ChatMessage | null;
+  setReplyingTo: (msg: ChatMessage | null) => void;
 
   /* search */
   searchQuery: string;
@@ -63,6 +68,9 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const teamContext = getTeamContext();
   const teamId = teamContext.teamId ?? '';
 
+  // ── Sidebar ───────────────────────────────────────────────────────────────
+  const { setActiveItem } = useSidebar();
+
   // ── Groups → ChatRooms ──────────────────────────────────────────────────────
   const { data: groups = [] } = useTeamGroups(teamId);
   const { data: rooms = [] } = useChatRooms(teamId, groups);
@@ -77,8 +85,9 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const deleteMutation = useDeleteMessage();
   const zegoTokenMutation = useZegoToken();
 
-  // ── Search ──────────────────────────────────────────────────────────────────
+  // ── Search & Reply ──────────────────────────────────────────────────────────
   const [searchQuery, setSearchQuery] = useState('');
+  const [replyingTo, setReplyingTo] = useState<ChatMessage | null>(null);
 
   // ── Call State ──────────────────────────────────────────────────────────────
   const [callState, setCallState] = useState<CallState>('idle');
@@ -92,14 +101,26 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const selectRoom = useCallback((room: ChatRoom) => {
     setActiveRoom(room);
+    setReplyingTo(null);
   }, []);
 
   const sendMessage = useCallback(
-    (text: string) => {
-      if (!text.trim() || !activeRoom) return;
-      sendMutation.mutate({ teamId, roomId: activeRoom.id, text: text.trim() });
+    (text: string, type: 'text' | 'system' | 'image' | 'file' = 'text', fileUrl?: string, fileName?: string) => {
+      if (!activeRoom) return;
+      if (type === 'text' && !text.trim()) return;
+      
+      sendMutation.mutate({ 
+        teamId, 
+        roomId: activeRoom.id, 
+        text: text.trim(),
+        type,
+        fileUrl,
+        fileName,
+        replyTo: replyingTo ? { id: replyingTo.id, text: replyingTo.text || 'Archivo multimedia', senderName: replyingTo.senderName } : undefined
+      });
+      setReplyingTo(null);
     },
-    [activeRoom, sendMutation, teamId],
+    [activeRoom, sendMutation, teamId, replyingTo],
   );
 
   const editMessage = useCallback(
@@ -143,12 +164,17 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const startVideoCallSession = useCallback(
     (options: { roomId?: string; mode: VideoCallJoinMode }) => {
-      if (!activeRoom) return;
-
-      const roomId = options.roomId?.trim() || activeRoom.id;
+      const roomId = options.roomId?.trim() || activeRoom?.id;
+      if (!roomId) {
+        console.warn('[ChatContext] Cannot start video call session: No roomId provided and no activeRoom selected.');
+        return;
+      }
 
       setRtcStatus('requesting-token');
       setActiveVideoCall({ roomId, joinMode: options.mode });
+      
+      // Navigate to the video call page
+      setActiveItem('video-call');
 
       // The token will be fetched when VideoCallPage mounts
       // via the chatApi.getZegoToken call. Here we just set the state.
@@ -167,7 +193,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         },
       );
     },
-    [activeRoom, teamId, zegoTokenMutation],
+    [activeRoom, teamId, zegoTokenMutation, setActiveItem],
   );
 
   const endVideoCallSession = useCallback(() => {
@@ -193,6 +219,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   return (
     <ChatContext.Provider
       value={{
+        teamId,
         rooms: filteredRooms,
         activeRoom,
         selectRoom,
@@ -200,6 +227,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         sendMessage,
         editMessage,
         deleteMessage,
+        replyingTo,
+        setReplyingTo,
         searchQuery,
         setSearchQuery,
         callState,

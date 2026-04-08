@@ -79,9 +79,13 @@ export function useRoomMessages(teamId: string, roomId: string | null) {
               senderName: typeof data.senderName === 'string' ? data.senderName : '',
               text: typeof data.text === 'string' ? data.text : '',
               createdAt: toDateOrNow(data.createdAt),
-              type: data.type === 'system' ? 'system' : 'text',
+              type: (['system', 'image', 'file'].includes(data.type as string) ? data.type : 'text') as 'text' | 'system' | 'image' | 'file',
               deleted: Boolean(data.deleted),
               editedAt: toDateOrUndefined(data.editedAt),
+              replyTo: data.replyTo as any,
+              readBy: Array.isArray(data.readBy) ? data.readBy : [],
+              fileUrl: typeof data.fileUrl === 'string' ? data.fileUrl : undefined,
+              fileName: typeof data.fileName === 'string' ? data.fileName : undefined,
             };
           })
           .reverse(); // Oldest first for display

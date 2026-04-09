@@ -3,10 +3,16 @@ import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 import { auth,db } from '@/firebase';
 
+import type { ReplyToPayload } from '../types/chat';
+
 interface SendMessageArgs {
   teamId: string;
   roomId: string;
   text: string;
+  type?: 'text' | 'system' | 'image' | 'file';
+  replyTo?: ReplyToPayload;
+  fileUrl?: string;
+  fileName?: string;
 }
 
 /**
@@ -15,7 +21,15 @@ interface SendMessageArgs {
  */
 export function useSendMessage() {
   return useMutation({
-    mutationFn: async ({ teamId, roomId, text }: SendMessageArgs) => {
+    mutationFn: async ({
+      teamId,
+      roomId,
+      text,
+      type = 'text',
+      replyTo,
+      fileUrl,
+      fileName,
+    }: SendMessageArgs) => {
       const user = auth.currentUser;
       if (!user) throw new Error('Not authenticated');
 
@@ -28,14 +42,21 @@ export function useSendMessage() {
         'messages',
       );
 
-      await addDoc(messagesRef, {
+      const payload: any = {
         senderUid: user.uid,
         senderName: user.displayName || user.email?.split('@')[0] || 'Usuario',
         text,
         createdAt: serverTimestamp(),
-        type: 'text',
+        type,
         deleted: false,
-      });
+        readBy: [user.uid], // The sender automatically has read it
+      };
+
+      if (replyTo) payload.replyTo = replyTo;
+      if (fileUrl) payload.fileUrl = fileUrl;
+      if (fileName) payload.fileName = fileName;
+
+      await addDoc(messagesRef, payload);
     },
   });
 }

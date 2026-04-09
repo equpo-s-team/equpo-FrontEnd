@@ -1,19 +1,53 @@
-import { Paperclip, Send,Smile } from 'lucide-react';
-import React, { useCallback,useRef, useState } from 'react';
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
+import { Paperclip, Send, Smile, X } from 'lucide-react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
+import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
+import { storage } from '@/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 export default function MessageInput() {
-  const { activeRoom, sendMessage } = useChatContext();
+  const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId } = useChatContext();
   const [value, setValue] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const emojiButtonRef = useRef<HTMLButtonElement>(null);
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        showEmojiPicker &&
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(e.target as Node) &&
+        emojiButtonRef.current &&
+        !emojiButtonRef.current.contains(e.target as Node)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showEmojiPicker]);
+
+  const { setTyping } = useTyping(teamId, activeRoom?.id || null);
 
   const handleSend = useCallback(() => {
     if (!value.trim()) return;
     sendMessage(value);
     setValue('');
+    setShowEmojiPicker(false);
     inputRef.current?.focus();
-  }, [value, sendMessage]);
+    
+    // Clear typing state
+    if (typingTimeout) clearTimeout(typingTimeout);
+    setTyping(false);
+  }, [value, sendMessage, setTyping, typingTimeout]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -22,14 +56,81 @@ export default function MessageInput() {
     }
   };
 
-  const canSend = Boolean(value.trim() && activeRoom);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    
+    // Typing logic
+    setTyping(true);
+    if (typingTimeout) clearTimeout(typingTimeout);
+    
+    const timeout = setTimeout(() => {
+      setTyping(false);
+    }, 2000);
+    setTypingTimeout(timeout);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !activeRoom) return;
+
+    setIsUploading(true);
+    try {
+      const storageRef = ref(
+        storage,
+        `chatRooms/${activeRoom.id}/${Date.now()}_${file.name}`,
+      );
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+
+      const isImage = file.type.startsWith('image/');
+      sendMessage(file.name, isImage ? 'image' : 'file', url, file.name);
+    } catch (error) {
+      console.error('Error uploading file', error);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleEmojiSelect = (emoji: any) => {
+    setValue((prev) => prev + emoji.native);
+  };
+
+  const canSend = Boolean(value.trim() && activeRoom) && !isUploading;
 
   return (
-    <div className="px-4 py-3 border-t border-grey-150 bg-primary flex-shrink-0">
+    <div className="px-4 py-3 border-t border-grey-150 bg-primary flex-shrink-0 relative">
+      {/* ReplyTo Indicator */}
+      {replyingTo && (
+        <div className="mb-2 bg-grey-100 rounded-lg px-3 py-2 flex items-center justify-between border-l-4 border-purple-DEFAULT">
+          <div className="flex flex-col overflow-hidden">
+            <span className="text-[10px] text-purple-DEFAULT font-semibold">Respondiendo a {replyingTo.senderName}</span>
+            <span className="text-xs text-grey-600 truncate">{replyingTo.text}</span>
+          </div>
+          <button onClick={() => setReplyingTo(null)} className="text-grey-400 hover:text-grey-700">
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
+      {/* Emoji Picker Popover */}
+      {showEmojiPicker && (
+        <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 shadow-2xl">
+          <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
+        </div>
+      )}
+
       <div className="flex items-center gap-2 bg-grey-100 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
         {/* Attach */}
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          className="hidden" 
+          onChange={handleFileUpload} 
+        />
         <button
-          disabled={!activeRoom}
+          disabled={!activeRoom || isUploading}
+          onClick={() => fileInputRef.current?.click()}
           className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
           title="Adjuntar archivo"
         >
@@ -41,7 +142,7 @@ export default function MessageInput() {
           ref={inputRef}
           type="text"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           disabled={!activeRoom}
           placeholder={activeRoom ? 'Escribe un mensaje...' : 'Selecciona una sala'}
@@ -55,7 +156,9 @@ export default function MessageInput() {
 
         {/* Emoji */}
         <button
-          disabled={!activeRoom}
+          ref={emojiButtonRef}
+          disabled={!activeRoom || isUploading}
+          onClick={() => setShowEmojiPicker((prev) => !prev)}
           className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
           title="Emojis"
         >

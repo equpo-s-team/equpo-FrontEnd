@@ -11,17 +11,9 @@ export default function AppLayout({ children }) {
       <main
         className={`
                     transition-all duration-300 ease-in-out
-                    lg:${collapsed ? 'ml-[68px]' : 'ml-[220px]'}
-                    pb-20 lg:pb-0 rounded-l-2xl
+                    ml-0 ${collapsed ? 'lg:ml-[68px]' : 'lg:ml-[220px]'}
+                    lg:pb-0 rounded-l-2xl
                 `}
-        style={{
-          marginLeft:
-            typeof window !== 'undefined' && window.innerWidth >= 1024
-              ? collapsed
-                ? '68px'
-                : '220px'
-              : 0,
-        }}
       >
         {children}
       </main>

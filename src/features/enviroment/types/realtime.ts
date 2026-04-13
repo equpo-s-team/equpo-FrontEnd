@@ -28,6 +28,15 @@ export const SPLINE_SLOT_OBJECT_IDS: Record<SlotId, string> = {
   Character_06: '040cb552-0c18-4901-8211-eecd102a0da4',
 };
 
+export const THREE_SLOT_MODELS: Record<SlotId, string> = {
+  Character_01: 'blueGhost.glb',
+  Character_02: 'redGhost.glb',
+  Character_03: 'greenGhost.glb',
+  Character_04: 'purpleGhost.glb',
+  Character_05: 'darkBlueGhost.glb',
+  Character_06: 'blueGhost.glb', // Fallback or rotation
+};
+
 export const MAX_SPLINE_SLOTS = SPLINE_SLOT_IDS.length;
 
 export interface Vector3State {

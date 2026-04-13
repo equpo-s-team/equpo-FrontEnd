@@ -1,6 +1,5 @@
 import type { PlayerStats, SessionInfo } from '../types/hud';
 import LeftPanel from './LeftPanel.tsx';
-import RightPanel from './RightPanel.tsx';
 import TopBar from './TopBar.tsx';
 
 interface HUDProps {
@@ -13,7 +12,6 @@ export default function HUD({ stats, session }: HUDProps) {
     <div className="absolute inset-0 z-10 pointer-events-none">
       <TopBar session={session} />
       <LeftPanel stats={stats} />
-      <RightPanel session={session} />
     </div>
   );
 }

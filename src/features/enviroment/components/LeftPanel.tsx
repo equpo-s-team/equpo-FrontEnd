@@ -15,7 +15,7 @@ export default function LeftPanel({ stats }: LeftPanelProps) {
         value={stats.hp}
         max={stats.maxHp}
         fillClass="bg-gradient-green-bg"
-        valueColorClass="text-grey-800"
+        valueColorClass="text-red"
         icon={<Heart size={12} strokeWidth={2} />}
       />
       <StatBar

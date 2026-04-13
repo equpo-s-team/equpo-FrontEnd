@@ -1,43 +1,24 @@
-import Spline from '@splinetool/react-spline';
-import type { Application } from '@splinetool/runtime';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 
 import HUD from './components/HUD.tsx';
+import ThreeScene from './components/ThreeScene.tsx';
 import { useHudData } from './hooks/useHudData.ts';
-import { useSplineRealtimePlayers } from './hooks/useSplineRealtimePlayers.ts';
+import { useKeyboardControls } from './hooks/useKeyboardControls.ts';
+import { useThreeRealtime } from './hooks/useThreeRealtime.ts';
+import { Vector3State } from './types/realtime.ts';
 
 export default function GamePage() {
   const { user, isAuth } = useAuth();
   const { teamId } = useTeam();
-  const [splineApp, setSplineApp] = useState<Application | null>(null);
-  const [isSplineRendered, setIsSplineRendered] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const localUid = useMemo(() => user?.uid ?? null, [user?.uid]);
+  const keyboard = useKeyboardControls();
 
-  const handleSplineLoad = useCallback((app: Application) => {
-    setIsSplineRendered(false);
-    setSplineApp(app);
-  }, []);
-
-  useEffect(() => {
-    if (!splineApp) {
-      return;
-    }
-
-    const handleRendered = () => {
-      setIsSplineRendered(true);
-      splineApp.removeEventListener('rendered', handleRendered);
-    };
-
-    splineApp.addEventListener('rendered', handleRendered);
-
-    return () => {
-      splineApp.removeEventListener('rendered', handleRendered);
-    };
-  }, [splineApp]);
+  const [localPos, setLocalPos] = useState<Vector3State>({ x: 0, y: 0, z: 0 });
+  const [localRot, setLocalRot] = useState<Vector3State>({ x: 0, y: 0, z: 0 });
 
   useEffect(() => {
     setElapsedSeconds(0);
@@ -56,12 +37,12 @@ export default function GamePage() {
     };
   }, [isAuth, teamId]);
 
-  const { connectedUsers, connectedUserUids } = useSplineRealtimePlayers({
-    app: splineApp,
+  const { connectedUsers, connectedUserUids, playersState, localSlotId } = useThreeRealtime({
     teamId: teamId ?? null,
     localUid,
     isEnabled: isAuth,
-    isSceneReady: isSplineRendered,
+    localPosition: localPos,
+    localRotation: localRot,
   });
 
   const { stats, session } = useHudData({
@@ -74,10 +55,14 @@ export default function GamePage() {
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-grey-900">
       <div className="absolute inset-0 z-0">
-        <Spline
-          scene="/models/scene.splinecode"
-          onLoad={handleSplineLoad}
-          style={{ width: '100%', height: '100%' }}
+        <ThreeScene
+          localSlotId={localSlotId}
+          remotePlayers={playersState}
+          keyboard={keyboard}
+          onLocalMove={(pos, rot) => {
+            setLocalPos(pos);
+            setLocalRot(rot);
+          }}
         />
       </div>
 

@@ -26,12 +26,12 @@ export default function StatBar({
     "
     >
       <div className="flex items-center gap-1.5 mb-1.5">
-        <span className="text-grey-600">{icon}</span>
-        <span className="text-[10px] font-bold uppercase tracking-[0.6px] text-grey-700">
+        <span className={`${valueColorClass}`}>{icon}</span>
+        <span className={`text-[10px] font-bold uppercase tracking-[0.6px] ${valueColorClass}`}>
           {label}
         </span>
       </div>
-      <div className={`font-maxwell text-[22px] font-bold leading-none ${valueColorClass}`}>
+      <div className="font-maxwell text-[22px] font-bold leading-none text-grey-900">
         {Math.round(value)}
       </div>
       <div className="text-[10px] text-grey-600 mt-0.5">de {max}</div>

@@ -31,6 +31,11 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
   const roomIdFromQuery = useMemo(() => getUrlParams(window.location.href).roomID, []);
   const roomID = roomIDProp || activeVideoCall?.roomId || roomIdFromQuery;
   const userID = user?.uid || '';
+  const displayName = user?.displayName || 'Usuario';
+  const roomName = useMemo(
+    () => rooms.find((room) => room.id === roomID)?.name || 'Sala de video',
+    [rooms, roomID],
+  );
 
   const handleLeave = useCallback(async () => {
     if (inactivityTimerRef.current) {
@@ -82,7 +87,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
           tokenResponse.token,
           roomID,
           userID,
-          user?.displayName || 'Usuario',
+          displayName,
         );
 
         const zp = window.ZegoUIKitPrebuilt.create(kitToken);
@@ -95,10 +100,9 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
           },
           onJoinRoom: () => {
             usersInRoomRef.current.add(userID);
-            const roomName = rooms.find((r) => r.id === roomID)?.name || 'Sala de video';
             set(ref(rtdb, `teams/${teamId}/activeCalls/${roomID}`), {
               callerId: userID,
-              callerName: user?.displayName || 'Usuario',
+              callerName: displayName,
               roomName,
               startedAt: Date.now(),
             }).catch(() => {});
@@ -162,7 +166,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
         zpRef.current.destroy();
       }
     };
-  }, [handleLeave, roomID, userID, teamId]);
+  }, [displayName, handleLeave, roomID, roomName, teamId, userID]);
 
   if (error === 'forbidden' || rtcStatus === 'forbidden') {
     return (

@@ -42,7 +42,7 @@ export default function CallNotification() {
       }
     };
 
-    playAudio();
+    void playAudio();
 
     return () => {
       // Cleanup on unmount

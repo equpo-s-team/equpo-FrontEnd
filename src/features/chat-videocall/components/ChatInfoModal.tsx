@@ -11,10 +11,16 @@ interface ChatInfoModalProps {
   onClose: () => void;
 }
 
+interface ChatMemberView {
+  uid: string;
+  role: string;
+  name?: string;
+}
+
 export default function ChatInfoModal({ onClose }: ChatInfoModalProps) {
   const { activeRoom, teamId } = useChatContext();
   const activeCalls = useActiveCalls(teamId || '');
-  const [members, setMembers] = useState<{ uid: string; role: string; name?: string }[]>([]);
+  const [members, setMembers] = useState<ChatMemberView[]>([]);
   const modalRef = useRef<HTMLDivElement>(null);
   const isCallActive = activeCalls.some((c) => c.roomId === activeRoom?.id);
 
@@ -34,13 +40,19 @@ export default function ChatInfoModal({ onClose }: ChatInfoModalProps) {
       const snapshot = await getDocs(
         collection(db, 'teams', teamId, 'chatRooms', activeRoom.id, 'members'),
       );
-      const membersData: any[] = [];
+      const membersData: ChatMemberView[] = [];
       snapshot.forEach((doc) => {
-        membersData.push({ uid: doc.id, ...doc.data() });
+        const raw = doc.data() as unknown;
+        const data = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
+        membersData.push({
+          uid: doc.id,
+          role: typeof data.role === 'string' ? data.role : 'member',
+          name: typeof data.name === 'string' ? data.name : undefined,
+        });
       });
       setMembers(membersData);
     };
-    fetchMembers();
+    void fetchMembers();
   }, [activeRoom, teamId]);
 
   if (!activeRoom) return null;

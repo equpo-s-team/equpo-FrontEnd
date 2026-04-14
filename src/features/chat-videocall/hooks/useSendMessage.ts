@@ -15,6 +15,19 @@ interface SendMessageArgs {
   fileName?: string;
 }
 
+type MessagePayload = {
+  senderUid: string;
+  senderName: string;
+  text: string;
+  createdAt: ReturnType<typeof serverTimestamp>;
+  type: 'text' | 'system' | 'image' | 'file';
+  deleted: boolean;
+  readBy: string[];
+  replyTo?: ReplyToPayload;
+  fileUrl?: string;
+  fileName?: string;
+};
+
 /**
  * Writes a message directly to Firestore.
  * Security rules validate senderUid == auth.uid and enforce text constraints.
@@ -35,7 +48,7 @@ export function useSendMessage() {
 
       const messagesRef = collection(db, 'teams', teamId, 'chatRooms', roomId, 'messages');
 
-      const payload: any = {
+      const payload: MessagePayload = {
         senderUid: user.uid,
         senderName: user.displayName || user.email?.split('@')[0] || 'Usuario',
         text,

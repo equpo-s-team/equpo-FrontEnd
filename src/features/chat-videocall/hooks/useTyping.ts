@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 
 import { auth, rtdb } from '@/firebase';
 
+function toTypingUser(value: unknown): { timestamp: number; name: string } | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const source = value as Record<string, unknown>;
+  if (typeof source.timestamp !== 'number' || typeof source.name !== 'string') return null;
+  return { timestamp: source.timestamp, name: source.name };
+}
+
 export function useTyping(teamId: string, roomId: string | null) {
   const [typingUsers, setTypingUsers] = useState<{ uid: string; name: string }[]>([]);
 
@@ -17,9 +24,11 @@ export function useTyping(teamId: string, roomId: string | null) {
 
       snapshot.forEach((child) => {
         if (child.key !== currentUid) {
-          const data = child.val();
+          const data = toTypingUser(child.val() as unknown);
+          if (!data) return;
+
           // Filtrar entradas muy antiguas (>10 segundos)
-          if (data?.timestamp && Date.now() - data.timestamp < 10000) {
+          if (Date.now() - data.timestamp < 10000) {
             tUsers.push({ uid: child.key, name: data.name });
           }
         }

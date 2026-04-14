@@ -11,7 +11,7 @@ import { useEffect, useRef } from 'react';
 
 import { db } from '@/firebase';
 
-import type { ChatMessage } from '../types/chat';
+import type { ChatMessage, ReplyToPayload } from '../types/chat';
 
 const PAGE_SIZE = 50;
 
@@ -34,6 +34,24 @@ function toDateOrNow(value: unknown): Date {
 
 function toDateOrUndefined(value: unknown): Date | undefined {
   return isFirestoreTimestampLike(value) ? value.toDate() : undefined;
+}
+
+function toReplyToPayload(value: unknown): ReplyToPayload | undefined {
+  if (typeof value !== 'object' || value === null) return undefined;
+  const source = value as Record<string, unknown>;
+  if (
+    typeof source.id !== 'string' ||
+    typeof source.text !== 'string' ||
+    typeof source.senderName !== 'string'
+  ) {
+    return undefined;
+  }
+
+  return {
+    id: source.id,
+    text: source.text,
+    senderName: source.senderName,
+  };
 }
 
 /**
@@ -77,7 +95,7 @@ export function useRoomMessages(teamId: string, roomId: string | null) {
                 : 'text') as 'text' | 'system' | 'image' | 'file',
               deleted: Boolean(data.deleted),
               editedAt: toDateOrUndefined(data.editedAt),
-              replyTo: data.replyTo as any,
+              replyTo: toReplyToPayload(data.replyTo),
               readBy: Array.isArray(data.readBy) ? data.readBy : [],
               fileUrl: typeof data.fileUrl === 'string' ? data.fileUrl : undefined,
               fileName: typeof data.fileName === 'string' ? data.fileName : undefined,

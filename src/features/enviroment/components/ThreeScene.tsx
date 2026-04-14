@@ -25,6 +25,10 @@ function materialHasColor(material: THREE.Material): material is THREE.Material 
   return 'color' in material && (material as { color?: unknown }).color instanceof THREE.Color;
 }
 
+function isMesh(node: THREE.Object3D): node is THREE.Mesh {
+  return (node as THREE.Mesh).isMesh === true;
+}
+
 function normalizeHealthInput(value: number): number {
   if (!Number.isFinite(value)) {
     return 1;
@@ -87,6 +91,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
     scene.background = currentBackgroundRef.current.clone();
     scene.fog = new THREE.Fog(currentFogRef.current.clone(), 20, 60);
     sceneRef.current = scene;
+    const tintMaterials = dioramaTintMaterialsRef.current;
 
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.set(-30, 10, 30);
@@ -106,7 +111,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
     loader.current.load('/models/diorama.glb', (glb: GLTF) => {
       scene.add(glb.scene);
       glb.scene.traverse((node: THREE.Object3D) => {
-        if (node instanceof THREE.Mesh) {
+        if (isMesh(node)) {
           node.receiveShadow = true;
 
           const materials = Array.isArray(node.material) ? node.material : [node.material];
@@ -115,8 +120,8 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
               return;
             }
 
-            if (!dioramaTintMaterialsRef.current.has(material.uuid)) {
-              dioramaTintMaterialsRef.current.set(material.uuid, {
+            if (!tintMaterials.has(material.uuid)) {
+              tintMaterials.set(material.uuid, {
                 material,
                 baseColor: material.color.clone(),
               });
@@ -229,7 +234,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
       renderer.dispose();
       ambientLightRef.current = null;
       sunLightRef.current = null;
-      dioramaTintMaterialsRef.current.clear();
+      tintMaterials.clear();
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
     };
   }, [localSlotId]);
@@ -308,7 +313,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
           sceneRef.current.add(newGhost);
           remoteGhosts.current.set(uid, newGhost);
         });
-      } else if (ghost instanceof THREE.Group) {
+      } else if (ghost) {
         ghost.position.set(player.position.x, player.position.y + GHOST_Y_OFFSET, player.position.z);
         ghost.rotation.set(player.rotation.x, player.rotation.y, player.rotation.z);
       }

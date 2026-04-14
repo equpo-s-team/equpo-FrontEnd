@@ -17,7 +17,7 @@ export function useTyping(teamId: string, roomId: string | null) {
 
       snapshot.forEach((child) => {
         if (child.key !== currentUid) {
-          const data = child.val();
+          const data = child.val() as { timestamp?: number; name: string } | null;
           // Filtrar entradas muy antiguas (>10 segundos)
           if (data?.timestamp && Date.now() - data.timestamp < 10000) {
             tUsers.push({ uid: child.key, name: data.name });

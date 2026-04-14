@@ -2,9 +2,9 @@ import { collection, getDocs } from 'firebase/firestore';
 import { Phone, Users, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { db } from '@/firebase';
 import { teamsApi } from '@/features/team/api/teamsApi';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { db } from '@/firebase';
 
 import { useActiveCalls } from '../hooks/useActiveCalls';
 import { useChatContext } from './ChatContext';

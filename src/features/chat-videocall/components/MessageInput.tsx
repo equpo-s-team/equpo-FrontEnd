@@ -46,7 +46,7 @@ export default function MessageInput() {
 
     // Clear typing state
     if (typingTimeout) clearTimeout(typingTimeout);
-    setTyping(false);
+    void setTyping(false);
   }, [value, sendMessage, setTyping, typingTimeout]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -60,11 +60,11 @@ export default function MessageInput() {
     setValue(e.target.value);
 
     // Typing logic
-    setTyping(true);
+    void setTyping(true);
     if (typingTimeout) clearTimeout(typingTimeout);
 
     const timeout = setTimeout(() => {
-      setTyping(false);
+      void setTyping(false);
     }, 2000);
     setTypingTimeout(timeout);
   };
@@ -92,7 +92,7 @@ export default function MessageInput() {
       try {
         // 2. If it already exists, just get the URL
         url = await getDownloadURL(storageRef);
-      } catch (err) {
+      } catch {
         // 3. Otherwise, upload it
         await uploadBytes(storageRef, file);
         url = await getDownloadURL(storageRef);
@@ -108,7 +108,7 @@ export default function MessageInput() {
     }
   };
 
-  const handleEmojiSelect = (emoji: any) => {
+  const handleEmojiSelect = (emoji: { native: string }) => {
     setValue((prev) => prev + emoji.native);
   };
 
@@ -140,7 +140,7 @@ export default function MessageInput() {
 
       <div className="flex items-center gap-2 bg-grey-100 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
         {/* Attach */}
-        <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileUpload} />
+        <input type="file" ref={fileInputRef} className="hidden" onChange={(e) => void handleFileUpload(e)} />
         <button
           disabled={!activeRoom || isUploading}
           onClick={() => fileInputRef.current?.click()}

@@ -162,7 +162,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
         zpRef.current.destroy();
       }
     };
-  }, [handleLeave, roomID, userID, teamId]);
+  }, [handleLeave, roomID, userID, teamId, rooms, user?.displayName]);
 
   if (error === 'forbidden' || rtcStatus === 'forbidden') {
     return (

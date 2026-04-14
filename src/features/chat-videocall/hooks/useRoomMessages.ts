@@ -77,7 +77,7 @@ export function useRoomMessages(teamId: string, roomId: string | null) {
                 : 'text') as 'text' | 'system' | 'image' | 'file',
               deleted: Boolean(data.deleted),
               editedAt: toDateOrUndefined(data.editedAt),
-              replyTo: data.replyTo as any,
+              replyTo: data.replyTo as ChatMessage['replyTo'],
               readBy: Array.isArray(data.readBy) ? data.readBy : [],
               fileUrl: typeof data.fileUrl === 'string' ? data.fileUrl : undefined,
               fileName: typeof data.fileName === 'string' ? data.fileName : undefined,

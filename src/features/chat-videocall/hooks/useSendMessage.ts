@@ -35,7 +35,7 @@ export function useSendMessage() {
 
       const messagesRef = collection(db, 'teams', teamId, 'chatRooms', roomId, 'messages');
 
-      const payload: any = {
+      const payload: Record<string, unknown> = {
         senderUid: user.uid,
         senderName: user.displayName || user.email?.split('@')[0] || 'Usuario',
         text,

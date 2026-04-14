@@ -8,7 +8,7 @@ import ThreeScene from './components/ThreeScene.tsx';
 import { useHudData } from './hooks/useHudData.ts';
 import { useKeyboardControls } from './hooks/useKeyboardControls.ts';
 import { useThreeRealtime } from './hooks/useThreeRealtime.ts';
-import { Vector3State } from './types/realtime.ts';
+import { type Vector3State } from './types/realtime.ts';
 
 export default function GamePage() {
   const { user, isAuth } = useAuth();

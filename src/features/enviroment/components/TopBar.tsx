@@ -1,7 +1,9 @@
+import {Heart} from "lucide-react";
+
+import StatBar from "@/features/enviroment/components/StatBar.tsx";
+
 import type {PlayerStats, SessionInfo} from '../types/hud';
 import AvatarCluster from './AvatarCluster.tsx';
-import {Heart} from "lucide-react";
-import StatBar from "@/features/enviroment/components/StatBar.tsx";
 
 function formatTime(secs: number): string {
   const m = String(Math.floor(secs / 60)).padStart(2, '0');

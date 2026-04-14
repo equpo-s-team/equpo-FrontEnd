@@ -1,5 +1,4 @@
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import log from 'loglevel';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import log from 'loglevel';
 

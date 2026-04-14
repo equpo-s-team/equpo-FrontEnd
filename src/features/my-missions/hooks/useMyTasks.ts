@@ -2,7 +2,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { useCallback, useEffect, useMemo } from 'react';
 
-// @ts-expect-error — AuthContext is .jsx; Vite resolves it at runtime
 import { useAuth } from '@/context/AuthContext';
 import { useTasks } from '@/features/board/hooks/useTasks';
 import { useValidTaskIds } from '@/features/board/hooks/useValidTaskIds';

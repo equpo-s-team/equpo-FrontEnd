@@ -1,5 +1,7 @@
-import type { SessionInfo } from '../types/hud';
+import type {PlayerStats, SessionInfo} from '../types/hud';
 import AvatarCluster from './AvatarCluster.tsx';
+import {Heart} from "lucide-react";
+import StatBar from "@/features/enviroment/components/StatBar.tsx";
 
 function formatTime(secs: number): string {
   const m = String(Math.floor(secs / 60)).padStart(2, '0');
@@ -9,9 +11,10 @@ function formatTime(secs: number): string {
 
 interface TopBarProps {
   session: SessionInfo;
+  stats: PlayerStats;
 }
 
-export default function TopBar({ session }: TopBarProps) {
+export default function TopBar({ session, stats }: TopBarProps) {
   return (
     <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20 pointer-events-auto">
       {/* Live indicator + timer */}
@@ -48,6 +51,14 @@ export default function TopBar({ session }: TopBarProps) {
           users={session.connectedMembers}
         />
       </div>
+
+      <StatBar
+        value={stats.hp}
+        max={stats.maxHp}
+        fillClass="bg-gradient-red-bg"
+        valueColorClass="text-red"
+        icon={<Heart size={16} strokeWidth={3} />}
+      />
     </div>
   );
 }

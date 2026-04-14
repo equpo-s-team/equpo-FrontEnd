@@ -2,7 +2,6 @@ import { onDisconnect, onValue, ref, runTransaction, set } from 'firebase/databa
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
-  isSlotId,
   PLAYER_PRESENCE_STALE_MS,
   type PlayerRealtimeState,
   type SlotClaimState,

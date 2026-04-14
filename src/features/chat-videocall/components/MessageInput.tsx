@@ -75,17 +75,33 @@ export default function MessageInput() {
 
     setIsUploading(true);
     try {
+      // 1. Create a hash to deduplicate exact same files
+      const buffer = await file.arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+      const extension = file.name.split('.').pop() || 'bin';
+      const uniqueFileName = `${hashHex}.${extension}`;
+
       const storageRef = ref(
         storage,
-        `teams/${teamId}/chatRooms/${activeRoom.id}/${Date.now()}_${file.name}`,
+        `teams/${teamId}/chatRooms/${activeRoom.id}/${uniqueFileName}`
       );
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
+
+      let url: string;
+      try {
+        // 2. If it already exists, just get the URL
+        url = await getDownloadURL(storageRef);
+      } catch (err) {
+        // 3. Otherwise, upload it
+        await uploadBytes(storageRef, file);
+        url = await getDownloadURL(storageRef);
+      }
 
       const isImage = file.type.startsWith('image/');
       sendMessage(file.name, isImage ? 'image' : 'file', url, file.name);
     } catch (error) {
-      console.error('Error uploading file', error);
+      console.error('Error uploading file:', error);
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';

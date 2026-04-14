@@ -6,7 +6,7 @@ import {
   type PlayerRealtimeState,
   type SlotClaimState,
   type SlotId,
-  Vector3State,
+  type Vector3State,
 } from '@/features/enviroment/types/realtime.ts';
 import { realtimeDb } from '@/firebase.ts';
 

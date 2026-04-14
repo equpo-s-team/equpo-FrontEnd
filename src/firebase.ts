@@ -14,7 +14,6 @@ import log from 'loglevel';
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN as string,
-  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL as string,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID as string,
   databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL as string | undefined,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET as string,
@@ -37,10 +36,6 @@ export const storage = getStorage(app);
 // ── Realtime Database ─────────────────────────────────────────────────────────
 
 export const rtdb: Database = getDatabase(app);
-
-export const realtimeDb: Database = getDatabase(app);
-
-export const realtimeDb: Database = getDatabase(app);
 
 export const realtimeDb: Database = getDatabase(app);
 

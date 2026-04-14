@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { type GLTF,GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import { THREE_SLOT_MODELS, type SlotId, type Vector3State } from '../types/realtime';
+import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../types/realtime';
 
 interface ThreeSceneProps {
   localSlotId: SlotId | null;
@@ -289,7 +289,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
     Object.entries(remotePlayers).forEach(([uid, player]) => {
       if (!player.slotId) return;
 
-      let ghost = remoteGhosts.current.get(uid);
+      const ghost = remoteGhosts.current.get(uid);
       if (!ghost && !pendingLoads.current.has(uid)) {
         pendingLoads.current.add(uid);
         const modelPath = `/models/${THREE_SLOT_MODELS[player.slotId]}`;

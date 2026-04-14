@@ -1,8 +1,9 @@
 import { Info, PhoneCall, Users, Video } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useActiveCalls } from '@/features/chat-videocall/hooks/useActiveCalls';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
 import ChatInfoModal from './ChatInfoModal';
 
@@ -10,6 +11,12 @@ export default function ChatHeader() {
   const { activeRoom, startVideoCallSession, startCall, teamId } = useChatContext();
   const [showInfo, setShowInfo] = useState(false);
   const activeCalls = useActiveCalls(teamId || '');
+  const { data: teamMembers = [] } = useTeamMembers(teamId || '');
+
+  const usersInfo = useMemo(
+    () => teamMembers.map((member) => ({ uid: member.uid, displayName: member.displayName })),
+    [teamMembers],
+  );
 
   if (!activeRoom) return null;
 
@@ -69,7 +76,7 @@ export default function ChatHeader() {
         </div>
       )}
 
-      {showInfo && <ChatInfoModal onClose={() => setShowInfo(false)} />}
+      {showInfo && <ChatInfoModal onClose={() => setShowInfo(false)} usersInfo={usersInfo} />}
     </div>
   );
 }

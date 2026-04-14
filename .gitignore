@@ -25,6 +25,9 @@ coverage
 *.tsbuildinfo
 
 # Optional npm cache directory
+*.env.*
+*.env
+env.*
 .npm
 .env
 .env.development.local
@@ -115,6 +118,11 @@ storybook-static/
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+*rules.*
+dataconnect
+*.rules
+
 AGENTS.md
 .claude
 .agent
+/skills-lock.json

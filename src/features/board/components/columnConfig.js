@@ -64,14 +64,15 @@ export const COLUMN_CONFIG = {
 };
 
 export const PRIORITY_CONFIG = {
-  high: { label: 'Alta', bg: 'bg-red/10', text: 'text-red', border: 'border-red/30' },
+  high: { label: 'Alta', bg: 'bg-red/10', text: 'text-red', border: 'border-red/30', dot: 'bg-red' },
   medium: {
     label: 'Media',
     bg: 'bg-orange-dark/10',
     text: 'text-orange-dark',
     border: 'border-orange-dark/30',
+    dot: 'bg-orange-dark',
   },
-  low: { label: 'Baja', bg: 'bg-green/10', text: 'text-green', border: 'border-green/30' },
+  low: { label: 'Baja', bg: 'bg-green/10', text: 'text-green', border: 'border-green/30', dot: 'bg-green' },
 };
 
 export const TAG_COLOR_CONFIG = {

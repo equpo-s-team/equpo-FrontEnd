@@ -135,9 +135,12 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
       {/* Top row */}
       <div className="flex items-start justify-between mb-2">
         <span className="font-maxwell text-[10px] text-grey-400 tracking-[0.3px]">{card.id}</span>
-        <span
+        {/*<span
+        
           className={`text-[10px] font-semibold px-2 py-[2px] rounded-[6px] border-[1.5px] ${prio.bg} ${prio.text} ${prio.border}`}
-        >
+        >*/}
+          <span className={`flex items-center gap-1.5 text-[10px] font-bold ${prio.text}`}>
+          <span className={`w-2 h-2 rounded-full ${prio.dot}`} />
           {prio.label}
         </span>
       </div>

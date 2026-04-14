@@ -3,6 +3,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
+import ChatPage from '@/features/chat-videocall/ChatPage.tsx';
+import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
+import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
@@ -42,7 +45,9 @@ function Dashboard() {
       case 'my-missions':
         return <MyMissions />;
       case 'chat':
-        return <div>Mi Espacio</div>;
+        return <ChatPage />;
+      case 'video-call':
+        return <VideoCallPage />;
       case 'reports':
         return <Reports />;
       case 'settings':
@@ -68,7 +73,9 @@ function ProtectedRoute({ children }) {
 
   return isAuth ? (
     <TeamProvider>
-      <SidebarProvider>{children}</SidebarProvider>
+      <SidebarProvider>
+        <ChatProvider>{children}</ChatProvider>
+      </SidebarProvider>
     </TeamProvider>
   ) : (
     <Navigate to="/" replace />

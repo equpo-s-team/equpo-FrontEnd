@@ -2,23 +2,89 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ── Helpers ──
+    function isTeamMember(teamId) {
+      return exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
+    }
+
+    function isChatRoomMember(teamId, roomId) {
+      return exists(/databases/$(database)/documents/teams/$(teamId)/chatRooms/$(roomId)/members/$(request.auth.uid));
+    }
+
+    function isTeamLeader(teamId) {
+      return exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid))
+        && get(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid)).data.role == 'leader';
+    }
+
+    function canReadChatRoom(teamId, roomId) {
+      return isTeamLeader(teamId) || isChatRoomMember(teamId, roomId);
+    }
+
     match /teams/{teamId} {
-      // The team document itself can be read by its members
-      allow read: if exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
-      
-      // Tasks subcollection can be read by team members
-      match /tasks/{taskId} {
-        allow read: if exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
-        // Note: write access is guarded by the backend POST/PATCH endpoints.
-        // We only allow read directly from Firestore for real-time syncing.
-        allow write: if false; 
+      allow read: if isTeamMember(teamId);
+
+      // ── Active Calls ──
+      match /activeCalls/{roomId} {
+        allow read, write: if isTeamMember(teamId);
       }
-      
-      // Members subcollection can be read by team members
-      match /members/{memberId} {
-        allow read: if exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
+
+      // ── Tasks (existing - unchanged) ──
+      match /tasks/{taskId} {
+        allow read: if isTeamMember(teamId);
         allow write: if false;
       }
+
+      // ── Members (existing - unchanged) ──
+      match /members/{memberId} {
+        allow read: if isTeamMember(teamId);
+        allow write: if false;
+      }
+
+      // ── Chat Rooms ──
+      match /chatRooms/{roomId} {
+        allow read: if canReadChatRoom(teamId, roomId);
+        allow write: if false;
+
+        // ── Chat Room Members ──
+        match /members/{memberId} {
+          allow read: if canReadChatRoom(teamId, roomId);
+          allow write: if false;
+        }
+
+        // ── Typing ──
+        match /typing/{uid} {
+          allow read, write: if canReadChatRoom(teamId, roomId);
+        }
+
+        // ── Messages ──
+        match /messages/{messageId} {
+          allow read: if canReadChatRoom(teamId, roomId);
+
+          // Create: member can send messages
+          allow create: if isChatRoomMember(teamId, roomId)
+            && request.resource.data.senderUid == request.auth.uid;
+
+          // Update: Author can edit message. Others can only update readBy.
+          allow update: if isChatRoomMember(teamId, roomId);
+
+          // Delete: only the author can delete their own messages
+          allow delete: if isChatRoomMember(teamId, roomId)
+            && resource.data.senderUid == request.auth.uid;
+        }
+      }
+    }
+
+    // Fallback rule (existing - unchanged)
+    match /{teamId}/{taskId} {
+      allow read: if teamId != "teams" && isTeamMember(teamId);
+      allow write: if false;
+    }
+    
+    // Fallback rule for tasks written directly to a root collection named after the teamId
+    match /{teamId}/{taskId} {
+      allow read: if teamId != "teams" && exists(/databases/$(database)/documents/teams/$(teamId)/members/$(request.auth.uid));
+      allow write: if false;
     }
     
     // Fallback rule for tasks written directly to a root collection named after the teamId

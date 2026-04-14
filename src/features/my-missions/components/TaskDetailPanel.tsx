@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, Edit3, Flag, Tag, X } from 'lucide-react';
+import { CalendarDays, Clock, Edit3, Tag, X, Zap } from 'lucide-react';
 
 import type { TeamTask } from '@/features/board/types';
 
@@ -29,10 +29,10 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; b
   },
 };
 
-const PRIORITY_CONFIG: Record<string, { label: string; icon: string; color: string }> = {
-  high: { label: 'Alta', icon: '🔴', color: 'text-red' },
-  medium: { label: 'Media', icon: '🟡', color: 'text-orange-dark' },
-  low: { label: 'Baja', icon: '🟢', color: 'text-green' },
+const PRIORITY_CONFIG: Record<string, { label: string; dot: string; color: string }> = {
+  high: { label: 'Alta', dot: 'bg-red', color: 'text-red' },
+  medium: { label: 'Media', dot: 'bg-orange-dark', color: 'text-orange-dark' },
+  low: { label: 'Baja', dot: 'bg-green', color: 'text-green' },
 };
 
 const AVATAR_GRADIENTS = [
@@ -79,7 +79,7 @@ export default function TaskDetailPanel({
       <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-6 flex items-center justify-center h-full">
         <div className="text-center">
           <div className="w-12 h-12 rounded-2xl bg-grey-100 flex items-center justify-center mx-auto mb-3">
-            <Flag size={20} className="text-grey-300" />
+            <Zap size={20} className="text-grey-300" />
           </div>
           <p className="text-sm font-medium text-grey-400 font-body">Selecciona una tarea</p>
           <p className="text-xs text-grey-300 font-body mt-1">Haz clic en una tarea del timeline</p>
@@ -142,11 +142,12 @@ export default function TaskDetailPanel({
         {/* Priority */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Flag size={14} className="text-grey-400" />
+            <Zap size={14} className="text-grey-400" />
             <span className="text-xs text-grey-500 font-body">Prioridad</span>
           </div>
-          <span className={`text-xs font-bold font-body ${priority.color}`}>
-            {priority.icon} {priority.label}
+          <span className={`flex items-center gap-1.5 text-xs font-bold font-body ${priority.color}`}>
+            <span className={`w-2.5 h-2.5 rounded-full ${priority.dot}`} />
+            {priority.label}
           </span>
         </div>
 

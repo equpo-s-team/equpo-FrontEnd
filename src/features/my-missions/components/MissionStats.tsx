@@ -104,9 +104,7 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
                 <ChevronDown className="w-3 h-3 text-grey-400 group-hover:text-grey-600 transition-colors" />
               )}
             </div>
-            <span className="text-xs font-bold font-body text-red">
-              {overdueTasks.length}
-            </span>
+            <span className="text-xs font-bold font-body text-red">{overdueTasks.length}</span>
           </div>
         ) : (
           <div className="flex items-center justify-between">

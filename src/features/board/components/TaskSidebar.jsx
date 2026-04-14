@@ -1,4 +1,4 @@
-import { CalendarDays, Layers, Repeat, Tag, Type, Users, X } from 'lucide-react';
+import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
@@ -325,7 +325,10 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
 
           {/* Priority */}
           <div>
-            <FieldLabel required>Prioridad</FieldLabel>
+            <FieldLabel required>
+              <Zap size={12} className="inline mr-1 -mt-0.5" />
+              Prioridad
+            </FieldLabel>
             <div className="flex gap-2">
               {PRIORITY_OPTIONS.map((opt) => (
                 <button

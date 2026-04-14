@@ -1,4 +1,4 @@
-import { Info, MoreVertical, PhoneCall, Users, Video } from 'lucide-react';
+import { Info, PhoneCall, Users, Video } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
@@ -45,17 +45,11 @@ export default function ChatHeader() {
 
         {/* Actions */}
         <div className="flex items-center gap-1">
-          <ActionButton onClick={() => startCall(false)} title="Llamada de voz">
-            <PhoneCall size={16} />
-          </ActionButton>
           <ActionButton onClick={() => startCall(true)} title="Videollamada">
             <Video size={16} />
           </ActionButton>
           <ActionButton onClick={() => setShowInfo(true)} title="Información">
             <Info size={16} />
-          </ActionButton>
-          <ActionButton onClick={() => {}} title="Más opciones">
-            <MoreVertical size={16} />
           </ActionButton>
         </div>
       </div>

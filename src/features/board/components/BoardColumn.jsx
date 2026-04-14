@@ -39,7 +39,7 @@ function DropZone({onDrop, position}) {
   );
 }
 
-export default function BoardColumn({column, cards, onMoveCard}) {
+export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, onCardClick }) {
   const {id, label, accent} = column;
   const cfg = COLUMN_CONFIG[accent];
 
@@ -70,7 +70,6 @@ export default function BoardColumn({column, cards, onMoveCard}) {
         />
       </div>
 
-      {/* Column header */}
       <div className="flex items-center justify-between px-4 pt-5 pb-3">
         <div className="flex items-center gap-2.5">
           <ColIndicator accent={accent}/>
@@ -84,12 +83,13 @@ export default function BoardColumn({column, cards, onMoveCard}) {
           </span>
         </div>
         <button
-          className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150">
-          <Plus size={14}/>
+          onClick={() => onCreateTask?.(id)}
+          className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
+        >
+          <Plus size={14} />
         </button>
       </div>
 
-      {/* Drop zone for cards - accepts cards from other columns */}
       <div
         role="button"
         className="flex flex-col gap-3 px-3 pb-3 flex-1"
@@ -121,15 +121,14 @@ export default function BoardColumn({column, cards, onMoveCard}) {
               accent={accent}
               columnId={id}
               onMoveCard={onMoveCard}
+              onCardClick={onCardClick}
               position={index}
             />
-            {/* Drop zone after this card */}
             <DropZone onDrop={handleExternalDrop} position={index + 1}/>
           </div>
         ))}
       </div>
 
-      {/* Add task zone */}
       <div className="mx-3 mb-3">
         <button
           className="w-full py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[10px] text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer">

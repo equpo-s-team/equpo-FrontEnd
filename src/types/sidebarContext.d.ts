@@ -18,4 +18,3 @@ declare module '@/features/layout/components/navbar/SidebarContext.jsx' {
   export function SidebarProvider(props: { children: ReactNode }): JSX.Element;
   export function useSidebar(): SidebarContextValue;
 }
-

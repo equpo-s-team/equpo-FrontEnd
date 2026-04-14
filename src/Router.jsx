@@ -3,6 +3,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
+import ChatPage from '@/features/chat-videocall/ChatPage.tsx';
+import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
+import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
@@ -11,9 +14,6 @@ import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
 import AppLayout from '@/lib/layout/components/AppLayout.jsx';
 import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
-import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
-import ChatPage from "@/features/chat-videocall/ChatPage.tsx";
-import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -36,30 +36,28 @@ function Dashboard() {
     return <Navigate to="/teams" replace />;
   }
 
-    const renderContent = () => {
-        switch (activeItem) {
-          case 'my-space':
-            return <GamePage />;
-          case 'missiones':
-            return <TeamBoard />;
-            case 'my-missions':
-            return <MyMissions />;
-            case 'chat':
-              return <ChatPage />;
-            case 'video-call':
-                return <VideoCallPage/>;
-          case 'reports':
-            return <Reports />;
-            case 'settings':
-                return <div>Mi Espacio</div>;
-            default:
-                return <div>Mi Espacio</div>;
-        }
-    };
+  const renderContent = () => {
+    switch (activeItem) {
+      case 'my-space':
+        return <GamePage />;
+      case 'missiones':
+        return <TeamBoard />;
+      case 'my-missions':
+        return <MyMissions />;
+      case 'chat':
+        return <ChatPage />;
+      case 'video-call':
+        return <VideoCallPage />;
+      case 'reports':
+        return <Reports />;
+      case 'settings':
+        return <div>Mi Espacio</div>;
+      default:
+        return <div>Mi Espacio</div>;
+    }
+  };
 
-  return (
-      <AppLayout>{renderContent()}</AppLayout>
-  );
+  return <AppLayout>{renderContent()}</AppLayout>;
 }
 
 function ProtectedRoute({ children }) {

@@ -110,7 +110,9 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           >
             {/* Render ReplyTo Reference */}
             {message.replyTo && (
-              <div className={`mb-2 pl-2 border-l-2 text-xs opacity-75 ${isSent ? 'border-white' : 'border-purple-DEFAULT'}`}>
+              <div
+                className={`mb-2 pl-2 border-l-2 text-xs opacity-75 ${isSent ? 'border-white' : 'border-purple-DEFAULT'}`}
+              >
                 <div className="font-semibold">{message.replyTo.senderName}</div>
                 <div className="truncate max-w-[200px]">{message.replyTo.text}</div>
               </div>
@@ -119,11 +121,20 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             {/* Render Media */}
             {message.type === 'image' && message.fileUrl && (
               <a href={message.fileUrl} target="_blank" rel="noreferrer">
-                <img src={message.fileUrl} alt={message.fileName || 'Imagen'} className="max-w-full rounded-lg mb-1" />
+                <img
+                  src={message.fileUrl}
+                  alt={message.fileName || 'Imagen'}
+                  className="max-w-full rounded-lg mb-1"
+                />
               </a>
             )}
             {message.type === 'file' && message.fileUrl && (
-              <a href={message.fileUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-1 underline">
+              <a
+                href={message.fileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 mb-1 underline"
+              >
                 <FileText size={16} />
                 <span className="truncate">{message.fileName || 'Archivo'}</span>
               </a>
@@ -145,7 +156,11 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
 
           {isSent && (
             <span className="text-grey-400">
-              {isReadByOthers ? <CheckCheck size={12} className="text-blue-500" /> : <Check size={12} />}
+              {isReadByOthers ? (
+                <CheckCheck size={12} className="text-blue-500" />
+              ) : (
+                <Check size={12} />
+              )}
             </span>
           )}
 

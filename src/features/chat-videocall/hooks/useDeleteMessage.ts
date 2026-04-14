@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { deleteDoc,doc } from 'firebase/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
 
 import { db } from '@/firebase';
 
@@ -16,15 +16,7 @@ interface DeleteMessageArgs {
 export function useDeleteMessage() {
   return useMutation({
     mutationFn: async ({ teamId, roomId, messageId }: DeleteMessageArgs) => {
-      const messageRef = doc(
-        db,
-        'teams',
-        teamId,
-        'chatRooms',
-        roomId,
-        'messages',
-        messageId,
-      );
+      const messageRef = doc(db, 'teams', teamId, 'chatRooms', roomId, 'messages', messageId);
 
       await deleteDoc(messageRef);
     },

@@ -1,4 +1,4 @@
-import React, { createContext, useCallback,useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
@@ -10,7 +10,13 @@ import { useEditMessage } from '../hooks/useEditMessage';
 import { useRoomMessages } from '../hooks/useRoomMessages';
 import { useSendMessage } from '../hooks/useSendMessage';
 import { useZegoToken } from '../hooks/useZegoToken';
-import type { CallSession, CallState, ChatMessage, ChatRoom, RtcConnectionStatus } from '../types/chat';
+import type {
+  CallSession,
+  CallState,
+  ChatMessage,
+  ChatRoom,
+  RtcConnectionStatus,
+} from '../types/chat';
 
 type VideoCallJoinMode = 'new' | 'join';
 
@@ -28,7 +34,12 @@ interface ChatContextType {
 
   /* messages (driven by activeRoom) */
   messages: ChatMessage[];
-  sendMessage: (text: string, type?: 'text' | 'system' | 'image' | 'file', fileUrl?: string, fileName?: string) => void;
+  sendMessage: (
+    text: string,
+    type?: 'text' | 'system' | 'image' | 'file',
+    fileUrl?: string,
+    fileName?: string,
+  ) => void;
   editMessage: (messageId: string, newText: string) => void;
   deleteMessage: (messageId: string) => void;
 
@@ -105,18 +116,29 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const sendMessage = useCallback(
-    (text: string, type: 'text' | 'system' | 'image' | 'file' = 'text', fileUrl?: string, fileName?: string) => {
+    (
+      text: string,
+      type: 'text' | 'system' | 'image' | 'file' = 'text',
+      fileUrl?: string,
+      fileName?: string,
+    ) => {
       if (!activeRoom) return;
       if (type === 'text' && !text.trim()) return;
-      
-      sendMutation.mutate({ 
-        teamId, 
-        roomId: activeRoom.id, 
+
+      sendMutation.mutate({
+        teamId,
+        roomId: activeRoom.id,
         text: text.trim(),
         type,
         fileUrl,
         fileName,
-        replyTo: replyingTo ? { id: replyingTo.id, text: replyingTo.text || 'Archivo multimedia', senderName: replyingTo.senderName } : undefined
+        replyTo: replyingTo
+          ? {
+              id: replyingTo.id,
+              text: replyingTo.text || 'Archivo multimedia',
+              senderName: replyingTo.senderName,
+            }
+          : undefined,
       });
       setReplyingTo(null);
     },
@@ -166,13 +188,15 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     (options: { roomId?: string; mode: VideoCallJoinMode }) => {
       const roomId = options.roomId?.trim() || activeRoom?.id;
       if (!roomId) {
-        console.warn('[ChatContext] Cannot start video call session: No roomId provided and no activeRoom selected.');
+        console.warn(
+          '[ChatContext] Cannot start video call session: No roomId provided and no activeRoom selected.',
+        );
         return;
       }
 
       setRtcStatus('requesting-token');
       setActiveVideoCall({ roomId, joinMode: options.mode });
-      
+
       // Navigate to the video call page
       setActiveItem('video-call');
 

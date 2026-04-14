@@ -1,4 +1,4 @@
-import { ref, set, remove } from 'firebase/database';
+import { ref, remove, set } from 'firebase/database';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
@@ -36,12 +36,12 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
     }
-    
+
     // Si somos el último usuario, borramos la llamada de la RTDB
     if (usersInRoomRef.current.size <= 1 && teamId && roomID) {
       remove(ref(rtdb, `teams/${teamId}/activeCalls/${roomID}`)).catch(() => {});
     }
-    
+
     if (zpRef.current) {
       zpRef.current.destroy();
       zpRef.current = null;
@@ -67,8 +67,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
         if (!window.ZegoUIKitPrebuilt) {
           await new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src =
-              'https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js';
+            script.src = 'https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js';
             script.async = true;
             script.onload = resolve;
             script.onerror = reject;
@@ -83,7 +82,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
           tokenResponse.token,
           roomID,
           userID,
-          user?.displayName || 'Usuario'
+          user?.displayName || 'Usuario',
         );
 
         const zp = window.ZegoUIKitPrebuilt.create(kitToken);
@@ -96,7 +95,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
           },
           onJoinRoom: () => {
             usersInRoomRef.current.add(userID);
-            const roomName = rooms.find(r => r.id === roomID)?.name || 'Sala de video';
+            const roomName = rooms.find((r) => r.id === roomID)?.name || 'Sala de video';
             set(ref(rtdb, `teams/${teamId}/activeCalls/${roomID}`), {
               callerId: userID,
               callerName: user?.displayName || 'Usuario',
@@ -113,14 +112,14 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
             }
           },
           onUserJoin: (users) => {
-            users.forEach(u => usersInRoomRef.current.add(u.userID));
+            users.forEach((u) => usersInRoomRef.current.add(u.userID));
             if (inactivityTimerRef.current) {
               clearTimeout(inactivityTimerRef.current);
               inactivityTimerRef.current = null;
             }
           },
           onUserLeave: (users) => {
-            users.forEach(u => usersInRoomRef.current.delete(u.userID));
+            users.forEach((u) => usersInRoomRef.current.delete(u.userID));
             if (usersInRoomRef.current.size <= 1) {
               inactivityTimerRef.current = setTimeout(() => {
                 alert('Por inactividad la videollamada se ha cerrado.');
@@ -190,9 +189,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
     return (
       <div className="flex h-full items-center justify-center rounded-lg bg-grey-900 text-white">
         <div className="text-center">
-          <p className="font-body text-lg text-yellow-400 font-semibold mb-2">
-            Error de conexión
-          </p>
+          <p className="font-body text-lg text-yellow-400 font-semibold mb-2">Error de conexión</p>
           <p className="font-body text-sm text-grey-300">
             No se pudo conectar a la videollamada. Intenta de nuevo.
           </p>

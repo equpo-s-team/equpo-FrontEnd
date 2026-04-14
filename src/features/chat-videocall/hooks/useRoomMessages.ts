@@ -1,4 +1,4 @@
-import { useQuery,useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   collection,
   limit,
@@ -51,14 +51,7 @@ export function useRoomMessages(teamId: string, roomId: string | null) {
     // Clean up previous listener
     unsubRef.current?.();
 
-    const messagesRef = collection(
-      db,
-      'teams',
-      teamId,
-      'chatRooms',
-      roomId,
-      'messages',
-    );
+    const messagesRef = collection(db, 'teams', teamId, 'chatRooms', roomId, 'messages');
 
     const q = query(messagesRef, orderBy('createdAt', 'desc'), limit(PAGE_SIZE));
 
@@ -79,7 +72,9 @@ export function useRoomMessages(teamId: string, roomId: string | null) {
               senderName: typeof data.senderName === 'string' ? data.senderName : '',
               text: typeof data.text === 'string' ? data.text : '',
               createdAt: toDateOrNow(data.createdAt),
-              type: (['system', 'image', 'file'].includes(data.type as string) ? data.type : 'text') as 'text' | 'system' | 'image' | 'file',
+              type: (['system', 'image', 'file'].includes(data.type as string)
+                ? data.type
+                : 'text') as 'text' | 'system' | 'image' | 'file',
               deleted: Boolean(data.deleted),
               editedAt: toDateOrUndefined(data.editedAt),
               replyTo: data.replyTo as any,

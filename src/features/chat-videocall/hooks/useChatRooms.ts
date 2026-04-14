@@ -47,7 +47,7 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
 
       const unsub = onSnapshot(
         roomDocRef,
-        snapshot => {
+        (snapshot) => {
           if (!snapshot.exists()) {
             return;
           }
@@ -69,14 +69,14 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
             name:
               typeof data.name === 'string' && data.name.trim().length > 0
                 ? data.name
-                : group.groupName ?? group.id,
+                : (group.groupName ?? group.id),
             type: 'group',
             createdBy: typeof data.createdBy === 'string' ? data.createdBy : '',
             createdAt,
           });
           pushRooms();
         },
-        error => {
+        (error) => {
           console.warn(`[useChatRooms] room ${group.id} snapshot denied/unavailable:`, error);
         },
       );
@@ -85,10 +85,10 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
     }
 
     return () => {
-      unsubscribes.forEach(unsub => unsub());
+      unsubscribes.forEach((unsub) => unsub());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teamId, groups.map(g => `${g.id}:${g.groupName ?? ''}`).join('|')]);
+  }, [teamId, groups.map((g) => `${g.id}:${g.groupName ?? ''}`).join('|')]);
 
   return useQuery<ChatRoom[]>({
     queryKey,

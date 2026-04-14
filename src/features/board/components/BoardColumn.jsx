@@ -39,7 +39,7 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ column, cards, onMoveCard }) {
+export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, onCardClick }) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
 
@@ -83,7 +83,10 @@ export default function BoardColumn({ column, cards, onMoveCard }) {
             {cards.length}
           </span>
         </div>
-        <button className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150">
+        <button
+          onClick={() => onCreateTask?.(id)}
+          className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
+        >
           <Plus size={14} />
         </button>
       </div>
@@ -120,19 +123,13 @@ export default function BoardColumn({ column, cards, onMoveCard }) {
               accent={accent}
               columnId={id}
               onMoveCard={onMoveCard}
+              onCardClick={onCardClick}
               position={index}
             />
             {/* Drop zone after this card */}
             <DropZone onDrop={handleExternalDrop} position={index + 1} />
           </div>
         ))}
-      </div>
-
-      {/* Add task zone */}
-      <div className="mx-3 mb-3">
-        <button className="w-full py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[10px] text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer">
-          + Agregar tarea
-        </button>
       </div>
     </div>
   );

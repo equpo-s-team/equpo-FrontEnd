@@ -5,8 +5,6 @@ import { auth, db } from '@/firebase';
 
 import type { ReplyToPayload } from '../types/chat';
 
-import type { ReplyToPayload } from '../types/chat';
-
 interface SendMessageArgs {
   teamId: string;
   roomId: string;

@@ -1,7 +1,7 @@
 import { PhoneCall } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { useTeam } from '@/context/TeamContext';
+import { useTeam } from '@/context/TeamContext.tsx';
 
 import { useActiveCalls } from '../hooks/useActiveCalls';
 import { useChatContext } from './ChatContext';
@@ -29,7 +29,7 @@ export default function CallNotification() {
         }
 
         try {
-          // Si ya está pausado o es nuevo, intentamos reproducir
+          // Si ya estÃ¡ pausado o es nuevo, intentamos reproducir
           await audioRef.current.play();
         } catch (err) {
           console.warn('[CallNotification] Autoplay blocked or audio error:', err);

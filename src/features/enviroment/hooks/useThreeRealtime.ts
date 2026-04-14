@@ -2,6 +2,7 @@ import { onDisconnect, onValue, ref, runTransaction, set } from 'firebase/databa
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
+  isSlotId,
   PLAYER_PRESENCE_STALE_MS,
   type PlayerRealtimeState,
   type SlotClaimState,
@@ -56,6 +57,48 @@ function toSlotClaim(value: unknown): SlotClaimState | null {
     uid: source.uid,
     clientId: source.clientId,
     updatedAt: source.updatedAt,
+  };
+}
+
+function toVector3State(value: unknown): Vector3State | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const source = value as Record<string, unknown>;
+  if (typeof source.x !== 'number' || typeof source.y !== 'number' || typeof source.z !== 'number') {
+    return null;
+  }
+  return { x: source.x, y: source.y, z: source.z };
+}
+
+function toPlayerRealtimeState(value: unknown): PlayerRealtimeState | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const source = value as Record<string, unknown>;
+  const position = toVector3State(source.position);
+  const rotation = toVector3State(source.rotation);
+  const slotIdValue = source.slotId;
+
+  if (
+    typeof source.active !== 'boolean' ||
+    typeof source.visible !== 'boolean' ||
+    typeof source.clientId !== 'string' ||
+    typeof source.updatedAt !== 'number' ||
+    !position ||
+    !rotation
+  ) {
+    return null;
+  }
+
+  if (slotIdValue !== null && !isSlotId(slotIdValue)) {
+    return null;
+  }
+
+  return {
+    active: source.active,
+    visible: source.visible,
+    position,
+    rotation,
+    clientId: source.clientId,
+    updatedAt: source.updatedAt,
+    slotId: slotIdValue,
   };
 }
 
@@ -115,17 +158,19 @@ export function useThreeRealtime({
         return;
       }
 
-      const source = snapshot.val() as Record<string, any>;
+      const raw = snapshot.val() as unknown;
+      const source = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
       const nextUids: string[] = [];
       const nextStates: Record<string, PlayerRealtimeState> = {};
       let count = 0;
 
       Object.entries(source).forEach(([uid, data]) => {
-        if (data.active && isPresenceFresh(data.updatedAt)) {
+        const playerState = toPlayerRealtimeState(data);
+        if (playerState?.active && isPresenceFresh(playerState.updatedAt)) {
           count++;
           nextUids.push(uid);
           if (uid !== localUid) {
-            nextStates[uid] = data as PlayerRealtimeState;
+            nextStates[uid] = playerState;
           }
         }
       });
@@ -147,7 +192,7 @@ export function useThreeRealtime({
     if (!isEnabled || !teamId || !localUid) return;
 
     let isDisposed = false;
-    let intervalId: any = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
     let claimedSlot: SlotId | null = null;
 
     const init = async () => {
@@ -159,8 +204,10 @@ export function useThreeRealtime({
       const presenceRef = getPresenceRef(teamId, localUid);
       const slotRef = getSlotRef(teamId, claimed);
 
-      onDisconnect(presenceRef).set({ active: false, updatedAt: Date.now() });
-      onDisconnect(slotRef).set(null);
+      void onDisconnect(presenceRef)
+        .set({ active: false, updatedAt: Date.now() })
+        .catch(() => {});
+      void onDisconnect(slotRef).set(null).catch(() => {});
 
       intervalId = setInterval(() => {
         const now = Date.now();
@@ -180,11 +227,11 @@ export function useThreeRealtime({
       }, UPDATE_INTERVAL_MS);
     };
 
-    init();
+    void init();
 
     return () => {
       isDisposed = true;
-      if (intervalId) clearInterval(intervalId);
+      if (intervalId !== null) clearInterval(intervalId);
       if (claimedSlot) {
         set(getPresenceRef(teamId, localUid), { active: false, updatedAt: Date.now() }).catch(() => {});
         set(getSlotRef(teamId, claimedSlot), null).catch(() => {});

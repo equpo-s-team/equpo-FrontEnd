@@ -5,10 +5,10 @@ import {
   isSlotId,
   PLAYER_PRESENCE_STALE_MS,
   type PlayerRealtimeState,
-  SPLINE_SLOT_OBJECT_IDS,
-  SPLINE_SLOT_IDS,
   type SlotClaimState,
   type SlotId,
+  SPLINE_SLOT_IDS,
+  SPLINE_SLOT_OBJECT_IDS,
 } from '@/features/enviroment/types/realtime.ts';
 import { realtimeDb } from '@/firebase.ts';
 

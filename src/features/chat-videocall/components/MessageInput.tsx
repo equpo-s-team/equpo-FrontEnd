@@ -1,12 +1,12 @@
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Paperclip, Send, Smile, X } from 'lucide-react';
-import React, { useCallback, useRef, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
 import { storage } from '@/firebase';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 export default function MessageInput() {
   const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId } = useChatContext();
@@ -43,7 +43,7 @@ export default function MessageInput() {
     setValue('');
     setShowEmojiPicker(false);
     inputRef.current?.focus();
-    
+
     // Clear typing state
     if (typingTimeout) clearTimeout(typingTimeout);
     setTyping(false);
@@ -58,11 +58,11 @@ export default function MessageInput() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
-    
+
     // Typing logic
     setTyping(true);
     if (typingTimeout) clearTimeout(typingTimeout);
-    
+
     const timeout = setTimeout(() => {
       setTyping(false);
     }, 2000);
@@ -77,7 +77,7 @@ export default function MessageInput() {
     try {
       const storageRef = ref(
         storage,
-        `chatRooms/${activeRoom.id}/${Date.now()}_${file.name}`,
+        `teams/${teamId}/chatRooms/${activeRoom.id}/${Date.now()}_${file.name}`,
       );
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
@@ -104,7 +104,9 @@ export default function MessageInput() {
       {replyingTo && (
         <div className="mb-2 bg-grey-100 rounded-lg px-3 py-2 flex items-center justify-between border-l-4 border-purple-DEFAULT">
           <div className="flex flex-col overflow-hidden">
-            <span className="text-[10px] text-purple-DEFAULT font-semibold">Respondiendo a {replyingTo.senderName}</span>
+            <span className="text-[10px] text-purple-DEFAULT font-semibold">
+              Respondiendo a {replyingTo.senderName}
+            </span>
             <span className="text-xs text-grey-600 truncate">{replyingTo.text}</span>
           </div>
           <button onClick={() => setReplyingTo(null)} className="text-grey-400 hover:text-grey-700">
@@ -122,12 +124,7 @@ export default function MessageInput() {
 
       <div className="flex items-center gap-2 bg-grey-100 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
         {/* Attach */}
-        <input 
-          type="file" 
-          ref={fileInputRef} 
-          className="hidden" 
-          onChange={handleFileUpload} 
-        />
+        <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileUpload} />
         <button
           disabled={!activeRoom || isUploading}
           onClick={() => fileInputRef.current?.click()}

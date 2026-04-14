@@ -10,4 +10,3 @@ type VideoCallPageProps = {
 declare const VideoCallPage: ComponentType<VideoCallPageProps>;
 
 export default VideoCallPage;
-

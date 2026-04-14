@@ -1,5 +1,5 @@
+import { onValue, ref, remove, set } from 'firebase/database';
 import { useEffect, useState } from 'react';
-import { ref, onValue, set, remove } from 'firebase/database';
 
 import { auth, rtdb } from '@/firebase';
 
@@ -20,7 +20,7 @@ export function useTyping(teamId: string, roomId: string | null) {
           const data = child.val();
           // Filtrar entradas muy antiguas (>10 segundos)
           if (data?.timestamp && Date.now() - data.timestamp < 10000) {
-            tUsers.push({ uid: child.key!, name: data.name });
+            tUsers.push({ uid: child.key, name: data.name });
           }
         }
       });

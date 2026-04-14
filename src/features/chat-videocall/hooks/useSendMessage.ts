@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
-import { auth,db } from '@/firebase';
+import { auth, db } from '@/firebase';
 
 import type { ReplyToPayload } from '../types/chat';
 
@@ -33,14 +33,7 @@ export function useSendMessage() {
       const user = auth.currentUser;
       if (!user) throw new Error('Not authenticated');
 
-      const messagesRef = collection(
-        db,
-        'teams',
-        teamId,
-        'chatRooms',
-        roomId,
-        'messages',
-      );
+      const messagesRef = collection(db, 'teams', teamId, 'chatRooms', roomId, 'messages');
 
       const payload: any = {
         senderUid: user.uid,

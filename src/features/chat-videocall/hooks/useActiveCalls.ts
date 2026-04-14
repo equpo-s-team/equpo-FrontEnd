@@ -1,5 +1,5 @@
+import { onValue, ref } from 'firebase/database';
 import { useEffect, useState } from 'react';
-import { ref, onValue } from 'firebase/database';
 
 import { rtdb } from '@/firebase';
 
@@ -23,7 +23,7 @@ export function useActiveCalls(teamId: string) {
       (snapshot) => {
         const calls: ActiveCall[] = [];
         snapshot.forEach((child) => {
-          calls.push({ roomId: child.key!, ...(child.val() as Omit<ActiveCall, 'roomId'>) });
+          calls.push({ roomId: child.key, ...(child.val() as Omit<ActiveCall, 'roomId'>) });
         });
         setActiveCalls(calls);
       },

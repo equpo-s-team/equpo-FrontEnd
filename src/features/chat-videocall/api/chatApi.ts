@@ -4,8 +4,5 @@ import type { ZegoTokenResponse } from '../types/chat';
 
 export const chatApi = {
   getZegoToken: (teamId: string, roomId: string) =>
-    request<ZegoTokenResponse>(
-      `/teams/${teamId}/rooms/${roomId}/zego-token`,
-      'POST',
-    ),
+    request<ZegoTokenResponse>(`/teams/${teamId}/rooms/${roomId}/zego-token`, 'POST'),
 };

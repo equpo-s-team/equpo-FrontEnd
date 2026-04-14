@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader, type GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import { THREE_SLOT_MODELS, type SlotId, type Vector3State } from '../types/realtime';
 
@@ -9,20 +9,49 @@ interface ThreeSceneProps {
   remotePlayers: Record<string, { position: Vector3State; rotation: Vector3State; slotId: SlotId | null }>;
   onLocalMove: (position: Vector3State, rotation: Vector3State) => void;
   keyboard: { forward: boolean; backward: boolean; left: boolean; right: boolean };
+  healthPercent: number;
 }
 
 const GHOST_SCALE = 0.4;
 const GHOST_Y_OFFSET = 2.5;
+const DIORAMA_TINT_COLOR = new THREE.Color(0x6b5f4c);
+const MAX_DIORAMA_TINT = 0.5;
+const CLEAN_SKY_COLOR = new THREE.Color(0x84eefa);
+const DETERIORATED_SKY_COLOR = new THREE.Color(0x8B8C79);
+const CLEAN_FOG_COLOR = new THREE.Color(0x48dbda);
+const DETERIORATED_FOG_COLOR = new THREE.Color(0x8B8C79);
 
-export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, keyboard }: ThreeSceneProps) {
+function materialHasColor(material: THREE.Material): material is THREE.Material & { color: THREE.Color } {
+  return 'color' in material && (material as { color?: unknown }).color instanceof THREE.Color;
+}
+
+function normalizeHealthInput(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 1;
+  }
+
+  const normalized = value > 1 ? value / 100 : value;
+  return THREE.MathUtils.clamp(normalized, 0, 1);
+}
+
+export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, keyboard, healthPercent }: ThreeSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const localProxy = useRef({ position: new THREE.Vector3(0, 0, 0), rotation: new THREE.Euler(0, 0, 0) });
   const remoteGhosts = useRef<Map<string, THREE.Group>>(new Map());
   const sceneRef = useRef<THREE.Scene | null>(null);
+  const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
+  const sunLightRef = useRef<THREE.DirectionalLight | null>(null);
   const loader = useRef(new GLTFLoader());
   const keyboardRef = useRef(keyboard);
   const onLocalMoveRef = useRef(onLocalMove);
   const remotePlayersRef = useRef(remotePlayers);
+  const targetDeteriorationRef = useRef(1 - normalizeHealthInput(healthPercent));
+  const currentDeteriorationRef = useRef(targetDeteriorationRef.current);
+  const currentBackgroundRef = useRef(CLEAN_SKY_COLOR.clone());
+  const currentFogRef = useRef(CLEAN_FOG_COLOR.clone());
+  const dioramaTintMaterialsRef = useRef<
+    Map<string, { material: THREE.Material & { color: THREE.Color }; baseColor: THREE.Color }>
+  >(new Map());
   const pendingLoads = useRef<Set<string>>(new Set());
 
   // Keep refs in sync with props
@@ -38,6 +67,10 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
     remotePlayersRef.current = remotePlayers;
   }, [remotePlayers]);
 
+  useEffect(() => {
+    targetDeteriorationRef.current = 1 - normalizeHealthInput(healthPercent);
+  }, [healthPercent]);
+
   // Initialization
   useEffect(() => {
     const container = mountRef.current;
@@ -51,8 +84,8 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x84EEFA);
-    scene.fog = new THREE.Fog(0x48DBDA, 20, 60);
+    scene.background = currentBackgroundRef.current.clone();
+    scene.fog = new THREE.Fog(currentFogRef.current.clone(), 20, 60);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -61,18 +94,34 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
+    ambientLightRef.current = ambientLight;
 
     const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
     sunLight.position.set(5, 10, 7.5);
     sunLight.castShadow = true;
     scene.add(sunLight);
+    sunLightRef.current = sunLight;
 
     // Load Environment
-    loader.current.load('/models/diorama.glb', (glb) => {
+    loader.current.load('/models/diorama.glb', (glb: GLTF) => {
       scene.add(glb.scene);
-      glb.scene.traverse((node) => {
-        if ((node as THREE.Mesh).isMesh) {
+      glb.scene.traverse((node: THREE.Object3D) => {
+        if (node instanceof THREE.Mesh) {
           node.receiveShadow = true;
+
+          const materials = Array.isArray(node.material) ? node.material : [node.material];
+          materials.forEach((material) => {
+            if (!materialHasColor(material)) {
+              return;
+            }
+
+            if (!dioramaTintMaterialsRef.current.has(material.uuid)) {
+              dioramaTintMaterialsRef.current.set(material.uuid, {
+                material,
+                baseColor: material.color.clone(),
+              });
+            }
+          });
         }
       });
     });
@@ -90,6 +139,41 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
       const currentTime = performance.now();
       const delta = (currentTime - lastTime) / 1000;
       lastTime = currentTime;
+
+      const targetDeterioration = targetDeteriorationRef.current;
+      currentDeteriorationRef.current = THREE.MathUtils.lerp(
+        currentDeteriorationRef.current,
+        targetDeterioration,
+        Math.min(1, delta * 2)
+      );
+      const deterioration = currentDeteriorationRef.current;
+      const dioramaTintMix = deterioration * MAX_DIORAMA_TINT;
+
+      // At full deterioration the diorama reaches 50% tint blend.
+      dioramaTintMaterialsRef.current.forEach(({ material, baseColor }) => {
+        material.color.copy(baseColor).lerp(DIORAMA_TINT_COLOR, dioramaTintMix);
+      });
+
+      const background = scene.background;
+      if (background instanceof THREE.Color) {
+        currentBackgroundRef.current.copy(CLEAN_SKY_COLOR).lerp(DETERIORATED_SKY_COLOR, deterioration);
+        background.copy(currentBackgroundRef.current);
+      }
+
+      if (scene.fog instanceof THREE.Fog) {
+        currentFogRef.current.copy(CLEAN_FOG_COLOR).lerp(DETERIORATED_FOG_COLOR, deterioration);
+        scene.fog.color.copy(currentFogRef.current);
+        scene.fog.near = THREE.MathUtils.lerp(20, 12, deterioration);
+        scene.fog.far = THREE.MathUtils.lerp(60, 32, deterioration);
+      }
+
+      if (ambientLightRef.current) {
+        ambientLightRef.current.intensity = THREE.MathUtils.lerp(0.7, 0.25, deterioration);
+      }
+
+      if (sunLightRef.current) {
+        sunLightRef.current.intensity = THREE.MathUtils.lerp(1.2, 0.35, deterioration);
+      }
 
       // Local Movement
       if (localSlotId) {
@@ -143,6 +227,9 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
+      ambientLightRef.current = null;
+      sunLightRef.current = null;
+      dioramaTintMaterialsRef.current.clear();
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
     };
   }, [localSlotId]);
@@ -157,7 +244,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
     pendingLoads.current.add(loadId);
 
     const modelPath = `/models/${THREE_SLOT_MODELS[localSlotId]}`;
-    loader.current.load(modelPath, (glb) => {
+    loader.current.load(modelPath, (glb: GLTF) => {
       pendingLoads.current.delete(loadId);
       if (!sceneRef.current || !localSlotId) return;
 
@@ -207,7 +294,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
         pendingLoads.current.add(uid);
         const modelPath = `/models/${THREE_SLOT_MODELS[player.slotId]}`;
 
-        loader.current.load(modelPath, (glb) => {
+        loader.current.load(modelPath, (glb: GLTF) => {
           pendingLoads.current.delete(uid);
 
           // Verify player still exists and needs this model using ref for latest state

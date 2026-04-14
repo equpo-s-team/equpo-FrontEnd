@@ -52,12 +52,21 @@ export default function GamePage() {
     elapsedSeconds,
   });
 
+  const healthPercent = useMemo(() => {
+    if (stats.maxHp <= 0) {
+      return 1;
+    }
+
+    return Math.max(0, Math.min(1, stats.hp / stats.maxHp));
+  }, [stats.hp, stats.maxHp]);
+
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-grey-900">
       <div className="absolute inset-0 z-0">
         <ThreeScene
           localSlotId={localSlotId}
           remotePlayers={playersState}
+          healthPercent={healthPercent}
           keyboard={keyboard}
           onLocalMove={(pos, rot) => {
             setLocalPos(pos);

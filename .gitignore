@@ -125,3 +125,4 @@ dataconnect
 AGENTS.md
 .claude
 .agent
+/skills-lock.json

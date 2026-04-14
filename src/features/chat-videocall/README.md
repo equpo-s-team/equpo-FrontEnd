@@ -21,9 +21,9 @@ Abre el archivo `src/features/chat-videocall/components/zego-config.js` y reempl
 
 ```javascript
 export const ZEGO_CONFIG = {
-    APP_ID: 1784682065, // ← Reemplaza con tu APP ID
-    SERVER_SECRET: '791007b5b0461a7ff37d15c671086e0e', // ← Reemplaza con tu SERVER SECRET
-    // ... resto de la configuración
+  APP_ID: 1784682065, // ← Reemplaza con tu APP ID
+  SERVER_SECRET: '791007b5b0461a7ff37d15c671086e0e', // ← Reemplaza con tu SERVER SECRET
+  // ... resto de la configuración
 };
 ```
 
@@ -64,8 +64,9 @@ src/features/chat-videocall/
 ## 🔐 Seguridad
 
 > **⚠️ IMPORTANTE**: Las credenciales del servidor (SERVER_SECRET) nunca deben ser expuestas en el código frontend en producción.
-> 
+>
 > Para aplicaciones de producción:
+>
 > 1. Mantén el SERVER_SECRET en el backend
 > 2. Crea un endpoint en tu servidor que genere tokens
 > 3. El cliente debe obtener tokens del servidor, no generarlos localmente
@@ -77,15 +78,15 @@ src/features/chat-videocall/
 const ZegoServerAssistant = require('./zego-server-assistant');
 
 app.post('/api/video-token', (req, res) => {
-    const { userId, userName, roomId } = req.body;
-    const token = ZegoServerAssistant.generateToken(
-        ZEGO_APP_ID,
-        ZEGO_SERVER_SECRET,
-        roomId,
-        userId,
-        userName
-    );
-    res.json({ token });
+  const { userId, userName, roomId } = req.body;
+  const token = ZegoServerAssistant.generateToken(
+    ZEGO_APP_ID,
+    ZEGO_SERVER_SECRET,
+    roomId,
+    userId,
+    userName,
+  );
+  res.json({ token });
 });
 ```
 
@@ -101,15 +102,18 @@ En `zego-config.js` puedes personalizar:
 ## 🐛 Solución de Problemas
 
 ### "El componente de video no aparece"
+
 - Verifica que el APP_ID y SERVER_SECRET sean correctos
 - Comprueba la consola del navegador para errores
 
 ### "No puedo conectarme"
+
 - Asegúrate de tener permisos de cámara/micrófono activados
 - Verifica tu conexión a Internet
 - Comprueba el Room ID correcto
 
 ### "Error de autenticación"
+
 - Verifica que las credenciales de Zego sean válidas
 - Comprueba que tu proyecto esté activo en Zego
 

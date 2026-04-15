@@ -10,7 +10,8 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 
-import {type Achievement} from "@/features/team/types/teamsTypes.ts";
+import {type Achievement} from "@/features/team/types";
+
 
 const BADGE_COLORS = [
   { gradient: 'linear-gradient(135deg,#60AFFF,#86F0FD)', glow: 'rgba(96,175,255,0.3)', border: 'rgba(96,175,255,0.25)' },
@@ -110,7 +111,9 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
       {showModal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           {/* Backdrop */}
-          <div
+          <button
+            type="button"
+            aria-label="Cerrar detalle del logro"
             className={`absolute inset-0 bg-grey-900/30 backdrop-blur-sm transition-opacity duration-200 ${modalVisible ? 'opacity-100' : 'opacity-0'}`}
             onClick={closeModal}
           />

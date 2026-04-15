@@ -2,21 +2,22 @@ import log from 'loglevel';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/context/AuthContext';
 import { NewTeamCard } from '@/features/team/components/NewTeamCard';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
+import {
+  UserProfileSidebar,
+} from '@/features/team/components/user/UserProfileSidebar.tsx';
 import { useCreateTeam } from '@/features/team/hooks/useCreateTeam';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
-import {
-  UserProfileSidebar,
-} from '@/features/team/components/user/UserProfileSidebar.tsx';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
-import { UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
-import { Achievement, AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
-import { useAuth } from '@/context/AuthContext';
+
+import { type Achievement, AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
+import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
 
 type AuthContextUser = {
   uid?: string | null;

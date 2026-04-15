@@ -10,6 +10,7 @@ import GamePage from '@/features/enviroment/GamePage.tsx';
 import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import LandingPage from '@/features/presentation/page.jsx';
 import Reports from '@/features/reports/Reports.tsx';
+import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
 import AppLayout from '@/lib/layout/components/AppLayout.jsx';
@@ -51,7 +52,7 @@ function Dashboard() {
       case 'reports':
         return <Reports />;
       case 'settings':
-        return <div>Mi Espacio</div>;
+        return <TeamSettings />;
       default:
         return <div>Mi Espacio</div>;
     }

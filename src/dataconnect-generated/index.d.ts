@@ -86,6 +86,15 @@ export interface TouchUserLastActiveData {
   user_update?: User_Key | null;
 }
 
+export interface UpdateUserProfileData {
+  user_update?: User_Key | null;
+}
+
+export interface UpdateUserProfileVariables {
+  displayName: string;
+  photoURL?: string | null;
+}
+
 export interface UserAchievement_Key {
   userUid: string;
   achievementId: UUIDString;
@@ -126,6 +135,18 @@ export const touchUserLastActiveRef: TouchUserLastActiveRef;
 
 export function touchUserLastActive(): MutationPromise<TouchUserLastActiveData, undefined>;
 export function touchUserLastActive(dc: DataConnect): MutationPromise<TouchUserLastActiveData, undefined>;
+
+interface UpdateUserProfileRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateUserProfileVariables): MutationRef<UpdateUserProfileData, UpdateUserProfileVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateUserProfileVariables): MutationRef<UpdateUserProfileData, UpdateUserProfileVariables>;
+  operationName: string;
+}
+export const updateUserProfileRef: UpdateUserProfileRef;
+
+export function updateUserProfile(vars: UpdateUserProfileVariables): MutationPromise<UpdateUserProfileData, UpdateUserProfileVariables>;
+export function updateUserProfile(dc: DataConnect, vars: UpdateUserProfileVariables): MutationPromise<UpdateUserProfileData, UpdateUserProfileVariables>;
 
 interface GetUserRef {
   /* Allow users to create refs without passing in DataConnect */

@@ -1,5 +1,9 @@
 import { ChartColumnBig, Home, MessageCircle, Settings, Star, UserCheck } from 'lucide-react';
 
+import { useAuth } from '@/context/AuthContext';
+import { useTeam } from '@/context/TeamContext.tsx';
+import { useTeams } from '@/features/team/hooks/useTeams';
+
 import { useSidebar } from './SidebarContext.jsx';
 import SidebarItem from './SidebarItem.jsx';
 import SidebarLogo from './SidebarLogo.jsx';
@@ -9,6 +13,19 @@ import SidebarUser from './SidebarUser.jsx';
 
 export default function Sidebar() {
   const { collapsed } = useSidebar();
+  const { user } = useAuth();
+  const { teamId } = useTeam();
+  const { data: teams = [] } = useTeams();
+
+  // Determine the current user's role in the active team
+  const currentTeam = teams.find((t) => t.id === teamId);
+  const currentUid = user?.uid ?? '';
+  const myRole = (() => {
+    if (!currentTeam || !currentUid) return null;
+    if (currentTeam.leaderUid === currentUid) return 'leader';
+    return currentTeam.members.find((m) => m.userUid === currentUid)?.role ?? null;
+  })();
+  const canAccessSettings = myRole === 'leader' || myRole === 'collaborator';
 
   return (
     <aside
@@ -31,7 +48,9 @@ export default function Sidebar() {
 
         <SidebarSection label="Moderation">
           <SidebarItem id="reports" icon={ChartColumnBig} label="Reportes" badge="2" />
-          <SidebarItem id="settings" icon={Settings} label="Ajustes" />
+          {canAccessSettings && (
+            <SidebarItem id="settings" icon={Settings} label="Ajustes del Equipo" />
+          )}
         </SidebarSection>
       </nav>
 

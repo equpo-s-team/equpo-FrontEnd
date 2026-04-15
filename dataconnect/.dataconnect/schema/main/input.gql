@@ -1893,6 +1893,14 @@ input Team_Data {
   """
   name_expr: String_Expr @fdc_forbiddenInVariables
   """
+  ✨ Generated from Field `Team`.`photoURL` of type `String`
+  """
+  photoURL: String
+  """
+  ✨ `_expr` server value variant of `photoURL` (✨ Generated from Field `Team`.`photoURL` of type `String`)
+  """
+  photoURL_expr: String_Expr @fdc_forbiddenInVariables
+  """
   ✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`
   """
   updatedAt: Timestamp
@@ -1961,6 +1969,10 @@ input Team_Filter {
   ✨ Generated from Field `Team`.`name` of type `String!`
   """
   name: String_Filter
+  """
+  ✨ Generated from Field `Team`.`photoURL` of type `String`
+  """
+  photoURL: String_Filter
   """
   ✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`
   """
@@ -2055,6 +2067,10 @@ input Team_Having {
   ✨ Generated from Field `Team`.`name_count` of type `Int!`
   """
   name_count: Int_Filter
+  """
+  ✨ Generated from Field `Team`.`photoURL_count` of type `Int!`
+  """
+  photoURL_count: Int_Filter
   """
   ✨ Generated from Field `Team`.`updatedAt_count` of type `Int!`
   """
@@ -2151,6 +2167,10 @@ input Team_Order {
   """
   name: OrderDirection
   """
+  ✨ Generated from Field `Team`.`photoURL` of type `String`
+  """
+  photoURL: OrderDirection
+  """
   ✨ Generated from Field `Team`.`updatedAt` of type `Timestamp!`
   """
   updatedAt: OrderDirection
@@ -2182,6 +2202,10 @@ input Team_Order {
   ✨ Generated from Field `Team`.`name_count` of type `Int!`
   """
   name_count: OrderDirection
+  """
+  ✨ Generated from Field `Team`.`photoURL_count` of type `Int!`
+  """
+  photoURL_count: OrderDirection
   """
   ✨ Generated from Field `Team`.`updatedAt_count` of type `Int!`
   """

@@ -104,6 +104,7 @@ export default {
         'gradient-progress-bg': 'linear-gradient(135deg, #86F0FD 0%, #60AFFF 100%)',
         'gradient-qa-bg': 'linear-gradient(135deg, #FF94AE 0%, #F65A70 100%)',
         'gradient-done-bg': 'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
+        'gradient-equpo': 'linear-gradient(135deg, #9CEDC1 0%, #60AFFF 50%, #F65A70 100%)',
         'avatar-at': 'linear-gradient(135deg, #60AFFF, #5961F9)',
         'avatar-jr': 'linear-gradient(135deg, #9CEDC1, #86F0FD)',
         'avatar-ml': 'linear-gradient(135deg, #F65A70, #FF94AE)',

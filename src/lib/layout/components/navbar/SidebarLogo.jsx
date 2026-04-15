@@ -31,6 +31,14 @@ export default function SidebarLogo() {
 
   useEffect(() => {
     setLogoImageError(false);
+
+    if (!teamPhotoUrl) {
+      return;
+    }
+
+    const probe = new Image();
+    probe.onerror = () => setLogoImageError(true);
+    probe.src = teamPhotoUrl;
   }, [teamPhotoUrl, teamId]);
 
   return (
@@ -45,7 +53,6 @@ export default function SidebarLogo() {
               src={teamPhotoUrl}
               alt={`Foto de ${teamName}`}
               className="w-full h-full rounded-xl object-cover"
-              onError={() => setLogoImageError(true)}
             />
           ) : (
             <span className="text-white text-[10px] font-bold leading-none">{teamInitials}</span>
@@ -84,8 +91,12 @@ export default function SidebarLogo() {
 
             {isOpen && (
               <>
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+                <button
+                  type="button"
+                  aria-label="Cerrar selector de equipos"
+                  className="fixed inset-0 z-40 bg-transparent border-0 p-0"
+                  onClick={() => setIsOpen(false)}
+                />
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 z-50 overflow-hidden py-1">
                   <p className="px-3 py-2 text-[10px] font-bold text-grey-400 uppercase tracking-wider">
                     Tus equipos

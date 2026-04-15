@@ -1,3 +1,3 @@
-export * from './achievementTypes';
-export * from './teamsTypes';
 export * from './userTypes';
+export * from './teamsTypes';
+export * from './achievementTypes';

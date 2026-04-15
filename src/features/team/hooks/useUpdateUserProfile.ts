@@ -1,12 +1,12 @@
 import { updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
-import { auth, storage } from '@/firebase';
 import {
-  GeneratedDataConnectModule,
-  UpdateUserProfileInput,
-  UpdateUserProfileResult
+  type GeneratedDataConnectModule,
+  type UpdateUserProfileInput,
+  type UpdateUserProfileResult
 } from "@/features/team/types/userTypes.ts";
+import { auth, storage } from '@/firebase';
 
 const getUserProfileImagePath = (uid: string): string => `users/${uid}/profile`;
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import {type UserProfileSaveInput} from "@/features/team/types";
+
 import { type UserProfile } from "./UserProfileCard.tsx";
-import {UserProfileSaveInput} from "@/features/team/types";
 
 interface UserProfileSidebarProps {
   user: UserProfile;
@@ -70,7 +71,9 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex h-full">
-      <div
+      <button
+        type="button"
+        aria-label="Cerrar panel de perfil"
         className={`absolute inset-0 bg-grey-900/20 backdrop-blur-sm transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         onClick={handleClose}
       />
@@ -79,7 +82,6 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
       <div
         className={`relative h-full w-full sm:w-1/3 min-w-[320px] max-w-[460px] flex flex-col p-[1px] shadow-2xl transition-transform duration-300 ease-in-out ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
         style={{ background: 'linear-gradient(135deg,#60AFFF,#9b7fe1)' }}
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="h-full bg-white/95 backdrop-blur-xl p-6 flex flex-col gap-5 overflow-y-auto">
 
@@ -110,9 +112,6 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 alt={displayName}
                 className="w-16 h-16 rounded-2xl object-cover"
                 style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.3)' }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = 'none';
-                }}
               />
             ) : (
               <div

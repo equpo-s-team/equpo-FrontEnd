@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import {AchievementBadge} from "@/features/team/components/Achievements/AchievementBadge.tsx";
 
-import {type Achievement} from "../../types/teamsTypes.ts";
+import {type Achievement} from "../../types/";
 
 
 interface AchievementsSectionProps {

@@ -1,5 +1,5 @@
-import React from 'react';
 import {Bolt} from "lucide-react";
+import React from 'react';
 
 export interface UserProfile {
   uid: string;

@@ -131,6 +131,7 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
 
       <div className="mx-3 mb-3">
         <button
+          onClick={() => onCreateTask?.(id)}
           className="w-full py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[10px] text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer">
           + Agregar tarea
         </button>

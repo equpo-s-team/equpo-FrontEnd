@@ -794,60 +794,6 @@ extend type Task {
     distinct: Boolean = false
   ): Float @fdc_generated(from: "Task.recurringCount", purpose: QUERY_AVG)
   """
-  ✨ Sum the `recurringCount` field in the `Task` table.
-  """
-  recurringCount_sum(
-    """
-    Set to true to sum the distinct values.
-    """
-    distinct: Boolean = false
-  ): Int @fdc_generated(from: "Task.recurringCount", purpose: QUERY_SUM)
-  """
-  ✨ Average the `recurringCount` field in the `Task` table.
-  """
-  recurringCount_avg(
-    """
-    Set to true to average the distinct values.
-    """
-    distinct: Boolean = false
-  ): Float @fdc_generated(from: "Task.recurringCount", purpose: QUERY_AVG)
-  """
-  ✨ Sum the `recurringCount` field in the `Task` table.
-  """
-  recurringCount_sum(
-    """
-    Set to true to sum the distinct values.
-    """
-    distinct: Boolean = false
-  ): Int @fdc_generated(from: "Task.recurringCount", purpose: QUERY_SUM)
-  """
-  ✨ Average the `recurringCount` field in the `Task` table.
-  """
-  recurringCount_avg(
-    """
-    Set to true to average the distinct values.
-    """
-    distinct: Boolean = false
-  ): Float @fdc_generated(from: "Task.recurringCount", purpose: QUERY_AVG)
-  """
-  ✨ Sum the `recurringCount` field in the `Task` table.
-  """
-  recurringCount_sum(
-    """
-    Set to true to sum the distinct values.
-    """
-    distinct: Boolean = false
-  ): Int @fdc_generated(from: "Task.recurringCount", purpose: QUERY_SUM)
-  """
-  ✨ Average the `recurringCount` field in the `Task` table.
-  """
-  recurringCount_avg(
-    """
-    Set to true to average the distinct values.
-    """
-    distinct: Boolean = false
-  ): Float @fdc_generated(from: "Task.recurringCount", purpose: QUERY_AVG)
-  """
   ✨ Minimum of the `dueDate` field in the `Task` table.
   """
   dueDate_min: Timestamp @fdc_generated(from: "Task.dueDate", purpose: QUERY_MIN)

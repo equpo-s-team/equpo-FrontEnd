@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import type { Team } from '@/features/team/types/teamsTypes';
 
 interface TeamFormSidebarProps {
@@ -37,6 +38,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [newMemberUid, setNewMemberUid] = useState('');
   const [memberUids, setMemberUids] = useState<string[]>([]);
+  const { data: members = [], isLoading: membersLoading } = useTeamMembers(team?.id);
 
   useEffect(() => {
     requestAnimationFrame(() => setIsVisible(true));
@@ -90,6 +92,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   const cfg = useMemo(() => (team ? COLORS[hashToIndex(team.id)] : COLORS[0]), [team]);
 
   const isCreate = mode === 'create';
+  const currentMembers = team?.members ?? [];
+  const membersForDisplay = membersLoading || members.length === 0 ? currentMembers : members;
 
   return (
     <div className="fixed inset-0 z-50 flex h-full">
@@ -230,7 +234,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
           </div>
 
           {/* Members list — Pending & Current */}
-          {(memberUids.length > 0 || (team && team.members.length > 0)) && (
+          {(memberUids.length > 0 || (!isCreate && membersForDisplay.length > 0)) && (
             <div>
               <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-2 block">
                 Miembros
@@ -263,21 +267,32 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
 
                 {/* Miembros actuales */}
                 {!isCreate &&
-                  team &&
-                  team.members.map((m) => (
+                  membersForDisplay.map((m) => {
+                    const memberUid = 'uid' in m ? m.uid : m.userUid;
+                    const memberName = m.displayName ?? memberUid;
+
+                    return (
                     <div
-                      key={m.userUid}
+                      key={memberUid}
                       className="flex items-center gap-3 px-3 py-2 rounded-xl bg-grey-50 border border-grey-100"
                     >
                       <div
-                        className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0"
+                        className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[10px] font-bold shrink-0"
                         style={{ background: cfg.gradient }}
                       >
-                        {(m.displayName || m.userUid).substring(0, 2).toUpperCase()}
+                        {m.photoUrl ? (
+                          <img
+                            src={m.photoUrl}
+                            alt={memberName}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          memberName.substring(0, 2).toUpperCase()
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-grey-700 truncate">
-                          {m.displayName || m.userUid}
+                          {memberName}
                         </p>
                       </div>
                       <span
@@ -292,7 +307,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                         {m.role}
                       </span>
                     </div>
-                  ))}
+                  );
+                  })}
               </div>
             </div>
           )}

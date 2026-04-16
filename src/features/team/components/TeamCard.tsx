@@ -1,11 +1,12 @@
+import {Coins} from "lucide-react";
 import React, { useMemo } from 'react';
 
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import type { Team } from '@/features/team/types/teamsTypes.ts';
 
 interface TeamCardProps {
   team: Team;
   onEnter: (id: string) => void;
-  onEdit: (id: string) => void;
 }
 
 const COLOR_PALETTE = [
@@ -49,8 +50,12 @@ function hashToIndex(id: string): number {
   return Math.abs(hash) % COLOR_PALETTE.length;
 }
 
-export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => {
+export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
   const cfg = useMemo(() => COLOR_PALETTE[hashToIndex(team.id)], [team.id]);
+  const { data: members = [], isLoading: membersLoading } = useTeamMembers(team.id);
+  const membersForDisplay = membersLoading || members.length === 0 ? team.members : members;
+  const baseCardShadow = '0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)';
+  const hoverCardShadow = '0 10px 30px rgba(0,0,0,0.14), 0 3px 10px rgba(0,0,0,0.08)';
 
   return (
     <div
@@ -58,16 +63,14 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
       className="group relative rounded-2xl p-[1px] transition-all duration-300"
       style={{
         background: cfg.border,
-        boxShadow: `0 4px 24px ${cfg.glow}, 0 1px 4px rgba(0,0,0,0.04)`,
+        boxShadow: baseCardShadow,
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow =
-          `0 8px 40px ${cfg.glow.replace('0.18', '0.38')}, 0 2px 8px rgba(0,0,0,0.06)`;
+        (e.currentTarget as HTMLDivElement).style.boxShadow = hoverCardShadow;
         (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)';
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow =
-          `0 4px 24px ${cfg.glow}, 0 1px 4px rgba(0,0,0,0.04)`;
+        (e.currentTarget as HTMLDivElement).style.boxShadow = baseCardShadow;
         (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
       }}
     >
@@ -81,13 +84,17 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
           <div className="flex items-center gap-3">
             {/* Color indicator */}
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md"
+              className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white font-bold text-sm shadow-md"
               style={{
                 background: cfg.gradient,
                 boxShadow: `0 4px 14px ${cfg.glow.replace('0.18', '0.5')}`,
               }}
             >
-              {team.name.charAt(0)}
+              {team.photoUrl ? (
+                <img src={team.photoUrl} alt={team.name} className="w-full h-full object-cover" />
+              ) : (
+                team.name.charAt(0)
+              )}
             </div>
             <div>
               <h3
@@ -114,9 +121,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
               border: `1px solid ${cfg.border}`,
             }}
           >
-            <span className="text-sm" role="img" aria-label="moneda">
-              💰
-            </span>
+              <Coins className="w-4 h-4 text-white" style={{ color: cfg.dot }}/>
             <span className="text-xs font-bold" style={{ color: cfg.dot }}>
               {team.virtualCurrency.toLocaleString()}
             </span>
@@ -125,7 +130,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
 
         {/* Description */}
         <p
-          className="text-xs text-grey-500 leading-relaxed line-clamp-2"
+          className="text-xs h-10 text-grey-500 leading-relaxed line-clamp-2"
           style={{ fontFamily: 'DM Sans, sans-serif' }}
         >
           {team.description || 'Sin descripción'}
@@ -136,26 +141,36 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
           <div className="flex items-center gap-2">
             {/* Avatar stack */}
             <div className="flex -space-x-2">
-              {team.members.slice(0, 4).map((m, i) => {
-                const initial = (m.displayName || m.userUid).substring(0, 2).toUpperCase();
+              {membersForDisplay.slice(0, 4).map((m, i) => {
+                const memberUid = 'uid' in m ? m.uid : m.userUid;
+                const memberName = m.displayName ?? memberUid;
+                const initial = memberName.substring(0, 2).toUpperCase();
                 return (
                   <div
-                    key={m.userUid}
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold border-2 border-white"
+                    key={memberUid}
+                    className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[10px] font-bold border-2 border-white"
                     style={{ background: cfg.gradient, zIndex: 10 - i }}
-                    title={m.displayName || m.userUid}
+                    title={memberName}
                   >
-                    {initial}
+                    {m.photoUrl ? (
+                      <img
+                        src={m.photoUrl}
+                        alt={memberName}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      initial
+                    )}
                   </div>
                 );
               })}
-              {team.members.length > 4 && (
+              {membersForDisplay.length > 4 && (
                 <div className="w-7 h-7 rounded-full bg-grey-100 border-2 border-white flex items-center justify-center text-[10px] text-grey-500 font-semibold">
-                  +{team.members.length - 4}
+                  +{membersForDisplay.length - 4}
                 </div>
               )}
             </div>
-            <span className="text-[11px] text-grey-400">{team.members.length} miembros</span>
+            <span className="text-[11px] text-grey-400">{membersForDisplay.length} miembros</span>
           </div>
 
           {/* Leader indicator */}
@@ -165,9 +180,9 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
               style={{ background: cfg.dot, boxShadow: `0 0 6px ${cfg.dot}` }}
             />
             <span className="text-[11px] font-medium" style={{ color: cfg.dot }}>
-              {team.members.length >= 5
+              {membersForDisplay.length >= 5
                 ? 'Grande'
-                : team.members.length >= 3
+                : membersForDisplay.length >= 3
                   ? 'Mediano'
                   : 'Pequeño'}
             </span>
@@ -185,12 +200,6 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
             }}
           >
             Entrar al equipo →
-          </button>
-          <button
-            onClick={() => onEdit(team.id)}
-            className="px-3 py-2 rounded-xl text-xs font-medium text-grey-500 bg-grey-50 hover:bg-grey-100 transition-colors border border-grey-200"
-          >
-            Editar
           </button>
         </div>
       </div>

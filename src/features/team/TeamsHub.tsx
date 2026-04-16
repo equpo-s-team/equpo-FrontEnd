@@ -2,33 +2,85 @@ import log from 'loglevel';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/context/AuthContext';
 import { NewTeamCard } from '@/features/team/components/NewTeamCard';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
+import {
+  UserProfileSidebar,
+} from '@/features/team/components/user/UserProfileSidebar.tsx';
 import { useCreateTeam } from '@/features/team/hooks/useCreateTeam';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
+import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
+import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
+
+import { type Achievement, AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
+import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
+
+type AuthContextUser = {
+  uid?: string | null;
+  email?: string | null;
+  displayName?: string | null;
+  photoURL?: string | null;
+  level?: number | null;
+  experiencePoints?: number | null;
+};
+
+const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => {
+  const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 1;
+  const experience =
+    typeof authUser?.experiencePoints === 'number' && authUser.experiencePoints >= 0
+      ? authUser.experiencePoints
+      : 0;
+
+  return {
+    uid: authUser?.uid || 'sin-uid',
+    displayName: authUser?.displayName || authUser?.email?.split('@')[0] || 'Usuario',
+    photoURL: authUser?.photoURL ?? null,
+    level,
+    experience,
+    experienceToNextLevel: Math.max(1000, level * 1000),
+  };
+};
+
+const MOCK_ACHIEVEMENTS: Achievement[] = [
+  { id: 'ach-1', name: 'Primer paso', icon: 'rocket', description: 'Creaste tu primer equipo en Equpo. ¡El inicio de grandes cosas!', unlockedAt: '2024-09-15T10:00:00Z' },
+  { id: 'ach-2', name: 'Colaborador', icon: 'handshake', description: 'Uniste a 3 equipos distintos y empezaste a construir tu red.', unlockedAt: '2024-10-02T14:30:00Z' },
+  { id: 'ach-3', name: 'Estratega', icon: 'bow-arrow', description: 'Completaste 10 tareas en un solo sprint. La planificación es tu fuerte.', unlockedAt: '2024-11-20T09:15:00Z' },
+  { id: 'ach-4', name: 'Líder nato', icon: 'goal', description: 'Lideraste un equipo de más de 5 personas hasta completar un proyecto.', unlockedAt: '2025-01-08T11:00:00Z' },
+  { id: 'ach-5', name: 'Velocista', icon: 'zap', description: 'Cerraste 5 tareas urgentes en menos de 24 horas.', unlockedAt: null },
+  { id: 'ach-6', name: 'Maestro XP', icon: 'sparkles', description: 'Alcanzaste el nivel 10. ¡Eres una leyenda de Equpo!', unlockedAt: null },
+  { id: 'ach-7', name: 'Networker', icon: 'globe', description: 'Invitaste a 10 usuarios únicos a tus equipos.', unlockedAt: null },
+  { id: 'ach-8', name: 'Constante', icon: 'flame', description: 'Iniciaste sesión 30 días seguidos. La constancia es tu superpoder.', unlockedAt: null },
+];
+// ---------------------------------------------------------------------------
 
 export const TeamsHub: React.FC = () => {
   const { data: teams = [], isLoading, error } = useTeams();
+  const { user: authUser } = useAuth() as { user: AuthContextUser | null };
   const createTeam = useCreateTeam();
   const updateTeam = useUpdateTeam();
+  const { saveProfile } = useUpdateUserProfile();
 
   const [modal, setModal] = useState<ModalState>({ mode: null });
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [profileOverrides, setProfileOverrides] = useState<Partial<Pick<UserProfile, 'displayName' | 'photoURL'>>>({});
   const [search, setSearch] = useState('');
+  const achievements = MOCK_ACHIEVEMENTS;
+  const baseUser = mapAuthUserToProfile(authUser);
+  const user: UserProfile = {
+    ...baseUser,
+    ...profileOverrides,
+  };
 
   const openCreate = () => setModal({ mode: 'create' });
-  const openEdit = (id: string) => setModal({ mode: 'edit', teamId: id });
   const closeModal = () => setModal({ mode: null });
 
   const handleCreate = (payload: { name: string; description: string; memberUids: string[] }) => {
     createTeam.mutate(
-      {
-        name: payload.name,
-        description: payload.description || null,
-        memberUids: payload.memberUids,
-      },
+      { name: payload.name, description: payload.description || null, memberUids: payload.memberUids },
       { onSuccess: () => closeModal() },
     );
   };
@@ -38,13 +90,9 @@ export const TeamsHub: React.FC = () => {
     payload: { name: string; description: string; memberUids: string[] },
   ) => {
     const updatePayload: Record<string, string | null> = {};
-    if (activeTeam && payload.name !== activeTeam.name) {
-      updatePayload.name = payload.name;
-    }
-    if (activeTeam && payload.description !== (activeTeam.description || '')) {
+    if (activeTeam && payload.name !== activeTeam.name) updatePayload.name = payload.name;
+    if (activeTeam && payload.description !== (activeTeam.description || ''))
       updatePayload.description = payload.description || null;
-    }
-
     updateTeam.mutate(
       { teamId, payload: updatePayload, memberUids: payload.memberUids },
       { onSuccess: () => closeModal() },
@@ -58,6 +106,28 @@ export const TeamsHub: React.FC = () => {
     void navigate(`/dashboard/${id}`);
   };
 
+  const handleProfileSave = async (updated: UserProfileSaveInput): Promise<void> => {
+    const nextDisplayName = updated.displayName || user.displayName;
+
+    try {
+      const savedProfile = await saveProfile({
+        uid: user.uid,
+        displayName: nextDisplayName,
+        photoURL: updated.photoURL,
+        photoFile: updated.photoFile,
+      });
+
+      setProfileOverrides((prev) => ({
+        ...prev,
+        displayName: savedProfile.displayName,
+        photoURL: savedProfile.photoURL,
+      }));
+    } catch (error) {
+      log.error('Error updating user profile', error);
+      throw error;
+    }
+  };
+
   const filtered = teams.filter(
     (t) =>
       t.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -66,213 +136,149 @@ export const TeamsHub: React.FC = () => {
 
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
-  const totalMembers = new Set(teams.flatMap((t) => t.members.map((m) => m.userUid))).size;
-  const totalCurrency = teams.reduce((s, t) => s + t.virtualCurrency, 0);
 
   return (
     <div
-      className="min-h-screen bg-white relative overflow-hidden"
-      style={{ fontFamily: 'DM Sans, sans-serif' }}
+      className="h-[100dvh] bg-white relative overflow-hidden"
     >
-      {/* ── Background orbs ── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-20"
-          style={{
-            background: 'radial-gradient(circle, #60AFFF 0%, transparent 70%)',
-            filter: 'blur(40px)',
-            animation: 'floatOrb 8s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute top-1/3 -right-24 w-80 h-80 rounded-full opacity-15"
-          style={{
-            background: 'radial-gradient(circle, #9b7fe1 0%, transparent 70%)',
-            filter: 'blur(50px)',
-            animation: 'floatOrb 10s ease-in-out infinite reverse',
-          }}
-        />
-        <div
-          className="absolute -bottom-24 left-1/3 w-72 h-72 rounded-full opacity-15"
-          style={{
-            background: 'radial-gradient(circle, #9CEDC1 0%, transparent 70%)',
-            filter: 'blur(40px)',
-            animation: 'floatOrb 12s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute top-2/3 right-1/4 w-48 h-48 rounded-full opacity-10"
-          style={{
-            background: 'radial-gradient(circle, #FF94AE 0%, transparent 70%)',
-            filter: 'blur(30px)',
-          }}
-        />
-      </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-10">
-        {/* ── Top bar ── */}
-        <div className="flex items-center justify-between mb-10">
+      <div className="relative h-full w-full flex flex-col">
+        <div className="shrink-0 flex w-full items-center justify-between mb-4 shadow-sm p-4">
           <div className="flex items-center gap-3">
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{
-                background: 'linear-gradient(135deg, #60AFFF, #9b7fe1)',
-                boxShadow: '0 4px 14px rgba(96,175,255,0.45)',
-              }}
+              className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo"
             >
-              <span className="text-white text-sm font-bold">✦</span>
+              <span className="text-white text-sm font-bold">U</span>
             </div>
-            <span className="font-bold text-grey-800 text-lg" style={{ letterSpacing: '-0.03em' }}>
+            <span className="font-bold text-grey-800 text-lg">
               Equpo
             </span>
           </div>
         </div>
 
-        {/* ── Hero section ── */}
-        <div className="mb-10">
-          <h1
-            className="text-grey-800 mb-2"
-            style={{
-              fontSize: 'clamp(2rem, 4vw, 3rem)',
-              lineHeight: 1.1,
-              letterSpacing: '-0.035em',
-              fontWeight: 800,
-            }}
-          >
-            Tus equipos,{' '}
-            <span
-              className="relative inline-block"
-              style={{
-                backgroundImage: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 50%, #9CEDC1 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              en un lugar.
-            </span>
-          </h1>
-          <p className="text-grey-400 text-base max-w-lg">
-            Gestiona tus equipos, sigue el progreso y colabora sin fricción.
-          </p>
-        </div>
+        <div className="grid flex-1 min-h-0 gap-6 px-5 pb-5 lg:px-6 lg:grid-cols-4 lg:grid-rows-[auto_minmax(0,1fr)]">
+          <section className="lg:col-span-3">
+            <UserProfileCard
+              user={user}
+              onOpenSettings={() => setIsProfileOpen(true)}
+            />
+          </section>
+          <section className="min-w-0 lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
+            <div className="flex items-center gap-3 mb-2 flex-row">
+              <div className="flex w-full flex-row items-center gap-3 mb-6 justify-start">
+                <div
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm"
+                  style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}
+                >
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }}
+                  />
+                  <div className="flex flex-row gap-2 items-center">
+                    <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
+                      {teams.length}
+                    </p>
+                    <p className="text-[10px] text-grey-400">Equipos activos</p>
+                  </div>
+                </div>
+              </div>
 
-        {/* ── Stats bar ── */}
-        <div className="flex items-center gap-4 mb-8 flex-wrap">
-          {[
-            {
-              label: 'Equipos activos',
-              value: teams.length,
-              color: '#60AFFF',
-              glow: 'rgba(96,175,255,0.25)',
-            },
-            {
-              label: 'Miembros únicos',
-              value: totalMembers,
-              color: '#9b7fe1',
-              glow: 'rgba(155,127,225,0.25)',
-            },
-            {
-              label: 'Moneda virtual total',
-              value: totalCurrency.toLocaleString(),
-              color: '#9CEDC1',
-              glow: 'rgba(156,237,193,0.25)',
-            },
-          ].map((stat) => (
+              <div className="relative flex flex-row">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm">
+                  ⌕
+                </span>
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Buscar equipos…"
+                  className="w-[24vw] pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
+                  onFocus={(e) =>
+                    (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
+                  }
+                  onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+                />
+              </div>
+
+              <button
+                onClick={openCreate}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
+                style={{
+                  background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
+                  boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
+                }}
+              >
+                <span className="text-base leading-none">+</span>
+                Crear equipo
+              </button>
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+              {isLoading ? (
+                <div className="text-center py-20">
+                  <div
+                    className="inline-block w-10 h-10 rounded-full border-4 border-grey-200 animate-spin"
+                    style={{ borderTopColor: '#60AFFF' }}
+                  />
+                  <p className="text-grey-400 text-sm mt-4">Cargando tus equipos…</p>
+                </div>
+              ) : error ? (
+                <div className="text-center py-20">
+                  <p className="text-[#F65A70] text-sm">
+                    Error al cargar los equipos. Intenta de nuevo.
+                  </p>
+                </div>
+              ) : filtered.length === 0 && search ? (
+                <div className="text-center py-20">
+                  <p className="text-grey-400 text-sm">
+                    No se encontraron equipos para "<strong>{search}</strong>"
+                  </p>
+                </div>
+              ) : filtered.length === 0 && !search ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                  <NewTeamCard onClick={openCreate} />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                  {filtered.map((team) => (
+                    <TeamCard key={team.id} team={team} onEnter={handleEnter}/>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+
+          <aside className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full">
             <div
-              key={stat.label}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-grey-150 bg-white/80 backdrop-blur-sm"
-              style={{ boxShadow: `0 4px 16px ${stat.glow}` }}
+              className="lg:h-full"
             >
               <div
-                className="w-2 h-2 rounded-full"
-                style={{ background: stat.color, boxShadow: `0 0 8px ${stat.color}` }}
-              />
-              <div>
-                <p className="text-sm font-bold text-grey-800" style={{ color: stat.color }}>
-                  {stat.value}
-                </p>
-                <p className="text-[10px] text-grey-400">{stat.label}</p>
+                className="p-4 lg:h-full lg:overflow-y-auto"
+              >
+                <AchievementsSection achievements={achievements} />
               </div>
             </div>
-          ))}
+          </aside>
         </div>
-
-        {/* ── Search + actions ── */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="relative flex-1 max-w-xs">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm">
-              ⌕
-            </span>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar equipos…"
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
-              onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')}
-              onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-            />
-          </div>
-
-          <button
-            onClick={openCreate}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
-            style={{
-              background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-              boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
-            }}
-          >
-            <span className="text-base leading-none">+</span>
-            Crear equipo
-          </button>
-        </div>
-
-        {/* ── Content ── */}
-        {isLoading ? (
-          <div className="text-center py-20">
-            <div
-              className="inline-block w-10 h-10 rounded-full border-4 border-grey-200 animate-spin"
-              style={{ borderTopColor: '#60AFFF' }}
-            />
-            <p className="text-grey-400 text-sm mt-4">Cargando tus equipos…</p>
-          </div>
-        ) : error ? (
-          <div className="text-center py-20">
-            <p className="text-[#F65A70] text-sm">Error al cargar los equipos. Intenta de nuevo.</p>
-          </div>
-        ) : filtered.length === 0 && search ? (
-          <div className="text-center py-20">
-            <p className="text-grey-400 text-sm">
-              No se encontraron equipos para "<strong>{search}</strong>"
-            </p>
-          </div>
-        ) : filtered.length === 0 && !search ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <NewTeamCard onClick={openCreate} />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map((team) => (
-              <TeamCard key={team.id} team={team} onEnter={handleEnter} onEdit={openEdit} />
-            ))}
-            {!search && <NewTeamCard onClick={openCreate} />}
-          </div>
-        )}
       </div>
 
-      {/* ── Sidebar ── */}
       {(modal.mode === 'create' || modal.mode === 'edit') && (
         <TeamFormSidebar
           mode={modal.mode}
           team={modal.mode === 'edit' ? activeTeam : undefined}
           onClose={closeModal}
           onSubmit={(payload) => {
-            if (modal.mode === 'create') {
-              handleCreate(payload);
-            } else if (modal.mode === 'edit' && activeTeam) {
-              handleEdit(activeTeam.id, payload);
-            }
+            if (modal.mode === 'create') handleCreate(payload);
+            else if (modal.mode === 'edit' && activeTeam) handleEdit(activeTeam.id, payload);
           }}
+        />
+      )}
+
+      {isProfileOpen && (
+        <UserProfileSidebar
+          user={user}
+          onClose={() => setIsProfileOpen(false)}
+          onSave={handleProfileSave}
         />
       )}
 

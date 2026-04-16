@@ -3,6 +3,7 @@ export interface TeamMember {
   role: 'leader' | 'collaborator' | 'spectator' | 'member';
   joinedAt: string;
   displayName?: string | null;
+  photoUrl?: string | null;
 }
 
 export interface Team {
@@ -23,3 +24,36 @@ export interface ModalState {
   mode: ModalMode;
   teamId?: string;
 }
+export interface CreateTeamPayload {
+  name: string;
+  virtualCurrency: number;
+  description?: string | null;
+}
+
+export interface UpdateTeamPayload {
+  name?: string;
+  virtualCurrency?: number;
+  description?: string | null;
+}
+
+export interface AddTeamMemberPayload {
+  userUid: string;
+  role?: 'collaborator' | 'spectator' | 'member';
+}
+
+export interface UpdateTeamMemberRolePayload {
+  role: 'collaborator' | 'spectator' | 'member';
+}
+
+export interface CreateTeamRewardPayload {
+  rewardId: string;
+  dateObtained?: string;
+}
+
+export interface TeamGroup {
+  id: string;
+  groupName: string;
+}
+
+
+

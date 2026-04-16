@@ -81,13 +81,17 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter, onEdit }) => 
           <div className="flex items-center gap-3">
             {/* Color indicator */}
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-md"
+              className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white font-bold text-sm shadow-md"
               style={{
                 background: cfg.gradient,
                 boxShadow: `0 4px 14px ${cfg.glow.replace('0.18', '0.5')}`,
               }}
             >
-              {team.name.charAt(0)}
+              {team.photoUrl ? (
+                <img src={team.photoUrl} alt={team.name} className="w-full h-full object-cover" />
+              ) : (
+                team.name.charAt(0)
+              )}
             </div>
             <div>
               <h3

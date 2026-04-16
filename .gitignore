@@ -118,9 +118,15 @@ storybook-static/
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+.firebase/
+firebase.json
+firestore.indexes.json
+.firebaserc
+
 *rules.*
 /dataconnect/
 *.rules
+*.rules.*
 
 AGENTS.md
 .claude

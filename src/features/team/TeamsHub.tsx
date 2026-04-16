@@ -76,7 +76,6 @@ export const TeamsHub: React.FC = () => {
   };
 
   const openCreate = () => setModal({ mode: 'create' });
-  const openEdit = (id: string) => setModal({ mode: 'edit', teamId: id });
   const closeModal = () => setModal({ mode: null });
 
   const handleCreate = (payload: { name: string; description: string; memberUids: string[] }) => {
@@ -242,7 +241,7 @@ export const TeamsHub: React.FC = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                   {filtered.map((team) => (
-                    <TeamCard key={team.id} team={team} onEnter={handleEnter} onEdit={openEdit} />
+                    <TeamCard key={team.id} team={team} onEnter={handleEnter}/>
                   ))}
                 </div>
               )}

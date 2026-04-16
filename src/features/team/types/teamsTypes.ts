@@ -3,6 +3,7 @@ export interface TeamMember {
   role: 'leader' | 'collaborator' | 'spectator' | 'member';
   joinedAt: string;
   displayName?: string | null;
+  photoUrl?: string | null;
 }
 
 export interface Team {

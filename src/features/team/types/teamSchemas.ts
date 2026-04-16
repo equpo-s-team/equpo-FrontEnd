@@ -6,6 +6,7 @@ export interface CreateTeamPayload {
 export interface UpdateTeamPayload {
   name?: string;
   description?: string | null;
+  photoUrl?: string | null;
 }
 
 export interface AddTeamMemberPayload {
@@ -37,6 +38,7 @@ export interface UnlockAchievementPayload {
 export interface TeamMember {
   uid: string;
   displayName: string | null;
+  photoUrl?: string | null;
   role: string;
 }
 

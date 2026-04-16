@@ -11,6 +11,7 @@ export interface Team {
   leaderUid: string;
   virtualCurrency: number;
   description: string | null;
+  photoUrl?: string | null;
   createdAt: string;
   updatedAt: string;
   members: TeamMember[];

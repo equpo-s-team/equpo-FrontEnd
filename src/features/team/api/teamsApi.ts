@@ -37,4 +37,7 @@ export const teamsApi = {
     request<{ members: TeamMember[] }>(`/teams/${teamId}/members`, 'GET'),
   listGroups: (teamId: string) =>
     request<{ groups: TeamGroup[] }>(`/teams/${teamId}/groups`, 'GET'),
+  removeMember: (teamId: string, userUid: string) =>
+    request<void>(`/teams/${teamId}/members/${userUid}`, 'DELETE'),
+  deleteTeam: (teamId: string) => request<void>(`/teams/${teamId}`, 'DELETE'),
 };

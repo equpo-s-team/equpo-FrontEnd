@@ -1,5 +1,5 @@
-import { ArrowRightLeft, ChessKnight } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowRightLeft } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useTeam } from '@/context/TeamContext.tsx';
@@ -7,15 +7,39 @@ import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
 import { useSidebar } from './SidebarContext.jsx';
 
+function getInitials(name, uid) {
+  if (!name) return uid.slice(0, 2).toUpperCase();
+  const parts = name.trim().split(/\s+/);
+  return parts
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() ?? '')
+    .join('');
+}
+
 export default function SidebarLogo() {
   const { collapsed } = useSidebar();
   const { teamId } = useTeam();
   const { data: teams = [] } = useTeams();
   const [isOpen, setIsOpen] = useState(false);
+  const [logoImageError, setLogoImageError] = useState(false);
   const navigate = useNavigate();
 
   const activeTeam = teams.find((t) => t.id === teamId);
   const teamName = activeTeam?.name || 'Cargando...';
+  const teamPhotoUrl = activeTeam?.photoUrl || null;
+  const teamInitials = getInitials(activeTeam?.name ?? null, activeTeam?.id ?? 'eq');
+
+  useEffect(() => {
+    setLogoImageError(false);
+
+    if (!teamPhotoUrl) {
+      return;
+    }
+
+    const probe = new Image();
+    probe.onerror = () => setLogoImageError(true);
+    probe.src = teamPhotoUrl;
+  }, [teamPhotoUrl, teamId]);
 
   return (
     <div
@@ -24,7 +48,15 @@ export default function SidebarLogo() {
       {/* Logo mark */}
       <div className="relative flex-shrink-0">
         <div className="w-9 h-9 rounded-xl bg-gradient-purple-bg flex items-center justify-center shadow-blue-glow">
-          <ChessKnight />
+          {teamPhotoUrl && !logoImageError ? (
+            <img
+              src={teamPhotoUrl}
+              alt={`Foto de ${teamName}`}
+              className="w-full h-full rounded-xl object-cover"
+            />
+          ) : (
+            <span className="text-white text-[10px] font-bold leading-none">{teamInitials}</span>
+          )}
         </div>
         {/* Online pulse */}
         <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green border-2 border-dark" />
@@ -59,8 +91,12 @@ export default function SidebarLogo() {
 
             {isOpen && (
               <>
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-                <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+                <button
+                  type="button"
+                  aria-label="Cerrar selector de equipos"
+                  className="fixed inset-0 z-40 bg-transparent border-0 p-0"
+                  onClick={() => setIsOpen(false)}
+                />
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 z-50 overflow-hidden py-1">
                   <p className="px-3 py-2 text-[10px] font-bold text-grey-400 uppercase tracking-wider">
                     Tus equipos

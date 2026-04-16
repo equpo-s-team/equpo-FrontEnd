@@ -1,17 +1,39 @@
 import { ChartColumnBig, Home, MessageCircle, Settings, Star } from 'lucide-react';
 
+import { useAuth } from '@/context/AuthContext';
+import { useTeam } from '@/context/TeamContext.tsx';
+import { useTeams } from '@/features/team/hooks/useTeams';
+
 import { useSidebar } from './SidebarContext.jsx';
 
-const NAV_ITEMS = [
+const BASE_NAV_ITEMS = [
   { id: 'my-space', label: 'Mi Espacio', icon: Home },
   { id: 'missiones', label: 'Misiones', icon: Star },
   { id: 'chat', label: 'Chat', icon: MessageCircle },
   { id: 'reports', label: 'Reportes', icon: ChartColumnBig },
-  { id: 'settings', label: 'Ajustes', icon: Settings },
 ];
+
+const SETTINGS_ITEM = { id: 'settings', label: 'Ajustes del Equipo', icon: Settings };
 
 export default function BottomNav() {
   const { activeItem, setActiveItem } = useSidebar();
+  const { user } = useAuth();
+  const { teamId } = useTeam();
+  const { data: teams = [] } = useTeams();
+
+  // Determine if current user can access settings
+  const currentTeam = teams.find((t) => t.id === teamId);
+  const currentUid = user?.uid ?? '';
+  const myRole = (() => {
+    if (!currentTeam || !currentUid) return null;
+    if (currentTeam.leaderUid === currentUid) return 'leader';
+    return currentTeam.members.find((m) => m.userUid === currentUid)?.role ?? null;
+  })();
+  const canAccessSettings = myRole === 'leader' || myRole === 'collaborator';
+
+  const navItems = canAccessSettings
+    ? [...BASE_NAV_ITEMS, SETTINGS_ITEM]
+    : BASE_NAV_ITEMS;
 
   return (
     <nav
@@ -23,7 +45,7 @@ export default function BottomNav() {
             pb-safe
         "
     >
-      {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
+      {navItems.map(({ id, label, icon: Icon }) => {
         const isActive = activeItem === id;
         return (
           <button
@@ -47,11 +69,11 @@ export default function BottomNav() {
 
             <span
               className={`
-                            text-[10px] font-body font-medium leading-none transition-colors
+                            text-[10px] font-body font-medium leading-none transition-colors truncate max-w-full px-1
                             ${isActive ? 'text-blue' : ''}
                         `}
             >
-              {label}
+              {id === 'settings' ? 'Ajustes' : label}
             </span>
           </button>
         );

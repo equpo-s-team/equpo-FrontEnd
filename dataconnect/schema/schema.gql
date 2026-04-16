@@ -19,6 +19,7 @@ type Team @table {
   createdAt: Timestamp! @default(expr: "request.time")
   updatedAt: Timestamp! @default(expr: "request.time")
   description: String
+  photoURL: String
 }
 
 type TeamMembership @table(key: ["user", "team"]) {

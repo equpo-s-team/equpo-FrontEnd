@@ -105,7 +105,7 @@ export const AudioProvider = ({ children }) => {
     if (!soundEnabled || isMuted) return;
 
     const audio = new Audio(soundFile);
-    audio.volume = volume * 1.2; // Efectos un poco más altos
+    audio.volume = Math.min(volume * 1.2, 1.0); // Efectos un poco más altos, pero máximo 1.0
 
     audio.load();
     audio.play().catch(err => {

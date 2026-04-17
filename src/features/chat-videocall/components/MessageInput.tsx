@@ -6,10 +6,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { storage } from '@/firebase';
 
 export default function MessageInput() {
   const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId } = useChatContext();
+  const { play } = useSoundEffects();
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -40,6 +42,7 @@ export default function MessageInput() {
   const handleSend = useCallback(() => {
     if (!value.trim()) return;
     sendMessage(value);
+    play('messageSent'); // Play sound when sending message
     setValue('');
     setShowEmojiPicker(false);
     inputRef.current?.focus();
@@ -47,7 +50,7 @@ export default function MessageInput() {
     // Clear typing state
     if (typingTimeout) clearTimeout(typingTimeout);
     void setTyping(false);
-  }, [value, sendMessage, setTyping, typingTimeout]);
+  }, [value, sendMessage, setTyping, typingTimeout, play]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -100,6 +103,7 @@ export default function MessageInput() {
 
       const isImage = file.type.startsWith('image/');
       sendMessage(file.name, isImage ? 'image' : 'file', url, file.name);
+      play('messageSent'); // Play sound when sending file
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {

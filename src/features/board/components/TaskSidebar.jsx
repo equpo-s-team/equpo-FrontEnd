@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 import { useCreateTask } from '../hooks/useCreateTask';
 import { useDeleteTask } from '../hooks/useDeleteTask';
@@ -53,6 +54,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
+  const { play } = useSoundEffects();
 
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
@@ -167,12 +169,15 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
       const payload = buildPayload();
       if (mode === 'edit' && task) {
         await updateTask.mutateAsync({ teamId, taskId: task.id, payload });
+        play('taskUpdated');
       } else {
         await createTask.mutateAsync({ teamId, payload });
+        play('taskCreated');
       }
       onClose();
     } catch (err) {
       setErrors({ form: err?.message || 'Error al guardar la tarea' });
+      play('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -183,9 +188,11 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     setIsSubmitting(true);
     try {
       await deleteTask.mutateAsync({ teamId, taskId: task.id });
+      play('taskDeleted');
       onClose();
     } catch (err) {
       setErrors({ form: err?.message || 'Error al eliminar la tarea' });
+      play('error');
     } finally {
       setIsSubmitting(false);
     }

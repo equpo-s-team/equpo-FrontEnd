@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
@@ -60,6 +61,7 @@ export default function TeamBoard() {
   const { data, isLoading } = useTasks(teamId);
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
+  const { play } = useSoundEffects();
 
   // ── Filter logic ──
   const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
@@ -110,6 +112,9 @@ export default function TeamBoard() {
     const card = fromCards[cardIndex];
     if (!card) return;
 
+    // Play drag start sound
+    play('dragStart');
+
     const nextStatus = COLUMN_TO_STATUS[toColumnId] ?? 'todo';
     const nextCard = {
       ...card,
@@ -134,6 +139,7 @@ export default function TeamBoard() {
 
       fromCards.splice(adjustedPosition, 0, nextCard);
       setLocalCards({ ...source, [fromColumnId]: fromCards });
+      play('dragEnd');
     } else {
       // Cross-column move: insert into a separate target array
       const toCards = [...(source[toColumnId] ?? [])];
@@ -145,6 +151,13 @@ export default function TeamBoard() {
         [fromColumnId]: fromCards,
         [toColumnId]: toCards,
       });
+      
+      play('drop');
+      
+      // Play completion sound if task is moved to done
+      if (toColumnId === 'done') {
+        play('taskCompleted');
+      }
     }
 
     // If the column changed, sync the new status to the backend

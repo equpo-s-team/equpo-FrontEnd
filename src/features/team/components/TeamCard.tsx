@@ -103,7 +103,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
               >
                 {team.name}
               </h3>
-              <p className="text-[11px] text-grey-400 mt-0.5">
+              <p className="text-xs text-grey-400 mt-0.5">
                 Desde{' '}
                 {new Date(team.createdAt).toLocaleDateString('es-CO', {
                   month: 'short',
@@ -148,7 +148,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                 return (
                   <div
                     key={memberUid}
-                    className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[10px] font-bold border-2 border-white"
+                    className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold border-2 border-white"
                     style={{ background: cfg.gradient, zIndex: 10 - i }}
                     title={memberName}
                   >
@@ -165,12 +165,12 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                 );
               })}
               {membersForDisplay.length > 4 && (
-                <div className="w-7 h-7 rounded-full bg-grey-100 border-2 border-white flex items-center justify-center text-[10px] text-grey-500 font-semibold">
+                <div className="w-7 h-7 rounded-full bg-grey-100 border-2 border-white flex items-center justify-center text-xs text-grey-500 font-semibold">
                   +{membersForDisplay.length - 4}
                 </div>
               )}
             </div>
-            <span className="text-[11px] text-grey-400">{membersForDisplay.length} miembros</span>
+            <span className="text-xs text-grey-400">{membersForDisplay.length} miembros</span>
           </div>
 
           {/* Leader indicator */}
@@ -179,7 +179,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
               className="w-1.5 h-1.5 rounded-full"
               style={{ background: cfg.dot, boxShadow: `0 0 6px ${cfg.dot}` }}
             />
-            <span className="text-[11px] font-medium" style={{ color: cfg.dot }}>
+            <span className="text-xs font-medium" style={{ color: cfg.dot }}>
               {membersForDisplay.length >= 5
                 ? 'Grande'
                 : membersForDisplay.length >= 3

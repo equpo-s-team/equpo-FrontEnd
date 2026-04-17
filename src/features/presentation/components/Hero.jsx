@@ -50,7 +50,7 @@ export default function Hero() {
               style={{ background: 'linear-gradient(90deg, #9CEDC1, #60AFFF)' }}
             />
             <span
-              className="font-body text-[0.85rem] font-bold tracking-[0.2em] uppercase"
+              className="font-body text-sm font-bold tracking-[0.2em] uppercase"
               style={{
                 background: 'linear-gradient(90deg, #38b97a, #2e8fd4)',
                 WebkitBackgroundClip: 'text',
@@ -61,7 +61,7 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1 className="font-maxwell text-[3.2rem] md:text-[3.8rem] text-grey-900 mb-6 leading-[1.08]">
+          <h1 className="font-maxwell text-5xl md:text-6xl text-grey-900 mb-6 leading-[1.08]">
             Organiza tareas. <br />
             <span className="relative inline-block overflow-hidden md:pb-2 md:pt-1 min-w-[900px]">
               &nbsp;
@@ -87,7 +87,7 @@ export default function Hero() {
             Haz que el equipo prospere.
           </h1>
 
-          <p className="font-body text-[1.1rem] leading-[1.65] text-grey-600 max-w-[480px] mb-8">
+          <p className="font-body text-lg leading-[1.65] text-grey-600 max-w-[480px] mb-8">
             Con equpo, cada tarea completada no solo avanza proyectos: mejora el bienestar del
             espacio virtual del equipo. Trabajo real, impacto visible, motivación compartida.
           </p>
@@ -95,7 +95,7 @@ export default function Hero() {
           <div className="flex flex-wrap gap-4 mb-8">
             <a
               href="#"
-              className="font-maxwell text-white px-[2.2rem] py-[1.1rem] rounded-[14px] text-[1rem] no-underline hover:-translate-y-1 transition-all"
+              className="font-maxwell text-white px-[2.2rem] py-[1.1rem] rounded-[14px] text-base no-underline hover:-translate-y-1 transition-all"
               style={{
                 background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 100%)',
                 boxShadow: '0 8px 28px rgba(56,185,122,0.35)',
@@ -105,7 +105,7 @@ export default function Hero() {
             </a>
             <a
               href="#what"
-              className="font-maxwell text-grey-700 border border-grey-200 bg-white/70 backdrop-blur px-[2.2rem] py-[1.1rem] rounded-[14px] text-[1rem] no-underline hover:-translate-y-1 hover:border-grey-300 transition-all"
+              className="font-maxwell text-grey-700 border border-grey-200 bg-white/70 backdrop-blur px-[2.2rem] py-[1.1rem] rounded-[14px] text-base no-underline hover:-translate-y-1 hover:border-grey-300 transition-all"
             >
               Ver cómo funciona
             </a>
@@ -115,7 +115,7 @@ export default function Hero() {
             {['Empieza en minutos.', 'Diseñado para equipos colaborativos.'].map((txt) => (
               <p
                 key={txt}
-                className="font-body text-[0.9rem] text-grey-500 flex items-center gap-2"
+                className="font-body text-sm text-grey-500 flex items-center gap-2"
               >
                 <Activity size={15} className="text-green-DEFAULT flex-shrink-0" />
                 {txt}
@@ -152,14 +152,14 @@ export default function Hero() {
             ].map((badge) => (
               <span
                 key={badge.label}
-                className={`font-body bg-gradient-to-r ${badge.grad} border ${badge.border} ${badge.text} text-[0.78rem] font-semibold px-[1rem] py-[0.45rem] rounded-full hover:-translate-y-px transition-all cursor-default`}
+                className={`font-body bg-gradient-to-r ${badge.grad} border ${badge.border} ${badge.text} text-xs font-semibold px-[1rem] py-[0.45rem] rounded-full hover:-translate-y-px transition-all cursor-default`}
               >
                 {badge.label}
               </span>
             ))}
           </div>
 
-          <p className="font-body text-[0.88rem] text-grey-400 italic border-t border-grey-150 pt-5">
+          <p className="font-body text-sm text-grey-400 italic border-t border-grey-150 pt-5">
             "Cuando todos aportan, el equipo lo siente."
           </p>
         </div>
@@ -245,8 +245,8 @@ function FloatCard({ className = '', icon, title, label, iconBg }) {
         {icon}
       </div>
       <div className="flex flex-col">
-        <span className="font-semibold text-grey-900 text-[0.88rem]">{title}</span>
-        <span className="text-grey-400 text-[0.75rem] font-normal">{label}</span>
+        <span className="font-semibold text-grey-900 text-sm">{title}</span>
+        <span className="text-grey-400 text-xs font-normal">{label}</span>
       </div>
     </motion.div>
   );
@@ -290,8 +290,8 @@ function FloatCardRing({ title, label }) {
         </svg>
       </div>
       <div className="flex flex-col">
-        <span className="font-semibold text-grey-900 text-[0.88rem]">{title}</span>
-        <span className="text-grey-400 text-[0.75rem] font-normal">{label}</span>
+        <span className="font-semibold text-grey-900 text-sm">{title}</span>
+        <span className="text-grey-400 text-xs font-normal">{label}</span>
       </div>
     </motion.div>
   );

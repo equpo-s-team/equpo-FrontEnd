@@ -69,7 +69,7 @@ export default function BottomNav() {
 
             <span
               className={`
-                            text-[10px] font-body font-medium leading-none transition-colors truncate max-w-full px-1
+                            text-xs font-body font-medium leading-none transition-colors truncate max-w-full px-1
                             ${isActive ? 'text-blue' : ''}
                         `}
             >

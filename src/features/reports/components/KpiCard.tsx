@@ -79,11 +79,11 @@ export function KpiCard({ variant, label, value, sub }: KpiCardProps) {
       />
 
       <div className="relative z-10">
-        <p className="text-[0.7rem] font-medium text-grey-500 mb-2.5">{label}</p>
-        <p className="text-[2.1rem] font-semibold tracking-[-0.04em] text-grey-900 leading-none">
+        <p className="text-xs font-medium text-grey-500 mb-2.5">{label}</p>
+        <p className="text-4xl font-semibold tracking-[-0.04em] text-grey-900 leading-none">
           {value}
         </p>
-        <p className="text-[0.72rem] text-grey-400 mt-1.5">{sub}</p>
+        <p className="text-xs text-grey-400 mt-1.5">{sub}</p>
       </div>
     </div>
   );

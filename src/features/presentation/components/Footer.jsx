@@ -43,7 +43,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-10 border-b border-grey-150 mb-7">
           {/* Brand */}
           <div>
-            <div className="font-maxwell text-[1.5rem] text-grey-900 mb-4">
+            <div className="font-maxwell text-2xl text-grey-900 mb-4">
               eq
               <span
                 style={{
@@ -56,7 +56,7 @@ export default function Footer() {
               </span>
               po
             </div>
-            <p className="font-body text-[.85rem] leading-[1.7] text-grey-400 max-w-[260px]">
+            <p className="font-body text-sm leading-[1.7] text-grey-400 max-w-[260px]">
               Una plataforma para equipos que quieren colaborar bien, crecer juntos y ver el impacto
               de su trabajo.
             </p>
@@ -71,7 +71,7 @@ export default function Footer() {
                 <a
                   key={label}
                   href="#"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-[.7rem] font-bold no-underline hover:-translate-y-0.5 transition-all"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold no-underline hover:-translate-y-0.5 transition-all"
                   style={{ background: grad }}
                 >
                   {label}
@@ -83,7 +83,7 @@ export default function Footer() {
           {/* Nav cols */}
           {NAV_COLS.map((col) => (
             <div key={col.title}>
-              <h4 className="font-body text-[.78rem] font-semibold tracking-[.1em] uppercase text-grey-400 mb-4">
+              <h4 className="font-body text-xs font-semibold tracking-[.1em] uppercase text-grey-400 mb-4">
                 {col.title}
               </h4>
               <ul className="list-none flex flex-col gap-3">
@@ -91,7 +91,7 @@ export default function Footer() {
                   <li key={link}>
                     <a
                       href="#"
-                      className="font-body text-[.87rem] text-grey-500 no-underline hover:text-grey-900 transition-colors"
+                      className="font-body text-sm text-grey-500 no-underline hover:text-grey-900 transition-colors"
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background =
                           'linear-gradient(90deg, #38b97a, #2e8fd4)';
@@ -119,7 +119,7 @@ export default function Footer() {
             <a
               key={item}
               href="#"
-              className="font-body text-[.82rem] text-grey-300 no-underline hover:text-grey-600 transition-colors"
+              className="font-body text-sm text-grey-300 no-underline hover:text-grey-600 transition-colors"
             >
               {item}
             </a>
@@ -128,11 +128,11 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <p className="font-body text-[.82rem] text-grey-400">
+          <p className="font-body text-sm text-grey-400">
             <strong className="text-grey-600 font-semibold">equpo</strong> — Trabajo real. Impacto
             compartido.
           </p>
-          <p className="font-body text-[.78rem] text-grey-300">
+          <p className="font-body text-xs text-grey-300">
             © 2025 equpo. Todos los derechos reservados.
           </p>
         </div>

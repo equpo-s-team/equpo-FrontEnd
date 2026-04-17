@@ -26,7 +26,7 @@ export default function StatBar({
       <div className="flex flex-col gap-1.5">
         <div className="flex w-full items-center justify-between gap-2">
           <span className={`${valueColorClass}`}>{icon}</span>
-          <div className={`font-maxwell text-[14px] font-bold leading-none ${valueColorClass}`}>
+          <div className={`font-maxwell text-sm font-bold leading-none ${valueColorClass}`}>
             {Math.round(value) + '/' + max}
           </div>
         </div>

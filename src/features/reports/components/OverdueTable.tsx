@@ -24,18 +24,18 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
       />
 
       <div className="relative z-10 mb-5 flex shrink-0 items-center justify-between">
-        <h2 className="text-[0.88rem] font-semibold text-grey-800 tracking-[-0.01em]">
+        <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">
           Tareas vencidas
         </h2>
-        <button className="text-[0.74rem] text-[#c94155] font-medium hover:opacity-70 transition-opacity">
+        <button className="text-xs text-[#c94155] font-medium hover:opacity-70 transition-opacity">
           Ver todas →
         </button>
       </div>
 
       <div className="relative z-10 grid shrink-0 grid-cols-[1fr_auto_auto] gap-3 border-b border-grey-150 pb-2">
-        <span className="text-[0.65rem] text-grey-400">Tarea</span>
-        <span className="text-[0.65rem] text-grey-400">Dias</span>
-        <span className="text-[0.65rem] text-grey-400">Prio.</span>
+        <span className="text-xs text-grey-400">Tarea</span>
+        <span className="text-xs text-grey-400">Dias</span>
+        <span className="text-xs text-grey-400">Prio.</span>
       </div>
 
       <div
@@ -45,17 +45,17 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
         {tasks.map((task) => (
           <div
             key={task.id}
-            className="grid grid-cols-[1fr_auto_auto] items-center gap-3 py-2.5 border-b border-grey-100 last:border-0 text-[0.78rem]"
+            className="grid grid-cols-[1fr_auto_auto] items-center gap-3 py-2.5 border-b border-grey-100 last:border-0 text-xs"
           >
             <div>
               <p className="font-medium text-grey-800 truncate">{task.task}</p>
-              <p className="text-[0.69rem] text-grey-500 mt-0.5">{task.assignee}</p>
+              <p className="text-xs text-grey-500 mt-0.5">{task.assignee}</p>
             </div>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[0.67rem] font-semibold bg-[rgba(246,90,112,0.1)] text-[#c94155] whitespace-nowrap">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[rgba(246,90,112,0.1)] text-[#c94155] whitespace-nowrap">
               +{task.daysOverdue} {task.daysOverdue === 1 ? 'dia' : 'dias'}
             </span>
             <span
-              className={`inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[0.65rem] font-semibold whitespace-nowrap ${PRIORITY_STYLES[task.priority]}`}
+              className={`inline-flex items-center justify-center px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap ${PRIORITY_STYLES[task.priority]}`}
             >
               {task.priority}
             </span>

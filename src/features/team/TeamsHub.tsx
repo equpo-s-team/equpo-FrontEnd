@@ -178,7 +178,7 @@ export const TeamsHub: React.FC = () => {
                     <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
                       {teams.length}
                     </p>
-                    <p className="text-[10px] text-grey-400">Equipos activos</p>
+                    <p className="text-xs text-grey-400">Equipos activos</p>
                   </div>
                 </div>
               </div>

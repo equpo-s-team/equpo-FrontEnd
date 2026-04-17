@@ -129,7 +129,7 @@ export default function Reports() {
       <AppHeader />
       <FilterBar setActiveDays={setActiveDays} />
       <main className="relative z-10 mx-1 flex flex-1 min-h-0 max-w-full flex-col overflow-hidden px-4 py-4 sm:px-6 lg:px-9">
-        <p className="mb-3.5 shrink-0 text-[0.67rem] font-semibold uppercase tracking-[0.1em] text-grey-400">
+        <p className="mb-3.5 shrink-0 text-xs font-semibold uppercase tracking-[0.1em] text-grey-400">
           Resumen de estados
         </p>
 

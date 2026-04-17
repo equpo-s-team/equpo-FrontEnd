@@ -17,16 +17,16 @@ export default function Sidebar() {
   const { user } = useAuth();
   const { teamId } = useTeam();
   const { data: teams = [] } = useTeams();
-  const { 
-    isPlaying, 
-    volume, 
-    musicEnabled, 
-    isMuted, 
-    playBackgroundMusic, 
-    pauseBackgroundMusic, 
-    setVolume, 
-    setMusicEnabled, 
-    toggleMute 
+  const {
+    isPlaying,
+    volume,
+    musicEnabled,
+    isMuted,
+    playBackgroundMusic,
+    pauseBackgroundMusic,
+    setVolume,
+    setMusicEnabled,
+    toggleMute
   } = useAudio();
 
   // Determine the current user's role in the active team
@@ -42,7 +42,7 @@ export default function Sidebar() {
   return (
     <aside
       className={`
-    hidden lg:flex flex-col fixed left-0 top-0 h-screen z-50 rounded-r-2xl
+    hidden lg:flex flex-col fixed left-0 top-0 h-screen z-50
     bg-primary border-r border-secondary transition-all duration-300 ease-in-out
     ${collapsed ? 'w-[68px]' : 'w-[220px]'}
     shadow-neonPurple
@@ -70,16 +70,37 @@ export default function Sidebar() {
       <div className={`px-2 py-3 transition-all duration-300 ${collapsed ? 'flex justify-center' : ''}`}>
         {!collapsed ? (
           <div className="space-y-2">
-            <div className="text-[10px] font-semibold text-grey-500 uppercase tracking-wider px-1">Audio</div>
+            <div className="px-3 pt-1 pb-0.5 text-xs font-body font-semibold tracking-widest uppercase text-purple select-none">Audio</div>
             <div className="space-y-2">
-              {/* Mute/Volume Control */}
-              <div className="flex items-center gap-2 p-2 rounded-lg bg-secondary/50">
+              <div className="flex items-center gap-2 p-2">
                 <button
                   onClick={toggleMute}
                   className="p-1.5 rounded-lg text-grey-600 hover:text-grey-800 hover:bg-grey-200 transition-all duration-200"
                   title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
                 >
-                  {isMuted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} />}
+                  {isMuted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} className="text-grey-600" />}
+                </button>
+                <button
+                  onClick={() => {
+                    if (!isPlaying) {
+                      setMusicEnabled(true);
+                      setTimeout(() => playBackgroundMusic(), 200);
+                    } else {
+                      pauseBackgroundMusic();
+                      setMusicEnabled(false);
+                    }
+                  }}
+                  disabled={isMuted}
+                  className={`p-1.5 rounded-lg transition-all duration-200 ${
+                    isMuted
+                      ? 'text-grey-400 cursor-not-allowed opacity-50'
+                      : isPlaying
+                        ? 'text-blue-500 hover:text-blue-600 hover:bg-blue-100'
+                        : 'text-grey-600 hover:text-grey-800 hover:bg-grey-200'
+                  }`}
+                  title={isMuted ? 'Audio muteado' : (isPlaying ? 'Pausar música' : 'Reproducir música')}
+                >
+                  {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                 </button>
                 <div className="flex-1 relative">
                   <input
@@ -95,10 +116,11 @@ export default function Sidebar() {
                     disabled={isMuted}
                     className="w-full h-1 appearance-none cursor-pointer disabled:opacity-30 transition-all duration-200"
                     style={{
-                      background: `linear-gradient(to right, rgb(59, 130, 246) 0%, rgb(59, 130, 246) ${(isMuted ? 0 : volume) * 100}%, rgb(229, 231, 235) ${(isMuted ? 0 : volume) * 100}%, rgb(229, 231, 235) 100%)`,
+                      background: `linear-gradient(to right, #60AFFF 0%, #60AFFF ${(isMuted ? 0 : volume) * 100}%, rgba(209, 213, 235, 0.3) ${(isMuted ? 0 : volume) * 100}%, rgba(209, 213, 235, 0.3) 100%)`,
                       borderRadius: '0.25rem',
                       WebkitAppearance: 'none',
-                      MozAppearance: 'none'
+                      MozAppearance: 'none',
+                      boxShadow: '0 0 8px rgba(96, 175, 255, 0.4), 0 0 18px rgba(96, 175, 255, 0.2)'
                     }}
                   />
                   <style jsx>{`
@@ -106,38 +128,44 @@ export default function Sidebar() {
                       appearance: none;
                       width: 12px;
                       height: 12px;
-                      background: rgb(107, 114, 128);
+                      background: #60AFFF;
                       border-radius: 50%;
                       cursor: pointer;
                       border: none;
                       transition: all 0.2s ease;
+                      box-shadow: 0 0 8px rgba(96, 175, 255, 0.6), 0 0 18px rgba(96, 175, 255, 0.3);
                     }
                     input[type="range"]::-webkit-slider-thumb:hover {
-                      background: rgb(75, 85, 99);
+                      background: #4A9FEF;
                       transform: scale(1.1);
+                      box-shadow: 0 0 12px rgba(96, 175, 255, 0.8), 0 0 24px rgba(96, 175, 255, 0.4);
                     }
                     input[type="range"]::-moz-range-thumb {
                       width: 12px;
                       height: 12px;
-                      background: rgb(107, 114, 128);
+                      background: #60AFFF;
                       border-radius: 50%;
                       cursor: pointer;
                       border: none;
                       transition: all 0.2s ease;
+                      box-shadow: 0 0 8px rgba(96, 175, 255, 0.6), 0 0 18px rgba(96, 175, 255, 0.3);
                     }
                     input[type="range"]::-moz-range-thumb:hover {
-                      background: rgb(75, 85, 99);
+                      background: #4A9FEF;
                       transform: scale(1.1);
+                      box-shadow: 0 0 12px rgba(96, 175, 255, 0.8), 0 0 24px rgba(96, 175, 255, 0.4);
                     }
                     input[type="range"]:disabled::-webkit-slider-thumb {
                       background: rgb(209, 213, 235);
                       cursor: not-allowed;
                       transform: scale(1);
+                      box-shadow: none;
                     }
                     input[type="range"]:disabled::-moz-range-thumb {
                       background: rgb(209, 213, 235);
                       cursor: not-allowed;
                       transform: scale(1);
+                      box-shadow: none;
                     }
                   `}</style>
                 </div>
@@ -145,69 +173,16 @@ export default function Sidebar() {
                   {isMuted ? '0%' : `${Math.round(volume * 100)}%`}
                 </span>
               </div>
-              
-              {/* Music Play/Pause Control */}
-              <div className="flex items-center gap-2 p-2 rounded-lg bg-secondary/50">
-                <button
-                  onClick={() => {
-                    if (!isPlaying) {
-                      setMusicEnabled(true);
-                      setTimeout(() => playBackgroundMusic(), 200);
-                    } else {
-                      pauseBackgroundMusic();
-                      setMusicEnabled(false);
-                    }
-                  }}
-                  disabled={isMuted}
-                  className={`p-1.5 rounded-lg transition-all duration-200 ${
-                    isMuted 
-                      ? 'text-grey-400 cursor-not-allowed opacity-50' 
-                      : isPlaying 
-                        ? 'text-blue-500 hover:text-blue-600 hover:bg-blue-100' 
-                        : 'text-grey-600 hover:text-grey-800 hover:bg-grey-200'
-                  }`}
-                  title={isMuted ? 'Audio muteado' : (isPlaying ? 'Pausar música' : 'Reproducir música')}
-                >
-                  {isPlaying ? <Pause size={14} /> : <Play size={14} />}
-                </button>
-                <span className="text-[10px] text-grey-500">
-                  {isPlaying ? 'Música ON' : 'Música OFF'}
-                </span>
-              </div>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-1">
-            <button
-              onClick={toggleMute}
-              className="p-2 rounded-lg text-grey-600 hover:text-grey-800 hover:bg-secondary transition-all duration-200"
-              title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
-            >
-              {isMuted ? <VolumeX size={16} className="text-red-500" /> : <Volume2 size={16} />}
-            </button>
-            <button
-              onClick={() => {
-                if (!isPlaying) {
-                  setMusicEnabled(true);
-                  setTimeout(() => playBackgroundMusic(), 200);
-                } else {
-                  pauseBackgroundMusic();
-                  setMusicEnabled(false);
-                }
-              }}
-              disabled={isMuted}
-              className={`p-2 rounded-lg transition-all duration-200 ${
-                isMuted 
-                  ? 'text-grey-400 cursor-not-allowed opacity-50' 
-                  : isPlaying 
-                    ? 'text-blue-500 hover:text-blue-600 hover:bg-blue-100' 
-                    : 'text-grey-600 hover:text-grey-800 hover:bg-secondary'
-              }`}
-              title={isMuted ? 'Audio muteado' : (isPlaying ? 'Pausar música' : 'Reproducir música')}
-            >
-              {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-            </button>
-          </div>
+          <button
+            onClick={toggleMute}
+            className="w-full flex items-center justify-center gap-3 px-3 py-2.5 rounded-xl text-primary-foreground hover:text-tertiary-foreground hover:bg-secondary transition-all duration-200"
+            title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
+          >
+            {isMuted ? <VolumeX size={18} className="text-red-500" /> : <Volume2 size={18} />}
+          </button>
         )}
       </div>
 

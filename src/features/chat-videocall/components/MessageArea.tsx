@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { auth, db } from '@/firebase';
 
 import type { ChatMessage } from '../types/chat';
@@ -57,13 +58,45 @@ function groupMessagesByDate(messages: ChatMessage[]) {
 
 export default function MessageArea() {
   const { activeRoom, messages, teamId } = useChatContext();
+  const { play } = useSoundEffects();
   const bottomRef = useRef<HTMLDivElement>(null);
   const currentUid = auth.currentUser?.uid;
+  const messagesRef = useRef<ChatMessage[]>([]);
+  const isInitializedRef = useRef(false);
 
   const { typingUsers } = useTyping(teamId, activeRoom?.id || null);
 
+  // Reset initialization when switching rooms
+  useEffect(() => {
+    isInitializedRef.current = false;
+    messagesRef.current = [];
+  }, [activeRoom?.id]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+    // Initialize on first load - don't play sounds for existing messages
+    if (!isInitializedRef.current && messages.length > 0) {
+      messagesRef.current = messages;
+      isInitializedRef.current = true;
+      return;
+    }
+
+    // Play sound only for new messages received after initialization
+    const previousMessages = messagesRef.current;
+    const newMessages = messages.filter(
+      msg => !previousMessages.find(prev => prev.id === msg.id)
+    );
+
+    // Play sound only for messages from other users
+    newMessages.forEach(msg => {
+      if (msg.senderUid !== currentUid && msg.type !== 'system') {
+        play('messageReceived');
+      }
+    });
+
+    // Update messages ref
+    messagesRef.current = messages;
 
     // Mark messages as read
     if (activeRoom && currentUid && teamId) {
@@ -76,7 +109,7 @@ export default function MessageArea() {
         }
       });
     }
-  }, [messages, activeRoom, teamId, currentUid]);
+  }, [messages, activeRoom, teamId, currentUid, play]);
 
   if (!activeRoom) {
     return (

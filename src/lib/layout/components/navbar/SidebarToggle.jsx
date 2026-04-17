@@ -19,7 +19,6 @@ export default function SidebarToggle() {
         className={`transition-transform duration-300 ${collapsed ? 'rotate-180' : ''}`}
       />
 
-      {!collapsed && <span className="text-xs font-body">Colapsar</span>}
-    </button>
+          </button>
   );
 }

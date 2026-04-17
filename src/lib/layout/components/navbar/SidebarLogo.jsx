@@ -55,7 +55,7 @@ export default function SidebarLogo() {
               className="w-full h-full rounded-xl object-cover"
             />
           ) : (
-            <span className="text-white text-[10px] font-bold leading-none">{teamInitials}</span>
+            <span className="text-white text-xs font-bold leading-none">{teamInitials}</span>
           )}
         </div>
         {/* Online pulse */}
@@ -98,7 +98,7 @@ export default function SidebarLogo() {
                   onClick={() => setIsOpen(false)}
                 />
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 z-50 overflow-hidden py-1">
-                  <p className="px-3 py-2 text-[10px] font-bold text-grey-400 uppercase tracking-wider">
+                  <p className="px-3 py-2 text-xs font-bold text-grey-400 uppercase tracking-wider">
                     Tus equipos
                   </p>
                   <div className="max-h-60 overflow-y-auto scrollbar-hide">

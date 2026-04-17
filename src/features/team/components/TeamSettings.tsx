@@ -355,7 +355,7 @@ export default function TeamSettings() {
           className="rounded-2xl border border-grey-100 bg-white p-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
         >
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-grey-400 mb-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-4">
             Información del equipo
           </p>
 
@@ -399,13 +399,13 @@ export default function TeamSettings() {
               <p className="text-xs text-grey-400 mt-0.5">
                 {isUploading ? 'Subiendo imagen…' : 'JPG, PNG, GIF — máx. 5 MB'}
               </p>
-              {uploadError && <p className="text-[11px] text-red mt-1" style={{ color: '#F65A70' }}>{uploadError}</p>}
+              {uploadError && <p className="text-xs text-red mt-1" style={{ color: '#F65A70' }}>{uploadError}</p>}
             </div>
           </div>
 
           {/* Name */}
           <div className="mb-4">
-            <label className="text-[10px] font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
+            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
               Nombre del equipo *
             </label>
             <input
@@ -420,7 +420,7 @@ export default function TeamSettings() {
 
           {/* Description */}
           <div className="mb-5">
-            <label className="text-[10px] font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
+            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
               Descripción
             </label>
             <textarea
@@ -454,7 +454,7 @@ export default function TeamSettings() {
           className="rounded-2xl border border-grey-100 bg-white p-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
         >
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-grey-400 mb-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-4">
             Miembros · {members.length}
           </p>
 
@@ -476,7 +476,7 @@ export default function TeamSettings() {
                   >
                     {/* Avatar */}
                     <div
-                      className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-[11px] font-bold shrink-0 overflow-hidden"
+                      className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden"
                       style={{ background: member.photoUrl ? undefined : grad }}
                     >
                       {member.photoUrl ? (
@@ -495,11 +495,11 @@ export default function TeamSettings() {
                       <p className="text-sm font-semibold text-grey-800 truncate">
                         {member.displayName ?? member.uid}
                         {isCurrentUser && (
-                          <span className="ml-1.5 text-[10px] text-grey-400 font-normal">(tú)</span>
+                          <span className="ml-1.5 text-xs text-grey-400 font-normal">(tú)</span>
                         )}
                       </p>
                       <span
-                        className="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-0.5"
+                        className="inline-block text-xs font-semibold px-2 py-0.5 rounded-full mt-0.5"
                         style={{ background: roleCfg.bg, color: roleCfg.color }}
                       >
                         {roleCfg.label}
@@ -558,7 +558,7 @@ export default function TeamSettings() {
 
           {/* Invite section */}
           <div className="border-t border-grey-100 pt-4">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-grey-400 mb-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2">
               Invitar usuario
             </p>
             <div className="flex gap-2 flex-wrap sm:flex-nowrap">
@@ -603,12 +603,12 @@ export default function TeamSettings() {
               </button>
             </div>
             {inviteError && (
-              <p className="text-[11px] mt-2" style={{ color: '#F65A70' }}>
+              <p className="text-xs mt-2" style={{ color: '#F65A70' }}>
                 {inviteError}
               </p>
             )}
             {addMember.isSuccess && (
-              <p className="text-[11px] mt-2 text-green" style={{ color: '#2e9660' }}>
+              <p className="text-xs mt-2 text-green" style={{ color: '#2e9660' }}>
                 ✓ Usuario añadido correctamente.
               </p>
             )}
@@ -626,7 +626,7 @@ export default function TeamSettings() {
             }}
           >
             <p
-              className="text-[10px] font-semibold uppercase tracking-widest mb-1"
+              className="text-xs font-semibold uppercase tracking-widest mb-1"
               style={{ color: '#F65A70' }}
             >
               Zona de peligro

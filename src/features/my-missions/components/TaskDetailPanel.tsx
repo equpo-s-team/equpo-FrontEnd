@@ -95,7 +95,7 @@ export default function TaskDetailPanel({
     <div className="rounded-2xl bg-white border border-grey-150 shadow-card flex flex-col overflow-hidden animate-fade-down">
       {/* Close / actions header */}
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-grey-400 font-body">
+        <span className="text-xs font-bold uppercase tracking-widest text-grey-400 font-body">
           Detalle
         </span>
         <button
@@ -129,7 +129,7 @@ export default function TaskDetailPanel({
             {task.categories.map((cat) => (
               <span
                 key={cat}
-                className="text-[10px] font-semibold text-purple bg-purple/10 px-2 py-0.5 rounded-md border border-purple/20"
+                className="text-xs font-semibold text-purple bg-purple/10 px-2 py-0.5 rounded-md border border-purple/20"
               >
                 {cat}
               </span>
@@ -180,7 +180,7 @@ export default function TaskDetailPanel({
         {/* Description */}
         {task.description && (
           <div className="mb-4">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-grey-400 mb-1.5 font-body">
+            <p className="text-xs font-bold uppercase tracking-widest text-grey-400 mb-1.5 font-body">
               Descripción
             </p>
             <p className="text-xs text-grey-600 font-body leading-relaxed">{task.description}</p>
@@ -208,7 +208,7 @@ export default function TaskDetailPanel({
         {/* Assigned users */}
         {task.assignedUsers?.length > 0 && (
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-grey-400 mb-2 font-body">
+            <p className="text-xs font-bold uppercase tracking-widest text-grey-400 mb-2 font-body">
               Asignados
             </p>
             <div className="flex flex-col gap-2">
@@ -219,7 +219,7 @@ export default function TaskDetailPanel({
                 return (
                   <div key={user.uid} className="flex items-center gap-2.5">
                     <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
                       style={{
                         background: AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length],
                       }}
@@ -239,8 +239,8 @@ export default function TaskDetailPanel({
         {/* Recurring info */}
         {task.isRecurring && (
           <div className="mt-3 p-2.5 rounded-xl bg-purple/5 border border-purple/15">
-            <p className="text-[10px] font-bold text-purple font-body">🔄 Tarea Recurrente</p>
-            <p className="text-[10px] text-grey-500 font-body mt-0.5">
+            <p className="text-xs font-bold text-purple font-body">🔄 Tarea Recurrente</p>
+            <p className="text-xs text-grey-500 font-body mt-0.5">
               Cada {task.recurringCount ?? 1}{' '}
               {task.recurringInterval === 'days'
                 ? 'día(s)'

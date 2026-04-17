@@ -22,10 +22,10 @@ export function MemberList({ members }: MemberListProps) {
       />
 
       <div className="panel-header flex items-center justify-between mb-5 relative z-10">
-        <h2 className="text-[0.88rem] font-semibold text-grey-800 tracking-[-0.01em]">
+        <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">
           Contribucion por miembro
         </h2>
-        <span className="text-[0.71rem] text-grey-400">
+        <span className="text-xs text-grey-400">
           {members.length} miembros · scroll para ver mas
         </span>
       </div>

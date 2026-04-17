@@ -171,7 +171,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
               onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${cfg.glow}`)}
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
             />
-            {errors.name && <p className="text-[11px] text-[#F65A70] mt-1">{errors.name}</p>}
+            {errors.name && <p className="text-xs text-[#F65A70] mt-1">{errors.name}</p>}
           </div>
 
           {/* Description */}
@@ -196,7 +196,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
             />
             {errors.description && (
-              <p className="text-[11px] text-[#F65A70] mt-1">{errors.description}</p>
+              <p className="text-xs text-[#F65A70] mt-1">{errors.description}</p>
             )}
           </div>
 
@@ -247,14 +247,14 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                     className="flex items-center gap-3 px-3 py-2 rounded-xl bg-blue-50 border border-blue-100"
                   >
                     <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[10px] font-bold shrink-0"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
                       style={{ background: cfg.gradient }}
                     >
                       {uid.substring(0, 2).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-semibold text-grey-700 truncate">{uid}</p>
-                      <p className="text-[10px] text-blue-500">Pendiente de añadir...</p>
+                      <p className="text-xs text-blue-500">Pendiente de añadir...</p>
                     </div>
                     <button
                       onClick={() => handleRemoveNewMember(uid)}
@@ -277,7 +277,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                       className="flex items-center gap-3 px-3 py-2 rounded-xl bg-grey-50 border border-grey-100"
                     >
                       <div
-                        className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-[10px] font-bold shrink-0"
+                        className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold shrink-0"
                         style={{ background: cfg.gradient }}
                       >
                         {m.photoUrl ? (
@@ -296,7 +296,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                         </p>
                       </div>
                       <span
-                        className="text-[10px] font-semibold px-2 py-0.5 rounded-full capitalize shrink-0"
+                        className="text-xs font-semibold px-2 py-0.5 rounded-full capitalize shrink-0"
                         style={{
                           background:
                             m.role === 'leader' ? cfg.glow.replace('0.5', '0.12') : 'transparent',

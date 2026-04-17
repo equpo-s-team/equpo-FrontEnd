@@ -47,7 +47,7 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({achieve
         {hasMore && (
           <button
             onClick={() => setShowAll((v) => !v)}
-            className="text-[11px] font-semibold text-grey-400 hover:text-grey-700 transition-colors"
+            className="text-xs font-semibold text-grey-400 hover:text-grey-700 transition-colors"
           >
             {showAll ? 'Ver menos' : `Ver todos (${sorted.length})`}
           </button>

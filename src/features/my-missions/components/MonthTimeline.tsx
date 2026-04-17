@@ -120,7 +120,7 @@ export default function MonthTimeline({
                 key={v}
                 onClick={() => onViewChange(v)}
                 className={`
-                  px-3 py-1 font-body text-[11px] font-bold rounded-lg transition-all
+                  px-3 py-1 font-body text-xs font-bold rounded-lg transition-all
                   ${isActive ? 'bg-white text-blue shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10 cursor-pointer'}
                 `}
               >
@@ -151,7 +151,7 @@ export default function MonthTimeline({
           {DAYS_OF_WEEK.map((day) => (
             <div
               key={day}
-              className="py-2 text-[10px] font-bold text-grey-400 text-center uppercase tracking-widest font-body"
+              className="py-2 text-xs font-bold text-grey-400 text-center uppercase tracking-widest font-body"
             >
               {day}
             </div>
@@ -173,7 +173,7 @@ export default function MonthTimeline({
               >
                 <div
                   className={`
-                    w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold font-body mb-1 shrink-0
+                    w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body mb-1 shrink-0
                     ${isToday ? 'bg-blue text-white shadow-neonBlue mx-auto mt-0.5' : 'text-grey-700 ml-1'}
                   `}
                 >
@@ -188,7 +188,7 @@ export default function MonthTimeline({
                         key={t.id}
                         onClick={() => onTaskClick(t)}
                         className={`
-                          w-full text-left px-1.5 py-1 rounded-[4px] text-[9px] font-bold font-body truncate transition-transform
+                          w-full text-left px-1.5 py-1 rounded-[4px] text-xs font-bold font-body truncate transition-transform
                           ${getTaskColorClass(t.status)}
                           ${isActive ? 'ring-2 ring-grey-800 ring-offset-1 scale-[1.05]' : 'hover:brightness-110'}
                         `}

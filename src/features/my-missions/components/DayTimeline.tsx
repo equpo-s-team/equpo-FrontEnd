@@ -149,7 +149,7 @@ export default function DayTimeline({
                   key={v}
                   onClick={() => onViewChange(v)}
                   className={`
-                    px-3 py-1 font-body text-[11px] font-bold rounded-lg transition-all
+                    px-3 py-1 font-body text-xs font-bold rounded-lg transition-all
                     ${isActive ? 'bg-white text-blue shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10 cursor-pointer'}
                   `}
                 >
@@ -189,7 +189,7 @@ export default function DayTimeline({
                 style={{ top: `${i * HOUR_HEIGHT}px` }}
               >
                 {/* Hour label */}
-                <span className="absolute -left-16 w-14 text-right text-[11px] text-grey-400 font-body font-medium -translate-y-1/2">
+                <span className="absolute -left-16 w-14 text-right text-xs text-grey-400 font-body font-medium -translate-y-1/2">
                   {formatHour(hour)}
                 </span>
                 {/* Grid line */}
@@ -242,10 +242,10 @@ export default function DayTimeline({
                 }}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-white/90 font-body">
+                  <span className="text-xs font-bold text-white/90 font-body">
                     {formatHour(hour)}
                   </span>
-                  <span className="text-[9px] font-semibold text-white/70 bg-white/15 px-1.5 py-0.5 rounded-md font-body">
+                  <span className="text-xs font-semibold text-white/70 bg-white/15 px-1.5 py-0.5 rounded-md font-body">
                     {STATUS_LABEL[task.status] ?? task.status}
                   </span>
                 </div>
@@ -253,7 +253,7 @@ export default function DayTimeline({
                   {task.name}
                 </p>
                 {task.categories?.length > 0 && (
-                  <p className="text-[10px] text-white/75 mt-0.5 line-clamp-1 font-body">
+                  <p className="text-xs text-white/75 mt-0.5 line-clamp-1 font-body">
                     {task.categories.join(' · ')}
                   </p>
                 )}

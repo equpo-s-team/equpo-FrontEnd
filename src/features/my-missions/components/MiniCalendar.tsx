@@ -102,7 +102,7 @@ export default function MiniCalendar({
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className="text-[10px] font-bold text-grey-400 text-center uppercase tracking-wider py-1"
+            className="text-xs font-bold text-grey-400 text-center uppercase tracking-wider py-1"
           >
             {day}
           </div>

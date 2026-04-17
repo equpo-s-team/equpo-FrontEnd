@@ -87,10 +87,10 @@ export function StatusDonut({ data }: StatusDonutProps) {
       />
 
       <div className="flex items-center justify-between mb-5 relative z-10">
-        <h2 className="text-[0.88rem] font-semibold text-grey-800 tracking-[-0.01em]">
+        <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">
           Estado general
         </h2>
-        <span className="text-[0.71rem] text-grey-400">{total} tareas</span>
+        <span className="text-xs text-grey-400">{total} tareas</span>
       </div>
 
       <div className="flex flex-row items-center gap-5 relative z-10">
@@ -141,10 +141,10 @@ export function StatusDonut({ data }: StatusDonutProps) {
             </defs>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-[1.8rem] font-semibold text-grey-900 tracking-[-0.04em]">
+            <span className="text-3xl font-semibold text-grey-900 tracking-[-0.04em]">
               {donePct}%
             </span>
-            <span className="text-[0.67rem] text-grey-400 mt-0.5">completado</span>
+            <span className="text-xs text-grey-400 mt-0.5">completado</span>
           </div>
         </div>
 
@@ -160,10 +160,10 @@ export function StatusDonut({ data }: StatusDonutProps) {
                 style={{ background: item.color, boxShadow: item.glow }}
               />
               <div>
-                <p className="text-[0.66rem] text-grey-500">{item.label}</p>
-                <p className="text-[0.83rem] font-semibold text-grey-800">
+                <p className="text-xs text-grey-500">{item.label}</p>
+                <p className="text-sm font-semibold text-grey-800">
                   {totals[item.key as keyof typeof totals]}{' '}
-                  <span className="text-[0.66rem] font-normal text-grey-400">
+                  <span className="text-xs font-normal text-grey-400">
                     {total > 0
                       ? Math.round((totals[item.key as keyof typeof totals] / total) * 100)
                       : 0}
@@ -181,15 +181,15 @@ export function StatusDonut({ data }: StatusDonutProps) {
               style={{ background: '#F65A70', boxShadow: '0 0 12px rgba(246,90,112,0.9)' }}
             />
             <div className="flex-1">
-              <p className="text-[0.66rem] text-grey-500">Vencidas</p>
-              <p className="text-[0.83rem] font-semibold text-[#c94155]">
+              <p className="text-xs text-grey-500">Vencidas</p>
+              <p className="text-sm font-semibold text-[#c94155]">
                 {totals.overdue}{' '}
-                <span className="text-[0.66rem] font-normal text-grey-400">
+                <span className="text-xs font-normal text-grey-400">
                   {total > 0 ? Math.round((totals.overdue / total) * 100) : 0}%
                 </span>
               </p>
             </div>
-            <span className="text-[0.67rem] text-[#c94155] font-medium">⚠ atención</span>
+            <span className="text-xs text-[#c94155] font-medium">⚠ atención</span>
           </div>
         </div>
       </div>

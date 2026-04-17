@@ -38,7 +38,7 @@ export default function SidebarItem({ id, icon: Icon, label, badge }) {
       )}
 
       {badge && !collapsed && (
-        <span className="ml-auto flex-shrink-0 px-1.5 py-0.5 rounded-full bg-purple-foreground/20 text-purple text-[10px] font-semibold font-body">
+        <span className="ml-auto flex-shrink-0 px-1.5 py-0.5 rounded-full bg-purple-foreground/20 text-purple text-xs font-semibold font-body">
           {badge}
         </span>
       )}

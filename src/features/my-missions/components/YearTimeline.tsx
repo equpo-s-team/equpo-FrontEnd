@@ -93,7 +93,7 @@ export default function YearTimeline({
                 key={v}
                 onClick={() => onViewChange(v)}
                 className={`
-                  px-3 py-1 font-body text-[11px] font-bold rounded-lg transition-all
+                  px-3 py-1 font-body text-xs font-bold rounded-lg transition-all
                   ${isActive ? 'bg-white text-blue shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10 cursor-pointer'}
                 `}
               >
@@ -150,7 +150,7 @@ export default function YearTimeline({
                     {MONTH_NAMES[data.monthIndex]}
                   </h3>
                   {data.total > 0 && (
-                    <span className="bg-grey-100 text-grey-600 text-[10px] font-bold px-2 py-0.5 rounded-full font-body">
+                    <span className="bg-grey-100 text-grey-600 text-xs font-bold px-2 py-0.5 rounded-full font-body">
                       {data.total}
                     </span>
                   )}
@@ -158,7 +158,7 @@ export default function YearTimeline({
 
                 {data.total === 0 ? (
                   <div className="h-24 flex items-center justify-center">
-                    <p className="text-[11px] text-grey-400 font-medium font-body flex gap-1">
+                    <p className="text-xs text-grey-400 font-medium font-body flex gap-1">
                       Vacío
                     </p>
                   </div>
@@ -195,7 +195,7 @@ export default function YearTimeline({
                     <div className="grid grid-cols-2 gap-2 mt-4">
                       <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('todo')}`} />
-                        <span className="text-[10px] text-grey-600 font-body">
+                        <span className="text-xs text-grey-600 font-body">
                           {data.todo.length} Por Hacer
                         </span>
                       </div>
@@ -203,19 +203,19 @@ export default function YearTimeline({
                         <div
                           className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-progress')}`}
                         />
-                        <span className="text-[10px] text-grey-600 font-body">
+                        <span className="text-xs text-grey-600 font-body">
                           {data.inProgress.length} Proceso
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-qa')}`} />
-                        <span className="text-[10px] text-grey-600 font-body">
+                        <span className="text-xs text-grey-600 font-body">
                           {data.inQa.length} En QA
                         </span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('done')}`} />
-                        <span className="text-[10px] text-grey-600 font-body">
+                        <span className="text-xs text-grey-600 font-body">
                           {data.done.length} Completadas
                         </span>
                       </div>

@@ -128,7 +128,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
               <p className="text-sm font-bold text-grey-800" style={{ fontFamily: 'DM Sans, sans-serif' }}>
                 {displayName || 'Sin nombre'}
               </p>
-              <p className="text-[10px] text-grey-400 font-mono mt-0.5 px-4 truncate max-w-[240px]">
+              <p className="text-xs text-grey-400 font-mono mt-0.5 px-4 truncate max-w-[240px]">
                 {user.uid}
               </p>
             </div>
@@ -139,7 +139,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             className="rounded-xl p-4 border border-grey-150"
             style={{ background: 'rgba(96,175,255,0.04)' }}
           >
-            <p className="text-[10px] font-semibold text-grey-400 uppercase tracking-wider mb-3">Progreso</p>
+            <p className="text-xs font-semibold text-grey-400 uppercase tracking-wider mb-3">Progreso</p>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <div
@@ -150,13 +150,13 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 </div>
                 <div>
                   <p className="text-xs font-bold text-grey-700">Nivel {user.level}</p>
-                  <p className="text-[10px] text-grey-400">
+                  <p className="text-xs text-grey-400">
                     {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()} XP
                   </p>
                 </div>
               </div>
               <span
-                className="text-[10px] font-bold px-2 py-1 rounded-lg"
+                className="text-xs font-bold px-2 py-1 rounded-lg"
                 style={{
                   background: 'rgba(155,127,225,0.1)',
                   color: '#9b7fe1',
@@ -202,7 +202,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
             />
             {errors.displayName && (
-              <p className="text-[11px] text-[#F65A70] mt-1">{errors.displayName}</p>
+              <p className="text-xs text-[#F65A70] mt-1">{errors.displayName}</p>
             )}
           </div>
 
@@ -229,7 +229,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 fontFamily: 'DM Sans, sans-serif',
               }}
             />
-            <p className="text-[10px] text-grey-400 mt-1">
+            <p className="text-xs text-grey-400 mt-1">
               Se guarda una sola imagen por usuario: cada nueva carga reemplaza la anterior.
             </p>
           </div>
@@ -250,13 +250,13 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             >
               {user.uid}
             </div>
-            <p className="text-[10px] text-grey-400 mt-1">El UID no se puede modificar</p>
+            <p className="text-xs text-grey-400 mt-1">El UID no se puede modificar</p>
           </div>
 
           <div className="flex-grow" />
 
           {errors.form && (
-            <p className="text-[11px] text-[#F65A70] -mt-2">{errors.form}</p>
+            <p className="text-xs text-[#F65A70] -mt-2">{errors.form}</p>
           )}
 
           {/* Footer */}

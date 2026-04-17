@@ -123,27 +123,27 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-kanban-todo opacity-60" />
-                  <span className="text-[11px] font-medium text-grey-500">Por Hacer</span>
+                  <span className="text-xs font-medium text-grey-500">Por Hacer</span>
                 </div>
-                <span className="text-[11px] font-bold text-grey-700">{overdueTodo}</span>
+                <span className="text-xs font-bold text-grey-700">{overdueTodo}</span>
               </div>
             )}
             {overdueInProgress > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue opacity-60" />
-                  <span className="text-[11px] font-medium text-grey-500">En Progreso</span>
+                  <span className="text-xs font-medium text-grey-500">En Progreso</span>
                 </div>
-                <span className="text-[11px] font-bold text-grey-700">{overdueInProgress}</span>
+                <span className="text-xs font-bold text-grey-700">{overdueInProgress}</span>
               </div>
             )}
             {overdueInQa > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-kanban-qa opacity-60" />
-                  <span className="text-[11px] font-medium text-grey-500">En QA</span>
+                  <span className="text-xs font-medium text-grey-500">En QA</span>
                 </div>
-                <span className="text-[11px] font-bold text-grey-700">{overdueInQa}</span>
+                <span className="text-xs font-bold text-grey-700">{overdueInQa}</span>
               </div>
             )}
           </div>

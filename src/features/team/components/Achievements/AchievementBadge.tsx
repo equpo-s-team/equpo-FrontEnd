@@ -103,7 +103,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
 
         {/* Locked indicator */}
         {isLocked && (
-          <span className="text-[9px] text-grey-300">🔒</span>
+          <span className="text-xs text-grey-300">🔒</span>
         )}
       </button>
 
@@ -161,7 +161,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
                     {achievement.name}
                   </h3>
                   {achievement.unlockedAt && (
-                    <p className="text-[10px] text-grey-400 mt-0.5">
+                    <p className="text-xs text-grey-400 mt-0.5">
                       Desbloqueado{' '}
                       {new Date(achievement.unlockedAt).toLocaleDateString('es-CO', {
                         day: 'numeric',
@@ -171,7 +171,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
                     </p>
                   )}
                   {isLocked && (
-                    <p className="text-[10px] text-grey-300 mt-0.5">Aún no desbloqueado</p>
+                    <p className="text-xs text-grey-300 mt-0.5">Aún no desbloqueado</p>
                   )}
                 </div>
               </div>
@@ -187,7 +187,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
               {/* Status badge */}
               <div className="flex justify-center">
                 <span
-                  className="text-[10px] font-semibold px-3 py-1 rounded-full"
+                  className="text-xs font-semibold px-3 py-1 rounded-full"
                   style={{
                     background: isLocked
                       ? 'rgba(176,173,167,0.15)'

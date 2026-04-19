@@ -1,7 +1,7 @@
 import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import type { TeamTask } from '@/features/board/types';
+import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
@@ -18,9 +18,19 @@ import {
   STATUS_TO_PROGRESS,
   toInputDatetime,
 } from '../utils/taskUtils';
+import { COLUMN_CONFIG } from './columnConfig';
 import { FieldLabel } from './FieldLabel';
 import { MarkdownDescriptionEditor } from './MarkdownDescriptionEditor';
 import { TagChip } from './TagChip';
+
+type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
+
+const STATUS_TO_COLUMN: Record<TaskStatus, BoardColumnId> = {
+  todo: 'todo',
+  'in-progress': 'progress',
+  'in-qa': 'qa',
+  done: 'done',
+};
 
 interface TaskSidebarProps {
   isOpen: boolean;
@@ -288,6 +298,8 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   const priorityStyle = READONLY_PRIORITY_STYLE[priority] ?? READONLY_PRIORITY_STYLE.medium;
   const currentStatus = (mode === 'edit' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done';
   const progress = STATUS_TO_PROGRESS[currentStatus] ?? 0;
+  const progressColumn = STATUS_TO_COLUMN[currentStatus];
+  const progressCfg = COLUMN_CONFIG[progressColumn];
   const formattedDueDate = (() => {
     if (!dueDate) return 'Sin fecha límite';
     const parsed = new Date(dueDate);
@@ -447,11 +459,13 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                     <span className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400">
                       Progreso
                     </span>
-                    <span className="font-maxwell text-[10px] font-bold text-blue">{progress}%</span>
+                    <span className={`font-maxwell text-[10px] font-bold ${progressCfg.progressColor}`}>
+                      {progress}%
+                    </span>
                   </div>
                   <div className="h-1 bg-secondary rounded-full overflow-hidden">
                     <div
-                      className="h-full rounded-full relative bg-gradient-to-r from-green to-blue transition-[width] duration-500 ease-out"
+                      className={`h-full rounded-full relative ${progressCfg.progressFill} transition-[width] duration-500 ease-out`}
                       style={{ width: `${progress}%` }}
                     >
                       {progress > 0 && (

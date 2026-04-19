@@ -44,7 +44,7 @@ export const COLUMN_CONFIG = {
     cardShadow: 'shadow-card-qa',
     cardBorderHover: 'hover:border-kanban-qa/75',
     cardShadowHover: 'hover:shadow-card-qa-hover',
-    progressFill: 'bg-gradient-progress-bg',
+    progressFill: 'bg-gradient-qa-bg',
     progressColor: 'text-kanban-qa',
   },
   done: {

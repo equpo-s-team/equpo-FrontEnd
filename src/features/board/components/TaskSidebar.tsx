@@ -1,359 +1,38 @@
-import { CalendarDays, Layers, List, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import type { TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
 import { useCreateTask } from '../hooks/useCreateTask';
 import { useDeleteTask } from '../hooks/useDeleteTask';
 import { useUpdateTask } from '../hooks/useUpdateTask';
+import { markdownToEditorHtml } from '../utils/markdownUtils';
+import {
+  DESCRIPTION_MAX_LENGTH,
+  getMinDate,
+  INTERVAL_OPTIONS,
+  PRIORITY_OPTIONS,
+  READONLY_PRIORITY_STYLE,
+  STATUS_TO_PROGRESS,
+  toInputDatetime,
+} from '../utils/taskUtils';
+import { FieldLabel } from './FieldLabel';
+import { MarkdownDescriptionEditor } from './MarkdownDescriptionEditor';
+import { TagChip } from './TagChip';
 
-const PRIORITY_OPTIONS = [
-  { value: 'high', label: 'Alta', dot: 'bg-red' },
-  { value: 'medium', label: 'Media', dot: 'bg-orange-dark' },
-  { value: 'low', label: 'Baja', dot: 'bg-green' },
-];
-
-const INTERVAL_OPTIONS = [
-  { value: 'days', label: 'Días' },
-  { value: 'weeks', label: 'Semanas' },
-  { value: 'months', label: 'Meses' },
-  { value: 'years', label: 'Años' },
-];
-
-const STATUS_TO_PROGRESS = {
-  todo: 0,
-  'in-progress': 40,
-  'in-qa': 85,
-  done: 100,
-};
-
-const TAG_COLORS = [
-  'bg-blue/10 text-[10.5px] text-blue border-blue/50 shadow-[0_0_8px_rgba(96,175,255,0.4)]',
-  'bg-kanban-qa/10 text-[10.5px] text-kanban-qa border-kanban-qa/50 shadow-[0_0_8px_rgba(255,148,174,0.4)]',
-  'bg-green/10 text-[10.5px] text-green border-green/50 shadow-[0_0_8px_rgba(156,237,193,0.4)]',
-  'bg-kanban-todo/10 text-[10.5px] text-kanban-todo border-kanban-todo/50 shadow-[0_0_8px_rgba(155,127,225,0.4)]',
-  'bg-red/10 text-[10.5px] text-red border-red/50 shadow-[0_0_8px_rgba(246,90,112,0.4)]',
-  'bg-kanban-progress/10 text-[10.5px] text-kanban-progress border-kanban-progress/50 shadow-[0_0_8px_rgba(134,240,253,0.4)]',
-];
-
-const READONLY_PRIORITY_STYLE = {
-  high: { text: 'text-red', dot: 'bg-red' },
-  medium: { text: 'text-orange-dark', dot: 'bg-orange-dark' },
-  low: { text: 'text-green', dot: 'bg-green' },
-};
-
-const DESCRIPTION_MAX_LENGTH = 2000;
-
-function getTagColorClass(label = '') {
-  let hash = 0;
-  for (let i = 0; i < label.length; i++) {
-    hash = label.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const index = Math.abs(hash) % TAG_COLORS.length;
-  return TAG_COLORS[index];
+interface TaskSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+  mode: 'create' | 'edit' | 'readonly';
+  task?: TeamTask | null;
+  teamId: string;
+  defaultStatus?: string;
 }
 
-function ReadOnlyTagChip({ label }) {
-  const colorClass = getTagColorClass(label);
-  return (
-    <span
-      className={`px-2 py-[2.5px] rounded-[8px] font-semibold tracking-wide border-[1px] ${colorClass}`}
-    >
-      {label}
-    </span>
-  );
-}
-
-function getMinDate() {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return d.toISOString().split('T')[0];
-}
-
-function toInputDatetime(isoString) {
-  if (!isoString) return '';
-  try {
-    const d = new Date(isoString);
-    // Adjust to local timezone for the datetime-local input
-    const offset = d.getTimezoneOffset() * 60000;
-    return new Date(d.getTime() - offset).toISOString().slice(0, 16);
-  } catch {
-    return '';
-  }
-}
-
-function FieldLabel({ children, required }) {
-  return (
-    <label className="block text-xs font-semibold text-grey-600 mb-1.5 tracking-wide uppercase">
-      {children}
-      {required && <span className="text-red ml-0.5">*</span>}
-    </label>
-  );
-}
-
-function escapeHtml(text) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function renderInlineMarkdown(text) {
-  let html = escapeHtml(text);
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  return html;
-}
-
-function markdownToEditorHtml(markdown) {
-  if (!markdown?.trim()) return '<p><br></p>';
-
-  const lines = markdown.split('\n');
-  const chunks = [];
-  let inList = false;
-
-  const openList = () => {
-    if (!inList) {
-      chunks.push('<ul>');
-      inList = true;
-    }
-  };
-
-  const closeList = () => {
-    if (inList) {
-      chunks.push('</ul>');
-      inList = false;
-    }
-  };
-
-  for (const line of lines) {
-    const bulletMatch = line.match(/^\s*-\s*(.*)$/);
-
-    if (bulletMatch) {
-      openList();
-      const content = renderInlineMarkdown(bulletMatch[1]);
-      chunks.push(`<li class=" text-grey-700">${content || '<br>'}</li>`);
-      continue;
-    }
-
-    closeList();
-
-    if (!line.trim()) {
-      chunks.push('<p><br></p>');
-      continue;
-    }
-
-    chunks.push(`<p>${renderInlineMarkdown(line)}</p>`);
-  }
-
-  closeList();
-  return chunks.join('');
-}
-
-function nodeToMarkdown(node) {
-  if (!node) return '';
-
-  if (node.nodeType === Node.TEXT_NODE) {
-    return node.textContent ?? '';
-  }
-
-  if (node.nodeType !== Node.ELEMENT_NODE) {
-    return '';
-  }
-
-  const el = node;
-  const tag = el.tagName.toLowerCase();
-
-  if (tag === 'br') return '\n';
-
-  if (tag === 'strong' || tag === 'b') {
-    return `**${Array.from(el.childNodes).map(nodeToMarkdown).join('')}**`;
-  }
-
-  if (tag === 'em' || tag === 'i') {
-    return `*${Array.from(el.childNodes).map(nodeToMarkdown).join('')}*`;
-  }
-
-  return Array.from(el.childNodes).map(nodeToMarkdown).join('');
-}
-
-function editorHtmlToMarkdown(html) {
-  const root = document.createElement('div');
-  root.innerHTML = html;
-
-  const lines = [];
-
-  const parseListItem = (li) => {
-    const text = nodeToMarkdown(li).trim();
-    return `- ${text}`.trimEnd();
-  };
-
-  Array.from(root.childNodes).forEach((node) => {
-    if (node.nodeType === Node.TEXT_NODE) {
-      const text = (node.textContent ?? '').trim();
-      if (text) lines.push(text);
-      return;
-    }
-
-    if (node.nodeType !== Node.ELEMENT_NODE) return;
-
-    const el = node;
-    const tag = el.tagName.toLowerCase();
-
-    if (tag === 'ul' || tag === 'ol') {
-      Array.from(el.children).forEach((child) => {
-        if (child.tagName.toLowerCase() === 'li') {
-          lines.push(parseListItem(child));
-        }
-      });
-      return;
-    }
-
-    if (tag === 'p' || tag === 'div') {
-      const line = nodeToMarkdown(el).replace(/\n+/g, ' ').trim();
-      lines.push(line);
-      return;
-    }
-
-    const line = nodeToMarkdown(el).replace(/\n+/g, ' ').trim();
-    lines.push(line);
-  });
-
-  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
-}
-
-function MarkdownDescriptionEditor({ value, onChange, maxLength, hasError }) {
-  const editorRef = useRef(null);
-  const lastValidMarkdownRef = useRef(value || '');
-
-  const baseContainer = hasError ? 'border-red/50' : 'border-grey-200 focus-within:border-blue';
-
-  useEffect(() => {
-    if (!editorRef.current) return;
-
-    const currentMarkdown = editorHtmlToMarkdown(editorRef.current.innerHTML);
-    if (currentMarkdown === value) return;
-
-    editorRef.current.innerHTML = markdownToEditorHtml(value);
-    lastValidMarkdownRef.current = value || '';
-  }, [value]);
-
-  function syncEditorToMarkdown() {
-    if (!editorRef.current) return;
-
-    const markdown = editorHtmlToMarkdown(editorRef.current.innerHTML);
-
-    if (markdown.length > maxLength) {
-      editorRef.current.innerHTML = markdownToEditorHtml(lastValidMarkdownRef.current);
-      return;
-    }
-
-    lastValidMarkdownRef.current = markdown;
-    onChange(markdown);
-  }
-
-  function runCommand(command) {
-    if (!editorRef.current) return;
-    editorRef.current.focus();
-    document.execCommand(command, false);
-    syncEditorToMarkdown();
-  }
-
-  function ensureSelectionInsideEditor() {
-    if (!editorRef.current) return;
-
-    editorRef.current.focus();
-    const selection = window.getSelection();
-    if (!selection) return;
-
-    const anchorNode = selection.anchorNode;
-    const isInsideEditor = anchorNode && editorRef.current.contains(anchorNode);
-    if (isInsideEditor) return;
-
-    const range = document.createRange();
-    range.selectNodeContents(editorRef.current);
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }
-
-  function insertBulletItem() {
-    if (!editorRef.current) return;
-    ensureSelectionInsideEditor();
-
-    const before = editorRef.current.innerHTML;
-    const inserted = document.execCommand('insertUnorderedList', false);
-
-    // Fallback for browsers/editors where list command may fail silently.
-    if (!inserted || editorRef.current.innerHTML === before) {
-      document.execCommand('insertHTML', false, '<ul><li><br></li></ul>');
-    }
-
-    syncEditorToMarkdown();
-  }
-
-  const charCount = value.length;
-
-  return (
-    <div className={`rounded-[10px] border-[1.5px] bg-primary transition-colors duration-150 ${baseContainer}`}>
-      <div className="flex items-center justify-between border-b border-grey-150">
-        <div className="flex items-center">
-        <ToggleGroup type="multiple" className="gap-0">
-          <ToggleGroupItem
-            value="bold"
-            type="button"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => runCommand('bold')}
-            aria-label="Negrita"
-            className="h-9 w-10 px-0 text-sm font-bold text-grey-700 !rounded-none"
-          >
-            B
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="italic"
-            type="button"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => runCommand('italic')}
-            aria-label="Itálica"
-            className="h-9 w-10 px-0 text-sm italic text-grey-700 !rounded-none"
-          >
-            I
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="bullet"
-            type="button"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={insertBulletItem}
-            aria-label="Viñeta"
-            className="h-9 w-10 px-0 text-grey-700 !rounded-none"
-          >
-            <List size={14} />
-          </ToggleGroupItem>
-        </ToggleGroup>
-         </div>
-        <span className="text-[11px] text-grey-400 px-3">{charCount}/{maxLength}</span>
-      </div>
-
-      <div
-        ref={editorRef}
-        role="textbox"
-        aria-multiline="true"
-        contentEditable
-        suppressContentEditableWarning
-        onInput={syncEditorToMarkdown}
-        onBlur={syncEditorToMarkdown}
-        className="min-h-[280px] sm:min-h-[420px] max-h-[560px] overflow-y-auto px-3 py-2.5 text-sm font-body text-grey-800 outline-none [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5 [&_li]:text-grey-700"
-      />
-    </div>
-  );
-}
-
-export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defaultStatus }) {
-  const backdropRef = useRef(null);
+export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defaultStatus }: TaskSidebarProps) {
+  const backdropRef = useRef<HTMLDivElement>(null);
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
@@ -365,16 +44,16 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [priority, setPriority] = useState('medium');
+  const [priority, setPriority] = useState<'high' | 'medium' | 'low'>('medium');
   const [assignedUserUid, setAssignedUserUid] = useState('');
   const [assignedGroupId, setAssignedGroupId] = useState('');
   const [categories, setCategories] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
-  const [recurringInterval, setRecurringInterval] = useState('days');
+  const [recurringInterval, setRecurringInterval] = useState<'days' | 'weeks' | 'months' | 'years'>('days');
   const [recurringCount, setRecurringCount] = useState(1);
   const [isEditView, setIsEditView] = useState(mode !== 'edit');
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ── Populate / reset form ──
@@ -452,7 +131,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
 
   // ── Validation ──
   function validate() {
-    const e = {};
+    const e: Record<string, string> = {};
     if (!name.trim()) e.name = 'El nombre es obligatorio';
     if (name.trim().length > 100) e.name = 'Máximo 100 caracteres';
     if (!description.trim()) e.description = 'La descripción es obligatoria';
@@ -495,8 +174,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
       description: description.trim(),
       dueDate: new Date(dueDate).toISOString(),
       priority,
-      status:
-        mode === 'edit' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo'),
+      status: (mode === 'edit' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done',
       categories: catArray,
       isRecurring,
       recurringInterval: isRecurring ? recurringInterval : 'days',
@@ -507,7 +185,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   }
 
   // ── Handlers ──
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
 
@@ -520,8 +198,9 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         await createTask.mutateAsync({ teamId, payload });
       }
       onClose();
-    } catch (err) {
-      setErrors({ form: err?.message || 'Error al guardar la tarea' });
+    } catch (err: unknown) {
+      const form = err instanceof Error ? err.message : 'Error al guardar la tarea';
+      setErrors({ form });
     } finally {
       setIsSubmitting(false);
     }
@@ -533,8 +212,9 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     try {
       await deleteTask.mutateAsync({ teamId, taskId: task.id });
       onClose();
-    } catch (err) {
-      setErrors({ form: err?.message || 'Error al eliminar la tarea' });
+    } catch (err: unknown) {
+      const form = err instanceof Error ? err.message : 'Error al eliminar la tarea';
+      setErrors({ form });
     } finally {
       setIsSubmitting(false);
     }
@@ -561,7 +241,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   }
 
   // ── Close on backdrop click ──
-  function handleBackdropClick(e) {
+  function handleBackdropClick(e: React.MouseEvent) {
     if (e.target === backdropRef.current) onClose();
   }
 
@@ -606,7 +286,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   const recurringLabel =
     INTERVAL_OPTIONS.find((opt) => opt.value === recurringInterval)?.label?.toLowerCase() ?? recurringInterval;
   const priorityStyle = READONLY_PRIORITY_STYLE[priority] ?? READONLY_PRIORITY_STYLE.medium;
-  const currentStatus = mode === 'edit' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo');
+  const currentStatus = (mode === 'edit' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done';
   const progress = STATUS_TO_PROGRESS[currentStatus] ?? 0;
   const formattedDueDate = (() => {
     if (!dueDate) return 'Sin fecha límite';
@@ -742,7 +422,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                   {categoriesList.length ? (
                     <div className="flex flex-wrap gap-1.5">
                       {categoriesList.map((category) => (
-                        <ReadOnlyTagChip key={category} label={category} />
+                        <TagChip key={category} label={category} />
                       ))}
                     </div>
                   ) : (
@@ -789,7 +469,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         ) : (
           <>
             {/* ── Form ── */}
-            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-6 py-5">
+            <form onSubmit={(e) => void handleSubmit(e)} className="flex-1 overflow-y-auto px-6 py-5">
           {/* Name spans both columns */}
           <div className="mb-5">
             <FieldLabel required>
@@ -854,7 +534,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                     <button
                       key={opt.value}
                       type="button"
-                      onClick={() => setPriority(opt.value)}
+                      onClick={() => setPriority(opt.value as 'high' | 'medium' | 'low')}
                       className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] border-[1.5px] text-xs font-semibold transition-all duration-150 cursor-pointer ${
                         priority === opt.value
                           ? 'border-blue bg-blue/8 text-blue'
@@ -981,7 +661,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                     />
                     <select
                       value={recurringInterval}
-                      onChange={(e) => setRecurringInterval(e.target.value)}
+                      onChange={(e) => setRecurringInterval(e.target.value as 'days' | 'weeks' | 'months' | 'years')}
                       className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
                     >
                       {INTERVAL_OPTIONS.map((opt) => (
@@ -1012,7 +692,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
           {mode === 'edit' && (
             <button
               type="button"
-              onClick={handleDelete}
+              onClick={() => void handleDelete()}
               disabled={isSubmitting}
               className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-red border-[1.5px] border-red/30 hover:bg-red/8 transition-all duration-150 cursor-pointer disabled:opacity-50"
             >
@@ -1029,7 +709,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
           </button>
           <button
             type="submit"
-            onClick={handleSubmit}
+            onClick={(e) => void handleSubmit(e)}
             disabled={isSubmitDisabled}
             className="px-5 py-2.5 rounded-[10px] text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
           >

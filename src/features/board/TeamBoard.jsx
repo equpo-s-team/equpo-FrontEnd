@@ -8,7 +8,7 @@ import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
 import FilterBar from './components/FilterBar.jsx';
 import { COLUMNS } from './components/kanbanData.js';
-import TaskSidebar from './components/TaskSidebar.jsx';
+import TaskSidebar from './components/TaskSidebar.tsx';
 import { useTaskFilters } from './hooks/useTaskFilters';
 import { useTasks } from './hooks/useTasks';
 import { useUpdateTask } from './hooks/useUpdateTask';

@@ -68,13 +68,15 @@ export const Component = ({ onClose }: AuthSwitchProps) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
-              className="w-[85vw] max-w-6xl h-[85vh] md:w-[700px] md:h-[600px]"
+              className="w-[95vw] h-[95vh] sm:w-[90vw] sm:h-[90vh] md:w-[700px] md:h-[600px] max-w-6xl"
             >
               <div className="bg-white/10 backdrop-blur-2xl rounded-[1.5rem] border border-white/20 shadow-2xl overflow-hidden h-full">
-                <div className="flex h-full">
-                  <MarketingPanel />
+                <div className="flex flex-col md:flex-row h-full">
+                  <div className="hidden md:flex md:w-2/5">
+                    <MarketingPanel />
+                  </div>
 
-                  <div className="w-3/5 bg-white/95 backdrop-blur-xl p-16 h-full overflow-y-auto">
+                  <div className="w-full md:w-3/5 bg-white/95 backdrop-blur-xl p-4 sm:p-8 md:p-16 h-full overflow-y-auto">
                     <AuthForm
                       onSuccess={handleSuccess}
                       onClose={() => {

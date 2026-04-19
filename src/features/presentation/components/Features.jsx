@@ -67,7 +67,7 @@ const FEATURES = [
 
 export default function Features() {
   return (
-    <section id="features" className="relative py-24 px-[5vw] overflow-hidden bg-white">
+    <section id="features" className="relative py-16 sm:py-24 px-4 sm:px-[5vw] overflow-hidden bg-white">
       {/* Subtle background pattern */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -79,7 +79,7 @@ export default function Features() {
 
       <div className="max-w-[1160px] mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center max-w-[600px] mx-auto mb-14">
+        <div className="text-center max-w-[600px] mx-auto mb-10 sm:mb-14">
           <SectionLabel
             gradient="linear-gradient(90deg, #9CEDC1, #60AFFF)"
             textGrad="linear-gradient(90deg, #38b97a, #2e8fd4)"
@@ -87,13 +87,13 @@ export default function Features() {
           >
             Funcionalidades
           </SectionLabel>
-          <h2 className="font-maxwell text-display-lg text-grey-900">
+          <h2 className="font-maxwell text-2xl sm:text-3xl md:text-display-lg text-grey-900">
             Todo lo que tu equipo necesita para moverse como uno solo.
           </h2>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {FEATURES.map((feat, i) => (
             <FeatureCard key={feat.title} feat={feat} delay={i % 3} />
           ))}
@@ -107,7 +107,7 @@ function FeatureCard({ feat }) {
 
   return (
     <button
-      className={`group relative rounded-[20px] p-7 cursor-default transition-all duration-300 hover:-translate-y-1`}
+      className={`group relative rounded-[20px] p-5 sm:p-7 cursor-default transition-all duration-300 hover:-translate-y-1`}
       style={{
         background: 'white',
         border: `1.5px solid ${feat.border}`,
@@ -124,14 +124,14 @@ function FeatureCard({ feat }) {
     >
       {/* Icon */}
       <div
-        className="w-12 h-12 rounded-[14px] flex items-center justify-center text-white mb-5"
+        className="w-10 sm:w-12 h-10 sm:h-12 rounded-[14px] flex items-center justify-center text-white mb-3 sm:mb-5"
         style={{ background: feat.grad, boxShadow: `0 4px 16px ${feat.border}` }}
       >
         {feat.icon}
       </div>
 
-      <h3 className="font-maxwell text-[1rem] text-grey-900 mb-1.5">{feat.title}</h3>
-      <p className="font-body text-[.87rem] leading-[1.6] text-grey-400 mb-3">{feat.desc}</p>
+      <h3 className="font-maxwell text-sm sm:text-[1rem] text-grey-900 mb-1.5">{feat.title}</h3>
+      <p className="font-body text-xs sm:text-[.87rem] leading-[1.6] text-grey-400 mb-2 sm:mb-3">{feat.desc}</p>
       <span
         className="font-body text-[.78rem] font-semibold flex items-center gap-1"
         style={{ color: feat.microColor }}

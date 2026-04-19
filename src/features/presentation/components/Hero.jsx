@@ -27,23 +27,23 @@ export default function Hero() {
       <div className="animated-gradient-bg-new" />
 
       <div
-        className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full pointer-events-none"
+        className="hidden sm:block absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full pointer-events-none"
         style={{
           background: 'radial-gradient(circle, rgba(156,237,193,0.22) 0%, transparent 70%)',
         }}
       />
       <div
-        className="absolute top-20 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+        className="hidden sm:block absolute top-20 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(96,175,255,0.15) 0%, transparent 70%)' }}
       />
       <div
-        className="absolute bottom-0 left-1/3 w-[350px] h-[350px] rounded-full pointer-events-none"
+        className="hidden sm:block absolute bottom-0 left-1/3 w-[350px] h-[350px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(246,90,112,0.10) 0%, transparent 70%)' }}
       />
 
-      <div className="max-w-full mx-auto px-16 grid md:grid-cols-2 gap-0 items-center pt-8 pb-0 min-h-[90vh] relative z-10">
+      <div className="max-w-full mx-auto px-4 sm:px-8 md:px-16 grid md:grid-cols-2 gap-0 items-center pt-6 sm:pt-8 pb-0 min-h-screen sm:min-h-[90vh] relative z-10">
         {/* ── LEFT COPY ── */}
-        <div className="hero-copy-enter py-16 pr-8">
+        <div className="hero-copy-enter py-8 sm:py-12 md:py-16 pr-0 sm:pr-4 md:pr-8">
           <div className="flex items-center gap-3 mb-8">
             <span
               className="block w-8 h-1 rounded"
@@ -61,9 +61,9 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1 className="font-maxwell text-5xl md:text-6xl text-grey-900 mb-6 leading-[1.08]">
+          <h1 className="font-maxwell text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-grey-900 mb-4 sm:mb-6 leading-[1.08]">
             Organiza tareas. <br />
-            <span className="relative inline-block overflow-hidden md:pb-2 md:pt-1 min-w-[900px]">
+            <span className="relative inline-block overflow-hidden md:pb-2 md:pt-1 min-w-[120px] sm:min-w-[200px] md:min-w-[900px]">
               &nbsp;
               {titles.map((title, index) => (
                 <motion.em
@@ -87,15 +87,15 @@ export default function Hero() {
             Haz que el equipo prospere.
           </h1>
 
-          <p className="font-body text-lg leading-[1.65] text-grey-600 max-w-[480px] mb-8">
+          <p className="font-body text-base sm:text-lg leading-[1.65] text-grey-600 max-w-[480px] mb-6 sm:mb-8">
             Con equpo, cada tarea completada no solo avanza proyectos: mejora el bienestar del
             espacio virtual del equipo. Trabajo real, impacto visible, motivación compartida.
           </p>
 
-          <div className="flex flex-wrap gap-4 mb-8">
+          <div className="flex flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
             <a
               href="#"
-              className="font-maxwell text-white px-[2.2rem] py-[1.1rem] rounded-[14px] text-base no-underline hover:-translate-y-1 transition-all"
+              className="font-maxwell text-white px-4 sm:px-[2.2rem] py-2.5 sm:py-[1.1rem] rounded-[14px] text-sm sm:text-base no-underline hover:-translate-y-1 transition-all"
               style={{
                 background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 100%)',
                 boxShadow: '0 8px 28px rgba(56,185,122,0.35)',
@@ -105,7 +105,7 @@ export default function Hero() {
             </a>
             <a
               href="#what"
-              className="font-maxwell text-grey-700 border border-grey-200 bg-white/70 backdrop-blur px-[2.2rem] py-[1.1rem] rounded-[14px] text-base no-underline hover:-translate-y-1 hover:border-grey-300 transition-all"
+              className="font-maxwell text-grey-700 border border-grey-200 bg-white/70 backdrop-blur px-4 sm:px-[2.2rem] py-2.5 sm:py-[1.1rem] rounded-[14px] text-sm sm:text-base no-underline hover:-translate-y-1 hover:border-grey-300 transition-all"
             >
               Ver cómo funciona
             </a>
@@ -165,7 +165,7 @@ export default function Hero() {
         </div>
 
         <div
-          className="hero-visual-enter relative h-full min-h-screen -mr-[5vw] overflow-visible"
+          className="hidden md:flex hero-visual-enter relative h-full min-h-screen -mr-[5vw] overflow-visible items-center justify-center"
           style={{ marginRight: 'calc(-5vw)' }}
         >
           <HeroVisual />

@@ -8,8 +8,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5vw] h-[68px] bg-white/88 backdrop-blur-[18px] border-b border-border">
-        <Link to="/" className="font-maxwell text-display-md tracking-tight text-dark no-underline">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-[5vw] h-16 sm:h-[68px] bg-white/88 backdrop-blur-[18px] border-b border-border">
+        <Link to="/" className="font-maxwell text-lg sm:text-display-md tracking-tight text-dark no-underline">
           eq
           <span className="bg-gradient-to-r from-[#9CEDC1] via-[#60AFFF] to-[#F65A70] bg-clip-text text-transparent">
             u
@@ -47,7 +47,7 @@ export default function Navbar() {
         <div className="md:hidden">
           <button
             onClick={() => setShowAuth(true)}
-            className="text-sm font-medium text-emerald-600 border border-emerald-600 px-[1rem] py-[.4rem] rounded-lg hover:bg-emerald-50 transition-all"
+            className="text-xs sm:text-sm font-medium text-emerald-600 border border-emerald-600 px-3 sm:px-[1rem] py-2 sm:py-[.4rem] rounded-lg hover:bg-emerald-50 transition-all"
           >
             Login
           </button>

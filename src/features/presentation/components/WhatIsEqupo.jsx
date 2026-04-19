@@ -4,24 +4,24 @@ export default function WhatIsEqupo() {
   return (
     <section
       id="what"
-      className="relative py-24 px-[5vw] overflow-hidden"
+      className="relative py-16 sm:py-24 px-4 sm:px-[5vw] overflow-hidden"
       style={{ background: '#ffffff' }}
     >
       {/* Decorative blobs */}
       <div
-        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+        className="hidden md:block absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(96,175,255,0.10) 0%, transparent 70%)' }}
       />
       <div
-        className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+        className="hidden md:block absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{
           background: 'radial-gradient(circle, rgba(156,237,193,0.14) 0%, transparent 70%)',
         }}
       />
 
-      <div className="max-w-[1160px] mx-auto grid md:grid-cols-2 gap-20 items-center relative z-10">
+      <div className="max-w-[1160px] mx-auto grid md:grid-cols-2 gap-8 sm:gap-12 md:gap-20 items-center relative z-10">
         {/* ── CARD VISUAL ── */}
-        <div className="relative">
+        <div className="hidden md:block relative">
           {/* Main card */}
           <div className="bg-white border border-grey-150 rounded-[24px] p-6 shadow-card-lg">
             {/* Board header */}
@@ -140,16 +140,16 @@ export default function WhatIsEqupo() {
             Qué es equpo
           </SectionLabel>
 
-          <h2 className="font-maxwell text-display-lg text-grey-900 mb-5">
+          <h2 className="font-maxwell text-2xl sm:text-3xl md:text-display-lg text-grey-900 mb-3 sm:mb-5">
             Un tablero colaborativo… con un giro que sí se nota.
           </h2>
 
-          <p className="font-body text-base leading-[1.75] text-grey-500 mb-5 ">
+          <p className="font-body text-sm sm:text-base leading-[1.75] text-grey-500 mb-4 sm:mb-5">
             equpo es una plataforma para equipos de cualquier rubro que combina todo lo que
             necesitas para trabajar bien y juntos.
           </p>
 
-          <ul className="list-none flex flex-col gap-3 mb-7 ">
+          <ul className="list-none flex flex-col gap-2 sm:gap-3 mb-6 sm:mb-7">
             {[
               {
                 text: 'Organización clara — tableros, tareas, prioridades',
@@ -170,7 +170,7 @@ export default function WhatIsEqupo() {
             ].map((item) => (
               <li
                 key={item.text}
-                className="flex items-start gap-3 font-body text-sm text-grey-700"
+                className="flex items-start gap-3 font-body text-xs sm:text-sm text-grey-700"
               >
                 <span
                   className="w-[18px] h-[18px] rounded-full flex-shrink-0 mt-0.5"

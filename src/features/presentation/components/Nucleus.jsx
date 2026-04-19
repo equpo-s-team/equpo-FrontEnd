@@ -103,22 +103,22 @@ export default function Nucleus() {
   return (
     <section
       id="nucleus"
-      className="relative py-24 px-[5vw] overflow-hidden"
+      className="relative py-16 sm:py-24 px-4 sm:px-[5vw] overflow-hidden"
       style={{ background: 'linear-gradient(160deg, #fafffe 0%, #f5f8ff 50%, #fff8fa 100%)' }}
     >
       {/* Decorative blobs */}
       <div
-        className="absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full pointer-events-none"
+        className="hidden sm:block absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(89,97,249,0.08), transparent 70%)' }}
       />
       <div
-        className="absolute bottom-[-60px] left-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none"
+        className="hidden sm:block absolute bottom-[-60px] left-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(246,90,112,0.08), transparent 70%)' }}
       />
 
       <div className="max-w-[1160px] mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center max-w-[680px] mx-auto mb-14">
+        <div className="text-center max-w-[680px] mx-auto mb-10 sm:mb-14">
           <SectionLabel
             gradient="linear-gradient(90deg, #d99aee, #5961F9)"
             textGrad="linear-gradient(90deg, #9a3fb5, #4248d4)"
@@ -126,12 +126,12 @@ export default function Nucleus() {
           >
             El núcleo
           </SectionLabel>
-          <h2 className="font-maxwell text-display-lg text-grey-900 mb-4">
+          <h2 className="font-maxwell text-2xl sm:text-3xl md:text-display-lg text-grey-900 mb-3 sm:mb-4">
             Tu equipo comparte un espacio.
             <br />
             Tus acciones dejan huella.
           </h2>
-          <p className="font-body text-base leading-[1.7] text-grey-500">
+          <p className="font-body text-sm sm:text-base leading-[1.7] text-grey-500">
             Aquí la productividad no es fría: se traduce en bienestar visible. Cuando alguien
             avanza, el equipo lo celebra; cuando el equipo se organiza, el mundo mejora.
           </p>
@@ -181,7 +181,7 @@ export default function Nucleus() {
         </button>
 
         {/* Dots */}
-        <div className="flex justify-center gap-2.5 mt-7">
+        <div className="flex justify-center gap-2.5 mt-6 sm:mt-7">
           {SLIDES.map((slide, i) => (
             <button
               key={i}

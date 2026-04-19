@@ -20,7 +20,7 @@ const LEGAL = ['Términos', 'Privacidad', 'Seguridad'];
 export default function Footer() {
   return (
     <footer
-      className="relative overflow-hidden px-[5vw] pt-16 pb-8"
+      className="relative overflow-hidden px-4 sm:px-[5vw] pt-12 sm:pt-16 pb-6 sm:pb-8"
       style={{ background: 'linear-gradient(160deg, #f5fdf8 0%, #f0f7ff 50%, #fdf5ff 100%)' }}
     >
       {/* Subtle border top */}
@@ -34,16 +34,16 @@ export default function Footer() {
 
       {/* Faint blobs */}
       <div
-        className="absolute bottom-0 right-0 w-[300px] h-[300px] rounded-full pointer-events-none"
+        className="hidden sm:block absolute bottom-0 right-0 w-[300px] h-[300px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(96,175,255,0.10), transparent 70%)' }}
       />
 
       <div className="max-w-[1160px] mx-auto relative z-10">
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-10 border-b border-grey-150 mb-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12 pb-8 sm:pb-10 border-b border-grey-150 mb-6 sm:mb-7">
           {/* Brand */}
           <div>
-            <div className="font-maxwell text-2xl text-grey-900 mb-4">
+            <div className="font-maxwell text-xl sm:text-2xl text-grey-900 mb-3 sm:mb-4">
               eq
               <span
                 style={{
@@ -56,13 +56,13 @@ export default function Footer() {
               </span>
               po
             </div>
-            <p className="font-body text-sm leading-[1.7] text-grey-400 max-w-[260px]">
+            <p className="font-body text-xs sm:text-sm leading-[1.7] text-grey-400 max-w-[260px]">
               Una plataforma para equipos que quieren colaborar bien, crecer juntos y ver el impacto
               de su trabajo.
             </p>
 
             {/* Social icons */}
-            <div className="flex gap-3 mt-5">
+            <div className="flex gap-2 sm:gap-3 mt-4 sm:mt-5">
               {[
                 { grad: 'linear-gradient(135deg,#9CEDC1,#60AFFF)', label: 'tw' },
                 { grad: 'linear-gradient(135deg,#60AFFF,#86F0FD)', label: 'in' },
@@ -71,7 +71,7 @@ export default function Footer() {
                 <a
                   key={label}
                   href="#"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold no-underline hover:-translate-y-0.5 transition-all"
+                  className="w-8 sm:w-9 h-8 sm:h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold no-underline hover:-translate-y-0.5 transition-all"
                   style={{ background: grad }}
                 >
                   {label}
@@ -83,15 +83,15 @@ export default function Footer() {
           {/* Nav cols */}
           {NAV_COLS.map((col) => (
             <div key={col.title}>
-              <h4 className="font-body text-xs font-semibold tracking-[.1em] uppercase text-grey-400 mb-4">
+              <h4 className="font-body text-xs font-semibold tracking-[.1em] uppercase text-grey-400 mb-3 sm:mb-4">
                 {col.title}
               </h4>
-              <ul className="list-none flex flex-col gap-3">
+              <ul className="list-none flex flex-col gap-2 sm:gap-3">
                 {col.links.map((link) => (
                   <li key={link}>
                     <a
                       href="#"
-                      className="font-body text-sm text-grey-500 no-underline hover:text-grey-900 transition-colors"
+                      className="font-body text-xs sm:text-sm text-grey-500 no-underline hover:text-grey-900 transition-colors"
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background =
                           'linear-gradient(90deg, #38b97a, #2e8fd4)';
@@ -114,12 +114,12 @@ export default function Footer() {
         </div>
 
         {/* Legal links */}
-        <div className="flex gap-8 mb-6 flex-wrap">
+        <div className="flex gap-4 sm:gap-8 mb-4 sm:mb-6 flex-wrap">
           {LEGAL.map((item) => (
             <a
               key={item}
               href="#"
-              className="font-body text-sm text-grey-300 no-underline hover:text-grey-600 transition-colors"
+              className="font-body text-xs sm:text-sm text-grey-300 no-underline hover:text-grey-600 transition-colors"
             >
               {item}
             </a>
@@ -127,8 +127,8 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <p className="font-body text-sm text-grey-400">
+        <div className="flex flex-col gap-2 sm:gap-0 sm:flex-row justify-between items-start sm:items-center">
+          <p className="font-body text-xs sm:text-sm text-grey-400">
             <strong className="text-grey-600 font-semibold">equpo</strong> — Trabajo real. Impacto
             compartido.
           </p>

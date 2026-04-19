@@ -212,8 +212,8 @@ export default function TeamBoard() {
 
       <div
         className="
-             px-4 md:px-8  pt-3 pb-10 flex gap-4 md:gap-5 overflow-x-auto md:overflow-x-visible md:grid md:grid-cols-4
-             snap-x snap-mandatory md:snap-none scroll-px-4
+             px-3 sm:px-4 md:px-8 pt-2 sm:pt-3 pb-6 sm:pb-10 flex gap-3 sm:gap-4 md:gap-5 overflow-x-auto md:overflow-x-visible md:grid md:grid-cols-4
+             snap-x snap-mandatory md:snap-none scroll-px-3 sm:scroll-px-4
              "
       >
         {COLUMNS.map((col, index) => (

@@ -21,8 +21,8 @@ function Pill({ active, children, onClick, className = '' }) {
     <button
       onClick={onClick}
       className={`
-        flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px]
-        font-body text-[12px] cursor-pointer whitespace-nowrap select-none
+        flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border-[1.5px]
+        font-body text-[11px] sm:text-[12px] cursor-pointer whitespace-nowrap select-none
         transition-all duration-200
         ${active ? 'border-blue text-blue bg-blue/8' : 'border-grey-200 text-grey-500 bg-primary hover:border-blue hover:text-blue hover:bg-blue/5'}
         ${className}
@@ -586,20 +586,20 @@ export default function FilterBar({
         flex md:hidden
         sticky top-14 z-40
         bg-primary border-b border-grey-200
-        px-4 py-2 items-center justify-between
+        px-3 sm:px-4 py-1.5 sm:py-2 items-center justify-between
       "
       >
-        <span className="text-[12px] font-semibold text-grey-600">Tablero de tareas</span>
+        <span className="text-[11px] sm:text-[12px] font-semibold text-grey-600">Tablero de tareas</span>
         <button
           onClick={() => setMobileOpen((o) => !o)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] border-[1.5px] font-body transition-all duration-200 cursor-pointer
+          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-[12px] border-[1.5px] font-body transition-all duration-200 cursor-pointer
             ${mobileOpen || activeFilterCount > 0 ? 'border-blue text-blue bg-blue/8' : 'border-grey-200 text-grey-500'}
           `}
         >
-          <SlidersHorizontal size={13} />
+          <SlidersHorizontal size={12} className="sm:block" />
           Filtros
           {activeFilterCount > 0 && (
-            <span className="bg-blue text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+            <span className="bg-blue text-white text-[9px] sm:text-[10px] font-bold px-1 sm:px-1.5 py-0.5 rounded-full">
               {activeFilterCount}
             </span>
           )}
@@ -610,14 +610,14 @@ export default function FilterBar({
       {mobileOpen && (
         <div
           className="
-          flex md:hidden flex-col gap-3
+          flex md:hidden flex-col gap-2 sm:gap-3
           bg-primary border-b border-grey-200
-          px-4 py-3 sticky top-[calc(56px+41px)] z-30
+          px-3 sm:px-4 py-2 sm:py-3 sticky top-[calc(56px+41px)] z-30
           shadow-[0_4px_12px_rgba(0,0,0,0.06)]
           animate-fade-down
         "
         >
-          <div className="flex flex-wrap gap-2">{filterControls}</div>
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">{filterControls}</div>
         </div>
       )}
     </>

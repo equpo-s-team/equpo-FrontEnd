@@ -50,12 +50,12 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
   return (
     <div
       className={`
-        bg-primary rounded-[14px] flex flex-col
+        bg-primary rounded-[12px] sm:rounded-[14px] flex flex-col
         border-[1.5px] ${cfg.border} ${cfg.shadow}
-        min-h-104 md:min-h-120
+        min-h-96 sm:min-h-104 md:min-h-120
         relative overflow-hidden
         transition-all duration-300
-        shrink-0 w-[82vw] sm:w-[72vw] md:w-auto
+        shrink-0 w-[calc(100vw-2rem)] xs:w-[85vw] sm:w-[75vw] md:w-auto
       `}
     >
       <div
@@ -70,29 +70,30 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
         />
       </div>
 
-      <div className="flex items-center justify-between px-4 pt-5 pb-3">
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center justify-between px-3 sm:px-4 pt-4 sm:pt-5 pb-2 sm:pb-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <ColIndicator accent={accent}/>
           <span
-            className={`font-maxwell text-[12px] font-bold tracking-[0.6px] uppercase ${cfg.title}`}
+            className={`font-maxwell text-[11px] sm:text-[12px] font-bold tracking-[0.5px] sm:tracking-[0.6px] uppercase ${cfg.title}`}
           >
             {label}
           </span>
-          <span className="text-[10px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-[9px]">
+          <span className="text-[9px] sm:text-[10px] font-semibold text-grey-400 bg-secondary px-1.5 sm:px-2 py-0.5 rounded-[8px] sm:rounded-[9px]">
             {cards.length}
           </span>
         </div>
         <button
           onClick={() => onCreateTask?.(id)}
-          className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
+          className="w-5 sm:w-6 h-5 sm:h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150 flex-shrink-0"
         >
-          <Plus size={14} />
+          <Plus size={12} className="sm:block" />
+          <Plus size={10} className="hidden sm:hidden" />
         </button>
       </div>
 
       <div
         role="button"
-        className="flex flex-col gap-3 px-3 pb-3 flex-1"
+        className="flex flex-col gap-2 sm:gap-3 px-2 sm:px-3 pb-2 sm:pb-3 flex-1"
         onDrop={(e) => {
           e.preventDefault();
           const cardId = e.dataTransfer.getData('text/card-id');
@@ -129,10 +130,10 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
         ))}
       </div>
 
-      <div className="mx-3 mb-3">
+      <div className="mx-2 sm:mx-3 mb-2 sm:mb-3">
         <button
           onClick={() => onCreateTask?.(id)}
-          className="w-full py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[10px] text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer">
+          className="w-full py-2 sm:py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[8px] sm:rounded-[10px] text-[11px] sm:text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer">
           + Agregar tarea
         </button>
       </div>

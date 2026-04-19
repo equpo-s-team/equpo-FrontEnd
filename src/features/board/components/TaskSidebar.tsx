@@ -332,7 +332,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
       {/* Sidebar panel */}
       <aside
         className={`
-          fixed top-0 right-0 z-50 h-full w-full sm:w-[760px] xl:w-[920px]
+          fixed top-0 right-0 z-50 h-full w-full sm:w-[720px] md:w-[760px] xl:w-[920px]
           bg-primary border-l-[1.5px] border-grey-200
           shadow-card-lg flex flex-col
           transition-transform duration-300 ease-out
@@ -340,7 +340,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         `}
       >
         {/* ── Header ── */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-grey-200">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-grey-200">
           <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
             {isReadOnlyView ? 'Detalle de Tarea' : mode === 'edit' ? 'Editar Tarea' : 'Crear Tarea'}
           </h2>
@@ -365,7 +365,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         </div>
 
         {isReadOnlyView ? (
-          <section className="flex-1 overflow-y-auto px-8 py-7 sm:px-10 sm:py-8">
+          <section className="flex-1 overflow-y-auto px-4 py-5 sm:px-8 sm:py-7 md:px-10 md:py-8">
             <div className="mb-5">
               <h1 className="font-maxwell text-2xl font-bold text-grey-900 tracking-wide">
                 {name || 'Sin nombre'}
@@ -483,7 +483,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         ) : (
           <>
             {/* ── Form ── */}
-            <form onSubmit={(e) => void handleSubmit(e)} className="flex-1 overflow-y-auto px-6 py-5">
+            <form onSubmit={(e) => void handleSubmit(e)} className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
           {/* Name spans both columns */}
           <div className="mb-5">
             <FieldLabel required>
@@ -496,12 +496,12 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
               onChange={(e) => setName(e.target.value)}
               maxLength={100}
               placeholder="Nombre de la tarea"
-              className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+              className={`w-full px-3 py-2 sm:py-2.5 rounded-[8px] sm:rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
             />
             {errors.name && <p className="mt-1 text-xs text-red">{errors.name}</p>}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-5">
             {/* Left column: description (2/3) */}
             <div className="sm:col-span-3">
               <FieldLabel required>
@@ -520,7 +520,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
             </div>
 
             {/* Right column: rest of task attributes (1/3) */}
-            <div className="sm:col-span-1 space-y-5">
+            <div className="sm:col-span-1 space-y-3 sm:space-y-5">
               {/* Due Date */}
               <div>
                 <FieldLabel required>
@@ -532,7 +532,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
                   min={getMinDate()}
-                  className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.dueDate ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+                  className={`w-full px-3 py-2 sm:py-2.5 rounded-[8px] sm:rounded-[10px] border-[1.5px] text-xs sm:text-sm font-body bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.dueDate ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
                 />
                 {errors.dueDate && <p className="mt-1 text-xs text-red">{errors.dueDate}</p>}
               </div>
@@ -543,13 +543,13 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                   <Zap size={12} className="inline mr-1 -mt-0.5" />
                   Prioridad
                 </FieldLabel>
-                <div className="flex gap-2">
+                <div className="flex gap-1.5 sm:gap-2">
                   {PRIORITY_OPTIONS.map((opt) => (
                     <button
                       key={opt.value}
                       type="button"
                       onClick={() => setPriority(opt.value as 'high' | 'medium' | 'low')}
-                      className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] border-[1.5px] text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                      className={`flex-1 flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-[8px] sm:rounded-[10px] border-[1.5px] text-xs font-semibold transition-all duration-150 cursor-pointer ${
                         priority === opt.value
                           ? 'border-blue bg-blue/8 text-blue'
                           : 'border-grey-200 text-grey-500 hover:border-grey-300'
@@ -702,13 +702,13 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
             </form>
 
             {/* ── Footer ── */}
-            <div className="px-6 py-4 border-t border-grey-200 flex items-center gap-3">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-grey-200 flex items-center gap-2 sm:gap-3">
           {mode === 'edit' && (
             <button
               type="button"
               onClick={() => void handleDelete()}
               disabled={isSubmitting}
-              className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-red border-[1.5px] border-red/30 hover:bg-red/8 transition-all duration-150 cursor-pointer disabled:opacity-50"
+              className="hidden sm:inline-block px-3 sm:px-4 py-2 sm:py-2.5 rounded-[8px] sm:rounded-[10px] text-xs sm:text-sm font-semibold text-red border-[1.5px] border-red/30 hover:bg-red/8 transition-all duration-150 cursor-pointer disabled:opacity-50"
             >
               Eliminar
             </button>
@@ -717,7 +717,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
           <button
             type="button"
             onClick={handleCancel}
-            className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-grey-500 border-[1.5px] border-grey-200 hover:border-grey-300 transition-all duration-150 cursor-pointer"
+            className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-[8px] sm:rounded-[10px] text-xs sm:text-sm font-semibold text-grey-500 border-[1.5px] border-grey-200 hover:border-grey-300 transition-all duration-150 cursor-pointer"
           >
             Cancelar
           </button>
@@ -725,9 +725,9 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
             type="submit"
             onClick={(e) => void handleSubmit(e)}
             disabled={isSubmitDisabled}
-            className="px-5 py-2.5 rounded-[10px] text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
+            className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-[8px] sm:rounded-[10px] text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
           >
-            {isSubmitting ? 'Guardando...' : mode === 'edit' ? 'Guardar Cambios' : 'Crear Tarea'}
+            {isSubmitting ? 'Guardando...' : mode === 'edit' ? 'Guardar' : 'Crear'}
           </button>
             </div>
           </>

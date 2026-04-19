@@ -19,7 +19,7 @@ export default function AvatarCluster({ connected, max, users }: AvatarClusterPr
             title={u.name}
             className={`
               w-[22px] h-[22px] rounded-full
-              text-[7.5px] font-bold text-white
+              text-xs font-bold text-white
               flex items-center justify-center
               border-[1.5px] border-black/40
               ${u.gradient}
@@ -31,18 +31,18 @@ export default function AvatarCluster({ connected, max, users }: AvatarClusterPr
         ))}
         {extra > 0 && (
           <div
-            className="w-[22px] h-[22px] rounded-full text-[7.5px] font-bold text-white flex items-center justify-center border-[1.5px] border-black/40 bg-grey-700"
+            className="w-[22px] h-[22px] rounded-full text-xs font-bold text-white flex items-center justify-center border-[1.5px] border-black/40 bg-grey-700"
             style={{ marginLeft: '-5px' }}
           >
             +{extra}
           </div>
         )}
       </div>
-      <span className="text-[11px] font-bold uppercase tracking-[0.5px] text-grey-700">
+      <span className="text-xs font-bold uppercase tracking-[0.5px] text-grey-700">
         Jugadores
       </span>
-      <span className="text-[13px] font-bold text-grey-800">{connected}</span>
-      <span className="text-[11px] text-grey-600">/ {max}</span>
+      <span className="text-sm font-bold text-grey-800">{connected}</span>
+      <span className="text-xs text-grey-600">/ {max}</span>
     </div>
   );
 }

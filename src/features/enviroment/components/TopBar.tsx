@@ -32,9 +32,9 @@ export default function TopBar({ session, stats }: TopBarProps) {
           className="w-[7px] h-[7px] rounded-full bg-kanban-done animate-pulse-neon flex-shrink-0"
           style={{ boxShadow: '0 0 6px #9CEDC1' }}
         />
-        <span className="text-[11px] font-bold uppercase tracking-[0.5px] text-grey-700">En vivo</span>
+        <span className="text-xs font-bold uppercase tracking-[0.5px] text-grey-700">En vivo</span>
         <div className="w-px h-4 bg-grey-300/80" />
-        <span className="font-maxwell text-[13px] font-bold text-grey-800 tabular-nums">
+        <span className="font-maxwell text-sm font-bold text-grey-800 tabular-nums">
           {formatTime(session.elapsedSeconds)}
         </span>
       </div>

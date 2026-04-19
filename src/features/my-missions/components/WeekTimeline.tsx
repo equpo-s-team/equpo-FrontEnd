@@ -140,7 +140,7 @@ export default function WeekTimeline({
                 key={v}
                 onClick={() => onViewChange(v)}
                 className={`
-                  px-3 py-1 font-body text-[11px] font-bold rounded-lg transition-all
+                  px-3 py-1 font-body text-xs font-bold rounded-lg transition-all
                   ${isActive ? 'bg-white text-blue shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10 cursor-pointer'}
                 `}
               >
@@ -178,7 +178,7 @@ export default function WeekTimeline({
                   key={`header-${key}`}
                   className={`py-3 px-1 text-center bg-white ${isToday ? 'bg-blue/5' : ''}`}
                 >
-                  <p className="text-[10px] font-bold text-grey-400 uppercase tracking-widest font-body">
+                  <p className="text-xs font-bold text-grey-400 uppercase tracking-widest font-body">
                     {DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1]}
                   </p>
                   <div
@@ -207,7 +207,7 @@ export default function WeekTimeline({
                     className="absolute left-0 right-0 flex items-start"
                     style={{ top: `${i * HOUR_HEIGHT}px` }}
                   >
-                    <span className="w-[50px] text-right text-[10px] pr-2 text-grey-400 font-body font-medium -translate-y-1/2 bg-white">
+                    <span className="w-[50px] text-right text-xs pr-2 text-grey-400 font-body font-medium -translate-y-1/2 bg-white">
                       {formatHour(hour)}
                     </span>
                     <div className="flex-1 h-px bg-grey-150" />
@@ -268,7 +268,7 @@ export default function WeekTimeline({
                             zIndex: isActive ? 30 : 10 + col,
                           }}
                         >
-                          <p className="text-[9px] font-bold text-white leading-tight line-clamp-2 font-body break-words">
+                          <p className="text-xs font-bold text-white leading-tight line-clamp-2 font-body break-words">
                             {task.name}
                           </p>
                         </button>

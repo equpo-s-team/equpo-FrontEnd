@@ -31,9 +31,9 @@ export default function WhatIsEqupo() {
                   className="w-6 h-6 rounded-lg flex items-center justify-center"
                   style={{ background: 'linear-gradient(135deg, #9CEDC1, #60AFFF)' }}
                 >
-                  <span className="text-white text-[.6rem] font-bold">e</span>
+                  <span className="text-white text-xs font-bold">e</span>
                 </div>
-                <span className="font-maxwell text-[.9rem] text-grey-800">Sprint Q2 — equpo</span>
+                <span className="font-maxwell text-sm text-grey-800">Sprint Q2 — equpo</span>
               </div>
               <div className="flex">
                 {[
@@ -43,7 +43,7 @@ export default function WhatIsEqupo() {
                 ].map(({ letter, bg }, i) => (
                   <div
                     key={letter}
-                    className={`w-[26px] h-[26px] rounded-full border-2 border-white flex items-center justify-center text-[.6rem] font-bold text-white ${i > 0 ? '-ml-[7px]' : ''}`}
+                    className={`w-[26px] h-[26px] rounded-full border-2 border-white flex items-center justify-center text-xs font-bold text-white ${i > 0 ? '-ml-[7px]' : ''}`}
                     style={{ background: bg }}
                   >
                     {letter}
@@ -120,8 +120,8 @@ export default function WhatIsEqupo() {
                 animation: 'floatOrb 4s ease-in-out infinite',
               }}
             />
-            <div className="font-body text-[.75rem]">
-              <strong className="block font-semibold text-grey-800 text-[.82rem]">
+            <div className="font-body text-xs">
+              <strong className="block font-semibold text-grey-800 text-sm">
                 Mundo prosperando
               </strong>
               <span className="text-grey-400 flex items-center gap-1">
@@ -144,7 +144,7 @@ export default function WhatIsEqupo() {
             Un tablero colaborativo… con un giro que sí se nota.
           </h2>
 
-          <p className="font-body text-[.97rem] leading-[1.75] text-grey-500 mb-5 ">
+          <p className="font-body text-base leading-[1.75] text-grey-500 mb-5 ">
             equpo es una plataforma para equipos de cualquier rubro que combina todo lo que
             necesitas para trabajar bien y juntos.
           </p>
@@ -170,7 +170,7 @@ export default function WhatIsEqupo() {
             ].map((item) => (
               <li
                 key={item.text}
-                className="flex items-start gap-3 font-body text-[.93rem] text-grey-700"
+                className="flex items-start gap-3 font-body text-sm text-grey-700"
               >
                 <span
                   className="w-[18px] h-[18px] rounded-full flex-shrink-0 mt-0.5"
@@ -182,7 +182,7 @@ export default function WhatIsEqupo() {
           </ul>
 
           <div
-            className="border-l-4 rounded-r-xl px-5 py-4 font-maxwell text-[1.05rem] text-grey-800"
+            className="border-l-4 rounded-r-xl px-5 py-4 font-maxwell text-base text-grey-800"
             style={{
               borderImage: 'linear-gradient(180deg, #9CEDC1, #60AFFF) 1',
               background: 'linear-gradient(135deg, rgba(156,237,193,0.10), rgba(96,175,255,0.08))',
@@ -201,17 +201,17 @@ function KanbanCol({ title, dotGrad, tasks }) {
     <div>
       <div className="flex items-center gap-1.5 mb-2">
         <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: dotGrad }} />
-        <span className="font-body text-[.68rem] font-semibold uppercase tracking-[.08em] text-grey-400">
+        <span className="font-body text-xs font-semibold uppercase tracking-[.08em] text-grey-400">
           {title}
         </span>
       </div>
       {tasks.map(({ tag, tagBg, tagColor, text }) => (
         <div
           key={text}
-          className="bg-grey-50 border border-grey-150 rounded-[10px] px-[.65rem] py-[.55rem] text-[.72rem] text-grey-700 mb-[.45rem]"
+          className="bg-grey-50 border border-grey-150 rounded-[10px] px-[.65rem] py-[.55rem] text-xs text-grey-700 mb-[.45rem]"
         >
           <span
-            className="inline-block text-[.6rem] font-semibold px-[.4rem] py-[.15rem] rounded mb-1"
+            className="inline-block text-xs font-semibold px-[.4rem] py-[.15rem] rounded mb-1"
             style={{ background: tagBg, color: tagColor }}
           >
             {tag}
@@ -236,7 +236,7 @@ export function SectionLabel({ children, gradient, textGrad, barColor, color, cl
 
   return (
     <div
-      className={`flex items-center gap-2 mb-3 font-body text-[.75rem] font-semibold tracking-[.14em] uppercase ${color || ''} ${className}`}
+      className={`flex items-center gap-2 mb-3 font-body text-xs font-semibold tracking-[.14em] uppercase ${color || ''} ${className}`}
     >
       <span className={`block w-5 h-0.5 rounded ${barColor || ''}`} style={barStyle} />
       <span style={textStyle}>{children}</span>

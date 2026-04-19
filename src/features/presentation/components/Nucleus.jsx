@@ -131,7 +131,7 @@ export default function Nucleus() {
             <br />
             Tus acciones dejan huella.
           </h2>
-          <p className="font-body text-[.97rem] leading-[1.7] text-grey-500">
+          <p className="font-body text-base leading-[1.7] text-grey-500">
             Aquí la productividad no es fría: se traduce en bienestar visible. Cuando alguien
             avanza, el equipo lo celebra; cuando el equipo se organiza, el mundo mejora.
           </p>
@@ -159,7 +159,7 @@ export default function Nucleus() {
               >
                 {/* Big decorative number */}
                 <span
-                  className="font-maxwell text-[4rem] absolute top-4 right-5 leading-none select-none"
+                  className="font-maxwell text-6xl absolute top-4 right-5 leading-none select-none"
                   style={{ color: slide.numColor }}
                 >
                   {slide.num}
@@ -173,8 +173,8 @@ export default function Nucleus() {
                   {slide.icon}
                 </div>
 
-                <h3 className="font-maxwell text-[1.12rem] text-grey-900 mb-3">{slide.title}</h3>
-                <p className="font-body text-[.88rem] leading-[1.7] text-grey-500">{slide.text}</p>
+                <h3 className="font-maxwell text-lg text-grey-900 mb-3">{slide.title}</h3>
+                <p className="font-body text-sm leading-[1.7] text-grey-500">{slide.text}</p>
               </div>
             </div>
           ))}

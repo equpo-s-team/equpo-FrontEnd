@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.tsx';
-// @ts-expect-error — TaskSidebar is .jsx; Vite resolves it at runtime
 import TaskSidebar from '@/features/board/components/TaskSidebar';
 import type { TeamTask } from '@/features/board/types';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -198,7 +197,7 @@ export default function MyMissions() {
         onClose={closeEdit}
         mode="edit"
         task={editSidebar.task}
-        teamId={teamId}
+        teamId={teamId ?? ''}
         defaultStatus={editSidebar.task?.status ?? 'todo'}
       />
     </div>

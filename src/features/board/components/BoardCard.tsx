@@ -1,44 +1,52 @@
+import type { DragEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { useRef } from 'react';
 
-import { COLUMN_CONFIG, PRIORITY_CONFIG, USER_GRADIENT } from './columnConfig.js';
+import type { TaskPriority, TaskStatus } from '../types';
+import { markdownToEditorHtml } from '../utils/markdownUtils';
+import { STATUS_TO_PROGRESS } from '../utils/taskUtils';
+import { COLUMN_CONFIG, PRIORITY_CONFIG, USER_GRADIENT } from './columnConfig';
+import { TagChip } from './TagChip';
 
-const STATUS_TO_PROGRESS = {
-  todo: 0,
-  'in-progress': 40,
-  'in-qa': 85,
-  done: 100,
+type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
+
+type BoardCardData = {
+  id: string;
+  name: string;
+  description?: string;
+  priority?: TaskPriority;
+  categories?: string[];
+  assignees?: string[];
 };
 
-const TAG_COLORS = [
-  'bg-blue/10 text-[10.5px] text-blue border-blue/50 shadow-[0_0_8px_rgba(96,175,255,0.4)]',
-  'bg-kanban-qa/10 text-[10.5px] text-kanban-qa border-kanban-qa/50 shadow-[0_0_8px_rgba(255,148,174,0.4)]',
-  'bg-green/10 text-[10.5px] text-green border-green/50 shadow-[0_0_8px_rgba(156,237,193,0.4)]',
-  'bg-kanban-todo/10 text-[10.5px] text-kanban-todo border-kanban-todo/50 shadow-[0_0_8px_rgba(155,127,225,0.4)]',
-  'bg-red/10 text-[10.5px] text-red border-red/50 shadow-[0_0_8px_rgba(246,90,112,0.4)]',
-  'bg-kanban-progress/10 text-[10.5px] text-kanban-progress border-kanban-progress/50 shadow-[0_0_8px_rgba(134,240,253,0.4)]',
-];
+type BoardCardProps = {
+  card: BoardCardData;
+  accent: BoardColumnId;
+  columnId: BoardColumnId;
+  onMoveCard?: (
+    draggedCardId: string,
+    fromColumnId: BoardColumnId,
+    toColumnId: BoardColumnId,
+    position: number,
+  ) => void;
+  onCardClick?: (card: BoardCardData) => void;
+  position: number;
+};
 
-function getTagColorClass(label) {
-  let hash = 0;
-  for (let i = 0; i < label.length; i++) {
-    hash = label.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const index = Math.abs(hash) % TAG_COLORS.length;
-  return TAG_COLORS[index];
-}
+type PointerTracking = {
+  x: number;
+  y: number;
+  t: number;
+  dragged: boolean;
+};
 
-function TagChip({ label }) {
-  const colorClass = getTagColorClass(label);
-  return (
-    <span
-      className={`px-2 py-[2.5px] rounded-[8px] font-semibold tracking-wide border-[1px] ${colorClass}`}
-    >
-      {label}
-    </span>
-  );
-}
+const COLUMN_TO_STATUS: Record<BoardColumnId, TaskStatus> = {
+  todo: 'todo',
+  progress: 'in-progress',
+  qa: 'in-qa',
+  done: 'done',
+};
 
-function UserAvatar({ userId, size = 'sm' }) {
+function UserAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
   const dim = size === 'sm' ? 'w-5.5 h-5.5 text-[7.5px]' : 'w-7 h-7 text-[10px]';
   return (
     <div
@@ -51,31 +59,33 @@ function UserAvatar({ userId, size = 'sm' }) {
   );
 }
 
-export default function BoardCard({ card, accent, columnId, onMoveCard, onCardClick, position }) {
+export default function BoardCard({ card, accent, columnId, onMoveCard, onCardClick, position }: BoardCardProps) {
   const cfg = COLUMN_CONFIG[accent];
-  const prio = PRIORITY_CONFIG[card.priority];
-  const progress = STATUS_TO_PROGRESS[columnId] ?? 0;
+  const prio = PRIORITY_CONFIG[card.priority ?? 'medium'];
+  const progress = STATUS_TO_PROGRESS[COLUMN_TO_STATUS[columnId]];
 
   // ── Click vs drag tracking ──
-  const pointerRef = useRef({ x: 0, y: 0, t: 0, dragged: false });
+  const pointerRef = useRef<PointerTracking>({ x: 0, y: 0, t: 0, dragged: false });
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {
     pointerRef.current = { x: e.clientX, y: e.clientY, t: Date.now(), dragged: false };
   };
 
-  const handleDragStart = (e) => {
+  const handleDragStart = (e: DragEvent<HTMLDivElement>) => {
     pointerRef.current.dragged = true;
     e.dataTransfer.setData('text/card-id', card.id);
     e.dataTransfer.setData('text/from-column', columnId);
     e.dataTransfer.effectAllowed = 'move';
   };
 
-  const handlePointerUp = () => {
+  const handlePointerUp = (e: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {
     const { x, y, t, dragged } = pointerRef.current;
-    if (dragged) return;
+    if (dragged) {
+      return;
+    }
 
-    const dx = Math.abs(x - (window.event?.clientX ?? x));
-    const dy = Math.abs(y - (window.event?.clientY ?? y));
+    const dx = Math.abs(x - e.clientX);
+    const dy = Math.abs(y - e.clientY);
     const dt = Date.now() - t;
 
     // Short, low-displacement press → single click
@@ -84,32 +94,32 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
     }
   };
 
-  // Handle drag end
-  const handleDragEnd = (e) => {
+  const handleDragEnd = (e: DragEvent<HTMLDivElement>) => {
     e.currentTarget.classList.remove('opacity-50');
   };
 
-  // Handle drop on same column (reordering)
-  const handleDrop = (e) => {
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     const draggedCardId = e.dataTransfer.getData('text/card-id');
-    const fromColumnId = e.dataTransfer.getData('text/from-column');
+    const fromColumnId = e.dataTransfer.getData('text/from-column') as BoardColumnId;
 
     if (fromColumnId === columnId && onMoveCard) {
-      // Same column reordering - simple swap
       onMoveCard(draggedCardId, columnId, columnId, position);
     }
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.currentTarget.classList.add('bg-blue/5');
   };
 
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
     e.currentTarget.classList.remove('bg-blue/5');
   };
+
+  const descriptionHtml = card.description ? markdownToEditorHtml(card.description) : '';
+  const categories = card.categories ?? [];
 
   return (
     <div
@@ -132,39 +142,38 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
         group
       `}
     >
-      {/* Top row */}
       <div className="flex items-start justify-between mb-2">
         <span className="font-maxwell text-[10px] text-grey-400 tracking-[0.3px]">{card.id}</span>
-        {/*<span
-        
-          className={`text-[10px] font-semibold px-2 py-[2px] rounded-[6px] border-[1.5px] ${prio.bg} ${prio.text} ${prio.border}`}
-        >*/}
           <span className={`flex items-center gap-1.5 text-[10px] font-bold ${prio.text}`}>
           <span className={`w-2 h-2 rounded-full ${prio.dot}`} />
           {prio.label}
         </span>
       </div>
 
-      {/* Title */}
       <p className="text-[13.5px] font-semibold text-grey-800 leading-snug mb-1.5 line-clamp-2">
         {card.name}
       </p>
 
-      {/* Description */}
-      <p className="text-[12px] text-grey-500 leading-relaxed mb-2.5 line-clamp-2">
-        {card.description}
-      </p>
+      {/* Description rendered as markdown within clamp */}
+      {descriptionHtml ? (
+        <div
+          className="text-[12px] text-grey-500 leading-relaxed mb-2.5 line-clamp-2 [&_p]:inline [&_ul]:inline [&_ol]:inline [&_li]:inline [&_li]:mr-1.5 [&_strong]:font-bold [&_em]:italic"
+          dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+        />
+      ) : (
+        <p className="text-[12px] text-grey-400 italic mb-2.5 line-clamp-2">
+          Sin descripción
+        </p>
+      )}
 
-      {/* Tags */}
-      {card.categories?.length > 0 && (
+      {categories.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
-          {card.categories.map((tag) => (
+          {categories.map((tag: string) => (
             <TagChip key={tag} label={tag} />
           ))}
         </div>
       )}
 
-      {/* Progress bar */}
       <div className="mb-3">
         <div className="flex justify-between items-center mb-1.5">
           <span className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400">
@@ -179,7 +188,6 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
             className={`h-full rounded-full relative ${cfg.progressFill} transition-[width] duration-500 ease-out`}
             style={{ width: `${progress}%` }}
           >
-            {/* glow tip */}
             {progress > 0 && (
               <div
                 className="absolute right-0 top-0 bottom-0 w-1.5 blur-[2px] rounded-full"
@@ -190,30 +198,14 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
         </div>
       </div>
 
-      {/* Footer */}
       <div className="flex items-center justify-between">
-        {/* Assignee avatars */}
         <div className="flex">
-          {card.assignees.map((uid, i) => (
+          {card.assignees?.map((uid: string, i: number) => (
             <div key={uid} style={{ marginLeft: i > 0 ? '-5px' : 0 }}>
               <UserAvatar userId={uid} />
             </div>
           ))}
         </div>
-
-        {/* Meta (Actualizaciones futuras, para agregar el attachments y comments)
-                <div className="flex items-center gap-2.5 text-[11px] text-grey-400">
-          <span className="flex items-center gap-1">
-            <Paperclip size={11}/>
-              {card.attachments}
-          </span>
-                    <span className="flex items-center gap-1">
-            <MessageSquare size={11}/>
-                        {card.comments}
-          </span>
-                </div>
-
-                 */}
       </div>
     </div>
   );

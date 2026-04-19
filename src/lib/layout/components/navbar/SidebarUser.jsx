@@ -61,7 +61,7 @@ export default function SidebarUser() {
           >
             {userName}
           </p>
-          <p className="text-secondary-foreground text-[11px] font-body mt-0.5 truncate">
+          <p className="text-secondary-foreground text-xs font-body mt-0.5 truncate">
             {displayRole}
           </p>
         </div>

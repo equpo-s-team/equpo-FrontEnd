@@ -1,6 +1,6 @@
 import {Plus} from 'lucide-react';
 
-import BoardCard from './BoardCard.jsx';
+import BoardCard from './BoardCard.tsx';
 import {COLUMN_CONFIG} from './columnConfig.js';
 
 function ColIndicator({accent}) {

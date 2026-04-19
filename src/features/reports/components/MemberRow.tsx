@@ -58,7 +58,7 @@ export function MemberRow({ member }: MemberRowProps) {
     >
       {/* Avatar */}
       <div
-        className="w-9 h-9 rounded-full flex items-center justify-center text-[0.67rem] font-semibold text-white flex-shrink-0 tracking-wide"
+        className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white flex-shrink-0 tracking-wide"
         style={avatarStyle}
       >
         {member.initials}
@@ -66,13 +66,13 @@ export function MemberRow({ member }: MemberRowProps) {
 
       {/* Name + role */}
       <div className="min-w-0">
-        <p className="text-[0.82rem] font-medium text-grey-800 truncate">{member.name}</p>
-        <p className="text-[0.69rem] text-grey-400 mt-px">{member.role}</p>
+        <p className="text-sm font-medium text-grey-800 truncate">{member.name}</p>
+        <p className="text-xs text-grey-400 mt-px">{member.role}</p>
       </div>
 
       {/* Progress bar */}
       <div>
-        <div className="flex justify-between mb-1.5 text-[0.67rem] text-grey-500">
+        <div className="flex justify-between mb-1.5 text-xs text-grey-500">
           <span>Completadas</span>
           <span>
             {member.completed}/{member.total}
@@ -92,7 +92,7 @@ export function MemberRow({ member }: MemberRowProps) {
 
       {/* Percentage */}
       <p
-        className="text-[0.82rem] font-semibold text-right whitespace-nowrap"
+        className="text-sm font-semibold text-right whitespace-nowrap"
         style={{ color: member.pctColor }}
       >
         {pct}%

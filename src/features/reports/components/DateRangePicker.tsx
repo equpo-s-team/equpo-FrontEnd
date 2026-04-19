@@ -102,7 +102,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
           {rangeLabel}
         </span>
         <span
-          className="text-[0.6rem] text-grey-400 ml-1 transition-transform duration-200"
+          className="text-xs text-grey-400 ml-1 transition-transform duration-200"
           style={{ transform: open ? 'rotate(180deg)' : 'none' }}
         >
           ▼
@@ -136,7 +136,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
 
         {/* Custom range inputs */}
         <div className="px-4 pt-3.5">
-          <p className="text-[0.67rem] font-semibold uppercase tracking-[0.08em] text-grey-400 mb-2.5">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-grey-400 mb-2.5">
             Rango personalizado
           </p>
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
@@ -182,7 +182,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
             >
               ‹
             </button>
-            <span className="text-[0.82rem] font-semibold text-grey-800">
+            <span className="text-sm font-semibold text-grey-800">
               {MONTHS_ES[calMonth.getMonth()]} {calMonth.getFullYear()}
             </span>
             <button
@@ -199,7 +199,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
             {DAYS_ES.map((d) => (
               <div
                 key={d}
-                className="text-center text-[0.61rem] font-semibold uppercase tracking-wider text-grey-400 py-1"
+                className="text-center text-xs font-semibold uppercase tracking-wider text-grey-400 py-1"
               >
                 {d}
               </div>
@@ -220,7 +220,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
               const inR = isInRange(date);
 
               let cls =
-                'aspect-square flex items-center justify-center text-[0.72rem] rounded-lg cursor-pointer transition-all duration-100 ';
+                'aspect-square flex items-center justify-center text-xs rounded-lg cursor-pointer transition-all duration-100 ';
 
               if (isS || isE) {
                 cls +=

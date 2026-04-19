@@ -57,7 +57,7 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
           )}
           {/* Level badge */}
           <div
-            className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-lg flex items-center justify-center text-white text-[10px] font-bold border-2 border-white"
+            className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs font-bold border-2 border-white"
             style={{ background: 'linear-gradient(135deg, #9b7fe1, #5961F9)' }}
           >
             {user.level}
@@ -83,7 +83,7 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
           </div>
 
           <p
-            className="text-[11px] text-grey-400 font-mono mb-2 truncate"
+            className="text-xs text-grey-400 font-mono mb-2 truncate"
             title={user.uid}
           >
             {user.uid.length > 20 ? `${user.uid.substring(0, 20)}…` : user.uid}
@@ -92,11 +92,11 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
           {/* XP bar */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] font-semibold text-grey-500">
+              <span className="text-xs font-semibold text-grey-500">
                 Nivel {user.level} → {user.level + 1}
               </span>
               <span
-                className="text-[10px] font-bold"
+                className="text-xs font-bold"
                 style={{ color: '#9b7fe1' }}
               >
                 {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()} XP

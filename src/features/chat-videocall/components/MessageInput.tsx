@@ -115,39 +115,39 @@ export default function MessageInput() {
   const canSend = Boolean(value.trim() && activeRoom) && !isUploading;
 
   return (
-    <div className="px-4 py-3 border-t border-grey-150 bg-primary flex-shrink-0 relative">
+    <div className="px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 border-t border-grey-150 bg-primary flex-shrink-0 relative min-h-fit">
       {/* ReplyTo Indicator */}
       {replyingTo && (
-        <div className="mb-2 bg-grey-100 rounded-lg px-3 py-2 flex items-center justify-between border-l-4 border-purple-DEFAULT">
-          <div className="flex flex-col overflow-hidden">
-            <span className="text-[10px] text-purple-DEFAULT font-semibold">
+        <div className="mb-1.5 sm:mb-2 bg-grey-100 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 flex items-center justify-between border-l-4 border-purple-DEFAULT">
+          <div className="flex flex-col overflow-hidden min-w-0">
+            <span className="text-[9px] sm:text-[10px] text-purple-DEFAULT font-semibold">
               Respondiendo a {replyingTo.senderName}
             </span>
-            <span className="text-xs text-grey-600 truncate">{replyingTo.text}</span>
+            <span className="text-[10px] sm:text-xs text-grey-600 truncate">{replyingTo.text}</span>
           </div>
-          <button onClick={() => setReplyingTo(null)} className="text-grey-400 hover:text-grey-700">
-            <X size={14} />
+          <button onClick={() => setReplyingTo(null)} className="text-grey-400 hover:text-grey-700 ml-2 flex-shrink-0">
+            <X size={12} />
           </button>
         </div>
       )}
 
       {/* Emoji Picker Popover */}
       {showEmojiPicker && (
-        <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 shadow-2xl">
+        <div ref={emojiPickerRef} className="absolute bottom-full right-2 sm:right-3 md:right-4 mb-1 sm:mb-2 z-50 shadow-2xl scale-75 sm:scale-100 origin-bottom-right">
           <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
         </div>
       )}
 
-      <div className="flex items-center gap-2 bg-grey-100 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
+      <div className="flex items-center gap-1 sm:gap-2 bg-grey-100 rounded-lg sm:rounded-2xl px-2 sm:px-3 py-1.5 sm:py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
         {/* Attach */}
         <input type="file" ref={fileInputRef} className="hidden" onChange={(e) => void handleFileUpload(e)} />
         <button
           disabled={!activeRoom || isUploading}
           onClick={() => fileInputRef.current?.click()}
-          className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+          className="w-6 sm:w-7 h-6 sm:h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40 flex-shrink-0"
           title="Adjuntar archivo"
         >
-          <Paperclip size={16} />
+          <Paperclip size={14} />
         </button>
 
         {/* Input */}
@@ -161,7 +161,7 @@ export default function MessageInput() {
           placeholder={activeRoom ? 'Escribe un mensaje...' : 'Selecciona una sala'}
           className="
             flex-1 bg-transparent outline-none
-            font-body text-sm text-grey-800 placeholder:text-grey-400
+            font-body text-xs sm:text-sm text-grey-800 placeholder:text-grey-400
             disabled:cursor-not-allowed
           "
           autoComplete="off"
@@ -172,10 +172,10 @@ export default function MessageInput() {
           ref={emojiButtonRef}
           disabled={!activeRoom || isUploading}
           onClick={() => setShowEmojiPicker((prev) => !prev)}
-          className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+          className="w-6 sm:w-7 h-6 sm:h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40 flex-shrink-0"
           title="Emojis"
         >
-          <Smile size={16} />
+          <Smile size={14} />
         </button>
 
         {/* Send */}
@@ -184,7 +184,7 @@ export default function MessageInput() {
           disabled={!canSend}
           title="Enviar"
           className={`
-            w-8 h-8 rounded-xl flex items-center justify-center
+            w-7 sm:w-8 h-7 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0
             transition-all duration-200
             ${
               canSend
@@ -193,7 +193,7 @@ export default function MessageInput() {
             }
           `}
         >
-          <Send size={14} />
+          <Send size={12} />
         </button>
       </div>
     </div>

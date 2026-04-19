@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import CallModal from './components/CallModal.tsx';
 import CallNotification from './components/CallNotification.tsx';
 import ChatHeader from './components/ChatHeader.tsx';
@@ -7,13 +8,16 @@ import MessageInput from './components/MessageInput.tsx';
 
 function ChatLayout() {
   return (
-    <div className="flex h-full min-h-0 bg-primary">
+    <div className="flex w-screen h-[100dvh] bg-primary">
       <CallNotification />
-      {/* Conversation sidebar */}
-      <ConversationList />
+      
+      {/* Sidebar - visible on all sizes */}
+      <div className="flex flex-col flex-shrink-0">
+        <ConversationList />
+      </div>
 
       {/* Main chat area */}
-      <main className="flex-1 flex flex-col min-w-0 h-screen max-h-screen bg-grey-50">
+      <main className="flex flex-col flex-1 min-w-0 bg-grey-50">
         <ChatHeader />
         <MessageArea />
         <MessageInput />

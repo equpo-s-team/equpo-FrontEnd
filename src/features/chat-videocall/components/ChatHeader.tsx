@@ -31,45 +31,45 @@ export default function ChatHeader() {
 
   return (
     <div className="flex flex-col flex-shrink-0 bg-primary border-b border-grey-150">
-      <div className="flex items-center justify-between px-5 py-3">
-        {/* Room info */}
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9] flex items-center justify-center text-white font-body font-semibold text-sm">
+      <div className="flex items-center justify-between px-3 sm:px-5 py-2 sm:py-3">
+        {/* Left: Room info */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="relative flex-shrink-0">
+            <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9] flex items-center justify-center text-white font-body font-semibold text-xs sm:text-sm">
               {initials}
             </div>
           </div>
-          <div>
-            <h3 className="font-body font-semibold text-grey-900 text-sm leading-tight">
+          <div className="min-w-0">
+            <h3 className="font-body font-semibold text-grey-900 text-xs sm:text-sm leading-tight truncate">
               {activeRoom.name}
             </h3>
-            <p className="font-body text-xs leading-tight text-grey-400 flex items-center gap-1">
-              <Users size={10} />
+            <p className="font-body text-[10px] sm:text-xs leading-tight text-grey-400 flex items-center gap-0.5">
+              <Users size={8} />
               Grupo
             </p>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1">
-          <ActionButton onClick={() => startCall(true)} title="Videollamada">
-            <Video size={16} />
+        <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
+          <ActionButton onClick={() => startCall(true)} title="Videollamada" size="sm">
+            <Video size={14} />
           </ActionButton>
-          <ActionButton onClick={() => setShowInfo(true)} title="Información">
-            <Info size={16} />
+          <ActionButton onClick={() => setShowInfo(true)} title="Información" size="sm">
+            <Info size={14} />
           </ActionButton>
         </div>
       </div>
 
       {/* Active Call Banner */}
       {isCallActive && (
-        <div className="bg-green/10 text-green px-5 py-2 text-xs font-semibold flex justify-between items-center animate-in fade-in slide-in-from-top-2">
-          <span className="flex items-center gap-2">
-            <PhoneCall size={14} className="animate-pulse" /> Videollamada en curso
+        <div className="bg-green/10 text-green px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold flex justify-between items-center gap-2 animate-in fade-in slide-in-from-top-2">
+          <span className="flex items-center gap-1.5">
+            <PhoneCall size={12} className="animate-pulse" /> Videollamada en curso
           </span>
           <button
             onClick={() => startVideoCallSession({ mode: 'join' })}
-            className="bg-green text-white px-3 py-1 rounded-md hover:bg-green/90 transition-colors"
+            className="bg-green text-white px-2 py-0.5 rounded text-[10px] sm:text-xs hover:bg-green/90 transition-colors whitespace-nowrap"
           >
             Unirse
           </button>
@@ -85,20 +85,22 @@ function ActionButton({
   onClick,
   title,
   children,
+  size = 'md'
 }: {
   onClick: () => void;
   title: string;
   children: React.ReactNode;
+  size?: 'sm' | 'md'
 }) {
+  const sizeClasses = size === 'sm' ? 'w-7 h-7' : 'w-8 h-8';
   return (
     <button
       onClick={onClick}
       title={title}
-      className="
-        w-8 h-8 rounded-xl flex items-center justify-center
-        text-grey-500 hover:text-grey-900 hover:bg-grey-100
-        transition-all duration-200
-      "
+      className={`
+        ${sizeClasses} rounded-lg flex items-center justify-center
+        text-grey-600 hover:bg-grey-100 transition-colors
+      `}
     >
       {children}
     </button>

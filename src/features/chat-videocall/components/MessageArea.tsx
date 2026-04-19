@@ -11,9 +11,9 @@ import MessageBubble from './MessageBubble';
 
 function DateDivider({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-3 my-4">
+    <div className="flex items-center gap-2 sm:gap-3 my-2 sm:my-4">
       <div className="flex-1 h-px bg-grey-150" />
-      <span className="font-body text-xs text-grey-400 font-medium">{label}</span>
+      <span className="font-body text-[10px] sm:text-xs text-grey-400 font-medium">{label}</span>
       <div className="flex-1 h-px bg-grey-150" />
     </div>
   );
@@ -21,8 +21,8 @@ function DateDivider({ label }: { label: string }) {
 
 function SystemMessage({ message }: { message: ChatMessage }) {
   return (
-    <div className="flex justify-center my-2">
-      <span className="px-3 py-1 rounded-full bg-grey-100 border border-grey-150 font-body text-xs text-grey-500">
+    <div className="flex justify-center my-1 sm:my-2">
+      <span className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-grey-100 border border-grey-150 font-body text-[10px] sm:text-xs text-grey-500">
         {message.text}
       </span>
     </div>
@@ -80,14 +80,14 @@ export default function MessageArea() {
 
   if (!activeRoom) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-        <div className="w-16 h-16 rounded-3xl bg-grey-100 flex items-center justify-center mb-4">
-          <MessageCircle size={28} strokeWidth={1.5} className="text-grey-300" />
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-3 sm:px-6 py-4 sm:py-8">
+        <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-2xl sm:rounded-3xl bg-grey-100 flex items-center justify-center mb-2 sm:mb-4">
+          <MessageCircle size={20} strokeWidth={1.5} className="text-grey-300 sm:w-7 sm:h-7" />
         </div>
-        <h3 className="font-body font-semibold text-grey-700 text-base mb-1">
+        <h3 className="font-body font-semibold text-grey-700 text-sm sm:text-base mb-0.5 sm:mb-1">
           Selecciona una sala
         </h3>
-        <p className="font-body text-sm text-grey-400 max-w-xs">
+        <p className="font-body text-xs sm:text-sm text-grey-400 max-w-xs">
           Elige un chat de la lista para comenzar a mensajear
         </p>
       </div>
@@ -97,11 +97,11 @@ export default function MessageArea() {
   const groups = groupMessagesByDate(messages);
 
   return (
-    <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-1 scrollbar-hide">
+    <div className="flex-1 min-h-0 overflow-y-auto px-2 sm:px-4 md:px-5 py-2 sm:py-3 md:py-4 flex flex-col gap-0.5 sm:gap-1 scrollbar-hide">
       {groups.map((group) => (
         <div key={group.date}>
           <DateDivider label={group.date} />
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-0.5 sm:gap-1">
             {group.messages.map((msg) => {
               if (msg.type === 'system') {
                 return <SystemMessage key={msg.id} message={msg} />;
@@ -114,7 +114,7 @@ export default function MessageArea() {
 
       {/* Typing Indicator */}
       {typingUsers.length > 0 && (
-        <div className="text-xs text-grey-500 italic mt-2 ml-2">
+        <div className="text-[10px] sm:text-xs text-grey-500 italic mt-1 sm:mt-2 ml-1 sm:ml-2">
           {typingUsers.length === 1
             ? `${typingUsers[0].name} está escribiendo...`
             : 'Varios usuarios están escribiendo...'}

@@ -82,6 +82,15 @@ export function MarkdownDescriptionEditor({ value, onChange, maxLength, hasError
     syncEditorToMarkdown();
   }
 
+  function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+    e.preventDefault();
+    ensureSelectionInsideEditor();
+
+    const plainText = e.clipboardData.getData('text/plain');
+    document.execCommand('insertText', false, plainText);
+    syncEditorToMarkdown();
+  }
+
   const charCount = value.length;
 
   return (
@@ -132,6 +141,7 @@ export function MarkdownDescriptionEditor({ value, onChange, maxLength, hasError
         suppressContentEditableWarning
         onInput={syncEditorToMarkdown}
         onBlur={syncEditorToMarkdown}
+        onPaste={handlePaste}
         className="min-h-[280px] sm:min-h-[420px] max-h-[560px] overflow-y-auto px-3 py-2.5 text-sm font-body text-grey-800 outline-none [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5 [&_li]:text-grey-700"
       />
     </div>

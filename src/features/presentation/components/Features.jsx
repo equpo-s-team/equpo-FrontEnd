@@ -104,7 +104,6 @@ export default function Features() {
 }
 
 function FeatureCard({ feat }) {
-
   return (
     <button
       className={`group relative rounded-[20px] p-7 cursor-default transition-all duration-300 hover:-translate-y-1`}

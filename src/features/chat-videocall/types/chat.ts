@@ -6,6 +6,7 @@ export interface ChatRoom {
   type: 'group';
   createdBy: string;
   createdAt: Date;
+  photoUrl?: string | null;
 }
 
 /* ── Chat Room Member (Firestore: .../chatRooms/{groupId}/members/{uid}) ── */

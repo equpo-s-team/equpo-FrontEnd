@@ -1,8 +1,7 @@
 import { CalendarDays, Clock, Edit3, Tag, X, Zap } from 'lucide-react';
 
-import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { TaskAssigneesPreview } from '@/features/board/components/TaskAssigneesPreview';
 import type { TeamTask } from '@/features/board/types';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; border: string }> = {
   todo: {
@@ -37,19 +36,12 @@ const PRIORITY_CONFIG: Record<string, { label: string; dot: string; color: strin
   low: { label: 'Baja', dot: 'bg-green', color: 'text-green' },
 };
 
-const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg, #60AFFF, #5961F9)',
-  'linear-gradient(135deg, #9CEDC1, #86F0FD)',
-  'linear-gradient(135deg, #F65A70, #FF94AE)',
-  'linear-gradient(135deg, #FF94AE, #FCE98D)',
-  'linear-gradient(135deg, #9b7fe1, #5961F9)',
-];
-
 interface TaskDetailPanelProps {
   task: TeamTask | null;
   onClose: () => void;
   onEdit: (task: TeamTask) => void;
   members?: { uid: string; displayName: string | null; photoUrl?: string | null }[];
+  groups?: { id: string; groupName: string; photoUrl?: string | null }[];
 }
 
 function formatDate(dateStr: string) {
@@ -75,6 +67,7 @@ export default function TaskDetailPanel({
   onClose,
   onEdit,
   members = [],
+  groups = [],
 }: TaskDetailPanelProps) {
   if (!task) {
     return (
@@ -84,7 +77,6 @@ export default function TaskDetailPanel({
             <Zap size={20} className="text-grey-300" />
           </div>
           <p className="text-sm font-medium text-grey-400 font-body">Selecciona una tarea</p>
-          <p className="text-xs text-grey-300 font-body mt-1">Haz clic en una tarea del timeline</p>
         </div>
       </div>
     );
@@ -92,6 +84,7 @@ export default function TaskDetailPanel({
 
   const status = STATUS_CONFIG[task.status] ?? STATUS_CONFIG.todo;
   const priority = PRIORITY_CONFIG[task.priority] ?? PRIORITY_CONFIG.medium;
+  const selectedGroup = groups.find((group) => group.id === task.assignedGroupId) ?? null;
 
   return (
     <div className="rounded-2xl bg-white border border-grey-150 shadow-card flex flex-col overflow-hidden animate-fade-down">
@@ -147,7 +140,9 @@ export default function TaskDetailPanel({
             <Zap size={14} className="text-grey-400" />
             <span className="text-xs text-grey-500 font-body">Prioridad</span>
           </div>
-          <span className={`flex items-center gap-1.5 text-xs font-bold font-body ${priority.color}`}>
+          <span
+            className={`flex items-center gap-1.5 text-xs font-bold font-body ${priority.color}`}
+          >
             <span className={`w-2.5 h-2.5 rounded-full ${priority.dot}`} />
             {priority.label}
           </span>
@@ -189,54 +184,15 @@ export default function TaskDetailPanel({
           </div>
         )}
 
-        {/* Edit button */}
-        <button
-          onClick={() => onEdit(task)}
-          className="
-            w-full flex items-center justify-center gap-2
-            py-2.5 rounded-xl font-body text-xs font-bold
-            bg-gradient-to-r from-blue to-purple text-white
-            hover:shadow-[0_4px_20px_rgba(89,97,249,0.4)]
-            active:scale-[0.98]
-            transition-all duration-200
-          "
-        >
-          <Edit3 size={14} />
-          Editar Tarea
-        </button>
-
-        <hr className="border-grey-100 my-3" />
-
-        {/* Assigned users */}
-        {task.assignedUsers?.length > 0 && (
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-grey-400 mb-2 font-body">
-              Asignados
-            </p>
-            <div className="flex flex-col gap-2">
-              {task.assignedUsers.map((user, i) => {
-                const realMember = members.find((m) => m.uid === user.uid);
-                const displayName =
-                  realMember?.displayName ?? user.displayName ?? `Usuario ${user.uid.slice(0, 6)}`;
-                return (
-                  <div key={user.uid} className="flex items-center gap-2.5">
-                    <UserAvatar
-                      src={realMember?.photoUrl ?? null}
-                      alt={displayName}
-                      initials={getInitials(displayName, 'U')}
-                      className="w-7 h-7 rounded-full object-cover flex-shrink-0"
-                      fallbackClassName="flex items-center justify-center text-xs font-bold text-white"
-                      fallbackStyle={{
-                        background: AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length],
-                      }}
-                    />
-                    <div>
-                      <p className="text-xs font-semibold text-grey-700 font-body">{displayName}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+        {/* Assignees (users + group) */}
+        {(task.assignedUsers?.length > 0 || selectedGroup) && (
+          <div className="mb-4">
+            <TaskAssigneesPreview
+              assignedUsers={task.assignedUsers ?? []}
+              members={members}
+              assignedGroup={selectedGroup}
+              usersPerPage={10}
+            />
           </div>
         )}
 
@@ -256,6 +212,21 @@ export default function TaskDetailPanel({
             </p>
           </div>
         )}
+
+        {/* Edit button */}
+        <button
+          onClick={() => onEdit(task)}
+          className="
+            mt-4 w-full flex items-center justify-center gap-2
+            py-2.5 rounded-xl font-body text-xs font-bold
+            bg-gradient-to-r from-blue to-purple text-white
+            hover:shadow-[0_4px_20px_rgba(89,97,249,0.4)]
+            active:scale-[0.98] transition-all duration-200
+          "
+        >
+          <Edit3 size={13} />
+          Editar tarea
+        </button>
       </div>
     </div>
   );

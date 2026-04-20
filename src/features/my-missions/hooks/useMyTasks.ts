@@ -17,7 +17,9 @@ interface AuthUser {
 
 const REST_TASKS_PAGE_LIMIT = 200;
 
-async function fetchAssignmentsByTaskId(teamId: string): Promise<Map<string, TeamTask['assignedUsers']>> {
+async function fetchAssignmentsByTaskId(
+  teamId: string,
+): Promise<Map<string, TeamTask['assignedUsers']>> {
   const map = new Map<string, TeamTask['assignedUsers']>();
   let page = 1;
   let hasNext = true;

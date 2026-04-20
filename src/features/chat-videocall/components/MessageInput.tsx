@@ -85,7 +85,7 @@ export default function MessageInput() {
 
       const storageRef = ref(
         storage,
-        `teams/${teamId}/chatRooms/${activeRoom.id}/${uniqueFileName}`
+        `teams/${teamId}/chatRooms/${activeRoom.id}/${uniqueFileName}`,
       );
 
       let url: string;
@@ -140,7 +140,12 @@ export default function MessageInput() {
 
       <div className="flex items-center gap-2 bg-grey-100 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
         {/* Attach */}
-        <input type="file" ref={fileInputRef} className="hidden" onChange={(e) => void handleFileUpload(e)} />
+        <input
+          type="file"
+          ref={fileInputRef}
+          className="hidden"
+          onChange={(e) => void handleFileUpload(e)}
+        />
         <button
           disabled={!activeRoom || isUploading}
           onClick={() => fileInputRef.current?.click()}

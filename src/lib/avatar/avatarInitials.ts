@@ -17,4 +17,3 @@ export const getInitials = (value: string, fallback = 'U'): string => {
 
   return `${words[0][0]}${words[1][0]}`.toUpperCase();
 };
-

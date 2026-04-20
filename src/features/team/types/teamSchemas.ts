@@ -45,4 +45,6 @@ export interface TeamMember {
 export interface TeamGroup {
   id: string;
   groupName: string;
+  photoUrl?: string | null;
+  memberCount?: number;
 }

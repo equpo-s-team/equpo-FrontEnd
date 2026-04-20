@@ -1,15 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {AchievementBadge} from "@/features/team/components/Achievements/AchievementBadge.tsx";
+import { AchievementBadge } from '@/features/team/components/Achievements/AchievementBadge.tsx';
 
-import {type Achievement} from "../../types/";
-
+import { type Achievement } from '../../types/';
 
 interface AchievementsSectionProps {
   achievements: Achievement[];
 }
 
-export const AchievementsSection: React.FC<AchievementsSectionProps> = ({achievements}) => {
+export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements }) => {
   const [showAll, setShowAll] = useState(false);
 
   const unlocked = achievements.filter((a) => !!a.unlockedAt);
@@ -28,7 +27,7 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({achieve
         <div className="flex items-center gap-2 w-full justify-between">
           <h2
             className="text-md font-bold text-grey-700"
-            style={{fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em'}}
+            style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
           >
             Logros
           </h2>
@@ -57,11 +56,11 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({achieve
       {/* Badges grid */}
       <div className="grid grid-cols-3 gap-2">
         {visible.map((achievement) => (
-          <AchievementBadge key={achievement.id} achievement={achievement}/>
+          <AchievementBadge key={achievement.id} achievement={achievement} />
         ))}
       </div>
     </div>
   );
 };
 
-export type {Achievement};
+export type { Achievement };

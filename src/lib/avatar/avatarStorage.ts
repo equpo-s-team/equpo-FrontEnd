@@ -107,4 +107,3 @@ export const resolveCanonicalAvatarUrl = async (
 
   return photoUrl;
 };
-

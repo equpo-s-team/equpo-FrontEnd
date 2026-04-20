@@ -43,8 +43,8 @@ export default function SidebarUser() {
           src={user?.photoURL}
           alt={userName}
           initials={initial}
-          className="w-8 h-8 rounded-full object-cover"
-          fallbackClassName="bg-gradient-blue-bg flex items-center justify-center text-secondary text-xs font-maxwell font-bold select-none"
+          className="w-8 h-8"
+          fallbackClassName="bg-gradient-blue-bg text-secondary font-maxwell text-xs select-none"
           loading="eager"
         />
         <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green border-[1.5px] border-dark" />

@@ -12,7 +12,12 @@ interface MarkdownDescriptionEditorProps {
   hasError?: boolean;
 }
 
-export function MarkdownDescriptionEditor({ value, onChange, maxLength, hasError }: MarkdownDescriptionEditorProps) {
+export function MarkdownDescriptionEditor({
+  value,
+  onChange,
+  maxLength,
+  hasError,
+}: MarkdownDescriptionEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const lastValidMarkdownRef = useRef(value || '');
 
@@ -94,7 +99,9 @@ export function MarkdownDescriptionEditor({ value, onChange, maxLength, hasError
   const charCount = value.length;
 
   return (
-    <div className={`rounded-[10px] border-[1.5px] bg-primary transition-colors duration-150 ${baseContainer}`}>
+    <div
+      className={`rounded-[10px] border-[1.5px] bg-primary transition-colors duration-150 ${baseContainer}`}
+    >
       <div className="flex items-center justify-between border-b border-grey-150">
         <div className="flex items-center">
           <ToggleGroup type="multiple" className="gap-0">
@@ -130,7 +137,9 @@ export function MarkdownDescriptionEditor({ value, onChange, maxLength, hasError
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
-        <span className="text-[11px] text-grey-400 px-3">{charCount}/{maxLength}</span>
+        <span className="text-[11px] text-grey-400 px-3">
+          {charCount}/{maxLength}
+        </span>
       </div>
 
       <div

@@ -30,6 +30,3 @@ export const PRIORITY_CONFIG: Record<PriorityKey, PriorityStyleConfig>;
 export const USER_GRADIENT: Record<string, string>;
 export const TAG_COLOR_CONFIG: Record<string, { bg: string; text: string; border: string }>;
 export const TAG_LABEL_TO_COLOR: Record<string, string>;
-
-
-

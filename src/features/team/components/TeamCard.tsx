@@ -1,4 +1,4 @@
-import {Coins} from "lucide-react";
+import { Coins } from 'lucide-react';
 import React, { useMemo } from 'react';
 
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
@@ -95,8 +95,8 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
               <TeamAvatar
                 src={team.photoUrl}
                 name={team.name}
-                className="w-full h-full rounded-xl object-cover"
-                fallbackClassName="w-full h-full rounded-xl flex items-center justify-center text-white font-bold text-sm"
+                className="w-full h-full"
+                fallbackClassName="w-full h-full"
                 fallbackStyle={{ background: cfg.gradient }}
               />
             </div>
@@ -125,7 +125,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
               border: `1px solid ${cfg.border}`,
             }}
           >
-              <Coins className="w-4 h-4 text-white" style={{ color: cfg.dot }}/>
+            <Coins className="w-4 h-4 text-white" style={{ color: cfg.dot }} />
             <span className="text-xs font-bold" style={{ color: cfg.dot }}>
               {team.virtualCurrency.toLocaleString()}
             </span>
@@ -160,8 +160,8 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                       src={m.photoUrl}
                       alt={memberName}
                       initials={initial}
-                      className="w-full h-full object-cover"
-                      fallbackClassName="flex items-center justify-center text-white text-xs font-bold"
+                      className="w-full h-full"
+                      fallbackClassName="text-white text-xs"
                       fallbackStyle={{ background: cfg.gradient }}
                     />
                   </div>

@@ -77,14 +77,20 @@ export function nodeToMarkdown(node: Node | null): string {
   if (tag === 'br') return '\n';
 
   if (tag === 'strong' || tag === 'b') {
-    return `**${Array.from(el.childNodes).map((n) => nodeToMarkdown(n)).join('')}**`;
+    return `**${Array.from(el.childNodes)
+      .map((n) => nodeToMarkdown(n))
+      .join('')}**`;
   }
 
   if (tag === 'em' || tag === 'i') {
-    return `*${Array.from(el.childNodes).map((n) => nodeToMarkdown(n)).join('')}*`;
+    return `*${Array.from(el.childNodes)
+      .map((n) => nodeToMarkdown(n))
+      .join('')}*`;
   }
 
-  return Array.from(el.childNodes).map((n) => nodeToMarkdown(n)).join('');
+  return Array.from(el.childNodes)
+    .map((n) => nodeToMarkdown(n))
+    .join('');
 }
 
 export function editorHtmlToMarkdown(html: string): string {
@@ -129,5 +135,8 @@ export function editorHtmlToMarkdown(html: string): string {
     lines.push(line);
   });
 
-  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  return lines
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }

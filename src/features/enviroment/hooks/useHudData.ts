@@ -33,7 +33,9 @@ function clampPercentage(value: number): number {
 }
 
 function toConnectedUsers(
-  memberList: Array<{ uid: string; displayName: string | null; photoUrl?: string | null }> | undefined,
+  memberList:
+    | Array<{ uid: string; displayName: string | null; photoUrl?: string | null }>
+    | undefined,
   connectedUserUids: string[],
 ): ConnectedUser[] {
   if (!memberList || connectedUserUids.length === 0) {

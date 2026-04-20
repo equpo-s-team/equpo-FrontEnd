@@ -11,4 +11,3 @@ declare module '@/context/AuthContext' {
 
   export function useAuth(): AuthContextValue;
 }
-

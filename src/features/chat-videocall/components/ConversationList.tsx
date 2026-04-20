@@ -1,34 +1,9 @@
 import { MessageCircle, Search, Users } from 'lucide-react';
 
+import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 import type { ChatRoom } from '../types/chat';
-
-const ROOM_GRADIENTS = [
-  'from-[#60AFFF] to-[#5961F9]',
-  'from-[#F65A70] to-[#FF94AE]',
-  'from-[#9b7fe1] to-[#5961F9]',
-  'from-[#9CEDC1] to-[#86F0FD]',
-  'from-[#FFB347] to-[#FF6B6B]',
-  'from-[#667EEA] to-[#764BA2]',
-];
-
-function getGradient(id: string) {
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) {
-    hash = id.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return ROOM_GRADIENTS[Math.abs(hash) % ROOM_GRADIENTS.length];
-}
-
-function getInitials(name: string) {
-  return name
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-}
 
 function RoomItem({
   room,
@@ -41,25 +16,17 @@ function RoomItem({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`
-        w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left
+        w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer
         transition-all duration-200 group relative
         ${isActive ? 'bg-grey-150 shadow-card' : 'hover:bg-grey-100'}
       `}
     >
       {/* Avatar */}
       <div className="relative flex-shrink-0">
-        <div
-          className={`
-          w-11 h-11 rounded-2xl bg-gradient-to-br ${getGradient(room.id)}
-          flex items-center justify-center
-          text-white font-body font-semibold text-sm
-          shadow-card
-        `}
-        >
-          {getInitials(room.name)}
-        </div>
+        <GroupAvatar src={room.photoUrl} name={room.name} className="w-11 h-11 shadow-card" />
       </div>
 
       {/* Info */}
@@ -67,9 +34,9 @@ function RoomItem({
         <div className="flex items-center justify-between mb-0.5">
           <span
             className={`
-            font-body font-semibold text-sm truncate
-            ${isActive ? 'text-grey-900' : 'text-grey-700'}
-          `}
+              font-body font-semibold text-sm truncate
+              ${isActive ? 'text-grey-900' : 'text-grey-700'}
+            `}
           >
             {room.name}
           </span>

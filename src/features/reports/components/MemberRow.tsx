@@ -63,8 +63,8 @@ export function MemberRow({ member }: MemberRowProps) {
         src={member.photoUrl}
         alt={member.name}
         initials={member.initials}
-        className="w-9 h-9 rounded-full object-cover flex-shrink-0"
-        fallbackClassName="flex items-center justify-center text-xs font-semibold text-white tracking-wide"
+        className="w-9 h-9"
+        fallbackClassName="text-white tracking-wide"
         fallbackStyle={avatarStyle}
       />
 

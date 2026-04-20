@@ -282,29 +282,29 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                             src={m.photoUrl}
                             alt={memberName}
                             initials={memberName.substring(0, 2).toUpperCase()}
-                            className="w-full h-full object-cover"
-                            fallbackClassName="flex items-center justify-center text-white text-xs font-bold"
+                            className="w-full h-full"
+                            fallbackClassName="text-white text-xs"
                             fallbackStyle={{ background: cfg.gradient }}
                           />
                         </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-grey-700 truncate">
-                          {memberName}
-                        </p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-grey-700 truncate">
+                            {memberName}
+                          </p>
+                        </div>
+                        <span
+                          className="text-xs font-semibold px-2 py-0.5 rounded-full capitalize shrink-0"
+                          style={{
+                            background:
+                              m.role === 'leader' ? cfg.glow.replace('0.5', '0.12') : 'transparent',
+                            color: m.role === 'leader' ? '#524F4A' : '#908E88',
+                            border: `1px solid ${m.role === 'leader' ? cfg.glow.replace('0.5', '0.3') : 'transparent'}`,
+                          }}
+                        >
+                          {m.role}
+                        </span>
                       </div>
-                      <span
-                        className="text-xs font-semibold px-2 py-0.5 rounded-full capitalize shrink-0"
-                        style={{
-                          background:
-                            m.role === 'leader' ? cfg.glow.replace('0.5', '0.12') : 'transparent',
-                          color: m.role === 'leader' ? '#524F4A' : '#908E88',
-                          border: `1px solid ${m.role === 'leader' ? cfg.glow.replace('0.5', '0.3') : 'transparent'}`,
-                        }}
-                      >
-                        {m.role}
-                      </span>
-                    </div>
-                  );
+                    );
                   })}
               </div>
             </div>

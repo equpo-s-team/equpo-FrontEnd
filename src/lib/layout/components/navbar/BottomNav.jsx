@@ -31,9 +31,7 @@ export default function BottomNav() {
   })();
   const canAccessSettings = myRole === 'leader' || myRole === 'collaborator';
 
-  const navItems = canAccessSettings
-    ? [...BASE_NAV_ITEMS, SETTINGS_ITEM]
-    : BASE_NAV_ITEMS;
+  const navItems = canAccessSettings ? [...BASE_NAV_ITEMS, SETTINGS_ITEM] : BASE_NAV_ITEMS;
 
   return (
     <nav

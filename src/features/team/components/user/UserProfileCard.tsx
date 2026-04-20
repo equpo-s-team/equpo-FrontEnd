@@ -1,4 +1,4 @@
-import {Bolt} from "lucide-react";
+import { Bolt } from 'lucide-react';
 import React from 'react';
 
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
@@ -18,10 +18,7 @@ interface UserProfileCardProps {
 }
 
 export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSettings }) => {
-  const xpPercent = Math.min(
-    100,
-    Math.round((user.experience / user.experienceToNextLevel) * 100),
-  );
+  const xpPercent = Math.min(100, Math.round((user.experience / user.experienceToNextLevel) * 100));
 
   const initials = user.displayName
     .split(' ')
@@ -31,21 +28,17 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
     .toUpperCase();
 
   return (
-    <div
-      className="relative w-full"
-    >
-      <div
-        className="backdrop-blur-md p-5 flex items-center gap-4"
-      >
+    <div className="relative w-full">
+      <div className="backdrop-blur-md p-5 flex items-center gap-4">
         {/* Avatar */}
         <div className="relative shrink-0">
           <UserAvatar
             src={user.photoURL}
             alt={user.displayName}
             initials={initials}
-            className="w-14 h-14 rounded-full object-cover"
+            className="w-14 h-14"
             style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.35)' }}
-            fallbackClassName="flex items-center justify-center text-white font-bold text-lg"
+            fallbackClassName="text-white text-lg"
             fallbackStyle={{
               background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
               boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
@@ -75,14 +68,11 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
               className="w-7 h-7 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-grey-100 transition-all shrink-0"
               title="Configuración de perfil"
             >
-              <Bolt/>
+              <Bolt />
             </button>
           </div>
 
-          <p
-            className="text-xs text-grey-400 font-mono mb-2 truncate"
-            title={user.uid}
-          >
+          <p className="text-xs text-grey-400 font-mono mb-2 truncate" title={user.uid}>
             {user.uid.length > 20 ? `${user.uid.substring(0, 20)}…` : user.uid}
           </p>
 
@@ -92,11 +82,9 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
               <span className="text-xs font-semibold text-grey-500">
                 Nivel {user.level} → {user.level + 1}
               </span>
-              <span
-                className="text-xs font-bold"
-                style={{ color: '#9b7fe1' }}
-              >
-                {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()} XP
+              <span className="text-xs font-bold" style={{ color: '#9b7fe1' }}>
+                {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()}{' '}
+                XP
               </span>
             </div>
             <div className="w-full h-1.5 rounded-full bg-grey-150 overflow-hidden">

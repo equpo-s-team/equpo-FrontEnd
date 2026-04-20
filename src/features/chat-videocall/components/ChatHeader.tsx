@@ -1,6 +1,7 @@
 import { Info, PhoneCall, Users, Video } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
+import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useActiveCalls } from '@/features/chat-videocall/hooks/useActiveCalls';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -27,23 +28,12 @@ export default function ChatHeader() {
 
   const isCallActive = activeCalls.some((c) => c.roomId === activeRoom.id);
 
-  const initials = activeRoom.name
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-
   return (
     <div className="flex flex-col flex-shrink-0 bg-primary border-b border-grey-150">
       <div className="flex items-center justify-between px-5 py-3">
-        {/* Room info */}
+        {/* Room avatar + name */}
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9] flex items-center justify-center text-white font-body font-semibold text-sm">
-              {initials}
-            </div>
-          </div>
+          <GroupAvatar src={activeRoom.photoUrl} name={activeRoom.name} />
           <div>
             <h3 className="font-body font-semibold text-grey-900 text-sm leading-tight">
               {activeRoom.name}

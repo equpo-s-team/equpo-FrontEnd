@@ -113,10 +113,7 @@ export default function Hero() {
 
           <div className="flex flex-col gap-2.5 mb-8">
             {['Empieza en minutos.', 'Diseñado para equipos colaborativos.'].map((txt) => (
-              <p
-                key={txt}
-                className="font-body text-sm text-grey-500 flex items-center gap-2"
-              >
+              <p key={txt} className="font-body text-sm text-grey-500 flex items-center gap-2">
                 <Activity size={15} className="text-green-DEFAULT flex-shrink-0" />
                 {txt}
               </p>

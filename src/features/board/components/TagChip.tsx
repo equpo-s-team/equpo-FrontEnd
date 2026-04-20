@@ -1,4 +1,3 @@
-
 const TAG_COLORS = [
   'bg-blue/10 text-[10.5px] text-blue border-blue/50 shadow-[0_0_8px_rgba(96,175,255,0.4)]',
   'bg-kanban-qa/10 text-[10.5px] text-kanban-qa border-kanban-qa/50 shadow-[0_0_8px_rgba(255,148,174,0.4)]',

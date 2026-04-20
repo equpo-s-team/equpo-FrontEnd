@@ -2,10 +2,12 @@ import { collection, getDocs } from 'firebase/firestore';
 import { Phone, Users, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { teamsApi } from '@/features/team/api/teamsApi';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { db } from '@/firebase';
+import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 import { useActiveCalls } from '../hooks/useActiveCalls';
 import { useChatContext } from './ChatContext';
@@ -26,13 +28,6 @@ interface ChatModalMember {
   role: string;
   name: string;
   photoURL?: string | null;
-}
-
-function getInitials(name: string, fallbackUid: string) {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  if (words.length === 0) return fallbackUid.slice(0, 2).toUpperCase();
-  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
-  return `${words[0][0]}${words[1][0]}`.toUpperCase();
 }
 
 export default function ChatInfoModal({ onClose, usersInfo = [] }: ChatInfoModalProps) {
@@ -126,10 +121,13 @@ export default function ChatInfoModal({ onClose, usersInfo = [] }: ChatInfoModal
         </div>
 
         <div className="p-6 flex flex-col items-center">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9] flex items-center justify-center text-white font-semibold text-2xl mb-4">
-            {activeRoom.name.slice(0, 2).toUpperCase()}
-          </div>
-          <h2 className="text-lg font-semibold text-grey-900 mb-1">{activeRoom.name}</h2>
+          <GroupAvatar
+            src={activeRoom.photoUrl}
+            name={activeRoom.name}
+            className="w-16 h-16 mb-4"
+            fallbackClassName="text-2xl"
+          />
+          <h4 className="font-body font-bold text-grey-900 text-base">{activeRoom.name}</h4>
 
           {isCallActive ? (
             <div className="mt-2 flex items-center gap-2 text-green font-medium text-sm">
@@ -152,8 +150,8 @@ export default function ChatInfoModal({ onClose, usersInfo = [] }: ChatInfoModal
                   src={m.photoURL}
                   alt={m.name}
                   initials={getInitials(m.name, m.uid)}
-                  className="w-8 h-8 rounded-full object-cover border border-grey-200"
-                  fallbackClassName="bg-grey-200 flex items-center justify-center text-xs font-semibold"
+                  className="w-8 h-8 border border-grey-200"
+                  fallbackClassName="text-xs"
                 />
                 <span>{m.name}</span>
               </div>

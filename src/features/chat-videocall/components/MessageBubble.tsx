@@ -19,7 +19,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
   const currentUid = auth.currentUser?.uid;
   const isSent = message.senderUid === currentUid;
 
-  const senderPhotoUrl = teamMembers.find((member) => member.uid === message.senderUid)?.photoUrl ?? null;
+  const senderPhotoUrl =
+    teamMembers.find((member) => member.uid === message.senderUid)?.photoUrl ?? null;
 
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(message.text);
@@ -59,8 +60,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             src={senderPhotoUrl}
             alt={message.senderName ?? 'Usuario'}
             initials={getInitials(message.senderName ?? 'Usuario', 'U')}
-            className="w-7 h-7 rounded-full object-cover"
-            fallbackClassName="bg-gradient-to-br from-[#60AFFF] to-[#5961F9] flex items-center justify-center text-white font-body font-semibold text-[10px]"
+            className="w-7 h-7"
+            fallbackClassName="bg-gradient-to-br from-[#60AFFF] to-[#5961F9] text-white text-[10px]"
           />
         </div>
       )}

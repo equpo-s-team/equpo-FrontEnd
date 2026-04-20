@@ -191,10 +191,7 @@ function getCatalogSlotObjects(app: SplineRuntimeApp): Map<SlotId, SplineSceneOb
   return catalog;
 }
 
-function resolveSplineObject(
-  app: SplineRuntimeApp,
-  slotId: SlotId,
-): SplineSceneObject | null {
+function resolveSplineObject(app: SplineRuntimeApp, slotId: SlotId): SplineSceneObject | null {
   const mappedObjectId = SPLINE_SLOT_OBJECT_IDS[slotId];
   const slotNumber = slotId.split('_')[1] ?? '';
   const unpaddedNumber = String(Number(slotNumber));
@@ -429,26 +426,54 @@ export function useSplineRealtimePlayers({
 
     const presenceRootRef = getPresenceRootRef(teamId);
 
-    const unsubscribe = onValue(presenceRootRef, (snapshot) => {
-      if (!snapshot.exists()) {
-        setConnectedUsers(0);
-        setConnectedUserUids([]);
-        return;
-      }
+    const unsubscribe = onValue(
+      presenceRootRef,
+      (snapshot) => {
+        if (!snapshot.exists()) {
+          setConnectedUsers(0);
+          setConnectedUserUids([]);
+          return;
+        }
 
-      const source: unknown = snapshot.val();
+        const source: unknown = snapshot.val();
 
-      if (typeof source !== 'object' || !source) {
-        setConnectedUsers(0);
-        setConnectedUserUids([]);
-        return;
-      }
+        if (typeof source !== 'object' || !source) {
+          setConnectedUsers(0);
+          setConnectedUserUids([]);
+          return;
+        }
 
-      const entries = Object.entries(source as Record<string, unknown>);
-      let mySlotId: SlotId | null = null;
+        const entries = Object.entries(source as Record<string, unknown>);
+        let mySlotId: SlotId | null = null;
 
-      for (const [uid, entry] of entries) {
-        if (uid === localUid) {
+        for (const [uid, entry] of entries) {
+          if (uid === localUid) {
+            const fallbackState: PlayerRealtimeState = {
+              active: false,
+              visible: false,
+              position: { x: 0, y: 0, z: 0 },
+              rotation: { x: 0, y: 0, z: 0 },
+              clientId,
+              updatedAt: 0,
+              slotId: null,
+            };
+            const data = toRealtimeState(entry, fallbackState);
+            mySlotId = data.slotId;
+            break;
+          }
+        }
+
+        slotObjects.forEach((object, slotId) => {
+          if (slotId === mySlotId) {
+            return;
+          }
+
+          object.visible = false;
+        });
+        let nextConnectedUsers = 0;
+        const nextConnectedUserUids: string[] = [];
+
+        for (const [uid, entry] of entries) {
           const fallbackState: PlayerRealtimeState = {
             active: false,
             visible: false,
@@ -459,70 +484,48 @@ export function useSplineRealtimePlayers({
             slotId: null,
           };
           const data = toRealtimeState(entry, fallbackState);
-          mySlotId = data.slotId;
-          break;
-        }
-      }
 
-      slotObjects.forEach((object, slotId) => {
-        if (slotId === mySlotId) {
-          return;
-        }
+          if (data.active && isPresenceFresh(data.updatedAt)) {
+            nextConnectedUsers += 1;
+            nextConnectedUserUids.push(uid);
+          }
 
-        object.visible = false;
-      });
-      let nextConnectedUsers = 0;
-      const nextConnectedUserUids: string[] = [];
+          if (uid === localUid) {
+            continue;
+          }
 
-      for (const [uid, entry] of entries) {
-        const fallbackState: PlayerRealtimeState = {
-          active: false,
-          visible: false,
-          position: { x: 0, y: 0, z: 0 },
-          rotation: { x: 0, y: 0, z: 0 },
-          clientId,
-          updatedAt: 0,
-          slotId: null,
-        };
-        const data = toRealtimeState(entry, fallbackState);
+          if (!data.slotId) {
+            continue;
+          }
 
-        if (data.active && isPresenceFresh(data.updatedAt)) {
-          nextConnectedUsers += 1;
-          nextConnectedUserUids.push(uid);
-        }
+          if (!data.active || !data.visible || !isPresenceFresh(data.updatedAt)) {
+            continue;
+          }
 
-        if (uid === localUid) {
-          continue;
+          const object = slotObjects.get(data.slotId);
+
+          if (!object) {
+            continue;
+          }
+
+          object.visible = true;
+          object.position.x = data.position.x;
+          object.position.y = data.position.y;
+          object.position.z = data.position.z;
+          object.rotation.x = data.rotation.x;
+          object.rotation.y = data.rotation.y;
+          object.rotation.z = data.rotation.z;
         }
 
-        if (!data.slotId) {
-          continue;
-        }
-
-        if (!data.active || !data.visible || !isPresenceFresh(data.updatedAt)) {
-          continue;
-        }
-
-        const object = slotObjects.get(data.slotId);
-
-        if (!object) {
-          continue;
-        }
-
-        object.visible = true;
-        object.position.x = data.position.x;
-        object.position.y = data.position.y;
-        object.position.z = data.position.z;
-        object.rotation.x = data.rotation.x;
-        object.rotation.y = data.rotation.y;
-        object.rotation.z = data.rotation.z;
-      }
-
-      setConnectedUsers((current) => (current === nextConnectedUsers ? current : nextConnectedUsers));
-      setConnectedUserUids(nextConnectedUserUids);
-    }, (error) => {
-      console.error(`RTDB presence read error for team ${teamId}:`, error);
-    });
+        setConnectedUsers((current) =>
+          current === nextConnectedUsers ? current : nextConnectedUsers,
+        );
+        setConnectedUserUids(nextConnectedUserUids);
+      },
+      (error) => {
+        console.error(`RTDB presence read error for team ${teamId}:`, error);
+      },
+    );
 
     return () => {
       slotObjects.forEach((object) => {
@@ -558,7 +561,9 @@ export function useSplineRealtimePlayers({
     let rafId: number | null = null;
 
     const initialize = async () => {
-      const availableSlots = [...slotObjects.keys()].filter(id => id !== LOCAL_CONTROLLED_SLOT_ID);
+      const availableSlots = [...slotObjects.keys()].filter(
+        (id) => id !== LOCAL_CONTROLLED_SLOT_ID,
+      );
       const claimedSlotId = await claimSlot(teamId, localUid, clientId, availableSlots);
 
       if (isDisposed || !claimedSlotId) {
@@ -576,21 +581,21 @@ export function useSplineRealtimePlayers({
       }
 
       if (controlledObject && claimedObject && controlledObject !== claimedObject) {
-         controlledObject.visible = false;
-         claimedObject.visible = true;
-         
-         const syncLocalVisuals = () => {
-             claimedObject.position.x = controlledObject.position.x;
-             claimedObject.position.y = controlledObject.position.y;
-             claimedObject.position.z = controlledObject.position.z;
-             claimedObject.rotation.x = controlledObject.rotation.x;
-             claimedObject.rotation.y = controlledObject.rotation.y;
-             claimedObject.rotation.z = controlledObject.rotation.z;
-             rafId = globalThis.requestAnimationFrame(syncLocalVisuals);
-         };
-         syncLocalVisuals();
+        controlledObject.visible = false;
+        claimedObject.visible = true;
+
+        const syncLocalVisuals = () => {
+          claimedObject.position.x = controlledObject.position.x;
+          claimedObject.position.y = controlledObject.position.y;
+          claimedObject.position.z = controlledObject.position.z;
+          claimedObject.rotation.x = controlledObject.rotation.x;
+          claimedObject.rotation.y = controlledObject.rotation.y;
+          claimedObject.rotation.z = controlledObject.rotation.z;
+          rafId = globalThis.requestAnimationFrame(syncLocalVisuals);
+        };
+        syncLocalVisuals();
       } else if (controlledObject) {
-         controlledObject.visible = true;
+        controlledObject.visible = true;
       }
 
       const presenceRef = getPresenceRef(teamId, localUid);
@@ -666,7 +671,7 @@ export function useSplineRealtimePlayers({
       if (intervalId !== null) {
         globalThis.clearInterval(intervalId);
       }
-      
+
       if (rafId !== null) {
         globalThis.cancelAnimationFrame(rafId);
       }
@@ -712,4 +717,3 @@ export function useSplineRealtimePlayers({
     connectedUserUids,
   };
 }
-

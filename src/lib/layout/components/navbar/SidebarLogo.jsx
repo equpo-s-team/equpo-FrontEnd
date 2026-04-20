@@ -29,8 +29,8 @@ export default function SidebarLogo() {
           <TeamAvatar
             src={teamPhotoUrl}
             name={teamName}
-            className="w-full h-full rounded-xl object-cover"
-            fallbackClassName="w-full h-full rounded-xl flex items-center justify-center text-white text-xs font-bold leading-none"
+            className="w-full h-full"
+            fallbackClassName="w-full h-full text-white text-xs leading-none"
             loading="eager"
           />
         </div>

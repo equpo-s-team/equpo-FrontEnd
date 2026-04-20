@@ -41,9 +41,7 @@ export default function FilterBar({ setActiveDays }: FilterBarProps) {
         px-4 py-2 items-center justify-between
       "
       >
-        <span className="text-xs font-semibold text-grey-600">
-          Sprint 7 - Modulo de Reportes
-        </span>
+        <span className="text-xs font-semibold text-grey-600">Sprint 7 - Modulo de Reportes</span>
         <button
           onClick={() => setMobileOpen((open) => !open)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border-[1.5px] font-body transition-all duration-200"

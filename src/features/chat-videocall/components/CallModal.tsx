@@ -1,6 +1,7 @@
 import { Mic, MicOff, PhoneOff, Video, VideoOff } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 
@@ -40,15 +41,6 @@ export default function CallModal() {
   const isCalling = callState === 'calling';
   const isInCall = callState === 'in-call';
 
-  const roomInitials = activeRoom
-    ? activeRoom.name
-        .split(' ')
-        .map((w) => w[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2)
-    : '';
-
   useEffect(() => {
     if (!isVideo || !isInCall || !activeRoom || hasOpenedVideoRef.current) return;
 
@@ -67,20 +59,20 @@ export default function CallModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-grey-900/80 backdrop-blur-sm">
       <div className="relative w-full max-w-md mx-4 rounded-3xl overflow-hidden bg-grey-900 shadow-card-lg border border-grey-700">
-        {/* Video area */}
-        {isVideo && (
-          <div className="aspect-video bg-grey-800 relative flex items-center justify-center">
-            <div
-              className={`
-              w-24 h-24 rounded-3xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9]
-              flex items-center justify-center
-              text-white font-body font-bold text-2xl
-              ${isCalling ? 'animate-pulse' : ''}
-            `}
-            >
-              {roomInitials}
-            </div>
+        {/* Audio-only call avatar */}
+        {!isVideo && (
+          <div className="py-12 flex flex-col items-center gap-4">
+            <GroupAvatar
+              src={activeRoom.photoUrl}
+              name={activeRoom.name}
+              className={`w-24 h-24 ${isCalling ? 'animate-pulse' : ''}`}
+            />
+          </div>
+        )}
 
+        {/* Video area placeholder when video call */}
+        {isVideo && (
+          <div className="relative bg-grey-800 aspect-video flex items-center justify-center">
             <div className="absolute bottom-3 right-3 w-24 h-16 bg-grey-700 rounded-xl border border-grey-600 overflow-hidden flex items-center justify-center">
               {isCameraOff ? (
                 <VideoOff size={18} className="text-grey-400" />
@@ -91,29 +83,13 @@ export default function CallModal() {
           </div>
         )}
 
-        {/* Audio-only call avatar */}
-        {!isVideo && (
-          <div className="py-12 flex flex-col items-center gap-4">
-            <div
-              className={`
-              w-24 h-24 rounded-3xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9]
-              flex items-center justify-center
-              text-white font-body font-bold text-2xl
-              ${isCalling ? 'animate-pulse' : ''}
-            `}
-            >
-              {roomInitials}
-            </div>
-          </div>
-        )}
-
         {/* Info */}
         <div className="px-6 py-4 text-center">
           <h3 className="font-body font-bold text-white text-lg">{activeRoom.name}</h3>
           <p className="font-body text-sm text-grey-400 mt-1">
             {isCalling ? (
               <span className="flex items-center justify-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-green-DEFAULT rounded-full animate-pulse" />
+                <span className="w-1.5 h-1.5 bg-green rounded-full animate-pulse" />
                 Marcando...
               </span>
             ) : (
@@ -148,7 +124,7 @@ export default function CallModal() {
             title="Terminar llamada"
             className="
               w-14 h-14 rounded-2xl
-              bg-gradient-to-br from-[#F65A70] to-[#FF94AE]
+              bg-gradient-to-br from-red to-orange
               flex items-center justify-center text-white
               shadow-neonRed hover:scale-105 active:scale-95
               transition-all duration-200

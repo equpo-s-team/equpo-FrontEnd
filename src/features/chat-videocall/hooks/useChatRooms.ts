@@ -9,6 +9,7 @@ import type { ChatRoom } from '../types/chat';
 type GroupLike = {
   id: string;
   groupName?: string;
+  photoUrl?: string | null;
 };
 
 /**
@@ -38,6 +39,7 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
         type: 'group',
         createdBy: '',
         createdAt: new Date(0),
+        photoUrl: group.photoUrl ?? null,
       });
     }
     pushRooms();
@@ -64,6 +66,12 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
               ? createdAtValue.toDate()
               : new Date(0);
 
+          // photoUrl: prefer Firestore value if present, fall back to backend value
+          const firestorePhotoUrl =
+            typeof data.photoUrl === 'string' && data.photoUrl.trim().length > 0
+              ? data.photoUrl
+              : null;
+
           rooms.set(group.id, {
             id: group.id,
             name:
@@ -73,6 +81,7 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
             type: 'group',
             createdBy: typeof data.createdBy === 'string' ? data.createdBy : '',
             createdAt,
+            photoUrl: firestorePhotoUrl ?? group.photoUrl ?? null,
           });
           pushRooms();
         },
@@ -88,11 +97,10 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
       unsubscribes.forEach((unsub) => unsub());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teamId, groups.map((g) => `${g.id}:${g.groupName ?? ''}`).join('|')]);
+  }, [teamId, groups.map((g) => `${g.id}:${g.groupName ?? ''}:${g.photoUrl ?? ''}`).join('|')]);
 
   return useQuery<ChatRoom[]>({
     queryKey,
-    queryFn: () => queryClient.getQueryData(queryKey) ?? [],
     enabled: !!teamId,
     staleTime: Infinity,
   });

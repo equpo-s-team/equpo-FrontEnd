@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTeam } from '@/context/TeamContext.tsx';
 import TaskSidebar from '@/features/board/components/TaskSidebar';
 import type { TeamTask } from '@/features/board/types';
+import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
 import CategoryFilter from './components/CategoryFilter';
@@ -25,8 +26,8 @@ export default function MyMissions() {
 
   // Prefetch team members to ensure cache has their displayNames for TaskDetailPanel
   const { data: teamMembers = [] } = useTeamMembers(teamId ?? '');
+  const { data: teamGroups = [] } = useTeamGroups(teamId ?? '');
 
-  // ── Date & View state ──
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [view, setView] = useState<'day' | 'week' | 'month' | 'year'>('day');
 
@@ -187,11 +188,11 @@ export default function MyMissions() {
             onClose={() => setSelectedTask(null)}
             onEdit={openEdit}
             members={teamMembers}
+            groups={teamGroups}
           />
         </aside>
       </div>
 
-      {/* TaskSidebar for editing (reuses existing board component) */}
       <TaskSidebar
         isOpen={editSidebar.isOpen}
         onClose={closeEdit}

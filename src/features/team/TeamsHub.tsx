@@ -6,9 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { NewTeamCard } from '@/features/team/components/NewTeamCard';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
-import {
-  UserProfileSidebar,
-} from '@/features/team/components/user/UserProfileSidebar.tsx';
+import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
 import { useCreateTeam } from '@/features/team/hooks/useCreateTeam';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
@@ -16,7 +14,10 @@ import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
 
-import { type Achievement, AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
+import {
+  type Achievement,
+  AchievementsSection,
+} from './components/Achievements/AchievementsSection.tsx';
 import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
 
 type AuthContextUser = {
@@ -46,14 +47,62 @@ const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => 
 };
 
 const MOCK_ACHIEVEMENTS: Achievement[] = [
-  { id: 'ach-1', name: 'Primer paso', icon: 'rocket', description: 'Creaste tu primer equipo en Equpo. ¡El inicio de grandes cosas!', unlockedAt: '2024-09-15T10:00:00Z' },
-  { id: 'ach-2', name: 'Colaborador', icon: 'handshake', description: 'Uniste a 3 equipos distintos y empezaste a construir tu red.', unlockedAt: '2024-10-02T14:30:00Z' },
-  { id: 'ach-3', name: 'Estratega', icon: 'bow-arrow', description: 'Completaste 10 tareas en un solo sprint. La planificación es tu fuerte.', unlockedAt: '2024-11-20T09:15:00Z' },
-  { id: 'ach-4', name: 'Líder nato', icon: 'goal', description: 'Lideraste un equipo de más de 5 personas hasta completar un proyecto.', unlockedAt: '2025-01-08T11:00:00Z' },
-  { id: 'ach-5', name: 'Velocista', icon: 'zap', description: 'Cerraste 5 tareas urgentes en menos de 24 horas.', unlockedAt: null },
-  { id: 'ach-6', name: 'Maestro XP', icon: 'sparkles', description: 'Alcanzaste el nivel 10. ¡Eres una leyenda de Equpo!', unlockedAt: null },
-  { id: 'ach-7', name: 'Networker', icon: 'globe', description: 'Invitaste a 10 usuarios únicos a tus equipos.', unlockedAt: null },
-  { id: 'ach-8', name: 'Constante', icon: 'flame', description: 'Iniciaste sesión 30 días seguidos. La constancia es tu superpoder.', unlockedAt: null },
+  {
+    id: 'ach-1',
+    name: 'Primer paso',
+    icon: 'rocket',
+    description: 'Creaste tu primer equipo en Equpo. ¡El inicio de grandes cosas!',
+    unlockedAt: '2024-09-15T10:00:00Z',
+  },
+  {
+    id: 'ach-2',
+    name: 'Colaborador',
+    icon: 'handshake',
+    description: 'Uniste a 3 equipos distintos y empezaste a construir tu red.',
+    unlockedAt: '2024-10-02T14:30:00Z',
+  },
+  {
+    id: 'ach-3',
+    name: 'Estratega',
+    icon: 'bow-arrow',
+    description: 'Completaste 10 tareas en un solo sprint. La planificación es tu fuerte.',
+    unlockedAt: '2024-11-20T09:15:00Z',
+  },
+  {
+    id: 'ach-4',
+    name: 'Líder nato',
+    icon: 'goal',
+    description: 'Lideraste un equipo de más de 5 personas hasta completar un proyecto.',
+    unlockedAt: '2025-01-08T11:00:00Z',
+  },
+  {
+    id: 'ach-5',
+    name: 'Velocista',
+    icon: 'zap',
+    description: 'Cerraste 5 tareas urgentes en menos de 24 horas.',
+    unlockedAt: null,
+  },
+  {
+    id: 'ach-6',
+    name: 'Maestro XP',
+    icon: 'sparkles',
+    description: 'Alcanzaste el nivel 10. ¡Eres una leyenda de Equpo!',
+    unlockedAt: null,
+  },
+  {
+    id: 'ach-7',
+    name: 'Networker',
+    icon: 'globe',
+    description: 'Invitaste a 10 usuarios únicos a tus equipos.',
+    unlockedAt: null,
+  },
+  {
+    id: 'ach-8',
+    name: 'Constante',
+    icon: 'flame',
+    description: 'Iniciaste sesión 30 días seguidos. La constancia es tu superpoder.',
+    unlockedAt: null,
+  },
 ];
 // ---------------------------------------------------------------------------
 
@@ -66,7 +115,9 @@ export const TeamsHub: React.FC = () => {
 
   const [modal, setModal] = useState<ModalState>({ mode: null });
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [profileOverrides, setProfileOverrides] = useState<Partial<Pick<UserProfile, 'displayName' | 'photoURL'>>>({});
+  const [profileOverrides, setProfileOverrides] = useState<
+    Partial<Pick<UserProfile, 'displayName' | 'photoURL'>>
+  >({});
   const [search, setSearch] = useState('');
   const achievements = MOCK_ACHIEVEMENTS;
   const baseUser = mapAuthUserToProfile(authUser);
@@ -80,7 +131,11 @@ export const TeamsHub: React.FC = () => {
 
   const handleCreate = (payload: { name: string; description: string; memberUids: string[] }) => {
     createTeam.mutate(
-      { name: payload.name, description: payload.description || null, memberUids: payload.memberUids },
+      {
+        name: payload.name,
+        description: payload.description || null,
+        memberUids: payload.memberUids,
+      },
       { onSuccess: () => closeModal() },
     );
   };
@@ -136,32 +191,21 @@ export const TeamsHub: React.FC = () => {
 
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
-
   return (
-    <div
-      className="h-[100dvh] bg-white relative overflow-hidden"
-    >
-
+    <div className="h-[100dvh] bg-white relative overflow-hidden">
       <div className="relative h-full w-full flex flex-col">
         <div className="shrink-0 flex w-full items-center justify-between mb-4 shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo"
-            >
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
               <span className="text-white text-sm font-bold">U</span>
             </div>
-            <span className="font-bold text-grey-800 text-lg">
-              Equpo
-            </span>
+            <span className="font-bold text-grey-800 text-lg">Equpo</span>
           </div>
         </div>
 
         <div className="grid flex-1 min-h-0 gap-6 px-5 pb-5 lg:px-6 lg:grid-cols-4 lg:grid-rows-[auto_minmax(0,1fr)]">
           <section className="lg:col-span-3">
-            <UserProfileCard
-              user={user}
-              onOpenSettings={() => setIsProfileOpen(true)}
-            />
+            <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
           </section>
           <section className="min-w-0 lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
             <div className="flex items-center gap-3 mb-2 flex-row">
@@ -241,7 +285,7 @@ export const TeamsHub: React.FC = () => {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                   {filtered.map((team) => (
-                    <TeamCard key={team.id} team={team} onEnter={handleEnter}/>
+                    <TeamCard key={team.id} team={team} onEnter={handleEnter} />
                   ))}
                 </div>
               )}
@@ -249,12 +293,8 @@ export const TeamsHub: React.FC = () => {
           </section>
 
           <aside className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full">
-            <div
-              className="lg:h-full"
-            >
-              <div
-                className="p-4 lg:h-full lg:overflow-y-auto"
-              >
+            <div className="lg:h-full">
+              <div className="p-4 lg:h-full lg:overflow-y-auto">
                 <AchievementsSection achievements={achievements} />
               </div>
             </div>

@@ -1,12 +1,6 @@
 export const PLAYER_PRESENCE_STALE_MS = 10_000;
 
-type SlotNumber =
-  | '01'
-  | '02'
-  | '03'
-  | '04'
-  | '05'
-  | '06';
+type SlotNumber = '01' | '02' | '03' | '04' | '05' | '06';
 
 export type SlotId = `Character_${SlotNumber}`;
 

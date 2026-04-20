@@ -6,13 +6,7 @@ interface StatBarProps {
   icon: React.ReactNode;
 }
 
-export default function StatBar({
-  value,
-  max,
-  fillClass,
-  valueColorClass,
-  icon,
-}: StatBarProps) {
+export default function StatBar({ value, max, fillClass, valueColorClass, icon }: StatBarProps) {
   const pct = Math.round((value / max) * 100);
 
   return (

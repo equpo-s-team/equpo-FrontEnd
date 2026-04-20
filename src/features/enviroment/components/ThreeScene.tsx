@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { type GLTF,GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { type GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../types/realtime';
 
 interface ThreeSceneProps {
   localSlotId: SlotId | null;
-  remotePlayers: Record<string, { position: Vector3State; rotation: Vector3State; slotId: SlotId | null }>;
+  remotePlayers: Record<
+    string,
+    { position: Vector3State; rotation: Vector3State; slotId: SlotId | null }
+  >;
   onLocalMove: (position: Vector3State, rotation: Vector3State) => void;
   keyboard: { forward: boolean; backward: boolean; left: boolean; right: boolean };
   healthPercent: number;
@@ -17,11 +20,13 @@ const GHOST_Y_OFFSET = 2.5;
 const DIORAMA_TINT_COLOR = new THREE.Color(0x6b5f4c);
 const MAX_DIORAMA_TINT = 0.5;
 const CLEAN_SKY_COLOR = new THREE.Color(0x84eefa);
-const DETERIORATED_SKY_COLOR = new THREE.Color(0x8B8C79);
+const DETERIORATED_SKY_COLOR = new THREE.Color(0x8b8c79);
 const CLEAN_FOG_COLOR = new THREE.Color(0x48dbda);
-const DETERIORATED_FOG_COLOR = new THREE.Color(0x8B8C79);
+const DETERIORATED_FOG_COLOR = new THREE.Color(0x8b8c79);
 
-function materialHasColor(material: THREE.Material): material is THREE.Material & { color: THREE.Color } {
+function materialHasColor(
+  material: THREE.Material,
+): material is THREE.Material & { color: THREE.Color } {
   return 'color' in material && (material as { color?: unknown }).color instanceof THREE.Color;
 }
 
@@ -38,9 +43,18 @@ function normalizeHealthInput(value: number): number {
   return THREE.MathUtils.clamp(normalized, 0, 1);
 }
 
-export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, keyboard, healthPercent }: ThreeSceneProps) {
+export default function ThreeScene({
+  localSlotId,
+  remotePlayers,
+  onLocalMove,
+  keyboard,
+  healthPercent,
+}: ThreeSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
-  const localProxy = useRef({ position: new THREE.Vector3(0, 0, 0), rotation: new THREE.Euler(0, 0, 0) });
+  const localProxy = useRef({
+    position: new THREE.Vector3(0, 0, 0),
+    rotation: new THREE.Euler(0, 0, 0),
+  });
   const remoteGhosts = useRef<Map<string, THREE.Group>>(new Map());
   const sceneRef = useRef<THREE.Scene | null>(null);
   const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
@@ -93,7 +107,12 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
     sceneRef.current = scene;
     const tintMaterials = dioramaTintMaterialsRef.current;
 
-    const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      50,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      1000,
+    );
     camera.position.set(-30, 10, 30);
     camera.lookAt(0, 0, 0);
 
@@ -149,7 +168,7 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
       currentDeteriorationRef.current = THREE.MathUtils.lerp(
         currentDeteriorationRef.current,
         targetDeterioration,
-        Math.min(1, delta * 2)
+        Math.min(1, delta * 2),
       );
       const deterioration = currentDeteriorationRef.current;
       const dioramaTintMix = deterioration * MAX_DIORAMA_TINT;
@@ -161,7 +180,9 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
 
       const background = scene.background;
       if (background instanceof THREE.Color) {
-        currentBackgroundRef.current.copy(CLEAN_SKY_COLOR).lerp(DETERIORATED_SKY_COLOR, deterioration);
+        currentBackgroundRef.current
+          .copy(CLEAN_SKY_COLOR)
+          .lerp(DETERIORATED_SKY_COLOR, deterioration);
         background.copy(currentBackgroundRef.current);
       }
 
@@ -198,21 +219,33 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
           localProxy.current.rotation.y = THREE.MathUtils.lerp(
             localProxy.current.rotation.y,
             targetRotation,
-            ROTATION_SPEED * delta
+            ROTATION_SPEED * delta,
           );
 
           if (currentTime - lastMoveSync > MOVE_SYNC_INTERVAL) {
             onLocalMoveRef.current(
-              { x: localProxy.current.position.x, y: localProxy.current.position.y, z: localProxy.current.position.z },
-              { x: 0, y: localProxy.current.rotation.y, z: 0 }
+              {
+                x: localProxy.current.position.x,
+                y: localProxy.current.position.y,
+                z: localProxy.current.position.z,
+              },
+              { x: 0, y: localProxy.current.rotation.y, z: 0 },
             );
             lastMoveSync = currentTime;
           }
         }
 
         // Follow cam
-        camera.position.x = THREE.MathUtils.lerp(camera.position.x, localProxy.current.position.x, 0.1);
-        camera.position.z = THREE.MathUtils.lerp(camera.position.z, localProxy.current.position.z + 20, 0.1);
+        camera.position.x = THREE.MathUtils.lerp(
+          camera.position.x,
+          localProxy.current.position.x,
+          0.1,
+        );
+        camera.position.z = THREE.MathUtils.lerp(
+          camera.position.z,
+          localProxy.current.position.z + 20,
+          0.1,
+        );
         camera.lookAt(localProxy.current.position);
       }
 
@@ -307,14 +340,22 @@ export default function ThreeScene({ localSlotId, remotePlayers, onLocalMove, ke
 
           const newGhost = glb.scene;
           newGhost.scale.setScalar(GHOST_SCALE);
-          newGhost.position.set(player.position.x, player.position.y + GHOST_Y_OFFSET, player.position.z);
+          newGhost.position.set(
+            player.position.x,
+            player.position.y + GHOST_Y_OFFSET,
+            player.position.z,
+          );
           newGhost.rotation.set(player.rotation.x, player.rotation.y, player.rotation.z);
 
           sceneRef.current.add(newGhost);
           remoteGhosts.current.set(uid, newGhost);
         });
       } else if (ghost) {
-        ghost.position.set(player.position.x, player.position.y + GHOST_Y_OFFSET, player.position.z);
+        ghost.position.set(
+          player.position.x,
+          player.position.y + GHOST_Y_OFFSET,
+          player.position.z,
+        );
         ghost.rotation.set(player.rotation.x, player.rotation.y, player.rotation.z);
       }
     });

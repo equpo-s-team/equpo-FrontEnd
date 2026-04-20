@@ -22,6 +22,7 @@ import { COLUMN_CONFIG } from './columnConfig';
 import { FieldLabel } from './FieldLabel';
 import { MarkdownDescriptionEditor } from './MarkdownDescriptionEditor';
 import { TagChip } from './TagChip';
+import { TaskAssigneesPreview } from './TaskAssigneesPreview';
 
 type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
 
@@ -35,13 +36,20 @@ const STATUS_TO_COLUMN: Record<TaskStatus, BoardColumnId> = {
 interface TaskSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  mode: 'create' | 'edit' | 'readonly';
+  mode: 'create' | 'edit' | 'view' | 'readonly';
   task?: TeamTask | null;
   teamId: string;
   defaultStatus?: string;
 }
 
-export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defaultStatus }: TaskSidebarProps) {
+export default function TaskSidebar({
+  isOpen,
+  onClose,
+  mode,
+  task,
+  teamId,
+  defaultStatus,
+}: TaskSidebarProps) {
   const backdropRef = useRef<HTMLDivElement>(null);
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
@@ -59,9 +67,11 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   const [assignedGroupId, setAssignedGroupId] = useState('');
   const [categories, setCategories] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
-  const [recurringInterval, setRecurringInterval] = useState<'days' | 'weeks' | 'months' | 'years'>('days');
+  const [recurringInterval, setRecurringInterval] = useState<'days' | 'weeks' | 'months' | 'years'>(
+    'days',
+  );
   const [recurringCount, setRecurringCount] = useState(1);
-  const [isEditView, setIsEditView] = useState(mode !== 'edit');
+  const [isEditView, setIsEditView] = useState(mode === 'create' || mode === 'edit');
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,7 +80,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   useEffect(() => {
     if (!isOpen) return;
 
-    if (mode === 'edit' && task) {
+    if (mode !== 'create' && task) {
       setName(task.name ?? '');
       setDescription(task.description ?? '');
       setDueDate(toInputDatetime(task.dueDate));
@@ -81,7 +91,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
       setIsRecurring(task.isRecurring ?? false);
       setRecurringInterval(task.recurringInterval ?? 'days');
       setRecurringCount(task.recurringCount ?? 1);
-      setIsEditView(false);
+      setIsEditView(mode === 'edit');
     } else {
       setName('');
       setDescription('');
@@ -113,15 +123,17 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         .some((c) => c.length > 12);
 
       if (next.name && nameTrimmed && nameTrimmed.length <= 100) delete next.name;
-      if (next.description && descriptionTrimmed && descriptionTrimmed.length <= DESCRIPTION_MAX_LENGTH) {
+      if (
+        next.description &&
+        descriptionTrimmed &&
+        descriptionTrimmed.length <= DESCRIPTION_MAX_LENGTH
+      ) {
         delete next.description;
       }
       if (next.dueDate && dueDate && new Date(dueDate) > new Date()) delete next.dueDate;
       if (next.priority && priority) delete next.priority;
       if (next.categories && !hasInvalidCategory) delete next.categories;
       if (next.recurringCount && (!isRecurring || recurringCount >= 1)) delete next.recurringCount;
-
-      // El error de submit se limpia cuando el usuario vuelve a editar.
       if (next.form) delete next.form;
 
       return Object.keys(next).length === Object.keys(prev).length ? prev : next;
@@ -184,7 +196,9 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
       description: description.trim(),
       dueDate: new Date(dueDate).toISOString(),
       priority,
-      status: (mode === 'edit' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done',
+      status: (mode !== 'create'
+        ? (task?.status ?? defaultStatus ?? 'todo')
+        : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done',
       categories: catArray,
       isRecurring,
       recurringInterval: isRecurring ? recurringInterval : 'days',
@@ -202,7 +216,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     setIsSubmitting(true);
     try {
       const payload = buildPayload();
-      if (mode === 'edit' && task) {
+      if (mode !== 'create' && task) {
         await updateTask.mutateAsync({ teamId, taskId: task.id, payload });
       } else {
         await createTask.mutateAsync({ teamId, payload });
@@ -231,7 +245,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   }
 
   function handleCancel() {
-    if (mode === 'edit') {
+    if (mode === 'view' && isEditView) {
       setName(task?.name ?? '');
       setDescription(task?.description ?? '');
       setDueDate(toInputDatetime(task?.dueDate));
@@ -246,7 +260,6 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
       setIsEditView(false);
       return;
     }
-
     onClose();
   }
 
@@ -259,7 +272,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
   const originalDueDate = task?.dueDate ? toInputDatetime(task.dueDate) : '';
 
   const hasChanges =
-    mode !== 'edit' ||
+    mode === 'create' ||
     name.trim() !== (task?.name ?? '') ||
     description.trim() !== (task?.description ?? '') ||
     dueDate !== originalDueDate ||
@@ -284,22 +297,24 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
     (!isRecurring || recurringCount >= 1);
 
   const isSubmitDisabled = isSubmitting || !isFormValid || !hasChanges;
-  const isReadOnlyView = mode === 'edit' && !isEditView;
 
-  const selectedPriority = PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? 'Sin prioridad';
-  const selectedUser = members.find((member) => member.uid === assignedUserUid);
-  const selectedGroup = groups.find((group) => group.id === assignedGroupId);
-  const categoriesList = categories
-    .split(',')
-    .map((category) => category.trim())
-    .filter(Boolean);
+  // In readonly mode, view mode, or edit mode with edit panel closed → show detail view
+  const isReadOnlyView = mode === 'readonly' || ((mode === 'view' || mode === 'edit') && !isEditView);
+
+  // Resolved data for readonly view
+  const selectedPriority =
+    PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? priority;
   const recurringLabel =
-    INTERVAL_OPTIONS.find((opt) => opt.value === recurringInterval)?.label?.toLowerCase() ?? recurringInterval;
+    INTERVAL_OPTIONS.find((opt) => opt.value === recurringInterval)?.label?.toLowerCase() ??
+    recurringInterval;
   const priorityStyle = READONLY_PRIORITY_STYLE[priority] ?? READONLY_PRIORITY_STYLE.medium;
-  const currentStatus = (mode === 'edit' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done';
+  const currentStatus = (
+    mode !== 'create' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo')
+  ) as 'todo' | 'in-progress' | 'in-qa' | 'done';
   const progress = STATUS_TO_PROGRESS[currentStatus] ?? 0;
   const progressColumn = STATUS_TO_COLUMN[currentStatus];
   const progressCfg = COLUMN_CONFIG[progressColumn];
+
   const formattedDueDate = (() => {
     if (!dueDate) return 'Sin fecha límite';
     const parsed = new Date(dueDate);
@@ -309,6 +324,14 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
       timeStyle: 'short',
     });
   })();
+
+  // For the readonly assignees preview
+  const selectedGroup = groups.find((g) => g.id === assignedGroupId) ?? null;
+  const readonlyAssignedUsers = task?.assignedUsers?.length ? task.assignedUsers : [];
+  const parsedCategories = categories
+    .split(',')
+    .map((c) => c.trim())
+    .filter(Boolean);
 
   return (
     <>
@@ -342,10 +365,10 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-grey-200">
           <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
-            {isReadOnlyView ? 'Detalle de Tarea' : mode === 'edit' ? 'Editar Tarea' : 'Crear Tarea'}
+            {isReadOnlyView ? 'Detalle de Tarea' : (mode === 'edit' || mode === 'view') ? 'Editar Tarea' : 'Crear Tarea'}
           </h2>
           <div className="flex items-center gap-2">
-            {isReadOnlyView && (
+            {(mode === 'edit' || mode === 'view') && isReadOnlyView && (
               <button
                 type="button"
                 onClick={() => setIsEditView(true)}
@@ -389,6 +412,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
               </div>
 
               <div className="sm:col-span-1 space-y-5">
+                {/* Due Date */}
                 <div>
                   <FieldLabel required>
                     <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
@@ -397,43 +421,44 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                   <p className="text-sm font-body text-grey-800">{formattedDueDate}</p>
                 </div>
 
+                {/* Priority */}
                 <div>
                   <FieldLabel required>
                     <Zap size={12} className="inline mr-1 -mt-0.5" />
                     Prioridad
                   </FieldLabel>
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-bold ${priorityStyle.text}`}>
+                  <span
+                    className={`inline-flex items-center gap-1.5 text-xs font-bold ${priorityStyle.text}`}
+                  >
                     <span className={`w-2 h-2 rounded-full ${priorityStyle.dot}`} />
                     {selectedPriority}
                   </span>
                 </div>
 
+                {/* Assignees (users + group) */}
                 <div>
                   <FieldLabel>
                     <Users size={12} className="inline mr-1 -mt-0.5" />
-                    Usuario Asignado
+                    Asignación
                   </FieldLabel>
-                  <p className="text-sm font-body text-grey-800">
-                    {selectedUser?.displayName || selectedUser?.uid || 'Sin asignar'}
-                  </p>
+                  <TaskAssigneesPreview
+                    assignedUsers={readonlyAssignedUsers}
+                    members={members}
+                    assignedGroup={selectedGroup ?? null}
+                    usersPerPage={10}
+                    teamId={teamId}
+                  />
                 </div>
 
-                <div>
-                  <FieldLabel>
-                    <Users size={12} className="inline mr-1 -mt-0.5" />
-                    Grupo Asignado
-                  </FieldLabel>
-                  <p className="text-sm font-body text-grey-800">{selectedGroup?.groupName || 'Sin asignar'}</p>
-                </div>
-
+                {/* Categories */}
                 <div>
                   <FieldLabel>
                     <Tag size={12} className="inline mr-1 -mt-0.5" />
                     Categorías
                   </FieldLabel>
-                  {categoriesList.length ? (
-                    <div className="flex flex-wrap gap-1.5">
-                      {categoriesList.map((category) => (
+                  {parsedCategories.length > 0 ? (
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {parsedCategories.map((category) => (
                         <TagChip key={category} label={category} />
                       ))}
                     </div>
@@ -442,8 +467,7 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                   )}
                 </div>
 
-
-
+                {/* Recurring */}
                 <div>
                   <FieldLabel>
                     <Repeat size={12} className="inline mr-1 -mt-0.5" />
@@ -454,12 +478,15 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
                   </p>
                 </div>
 
+                {/* Progress */}
                 <div>
                   <div className="flex justify-between items-center mb-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400">
                       Progreso
                     </span>
-                    <span className={`font-maxwell text-[10px] font-bold ${progressCfg.progressColor}`}>
+                    <span
+                      className={`font-maxwell text-[10px] font-bold ${progressCfg.progressColor}`}
+                    >
                       {progress}%
                     </span>
                   </div>
@@ -483,252 +510,262 @@ export default function TaskSidebar({ isOpen, onClose, mode, task, teamId, defau
         ) : (
           <>
             {/* ── Form ── */}
-            <form onSubmit={(e) => void handleSubmit(e)} className="flex-1 overflow-y-auto px-6 py-5">
-          {/* Name spans both columns */}
-          <div className="mb-5">
-            <FieldLabel required>
-              <Type size={12} className="inline mr-1 -mt-0.5" />
-              Nombre
-            </FieldLabel>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              maxLength={100}
-              placeholder="Nombre de la tarea"
-              className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
-            />
-            {errors.name && <p className="mt-1 text-xs text-red">{errors.name}</p>}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
-            {/* Left column: description (2/3) */}
-            <div className="sm:col-span-3">
-              <FieldLabel required>
-                <Layers size={12} className="inline mr-1 -mt-0.5" />
-                Descripción
-              </FieldLabel>
-              <MarkdownDescriptionEditor
-                value={description}
-                onChange={setDescription}
-                maxLength={DESCRIPTION_MAX_LENGTH}
-                hasError={Boolean(errors.description)}
-              />
-              {errors.description && (
-                <p className="mt-1 text-xs text-red">{errors.description}</p>
-              )}
-            </div>
-
-            {/* Right column: rest of task attributes (1/3) */}
-            <div className="sm:col-span-1 space-y-5">
-              {/* Due Date */}
-              <div>
+            <form
+              onSubmit={(e) => void handleSubmit(e)}
+              className="flex-1 overflow-y-auto px-6 py-5"
+            >
+              {/* Name */}
+              <div className="mb-5">
                 <FieldLabel required>
-                  <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
-                  Fecha Límite
-                </FieldLabel>
-                <input
-                  type="datetime-local"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                  min={getMinDate()}
-                  className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.dueDate ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
-                />
-                {errors.dueDate && <p className="mt-1 text-xs text-red">{errors.dueDate}</p>}
-              </div>
-
-              {/* Priority */}
-              <div>
-                <FieldLabel required>
-                  <Zap size={12} className="inline mr-1 -mt-0.5" />
-                  Prioridad
-                </FieldLabel>
-                <div className="flex gap-2">
-                  {PRIORITY_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => setPriority(opt.value as 'high' | 'medium' | 'low')}
-                      className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] border-[1.5px] text-xs font-semibold transition-all duration-150 cursor-pointer ${
-                        priority === opt.value
-                          ? 'border-blue bg-blue/8 text-blue'
-                          : 'border-grey-200 text-grey-500 hover:border-grey-300'
-                      }`}
-                    >
-                      <span className={`w-2 h-2 rounded-full ${opt.dot}`} />
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Assigned User */}
-              <div>
-                <FieldLabel>
-                  <Users size={12} className="inline mr-1 -mt-0.5" />
-                  Usuario Asignado
-                </FieldLabel>
-                <select
-                  value={assignedUserUid}
-                  onChange={(e) => setAssignedUserUid(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                >
-                  <option value="">Sin asignar</option>
-                  {members.map((m) => (
-                    <option key={m.uid} value={m.uid}>
-                      {m.displayName || m.uid}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Assigned Group */}
-              <div>
-                <FieldLabel>
-                  <Users size={12} className="inline mr-1 -mt-0.5" />
-                  Grupo Asignado
-                </FieldLabel>
-                <select
-                  value={assignedGroupId}
-                  onChange={(e) => setAssignedGroupId(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                >
-                  <option value="">Sin asignar</option>
-                  {groups.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.groupName}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Categories */}
-              <div>
-                <FieldLabel>
-                  <Tag size={12} className="inline mr-1 -mt-0.5" />
-                  Categorías
+                  <Type size={12} className="inline mr-1 -mt-0.5" />
+                  Nombre
                 </FieldLabel>
                 <input
                   type="text"
-                  value={categories}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setCategories(val);
-
-                    const catArray = val
-                      .split(',')
-                      .map((c) => c.trim())
-                      .filter(Boolean);
-                    if (catArray.some((c) => c.length > 12)) {
-                      setErrors((prev) => ({
-                        ...prev,
-                        categories: 'Cada categoría no puede exceder los 12 caracteres',
-                      }));
-                    } else {
-                      setErrors((prev) => {
-                        const newErr = { ...prev };
-                        delete newErr.categories;
-                        return newErr;
-                      });
-                    }
-                  }}
-                  placeholder="Backend, API, Diseño..."
-                  className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary outline-none transition-colors duration-150 ${
-                    errors.categories
-                      ? 'border-red/50 text-red focus:border-red'
-                      : 'border-grey-200 text-grey-800 placeholder:text-grey-400 focus:border-blue'
-                  }`}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={100}
+                  placeholder="Nombre de la tarea"
+                  className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
                 />
-                {errors.categories ? (
-                  <p className="mt-1 text-xs font-medium text-red">{errors.categories}</p>
-                ) : (
-                  <p className="mt-1 text-xs text-grey-400">Separadas por coma</p>
-                )}
+                {errors.name && <p className="mt-1 text-xs text-red">{errors.name}</p>}
               </div>
 
-              {/* Recurring Toggle */}
-              <div>
-                <FieldLabel>
-                  <Repeat size={12} className="inline mr-1 -mt-0.5" />
-                  Recurrente
-                </FieldLabel>
-                <button
-                  type="button"
-                  onClick={() => setIsRecurring((prev) => !prev)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer ${isRecurring ? 'bg-blue' : 'bg-grey-300'}`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${isRecurring ? 'translate-x-6' : 'translate-x-1'}`}
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
+                {/* Left: description */}
+                <div className="sm:col-span-3">
+                  <FieldLabel required>
+                    <Layers size={12} className="inline mr-1 -mt-0.5" />
+                    Descripción
+                  </FieldLabel>
+                  <MarkdownDescriptionEditor
+                    value={description}
+                    onChange={setDescription}
+                    maxLength={DESCRIPTION_MAX_LENGTH}
+                    hasError={Boolean(errors.description)}
                   />
-                </button>
+                  {errors.description && (
+                    <p className="mt-1 text-xs text-red">{errors.description}</p>
+                  )}
+                </div>
 
-                {isRecurring && (
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className="text-xs text-grey-600">Cada</span>
+                {/* Right: rest of task attributes */}
+                <div className="sm:col-span-1 space-y-5">
+                  {/* Due Date */}
+                  <div>
+                    <FieldLabel required>
+                      <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
+                      Fecha Límite
+                    </FieldLabel>
                     <input
-                      type="number"
-                      min={1}
-                      max={365}
-                      value={recurringCount}
-                      onChange={(e) => setRecurringCount(Math.max(1, Number(e.target.value)))}
-                      className={`w-16 px-2 py-1.5 rounded-[8px] border-[1.5px] text-sm font-body text-center bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+                      type="datetime-local"
+                      value={dueDate}
+                      onChange={(e) => setDueDate(e.target.value)}
+                      min={getMinDate()}
+                      className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.dueDate ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
                     />
-                    <select
-                      value={recurringInterval}
-                      onChange={(e) => setRecurringInterval(e.target.value as 'days' | 'weeks' | 'months' | 'years')}
-                      className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                    >
-                      {INTERVAL_OPTIONS.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
+                    {errors.dueDate && <p className="mt-1 text-xs text-red">{errors.dueDate}</p>}
+                  </div>
+
+                  {/* Priority */}
+                  <div>
+                    <FieldLabel required>
+                      <Zap size={12} className="inline mr-1 -mt-0.5" />
+                      Prioridad
+                    </FieldLabel>
+                    <div className="flex gap-2">
+                      {PRIORITY_OPTIONS.map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => setPriority(opt.value as 'high' | 'medium' | 'low')}
+                          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] border-[1.5px] text-xs font-semibold transition-all duration-150 cursor-pointer ${
+                            priority === opt.value
+                              ? 'border-blue bg-blue/8 text-blue'
+                              : 'border-grey-200 text-grey-500 hover:border-grey-300'
+                          }`}
+                        >
+                          <span className={`w-2 h-2 rounded-full ${opt.dot}`} />
                           {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Assigned User */}
+                  <div>
+                    <FieldLabel>
+                      <Users size={12} className="inline mr-1 -mt-0.5" />
+                      Usuario Asignado
+                    </FieldLabel>
+                    <select
+                      value={assignedUserUid}
+                      onChange={(e) => setAssignedUserUid(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
+                    >
+                      <option value="">Sin asignar</option>
+                      {members.map((m) => (
+                        <option key={m.uid} value={m.uid}>
+                          {m.displayName || m.uid}
                         </option>
                       ))}
                     </select>
                   </div>
-                )}
-                {errors.recurringCount && (
-                  <p className="mt-1 text-xs text-red">{errors.recurringCount}</p>
-                )}
-              </div>
-            </div>
-          </div>
 
-          {/* Form Error */}
-          {errors.form && (
-            <div className="mt-5 px-3 py-2 rounded-[10px] bg-red/10 border border-red/30 text-xs text-red">
-              {errors.form}
-            </div>
-          )}
+                  {/* Assigned Group */}
+                  <div>
+                    <FieldLabel>
+                      <Users size={12} className="inline mr-1 -mt-0.5" />
+                      Grupo Asignado
+                    </FieldLabel>
+                    <select
+                      value={assignedGroupId}
+                      onChange={(e) => setAssignedGroupId(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
+                    >
+                      <option value="">Sin asignar</option>
+                      {groups.map((g) => (
+                        <option key={g.id} value={g.id}>
+                          {g.groupName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Categories */}
+                  <div>
+                    <FieldLabel>
+                      <Tag size={12} className="inline mr-1 -mt-0.5" />
+                      Categorías
+                    </FieldLabel>
+                    <input
+                      type="text"
+                      value={categories}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setCategories(val);
+                        const catArray = val
+                          .split(',')
+                          .map((c) => c.trim())
+                          .filter(Boolean);
+                        if (catArray.some((c) => c.length > 12)) {
+                          setErrors((prev) => ({
+                            ...prev,
+                            categories: 'Cada categoría no puede exceder los 12 caracteres',
+                          }));
+                        } else {
+                          setErrors((prev) => {
+                            const newErr = { ...prev };
+                            delete newErr.categories;
+                            return newErr;
+                          });
+                        }
+                      }}
+                      placeholder="Backend, API, Diseño..."
+                      className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary outline-none transition-colors duration-150 ${
+                        errors.categories
+                          ? 'border-red/50 text-red focus:border-red'
+                          : 'border-grey-200 text-grey-800 placeholder:text-grey-400 focus:border-blue'
+                      }`}
+                    />
+                    {errors.categories ? (
+                      <p className="mt-1 text-xs font-medium text-red">{errors.categories}</p>
+                    ) : (
+                      <p className="mt-1 text-xs text-grey-400">Separadas por coma</p>
+                    )}
+                  </div>
+
+                  {/* Recurring Toggle */}
+                  <div>
+                    <FieldLabel>
+                      <Repeat size={12} className="inline mr-1 -mt-0.5" />
+                      Recurrente
+                    </FieldLabel>
+                    <button
+                      type="button"
+                      onClick={() => setIsRecurring((prev) => !prev)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer ${isRecurring ? 'bg-blue' : 'bg-grey-300'}`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${isRecurring ? 'translate-x-6' : 'translate-x-1'}`}
+                      />
+                    </button>
+
+                    {isRecurring && (
+                      <div className="flex items-center gap-2 mt-3">
+                        <span className="text-xs text-grey-600">Cada</span>
+                        <input
+                          type="number"
+                          min={1}
+                          max={365}
+                          value={recurringCount}
+                          onChange={(e) => setRecurringCount(Math.max(1, Number(e.target.value)))}
+                          className={`w-16 px-2 py-1.5 rounded-[8px] border-[1.5px] text-sm font-body text-center bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+                        />
+                        <select
+                          value={recurringInterval}
+                          onChange={(e) =>
+                            setRecurringInterval(
+                              e.target.value as 'days' | 'weeks' | 'months' | 'years',
+                            )
+                          }
+                          className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
+                        >
+                          {INTERVAL_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    {errors.recurringCount && (
+                      <p className="mt-1 text-xs text-red">{errors.recurringCount}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Error */}
+              {errors.form && (
+                <div className="mt-5 px-3 py-2 rounded-[10px] bg-red/10 border border-red/30 text-xs text-red">
+                  {errors.form}
+                </div>
+              )}
             </form>
 
             {/* ── Footer ── */}
             <div className="px-6 py-4 border-t border-grey-200 flex items-center gap-3">
-          {mode === 'edit' && (
-            <button
-              type="button"
-              onClick={() => void handleDelete()}
-              disabled={isSubmitting}
-              className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-red border-[1.5px] border-red/30 hover:bg-red/8 transition-all duration-150 cursor-pointer disabled:opacity-50"
-            >
-              Eliminar
-            </button>
-          )}
-          <div className="flex-1" />
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-grey-500 border-[1.5px] border-grey-200 hover:border-grey-300 transition-all duration-150 cursor-pointer"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            onClick={(e) => void handleSubmit(e)}
-            disabled={isSubmitDisabled}
-            className="px-5 py-2.5 rounded-[10px] text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
-          >
-            {isSubmitting ? 'Guardando...' : mode === 'edit' ? 'Guardar Cambios' : 'Crear Tarea'}
-          </button>
+              {(mode === 'edit' || mode === 'view') && (
+                <button
+                  type="button"
+                  onClick={() => void handleDelete()}
+                  disabled={isSubmitting}
+                  className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-red border-[1.5px] border-red/30 hover:bg-red/8 transition-all duration-150 cursor-pointer disabled:opacity-50"
+                >
+                  Eliminar
+                </button>
+              )}
+              <div className="flex-1" />
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-grey-500 border-[1.5px] border-grey-200 hover:border-grey-300 transition-all duration-150 cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                onClick={(e) => void handleSubmit(e)}
+                disabled={isSubmitDisabled}
+                className="px-5 py-2.5 rounded-[10px] text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
+              >
+                {isSubmitting
+                  ? 'Guardando...'
+                  : (mode === 'edit' || mode === 'view')
+                    ? 'Guardar Cambios'
+                    : 'Crear Tarea'}
+              </button>
             </div>
           </>
         )}

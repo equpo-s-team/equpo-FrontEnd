@@ -1,6 +1,8 @@
-import {Coins} from "lucide-react";
+import { Coins } from 'lucide-react';
 import React, { useMemo } from 'react';
 
+import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import type { Team } from '@/features/team/types/teamsTypes.ts';
 
@@ -90,11 +92,13 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                 boxShadow: `0 4px 14px ${cfg.glow.replace('0.18', '0.5')}`,
               }}
             >
-              {team.photoUrl ? (
-                <img src={team.photoUrl} alt={team.name} className="w-full h-full object-cover" />
-              ) : (
-                team.name.charAt(0)
-              )}
+              <TeamAvatar
+                src={team.photoUrl}
+                name={team.name}
+                className="w-full h-full"
+                fallbackClassName="w-full h-full"
+                fallbackStyle={{ background: cfg.gradient }}
+              />
             </div>
             <div>
               <h3
@@ -121,7 +125,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
               border: `1px solid ${cfg.border}`,
             }}
           >
-              <Coins className="w-4 h-4 text-white" style={{ color: cfg.dot }}/>
+            <Coins className="w-4 h-4 text-white" style={{ color: cfg.dot }} />
             <span className="text-xs font-bold" style={{ color: cfg.dot }}>
               {team.virtualCurrency.toLocaleString()}
             </span>
@@ -149,18 +153,17 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                   <div
                     key={memberUid}
                     className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold border-2 border-white"
-                    style={{ background: cfg.gradient, zIndex: 10 - i }}
+                    style={{ zIndex: 10 - i }}
                     title={memberName}
                   >
-                    {m.photoUrl ? (
-                      <img
-                        src={m.photoUrl}
-                        alt={memberName}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      initial
-                    )}
+                    <UserAvatar
+                      src={m.photoUrl}
+                      alt={memberName}
+                      initials={initial}
+                      className="w-full h-full"
+                      fallbackClassName="text-white text-xs"
+                      fallbackStyle={{ background: cfg.gradient }}
+                    />
                   </div>
                 );
               })}

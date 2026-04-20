@@ -1,5 +1,12 @@
-import type { DragEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from 'react';
+import type {
+  DragEvent,
+  MouseEvent as ReactMouseEvent,
+  PointerEvent as ReactPointerEvent,
+} from 'react';
 import { useRef } from 'react';
+
+import { UserAvatar as AppUserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 import type { TaskPriority, TaskStatus } from '../types';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
@@ -46,20 +53,27 @@ const COLUMN_TO_STATUS: Record<BoardColumnId, TaskStatus> = {
   done: 'done',
 };
 
-function UserAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
+function BoardAssigneeAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
   const dim = size === 'sm' ? 'w-5.5 h-5.5 text-[7.5px]' : 'w-7 h-7 text-[10px]';
   return (
-    <div
-      className={`${dim} rounded-full font-bold text-white flex items-center justify-center border-2 border-primary`}
-      style={{ background: USER_GRADIENT[userId] }}
-      title={userId}
-    >
-      {userId}
-    </div>
+    <AppUserAvatar
+      alt={userId}
+      initials={getInitials(userId, userId)}
+      className={`${dim} rounded-full object-cover border-2 border-primary`}
+      fallbackClassName="font-bold text-white flex items-center justify-center"
+      fallbackStyle={{ background: USER_GRADIENT[userId] }}
+    />
   );
 }
 
-export default function BoardCard({ card, accent, columnId, onMoveCard, onCardClick, position }: BoardCardProps) {
+export default function BoardCard({
+  card,
+  accent,
+  columnId,
+  onMoveCard,
+  onCardClick,
+  position,
+}: BoardCardProps) {
   const cfg = COLUMN_CONFIG[accent];
   const prio = PRIORITY_CONFIG[card.priority ?? 'medium'];
   const progress = STATUS_TO_PROGRESS[COLUMN_TO_STATUS[columnId]];
@@ -67,7 +81,9 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
   // ── Click vs drag tracking ──
   const pointerRef = useRef<PointerTracking>({ x: 0, y: 0, t: 0, dragged: false });
 
-  const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {
+  const handlePointerDown = (
+    e: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>,
+  ) => {
     pointerRef.current = { x: e.clientX, y: e.clientY, t: Date.now(), dragged: false };
   };
 
@@ -78,7 +94,9 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
     e.dataTransfer.effectAllowed = 'move';
   };
 
-  const handlePointerUp = (e: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {
+  const handlePointerUp = (
+    e: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>,
+  ) => {
     const { x, y, t, dragged } = pointerRef.current;
     if (dragged) {
       return;
@@ -144,7 +162,7 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
     >
       <div className="flex items-start justify-between mb-2">
         <span className="font-maxwell text-[10px] text-grey-400 tracking-[0.3px]">{card.id}</span>
-          <span className={`flex items-center gap-1.5 text-[10px] font-bold ${prio.text}`}>
+        <span className={`flex items-center gap-1.5 text-[10px] font-bold ${prio.text}`}>
           <span className={`w-2 h-2 rounded-full ${prio.dot}`} />
           {prio.label}
         </span>
@@ -161,9 +179,7 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />
       ) : (
-        <p className="text-[12px] text-grey-400 italic mb-2.5 line-clamp-2">
-          Sin descripción
-        </p>
+        <p className="text-[12px] text-grey-400 italic mb-2.5 line-clamp-2">Sin descripción</p>
       )}
 
       {categories.length > 0 && (
@@ -202,7 +218,7 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
         <div className="flex">
           {card.assignees?.map((uid: string, i: number) => (
             <div key={uid} style={{ marginLeft: i > 0 ? '-5px' : 0 }}>
-              <UserAvatar userId={uid} />
+              <BoardAssigneeAvatar userId={uid} />
             </div>
           ))}
         </div>

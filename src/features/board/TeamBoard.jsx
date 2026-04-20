@@ -183,7 +183,7 @@ export default function TeamBoard() {
     const taskData = card._raw ?? card;
     setSidebar({
       isOpen: true,
-      mode: 'edit',
+      mode: 'view',
       task: taskData,
       defaultStatus: taskData.status ?? 'todo',
     });

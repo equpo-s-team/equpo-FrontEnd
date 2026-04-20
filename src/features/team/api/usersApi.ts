@@ -15,6 +15,5 @@ export type UpdateMeResponse = {
 };
 
 export const usersApi = {
-  updateMe: (payload: UpdateMePayload) =>
-    request<UpdateMeResponse>('/users/me', 'PATCH', payload),
+  updateMe: (payload: UpdateMePayload) => request<UpdateMeResponse>('/users/me', 'PATCH', payload),
 };

@@ -1,8 +1,11 @@
 import { Check, CheckCheck, FileText, Pencil, Reply, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { auth } from '@/firebase';
+import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 import type { ChatMessage } from '../types/chat';
 
@@ -11,9 +14,13 @@ interface MessageBubbleProps {
 }
 
 export default function MessageBubble({ message }: MessageBubbleProps) {
-  const { editMessage, deleteMessage, setReplyingTo } = useChatContext();
+  const { editMessage, deleteMessage, setReplyingTo, teamId } = useChatContext();
+  const { data: teamMembers = [] } = useTeamMembers(teamId || '');
   const currentUid = auth.currentUser?.uid;
   const isSent = message.senderUid === currentUid;
+
+  const senderPhotoUrl =
+    teamMembers.find((member) => member.uid === message.senderUid)?.photoUrl ?? null;
 
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(message.text);
@@ -49,9 +56,13 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       {/* Avatar (received only) */}
       {!isSent && (
         <div className="flex-shrink-0 mb-1">
-          <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[#60AFFF] to-[#5961F9] flex items-center justify-center text-white font-body font-semibold text-[10px]">
-            {message.senderName?.slice(0, 2).toUpperCase() ?? '??'}
-          </div>
+          <UserAvatar
+            src={senderPhotoUrl}
+            alt={message.senderName ?? 'Usuario'}
+            initials={getInitials(message.senderName ?? 'Usuario', 'U')}
+            className="w-7 h-7"
+            fallbackClassName="bg-gradient-to-br from-[#60AFFF] to-[#5961F9] text-white text-[10px]"
+          />
         </div>
       )}
 

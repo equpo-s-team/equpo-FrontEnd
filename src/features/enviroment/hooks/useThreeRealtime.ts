@@ -63,7 +63,11 @@ function toSlotClaim(value: unknown): SlotClaimState | null {
 function toVector3State(value: unknown): Vector3State | null {
   if (typeof value !== 'object' || value === null) return null;
   const source = value as Record<string, unknown>;
-  if (typeof source.x !== 'number' || typeof source.y !== 'number' || typeof source.z !== 'number') {
+  if (
+    typeof source.x !== 'number' ||
+    typeof source.y !== 'number' ||
+    typeof source.z !== 'number'
+  ) {
     return null;
   }
   return { x: source.x, y: source.y, z: source.z };
@@ -108,22 +112,30 @@ async function claimSlot(
   clientId: string,
 ): Promise<SlotId | null> {
   const candidateSlots: SlotId[] = [
-    'Character_01', 'Character_02', 'Character_03',
-    'Character_04', 'Character_05', 'Character_06'
+    'Character_01',
+    'Character_02',
+    'Character_03',
+    'Character_04',
+    'Character_05',
+    'Character_06',
   ];
 
   for (const slotId of candidateSlots) {
     const slotRef = getSlotRef(teamId, slotId);
     try {
-      const result = await runTransaction(slotRef, (current) => {
-        const now = Date.now();
-        if (!current) return { uid: localUid, clientId, updatedAt: now };
-        const claim = toSlotClaim(current);
-        if (!claim || now - claim.updatedAt > SLOT_CLAIM_STALE_MS || claim.uid === localUid) {
-          return { uid: localUid, clientId, updatedAt: now };
-        }
-        return;
-      }, { applyLocally: false });
+      const result = await runTransaction(
+        slotRef,
+        (current) => {
+          const now = Date.now();
+          if (!current) return { uid: localUid, clientId, updatedAt: now };
+          const claim = toSlotClaim(current);
+          if (!claim || now - claim.updatedAt > SLOT_CLAIM_STALE_MS || claim.uid === localUid) {
+            return { uid: localUid, clientId, updatedAt: now };
+          }
+          return;
+        },
+        { applyLocally: false },
+      );
 
       if (result.committed) return slotId;
     } catch (error) {
@@ -159,7 +171,8 @@ export function useThreeRealtime({
       }
 
       const raw = snapshot.val() as unknown;
-      const source = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
+      const source =
+        typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
       const nextUids: string[] = [];
       const nextStates: Record<string, PlayerRealtimeState> = {};
       let count = 0;
@@ -207,7 +220,9 @@ export function useThreeRealtime({
       void onDisconnect(presenceRef)
         .set({ active: false, updatedAt: Date.now() })
         .catch(() => {});
-      void onDisconnect(slotRef).set(null).catch(() => {});
+      void onDisconnect(slotRef)
+        .set(null)
+        .catch(() => {});
 
       intervalId = setInterval(() => {
         const now = Date.now();
@@ -233,7 +248,9 @@ export function useThreeRealtime({
       isDisposed = true;
       if (intervalId !== null) clearInterval(intervalId);
       if (claimedSlot) {
-        set(getPresenceRef(teamId, localUid), { active: false, updatedAt: Date.now() }).catch(() => {});
+        set(getPresenceRef(teamId, localUid), { active: false, updatedAt: Date.now() }).catch(
+          () => {},
+        );
         set(getSlotRef(teamId, claimedSlot), null).catch(() => {});
       }
       setLocalSlotId(null);

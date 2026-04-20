@@ -1,8 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import { useCallback, useEffect, useMemo } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
+import { tasksApi } from '@/features/board/api/tasksApi';
 import { useTasks } from '@/features/board/hooks/useTasks';
 import { useValidTaskIds } from '@/features/board/hooks/useValidTaskIds';
 import type { TeamTask } from '@/features/board/types';
@@ -12,6 +13,32 @@ interface AuthUser {
   uid: string;
   email: string | null;
   displayName: string | null;
+}
+
+const REST_TASKS_PAGE_LIMIT = 200;
+
+async function fetchAssignmentsByTaskId(
+  teamId: string,
+): Promise<Map<string, TeamTask['assignedUsers']>> {
+  const map = new Map<string, TeamTask['assignedUsers']>();
+  let page = 1;
+  let hasNext = true;
+
+  while (hasNext) {
+    const response = await tasksApi.list(teamId, {
+      page,
+      limit: REST_TASKS_PAGE_LIMIT,
+    });
+
+    response.tasks.forEach((task) => {
+      map.set(task.id, task.assignedUsers ?? []);
+    });
+
+    hasNext = response.meta.hasNext;
+    page += 1;
+  }
+
+  return map;
 }
 
 /**
@@ -34,6 +61,12 @@ export function useMyTasks(teamId: string | undefined) {
 
   // Backend-derived IDs of tasks assigned to current user (direct + group)
   const { data: validIdsData, isLoading: idsLoading } = useValidTaskIds(teamId ?? '');
+  const assignmentsQuery = useQuery({
+    queryKey: ['tasks', teamId, 'assignments'],
+    queryFn: () => fetchAssignmentsByTaskId(teamId ?? ''),
+    enabled: !!teamId,
+    staleTime: 60_000,
+  });
 
   // ── Real-time sync: listen for Firestore changes and invalidate valid-ids ──
   useEffect(() => {
@@ -68,8 +101,13 @@ export function useMyTasks(teamId: string | undefined) {
   // Filter full task list to only user's tasks
   const myTasks = useMemo(() => {
     if (!taskData?.tasks?.length || validIdSet.size === 0) return [];
-    return taskData.tasks.filter((t) => validIdSet.has(t.id));
-  }, [taskData, validIdSet]);
+    return taskData.tasks
+      .filter((t) => validIdSet.has(t.id))
+      .map((task) => ({
+        ...task,
+        assignedUsers: assignmentsQuery.data?.get(task.id) ?? task.assignedUsers,
+      }));
+  }, [assignmentsQuery.data, taskData, validIdSet]);
 
   // Group by date (YYYY-MM-DD) for calendar dot indicators
   const tasksByDate = useMemo(() => {
@@ -103,7 +141,7 @@ export function useMyTasks(teamId: string | undefined) {
     tasksByDate,
     allCategories,
     getTasksForDate,
-    isLoading: tasksLoading || idsLoading,
+    isLoading: tasksLoading || idsLoading || assignmentsQuery.isPending,
     userUid: user?.uid ?? null,
   };
 }

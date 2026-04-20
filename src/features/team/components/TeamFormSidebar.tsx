@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import type { Team } from '@/features/team/types/teamsTypes';
 
@@ -272,42 +273,38 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                     const memberName = m.displayName ?? memberUid;
 
                     return (
-                    <div
-                      key={memberUid}
-                      className="flex items-center gap-3 px-3 py-2 rounded-xl bg-grey-50 border border-grey-100"
-                    >
                       <div
-                        className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold shrink-0"
-                        style={{ background: cfg.gradient }}
+                        key={memberUid}
+                        className="flex items-center gap-3 px-3 py-2 rounded-xl bg-grey-50 border border-grey-100"
                       >
-                        {m.photoUrl ? (
-                          <img
+                        <div className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold shrink-0">
+                          <UserAvatar
                             src={m.photoUrl}
                             alt={memberName}
-                            className="w-full h-full object-cover"
+                            initials={memberName.substring(0, 2).toUpperCase()}
+                            className="w-full h-full"
+                            fallbackClassName="text-white text-xs"
+                            fallbackStyle={{ background: cfg.gradient }}
                           />
-                        ) : (
-                          memberName.substring(0, 2).toUpperCase()
-                        )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-grey-700 truncate">
+                            {memberName}
+                          </p>
+                        </div>
+                        <span
+                          className="text-xs font-semibold px-2 py-0.5 rounded-full capitalize shrink-0"
+                          style={{
+                            background:
+                              m.role === 'leader' ? cfg.glow.replace('0.5', '0.12') : 'transparent',
+                            color: m.role === 'leader' ? '#524F4A' : '#908E88',
+                            border: `1px solid ${m.role === 'leader' ? cfg.glow.replace('0.5', '0.3') : 'transparent'}`,
+                          }}
+                        >
+                          {m.role}
+                        </span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-grey-700 truncate">
-                          {memberName}
-                        </p>
-                      </div>
-                      <span
-                        className="text-xs font-semibold px-2 py-0.5 rounded-full capitalize shrink-0"
-                        style={{
-                          background:
-                            m.role === 'leader' ? cfg.glow.replace('0.5', '0.12') : 'transparent',
-                          color: m.role === 'leader' ? '#524F4A' : '#908E88',
-                          border: `1px solid ${m.role === 'leader' ? cfg.glow.replace('0.5', '0.3') : 'transparent'}`,
-                        }}
-                      >
-                        {m.role}
-                      </span>
-                    </div>
-                  );
+                    );
                   })}
               </div>
             </div>

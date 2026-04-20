@@ -1,3 +1,5 @@
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+
 import type { ReportMemberRow } from '../types/types.ts';
 
 interface MemberRowProps {
@@ -57,12 +59,14 @@ export function MemberRow({ member }: MemberRowProps) {
       grid-cols-[38px_1fr_130px_52px] sm:grid-cols-[38px_1fr_140px_54px]"
     >
       {/* Avatar */}
-      <div
-        className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold text-white flex-shrink-0 tracking-wide"
-        style={avatarStyle}
-      >
-        {member.initials}
-      </div>
+      <UserAvatar
+        src={member.photoUrl}
+        alt={member.name}
+        initials={member.initials}
+        className="w-9 h-9"
+        fallbackClassName="text-white tracking-wide"
+        fallbackStyle={avatarStyle}
+      />
 
       {/* Name + role */}
       <div className="min-w-0">

@@ -18,6 +18,7 @@ export interface ConnectedUser {
   uid: string;
   id: string;
   name: string;
+  photoUrl?: string | null;
   gradient: string;
 }
 

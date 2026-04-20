@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import {type UserProfileSaveInput} from "@/features/team/types";
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { type UserProfileSaveInput } from '@/features/team/types';
 
-import { type UserProfile } from "./UserProfileCard.tsx";
+import { type UserProfile } from './UserProfileCard.tsx';
 
 interface UserProfileSidebarProps {
   user: UserProfile;
@@ -64,10 +65,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     .substring(0, 2)
     .toUpperCase();
 
-  const xpPercent = Math.min(
-    100,
-    Math.round((user.experience / user.experienceToNextLevel) * 100),
-  );
+  const xpPercent = Math.min(100, Math.round((user.experience / user.experienceToNextLevel) * 100));
 
   return (
     <div className="fixed inset-0 z-50 flex h-full">
@@ -84,7 +82,6 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
         style={{ background: 'linear-gradient(135deg,#60AFFF,#9b7fe1)' }}
       >
         <div className="h-full bg-white/95 backdrop-blur-xl p-6 flex flex-col gap-5 overflow-y-auto">
-
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
@@ -106,26 +103,24 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
           {/* Avatar preview */}
           <div className="flex flex-col items-center gap-3 py-4 rounded-2xl border border-grey-150 bg-grey-50/50">
-            {photoURL ? (
-              <img
-                src={photoURL}
-                alt={displayName}
-                className="w-16 h-16 rounded-2xl object-cover"
-                style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.3)' }}
-              />
-            ) : (
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl"
-                style={{
-                  background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-                  boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
-                }}
-              >
-                {initials}
-              </div>
-            )}
+            <UserAvatar
+              src={photoURL}
+              alt={displayName}
+              initials={initials}
+              className="w-16 h-16"
+              style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.3)' }}
+              fallbackClassName="text-white text-xl"
+              fallbackStyle={{
+                background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
+                boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
+              }}
+              loading="eager"
+            />
             <div className="text-center">
-              <p className="text-sm font-bold text-grey-800" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+              <p
+                className="text-sm font-bold text-grey-800"
+                style={{ fontFamily: 'DM Sans, sans-serif' }}
+              >
                 {displayName || 'Sin nombre'}
               </p>
               <p className="text-xs text-grey-400 font-mono mt-0.5 px-4 truncate max-w-[240px]">
@@ -139,7 +134,9 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             className="rounded-xl p-4 border border-grey-150"
             style={{ background: 'rgba(96,175,255,0.04)' }}
           >
-            <p className="text-xs font-semibold text-grey-400 uppercase tracking-wider mb-3">Progreso</p>
+            <p className="text-xs font-semibold text-grey-400 uppercase tracking-wider mb-3">
+              Progreso
+            </p>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <div
@@ -151,7 +148,8 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 <div>
                   <p className="text-xs font-bold text-grey-700">Nivel {user.level}</p>
                   <p className="text-xs text-grey-400">
-                    {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()} XP
+                    {user.experience.toLocaleString()} /{' '}
+                    {user.experienceToNextLevel.toLocaleString()} XP
                   </p>
                 </div>
               </div>
@@ -196,9 +194,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 borderColor: errors.displayName ? '#F65A70' : 'rgba(0,0,0,0.1)',
                 fontFamily: 'DM Sans, sans-serif',
               }}
-              onFocus={(e) =>
-                (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.25)')
-              }
+              onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.25)')}
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
             />
             {errors.displayName && (
@@ -255,9 +251,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
           <div className="flex-grow" />
 
-          {errors.form && (
-            <p className="text-xs text-[#F65A70] -mt-2">{errors.form}</p>
-          )}
+          {errors.form && <p className="text-xs text-[#F65A70] -mt-2">{errors.form}</p>}
 
           {/* Footer */}
           <div className="flex gap-3 pt-4 pb-2 mt-auto">

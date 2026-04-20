@@ -1,24 +1,34 @@
-import {
-  BowArrow,
-  Flame,
-  Globe,
-  Goal,
-  Handshake,
-  Rocket,
-  Sparkles,
-  Zap,
-} from 'lucide-react';
+import { BowArrow, Flame, Globe, Goal, Handshake, Rocket, Sparkles, Zap } from 'lucide-react';
 import React, { useState } from 'react';
 
-import {type Achievement} from "@/features/team/types";
-
+import { type Achievement } from '@/features/team/types';
 
 const BADGE_COLORS = [
-  { gradient: 'linear-gradient(135deg,#60AFFF,#86F0FD)', glow: 'rgba(96,175,255,0.3)', border: 'rgba(96,175,255,0.25)' },
-  { gradient: 'linear-gradient(135deg,#9b7fe1,#5961F9)', glow: 'rgba(155,127,225,0.3)', border: 'rgba(155,127,225,0.25)' },
-  { gradient: 'linear-gradient(135deg,#9CEDC1,#CEFB7C)', glow: 'rgba(156,237,193,0.3)', border: 'rgba(156,237,193,0.25)' },
-  { gradient: 'linear-gradient(135deg,#F65A70,#FFAF93)', glow: 'rgba(246,90,112,0.3)', border: 'rgba(246,90,112,0.25)' },
-  { gradient: 'linear-gradient(135deg,#FF94AE,#FCE98D)', glow: 'rgba(255,148,174,0.3)', border: 'rgba(255,148,174,0.25)' },
+  {
+    gradient: 'linear-gradient(135deg,#60AFFF,#86F0FD)',
+    glow: 'rgba(96,175,255,0.3)',
+    border: 'rgba(96,175,255,0.25)',
+  },
+  {
+    gradient: 'linear-gradient(135deg,#9b7fe1,#5961F9)',
+    glow: 'rgba(155,127,225,0.3)',
+    border: 'rgba(155,127,225,0.25)',
+  },
+  {
+    gradient: 'linear-gradient(135deg,#9CEDC1,#CEFB7C)',
+    glow: 'rgba(156,237,193,0.3)',
+    border: 'rgba(156,237,193,0.25)',
+  },
+  {
+    gradient: 'linear-gradient(135deg,#F65A70,#FFAF93)',
+    glow: 'rgba(246,90,112,0.3)',
+    border: 'rgba(246,90,112,0.25)',
+  },
+  {
+    gradient: 'linear-gradient(135deg,#FF94AE,#FCE98D)',
+    glow: 'rgba(255,148,174,0.3)',
+    border: 'rgba(255,148,174,0.25)',
+  },
 ];
 
 interface AchievementBadgeProps {
@@ -79,7 +89,9 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
         }}
         onMouseLeave={(e) => {
           (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
-          (e.currentTarget as HTMLButtonElement).style.boxShadow = isLocked ? 'none' : `0 4px 16px ${cfg.glow}`;
+          (e.currentTarget as HTMLButtonElement).style.boxShadow = isLocked
+            ? 'none'
+            : `0 4px 16px ${cfg.glow}`;
         }}
         title={achievement.name}
       >
@@ -95,16 +107,18 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
         </div>
 
         {/* Name */}
-        <p className={`text-sm font-semibold text-center leading-tight w-full font-body ${
-          isLocked ? 'text-grey-400' : 'text-white/95'
-        }`}>
-          {achievement.name.length > 14 ? `${achievement.name.substring(0, 13)}…` : achievement.name}
+        <p
+          className={`text-sm font-semibold text-center leading-tight w-full font-body ${
+            isLocked ? 'text-grey-400' : 'text-white/95'
+          }`}
+        >
+          {achievement.name.length > 14
+            ? `${achievement.name.substring(0, 13)}…`
+            : achievement.name}
         </p>
 
         {/* Locked indicator */}
-        {isLocked && (
-          <span className="text-xs text-grey-300">🔒</span>
-        )}
+        {isLocked && <span className="text-xs text-grey-300">🔒</span>}
       </button>
 
       {/* Modal */}
@@ -125,7 +139,9 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
               background: isLocked
                 ? 'linear-gradient(135deg,rgba(176,173,167,0.3),rgba(176,173,167,0.1))'
                 : cfg.gradient,
-              boxShadow: isLocked ? '0 20px 60px rgba(0,0,0,0.12)' : `0 20px 60px ${cfg.glow}, 0 4px 16px rgba(0,0,0,0.08)`,
+              boxShadow: isLocked
+                ? '0 20px 60px rgba(0,0,0,0.12)'
+                : `0 20px 60px ${cfg.glow}, 0 4px 16px rgba(0,0,0,0.08)`,
             }}
           >
             <div className="rounded-2xl bg-white/95 backdrop-blur-xl p-6 flex flex-col gap-4">
@@ -142,9 +158,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
                 <div
                   className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
                   style={{
-                    background: isLocked
-                      ? 'rgba(204,202,197,0.2)'
-                      : cfg.gradient,
+                    background: isLocked ? 'rgba(204,202,197,0.2)' : cfg.gradient,
                     filter: isLocked ? 'grayscale(1) opacity(0.5)' : 'none',
                     boxShadow: isLocked ? 'none' : `0 4px 20px ${cfg.glow}`,
                     color: isLocked ? '#B0ADA7' : '#FFFFFF',
@@ -170,9 +184,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
                       })}
                     </p>
                   )}
-                  {isLocked && (
-                    <p className="text-xs text-grey-300 mt-0.5">Aún no desbloqueado</p>
-                  )}
+                  {isLocked && <p className="text-xs text-grey-300 mt-0.5">Aún no desbloqueado</p>}
                 </div>
               </div>
 

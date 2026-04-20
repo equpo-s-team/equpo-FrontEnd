@@ -21,6 +21,7 @@ export interface ReportMemberRow {
   id: string;
   initials: string;
   name: string;
+  photoUrl?: string | null;
   role: string;
   completed: number;
   total: number;

@@ -158,9 +158,7 @@ export default function YearTimeline({
 
                 {data.total === 0 ? (
                   <div className="h-24 flex items-center justify-center">
-                    <p className="text-xs text-grey-400 font-medium font-body flex gap-1">
-                      Vacío
-                    </p>
+                    <p className="text-xs text-grey-400 font-medium font-body flex gap-1">Vacío</p>
                   </div>
                 ) : (
                   <div className="space-y-2.5">

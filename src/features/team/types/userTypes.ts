@@ -11,10 +11,7 @@ export type UpdateUserProfileResult = {
 };
 
 export type GeneratedDataConnectModule = {
-  updateUserProfile?: (vars: {
-    displayName: string;
-    photoURL: string | null;
-  }) => Promise<unknown>;
+  updateUserProfile?: (vars: { displayName: string; photoURL: string | null }) => Promise<unknown>;
 };
 
 export type UserProfileSaveInput = {

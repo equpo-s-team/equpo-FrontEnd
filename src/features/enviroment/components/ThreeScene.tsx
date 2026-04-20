@@ -34,7 +34,6 @@ import {
 } from '../lib/playerController';
 import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../types/realtime';
 
-// ─── Props ────────────────────────────────────────────────────────────────────
 
 interface ThreeSceneProps {
   localSlotId: SlotId | null;
@@ -42,37 +41,34 @@ interface ThreeSceneProps {
   onLocalMove: (position: Vector3State, rotation: Vector3State) => void;
   keyboard: { forward: boolean; backward: boolean; left: boolean; right: boolean };
   healthPercent: number;
+  onLoaded?: () => void;
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ThreeScene({
-  localSlotId,
-  remotePlayers,
-  onLocalMove,
-  keyboard,
-  healthPercent,
-}: ThreeSceneProps) {
+                                     localSlotId,
+                                     remotePlayers,
+                                     onLocalMove,
+                                     keyboard,
+                                     healthPercent,
+                                     onLoaded,
+                                   }: ThreeSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
 
-  // ── Physics refs ──────────────────────────────────────────────────────────
   const physicsWorldRef = useRef<CANNON.World | null>(null);
   const localBodyRef = useRef<CANNON.Body | null>(null);
   const environmentBodiesRef = useRef<CANNON.Body[]>([]);
 
-  // ── Scene refs ────────────────────────────────────────────────────────────
   const sceneRef = useRef<THREE.Scene | null>(null);
   const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
   const sunLightRef = useRef<THREE.DirectionalLight | null>(null);
   const tintMaterialsRef = useRef<Map<string, TintEntry>>(new Map());
 
-  // ── Player refs ───────────────────────────────────────────────────────────
   const localProxy = useRef({ position: new THREE.Vector3(), rotation: new THREE.Euler() });
   const localMeshRef = useRef<THREE.Group | null>(null);
   const remoteGhosts = useRef<Map<string, THREE.Group>>(new Map());
   const pendingLoads = useRef<Set<string>>(new Set());
 
-  // ── Stable prop refs (avoids stale closures in the animation loop) ────────
   const loader = useRef(new GLTFLoader());
   const keyboardRef = useRef(keyboard);
   const onLocalMoveRef = useRef(onLocalMove);
@@ -80,18 +76,15 @@ export default function ThreeScene({
   const deteriorationRef = useRef(1 - normalizeHealthInput(healthPercent));
   const currentDeteriorationRef = useRef(deteriorationRef.current);
 
-  // Keep stable refs in sync
   useEffect(() => { keyboardRef.current = keyboard; }, [keyboard]);
   useEffect(() => { onLocalMoveRef.current = onLocalMove; }, [onLocalMove]);
   useEffect(() => { remotePlayersRef.current = remotePlayers; }, [remotePlayers]);
   useEffect(() => { deteriorationRef.current = 1 - normalizeHealthInput(healthPercent); }, [healthPercent]);
 
-  // ── Main initialization effect ────────────────────────────────────────────
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -99,15 +92,14 @@ export default function ThreeScene({
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
 
-    // Scene
     const scene = new THREE.Scene();
     scene.background = CLEAN_SKY_COLOR.clone();
     scene.fog = new THREE.Fog(CLEAN_FOG_COLOR.clone(), 20, 60);
     sceneRef.current = scene;
-    // Capture ref value at mount time for safe cleanup
+
     const tintMaterials = tintMaterialsRef.current;
 
-    // Lights
+
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
     ambientLightRef.current = ambientLight;
@@ -118,12 +110,10 @@ export default function ThreeScene({
     scene.add(sunLight);
     sunLightRef.current = sunLight;
 
-    // Camera
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.set(-30, 10, 30);
     camera.lookAt(0, 0, 0);
 
-    // Physics
     const physicsWorld = createPhysicsWorld();
     physicsWorldRef.current = physicsWorld;
 
@@ -134,18 +124,15 @@ export default function ThreeScene({
     localBodyRef.current = localBody;
     physicsWorld.addBody(localBody);
 
-    // Load diorama
     loader.current.load('/models/BigDiorama.glb', (glb: GLTF) => {
       glb.scene.scale.setScalar(DIORAMA_SCALE);
       scene.add(glb.scene);
 
-      // Swap in updated colliders
       environmentBodiesRef.current.forEach((b) => physicsWorld.removeBody(b));
       const envBodies = buildDioramaCollisionBodies(glb.scene);
       envBodies.forEach((b) => physicsWorld.addBody(b));
       environmentBodiesRef.current = envBodies;
 
-      // Collect tintable materials
       collectTintMaterials(glb.scene, tintMaterials);
 
       glb.scene.traverse((node) => {
@@ -153,9 +140,10 @@ export default function ThreeScene({
           (node as THREE.Mesh).receiveShadow = true;
         }
       });
+
+      onLoaded?.();
     });
 
-    // Animation loop
     let lastTime = performance.now();
     let lastMoveSync = 0;
     let animId: number;
@@ -167,7 +155,6 @@ export default function ThreeScene({
       const delta = Math.min((now - lastTime) / 1000, MAX_PHYSICS_DELTA);
       lastTime = now;
 
-      // ── Deterioration ────────────────────────────────────────────────────
       currentDeteriorationRef.current = THREE.MathUtils.lerp(
         currentDeteriorationRef.current,
         deteriorationRef.current,
@@ -180,7 +167,6 @@ export default function ThreeScene({
         deterioration: currentDeteriorationRef.current,
       });
 
-      // ── Player movement ───────────────────────────────────────────────────
       let isTryingToMove = false;
       const body = localBodyRef.current;
 
@@ -188,21 +174,17 @@ export default function ThreeScene({
         isTryingToMove = applyMovementInput(body, keyboardRef.current, localProxy.current, delta);
       }
 
-      // ── Physics step ─────────────────────────────────────────────────────
       physicsWorld.step(PHYSICS_FIXED_STEP, delta, PHYSICS_MAX_SUB_STEPS);
 
-      // ── Post-step: sync proxy & handle fall ──────────────────────────────
       if (body) {
         checkFallRespawn(body);
         syncBodyToProxy(body, localProxy.current);
       }
 
-      // ── Sync visual mesh (frame-rate independent lerp) ───────────────────
       if (localMeshRef.current) {
-        syncMeshToProxy(localMeshRef.current, localProxy.current, delta);
+        syncMeshToProxy(localMeshRef.current, localProxy.current);
       }
 
-      // ── Firebase sync at 10 Hz ────────────────────────────────────────────
       if (localSlotId && isTryingToMove && now - lastMoveSync > MOVE_SYNC_INTERVAL) {
         const { x, y, z } = localProxy.current.position;
         onLocalMoveRef.current(
@@ -212,7 +194,6 @@ export default function ThreeScene({
         lastMoveSync = now;
       }
 
-      // ── Follow camera ─────────────────────────────────────────────────────
       if (localSlotId) {
         camera.position.x = THREE.MathUtils.lerp(camera.position.x, localProxy.current.position.x, 0.1);
         camera.position.z = THREE.MathUtils.lerp(camera.position.z, localProxy.current.position.z + 20, 0.1);
@@ -246,7 +227,6 @@ export default function ThreeScene({
     };
   }, [localSlotId]);
 
-  // ── Local ghost mesh ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!localSlotId || !sceneRef.current) return;
 
@@ -272,11 +252,9 @@ export default function ThreeScene({
     });
   }, [localSlotId]);
 
-  // ── Remote ghost meshes ───────────────────────────────────────────────────
   useEffect(() => {
     if (!sceneRef.current) return;
 
-    // Remove disconnected players
     remoteGhosts.current.forEach((group, uid) => {
       if (!remotePlayers[uid]) {
         sceneRef.current?.remove(group);
@@ -284,7 +262,6 @@ export default function ThreeScene({
       }
     });
 
-    // Add or update each remote player
     Object.entries(remotePlayers).forEach(([uid, player]) => {
       if (!player.slotId) return;
 

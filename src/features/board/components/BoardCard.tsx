@@ -64,7 +64,6 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
   const prio = PRIORITY_CONFIG[card.priority ?? 'medium'];
   const progress = STATUS_TO_PROGRESS[COLUMN_TO_STATUS[columnId]];
 
-  // ── Click vs drag tracking ──
   const pointerRef = useRef<PointerTracking>({ x: 0, y: 0, t: 0, dragged: false });
 
   const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {
@@ -88,7 +87,6 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
     const dy = Math.abs(y - e.clientY);
     const dt = Date.now() - t;
 
-    // Short, low-displacement press → single click
     if (dx < 6 && dy < 6 && dt < 300) {
       onCardClick?.(card);
     }
@@ -154,7 +152,6 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
         {card.name}
       </p>
 
-      {/* Description rendered as markdown within clamp */}
       {descriptionHtml ? (
         <div
           className="text-[12px] text-grey-500 leading-relaxed mb-2.5 line-clamp-2 [&_p]:inline [&_ul]:inline [&_ol]:inline [&_li]:inline [&_li]:mr-1.5 [&_strong]:font-bold [&_em]:italic"

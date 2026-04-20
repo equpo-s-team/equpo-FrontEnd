@@ -174,6 +174,8 @@ export default {
         'pulse-neon': 'pulseNeon 2.4s ease-in-out infinite',
         'pulse-neon-fast': 'pulseNeon 2s ease-in-out infinite',
         'fade-down': 'fadeDown 0.18s ease both',
+        'loader-bounce': 'loaderBounce 0.58s alternate infinite ease',
+        'loader-shadow': 'loaderShadow 0.58s alternate infinite ease',
       },
 
       keyframes: {
@@ -198,6 +200,34 @@ export default {
         fadeDown: {
           from: { opacity: '0', transform: 'translateY(-6px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        loaderBounce: {
+          '0%': {
+            transform: 'translateY(28px) scaleX(1.55) scaleY(0.55)',
+            borderRadius: '9999px / 42%',
+          },
+          '40%': {
+            transform: 'translateY(0px) scaleX(1) scaleY(1)',
+            borderRadius: '9999px',
+          },
+          '100%': {
+            transform: 'translateY(-28px) scaleX(1) scaleY(1)',
+            borderRadius: '9999px',
+          },
+        },
+        loaderShadow: {
+          '0%': {
+            transform: 'scaleX(1.45)',
+            opacity: '0.3',
+          },
+          '40%': {
+            transform: 'scaleX(1)',
+            opacity: '0.18',
+          },
+          '100%': {
+            transform: 'scaleX(0.38)',
+            opacity: '0.08',
+          },
         },
       },
 

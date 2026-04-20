@@ -8,9 +8,6 @@ import {
   touchUserLastActive as touchUserLastActiveFn,
 } from '@/dataconnect-generated';
 
-// Default photo URL for users who sign up without Google
-const DEFAULT_PHOTO_URL = '/default-avatar.png';
-
 export interface DatabaseUser {
   uid: string;
   displayName: string;
@@ -36,7 +33,7 @@ export const useDatabaseUser = () => {
       try {
         const userVars: CreateUserVariables = {
           displayName,
-          photoURL: photoURL ?? DEFAULT_PHOTO_URL,
+          photoURL: photoURL ?? null,
         };
 
         await createUserFn(userVars);

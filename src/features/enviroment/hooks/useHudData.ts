@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { useReportsKpi } from '@/features/reports/hooks';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
+import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 import type { ConnectedUser, PlayerStats, SessionInfo } from '../types/hud.ts';
 
@@ -31,21 +32,8 @@ function clampPercentage(value: number): number {
   return Math.max(0, Math.min(100, value));
 }
 
-function toInitials(value: string): string {
-  const parts = value.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) {
-    return 'NA';
-  }
-
-  if (parts.length === 1) {
-    return parts[0].slice(0, 2).toUpperCase();
-  }
-
-  return `${parts[0][0] ?? ''}${parts[1][0] ?? ''}`.toUpperCase();
-}
-
 function toConnectedUsers(
-  memberList: Array<{ uid: string; displayName: string | null }> | undefined,
+  memberList: Array<{ uid: string; displayName: string | null; photoUrl?: string | null }> | undefined,
   connectedUserUids: string[],
 ): ConnectedUser[] {
   if (!memberList || connectedUserUids.length === 0) {
@@ -60,8 +48,9 @@ function toConnectedUsers(
 
     return {
       uid,
-      id: toInitials(name),
+      id: getInitials(name, 'NA'),
       name,
+      photoUrl: member?.photoUrl ?? null,
       gradient: AVATAR_GRADIENTS[index % AVATAR_GRADIENTS.length],
     };
   });

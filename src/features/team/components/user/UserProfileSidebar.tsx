@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import {type UserProfileSaveInput} from "@/features/team/types";
 
 import { type UserProfile } from "./UserProfileCard.tsx";
@@ -106,24 +107,19 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
           {/* Avatar preview */}
           <div className="flex flex-col items-center gap-3 py-4 rounded-2xl border border-grey-150 bg-grey-50/50">
-            {photoURL ? (
-              <img
-                src={photoURL}
-                alt={displayName}
-                className="w-16 h-16 rounded-2xl object-cover"
-                style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.3)' }}
-              />
-            ) : (
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl"
-                style={{
-                  background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-                  boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
-                }}
-              >
-                {initials}
-              </div>
-            )}
+            <UserAvatar
+              src={photoURL}
+              alt={displayName}
+              initials={initials}
+              className="w-16 h-16 rounded-full object-cover"
+              style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.3)' }}
+              fallbackClassName="flex items-center justify-center text-white font-bold text-xl"
+              fallbackStyle={{
+                background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
+                boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
+              }}
+              loading="eager"
+            />
             <div className="text-center">
               <p className="text-sm font-bold text-grey-800" style={{ fontFamily: 'DM Sans, sans-serif' }}>
                 {displayName || 'Sin nombre'}

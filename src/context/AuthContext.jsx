@@ -1,9 +1,10 @@
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onIdTokenChanged, signOut, updateProfile } from 'firebase/auth';
 import log from 'loglevel';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
-import { getUser } from '@/dataconnect-generated';
+import { createUser, getUser } from '@/dataconnect-generated';
 import { auth } from '@/firebase.ts';
+import { resolveCanonicalAvatarUrl } from '@/lib/avatar/avatarStorage';
 
 const AuthContext = createContext(null);
 
@@ -22,7 +23,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
       if (user) {
         // First set basic Firebase user data
         const userData = {
@@ -34,11 +35,40 @@ export function AuthProvider({ children }) {
 
         // Fetch database user data for current auth user
         const databaseUser = await fetchDatabaseUser();
+        const baseDisplayName = userData.displayName ?? userData.email?.split('@')[0] ?? 'Usuario';
+        const sourcePhotoURL = databaseUser?.photoURL ?? userData.photoURL ?? null;
+
+        const canonicalPhotoURL = await resolveCanonicalAvatarUrl(user.uid, sourcePhotoURL);
+
+        if (canonicalPhotoURL && canonicalPhotoURL !== userData.photoURL) {
+          try {
+            await updateProfile(user, { photoURL: canonicalPhotoURL });
+          } catch (error) {
+            log.warn('No se pudo actualizar photoURL en Firebase Auth:', error);
+          }
+        }
+
+        const shouldUpsertDatabaseUser =
+          !databaseUser ||
+          databaseUser.displayName !== baseDisplayName ||
+          (databaseUser.photoURL ?? null) !== canonicalPhotoURL;
+
+        if (shouldUpsertDatabaseUser) {
+          try {
+            await createUser({
+              displayName: baseDisplayName,
+              photoURL: canonicalPhotoURL,
+            });
+          } catch (error) {
+            log.warn('No se pudo sincronizar el perfil del usuario en Data Connect:', error);
+          }
+        }
 
         if (databaseUser) {
           // Merge Firebase user data with database user data
           setUser({
             ...userData,
+            photoURL: canonicalPhotoURL,
             level: databaseUser.level,
             experiencePoints: databaseUser.experiencePoints,
             virtualCurrency: databaseUser.virtualCurrency,
@@ -48,7 +78,11 @@ export function AuthProvider({ children }) {
           });
         } else {
           // No database user found, return Firebase data only
-          setUser(userData);
+          setUser({
+            ...userData,
+            displayName: baseDisplayName,
+            photoURL: canonicalPhotoURL,
+          });
         }
       } else {
         setUser(null);

@@ -1,6 +1,8 @@
 import {Coins} from "lucide-react";
 import React, { useMemo } from 'react';
 
+import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import type { Team } from '@/features/team/types/teamsTypes.ts';
 
@@ -90,11 +92,13 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                 boxShadow: `0 4px 14px ${cfg.glow.replace('0.18', '0.5')}`,
               }}
             >
-              {team.photoUrl ? (
-                <img src={team.photoUrl} alt={team.name} className="w-full h-full object-cover" />
-              ) : (
-                team.name.charAt(0)
-              )}
+              <TeamAvatar
+                src={team.photoUrl}
+                name={team.name}
+                className="w-full h-full rounded-xl object-cover"
+                fallbackClassName="w-full h-full rounded-xl flex items-center justify-center text-white font-bold text-sm"
+                fallbackStyle={{ background: cfg.gradient }}
+              />
             </div>
             <div>
               <h3
@@ -149,18 +153,17 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                   <div
                     key={memberUid}
                     className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold border-2 border-white"
-                    style={{ background: cfg.gradient, zIndex: 10 - i }}
+                    style={{ zIndex: 10 - i }}
                     title={memberName}
                   >
-                    {m.photoUrl ? (
-                      <img
-                        src={m.photoUrl}
-                        alt={memberName}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      initial
-                    )}
+                    <UserAvatar
+                      src={m.photoUrl}
+                      alt={memberName}
+                      initials={initial}
+                      className="w-full h-full object-cover"
+                      fallbackClassName="flex items-center justify-center text-white text-xs font-bold"
+                      fallbackStyle={{ background: cfg.gradient }}
+                    />
                   </div>
                 );
               })}

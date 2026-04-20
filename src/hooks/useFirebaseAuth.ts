@@ -12,6 +12,7 @@ import {
 import { useCallback, useState } from 'react';
 
 import { auth } from '@/firebase';
+import { resolveCanonicalAvatarUrl } from '@/lib/avatar/avatarStorage';
 
 import { useDatabaseUser } from './useDatabaseUser';
 
@@ -68,22 +69,25 @@ export const useFirebaseAuth = () => {
       setIsLoading(true);
       try {
         const credential = await signInWithEmailAndPassword(auth, email, password);
+        const displayName =
+          credential.user.displayName ?? credential.user.email?.split('@')[0] ?? 'Usuario';
+        const canonicalPhotoURL = await resolveCanonicalAvatarUrl(
+          credential.user.uid,
+          credential.user.photoURL,
+        );
 
-        // Update server-side lastActive at login time.
-        const touchResult = await touchUserLastActive();
-        if (!touchResult.success) {
-          // If the user row doesn't exist yet, attempt bootstrap for current auth user.
-          const fallbackDisplayName =
-            credential.user.displayName ?? credential.user.email?.split('@')[0] ?? 'Usuario';
-          const fallbackPhotoURL = credential.user.photoURL ?? undefined;
-          await createDatabaseUser(fallbackDisplayName, fallbackPhotoURL);
-          await touchUserLastActive();
+        if (canonicalPhotoURL && canonicalPhotoURL !== credential.user.photoURL) {
+          await updateProfile(credential.user, { photoURL: canonicalPhotoURL });
         }
+
+        // Upsert current profile shape before touching lastActive.
+        await createDatabaseUser(displayName, canonicalPhotoURL);
+        await touchUserLastActive();
 
         return {
           success: true,
           user: credential.user,
-          photoURL: credential.user.photoURL ?? undefined,
+          photoURL: canonicalPhotoURL ?? undefined,
         };
       } catch (err) {
         return { success: false, error: mapFirebaseError(err as AuthError) };
@@ -132,16 +136,23 @@ export const useFirebaseAuth = () => {
 
       const displayName =
         credential.user.displayName ?? credential.user.email?.split('@')[0] ?? 'Usuario';
-      const photoURL = credential.user.photoURL ?? undefined;
+      const canonicalPhotoURL = await resolveCanonicalAvatarUrl(
+        credential.user.uid,
+        credential.user.photoURL,
+      );
+
+      if (canonicalPhotoURL && canonicalPhotoURL !== credential.user.photoURL) {
+        await updateProfile(credential.user, { photoURL: canonicalPhotoURL });
+      }
 
       // Ensure database user exists and always touch login time.
-      await createDatabaseUser(displayName, photoURL);
+      await createDatabaseUser(displayName, canonicalPhotoURL);
       await touchUserLastActive();
 
       return {
         success: true,
         user: credential.user,
-        photoURL: credential.user.photoURL ?? undefined,
+        photoURL: canonicalPhotoURL ?? undefined,
       };
     } catch (err) {
       const authErr = err as AuthError;

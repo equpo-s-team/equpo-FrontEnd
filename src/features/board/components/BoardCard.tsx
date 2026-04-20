@@ -1,6 +1,9 @@
 import type { DragEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { useRef } from 'react';
 
+import { UserAvatar as AppUserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { getInitials } from '@/lib/avatar/avatarInitials.ts';
+
 import type { TaskPriority, TaskStatus } from '../types';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 import { STATUS_TO_PROGRESS } from '../utils/taskUtils';
@@ -46,16 +49,16 @@ const COLUMN_TO_STATUS: Record<BoardColumnId, TaskStatus> = {
   done: 'done',
 };
 
-function UserAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
+function BoardAssigneeAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
   const dim = size === 'sm' ? 'w-5.5 h-5.5 text-[7.5px]' : 'w-7 h-7 text-[10px]';
   return (
-    <div
-      className={`${dim} rounded-full font-bold text-white flex items-center justify-center border-2 border-primary`}
-      style={{ background: USER_GRADIENT[userId] }}
-      title={userId}
-    >
-      {userId}
-    </div>
+    <AppUserAvatar
+      alt={userId}
+      initials={getInitials(userId, userId)}
+      className={`${dim} rounded-full object-cover border-2 border-primary`}
+      fallbackClassName="font-bold text-white flex items-center justify-center"
+      fallbackStyle={{ background: USER_GRADIENT[userId] }}
+    />
   );
 }
 
@@ -202,7 +205,7 @@ export default function BoardCard({ card, accent, columnId, onMoveCard, onCardCl
         <div className="flex">
           {card.assignees?.map((uid: string, i: number) => (
             <div key={uid} style={{ marginLeft: i > 0 ? '-5px' : 0 }}>
-              <UserAvatar userId={uid} />
+                  <BoardAssigneeAvatar userId={uid} />
             </div>
           ))}
         </div>

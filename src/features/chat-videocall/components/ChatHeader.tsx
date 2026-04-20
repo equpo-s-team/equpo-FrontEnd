@@ -14,7 +14,12 @@ export default function ChatHeader() {
   const { data: teamMembers = [] } = useTeamMembers(teamId || '');
 
   const usersInfo = useMemo(
-    () => teamMembers.map((member) => ({ uid: member.uid, displayName: member.displayName })),
+    () =>
+      teamMembers.map((member) => ({
+        uid: member.uid,
+        displayName: member.displayName,
+        photoURL: member.photoUrl,
+      })),
     [teamMembers],
   );
 

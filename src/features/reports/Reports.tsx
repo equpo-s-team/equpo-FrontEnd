@@ -7,6 +7,8 @@ import FilterBar from '@/features/reports/components/FilterBar.tsx';
 import { useReportsKpi, useReportsOverview, useReportsTaskSync } from '@/features/reports/hooks';
 import type { ReportsMember, ReportsOverdueTask } from '@/features/reports/types';
 import type { KpiData, OverdueTaskRow, ReportMemberRow } from '@/features/reports/types';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 const EMPTY_KPI: KpiData = {
   todo: 0,
@@ -52,27 +54,15 @@ const BAR_GLOWS: string[] = [
 ];
 const PCT_COLORS: string[] = ['#5961F9', '#60AFFF', '#F65A70', '#FF94AE', '#9b7fe1', '#2e9660'];
 
-function getInitials(displayName: string | null, fallback: string) {
-  if (!displayName) {
-    return fallback.slice(0, 2).toUpperCase();
-  }
-
-  const words = displayName.trim().split(/\s+/).filter(Boolean);
-  if (words.length === 0) {
-    return fallback.slice(0, 2).toUpperCase();
-  }
-
-  return words
-    .slice(0, 2)
-    .map((word) => word[0]?.toUpperCase() ?? '')
-    .join('');
-}
-
-function mapMembersToRows(members: ReportsMember[]): ReportMemberRow[] {
+function mapMembersToRows(
+  members: ReportsMember[],
+  memberPhotoByUid: Map<string, string | null>,
+): ReportMemberRow[] {
   return members.map((member, index) => ({
     id: member.uid,
-    initials: getInitials(member.displayName, member.uid),
+    initials: getInitials(member.displayName ?? member.uid, member.uid),
     name: member.displayName ?? `Usuario ${member.uid.slice(0, 6)}`,
+    photoUrl: memberPhotoByUid.get(member.uid) ?? null,
     role: member.role,
     completed: member.completed,
     total: member.total,
@@ -96,6 +86,7 @@ function mapOverdueToRows(tasks: ReportsOverdueTask[]): OverdueTaskRow[] {
 export default function Reports() {
   const { teamId } = useTeam();
   const [activeDays, setActiveDays] = useState(30);
+  const { data: teamMembers = [] } = useTeamMembers(teamId ?? '');
 
   const kpiQuery = useReportsKpi(teamId, { days: activeDays });
   const overviewQuery = useReportsOverview(teamId, {
@@ -105,10 +96,15 @@ export default function Reports() {
 
   useReportsTaskSync(teamId);
 
+  const memberPhotoByUid = useMemo(
+    () => new Map(teamMembers.map((member) => [member.uid, member.photoUrl ?? null])),
+    [teamMembers],
+  );
+
   const kpi = kpiQuery.data?.kpi ?? EMPTY_KPI;
   const members = useMemo(
-    () => mapMembersToRows(overviewQuery.data?.members ?? []),
-    [overviewQuery.data?.members],
+    () => mapMembersToRows(overviewQuery.data?.members ?? [], memberPhotoByUid),
+    [memberPhotoByUid, overviewQuery.data?.members],
   );
   const overdueTasks = useMemo(
     () => mapOverdueToRows(overviewQuery.data?.overdueTasks ?? []),

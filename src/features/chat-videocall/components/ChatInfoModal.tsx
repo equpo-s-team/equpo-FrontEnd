@@ -2,6 +2,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { Phone, Users, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { teamsApi } from '@/features/team/api/teamsApi';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { db } from '@/firebase';
@@ -147,17 +148,13 @@ export default function ChatInfoModal({ onClose, usersInfo = [] }: ChatInfoModal
           <div className="max-h-[200px] overflow-y-auto flex flex-col gap-2">
             {members.map((m) => (
               <div key={m.uid} className="flex items-center gap-3 text-sm text-grey-700">
-                {m.photoURL ? (
-                  <img
-                    src={m.photoURL}
-                    alt={m.name}
-                    className="w-8 h-8 rounded-full object-cover border border-grey-200"
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-grey-200 flex items-center justify-center text-xs font-semibold">
-                    {getInitials(m.name, m.uid)}
-                  </div>
-                )}
+                <UserAvatar
+                  src={m.photoURL}
+                  alt={m.name}
+                  initials={getInitials(m.name, m.uid)}
+                  className="w-8 h-8 rounded-full object-cover border border-grey-200"
+                  fallbackClassName="bg-grey-200 flex items-center justify-center text-xs font-semibold"
+                />
                 <span>{m.name}</span>
               </div>
             ))}

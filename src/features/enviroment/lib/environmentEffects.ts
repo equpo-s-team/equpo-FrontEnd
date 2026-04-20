@@ -76,7 +76,13 @@ export interface DeteriorationParams {
   scene: THREE.Scene;
   lights: LightRefs;
   tintMap: Map<string, TintEntry>;
-  deterioration: number; // 0 = clean, 1 = fully deteriorated
+  deterioration: number;
+  baseline?: {
+    skyColor?: THREE.Color;
+    fogColor?: THREE.Color;
+    ambientIntensity?: number;
+    sunIntensity?: number;
+  };
 }
 
 /** Applies health-based visual deterioration to the scene every frame. */
@@ -85,7 +91,13 @@ export function applyDeterioration({
   lights,
   tintMap,
   deterioration,
+  baseline,
 }: DeteriorationParams): void {
+  const baseSkyColor = baseline?.skyColor ?? CLEAN_SKY_COLOR;
+  const baseFogColor = baseline?.fogColor ?? CLEAN_FOG_COLOR;
+  const baseAmbientIntensity = baseline?.ambientIntensity ?? AMBIENT_LIGHT_CLEAN;
+  const baseSunIntensity = baseline?.sunIntensity ?? SUN_LIGHT_CLEAN;
+
   const dioramaTintMix = deterioration * MAX_DIORAMA_TINT;
 
   // Tint diorama materials
@@ -96,12 +108,12 @@ export function applyDeterioration({
   // Sky color
   const bg = scene.background;
   if (bg instanceof THREE.Color) {
-    bg.copy(CLEAN_SKY_COLOR).lerp(DETERIORATED_SKY_COLOR, deterioration);
+    bg.copy(baseSkyColor).lerp(DETERIORATED_SKY_COLOR, deterioration);
   }
 
   // Fog
   if (scene.fog instanceof THREE.Fog) {
-    scene.fog.color.copy(CLEAN_FOG_COLOR).lerp(DETERIORATED_FOG_COLOR, deterioration);
+    scene.fog.color.copy(baseFogColor).lerp(DETERIORATED_FOG_COLOR, deterioration);
     scene.fog.near = THREE.MathUtils.lerp(FOG_NEAR_CLEAN, FOG_NEAR_DIRTY, deterioration);
     scene.fog.far = THREE.MathUtils.lerp(FOG_FAR_CLEAN, FOG_FAR_DIRTY, deterioration);
   }
@@ -109,12 +121,12 @@ export function applyDeterioration({
   // Lighting
   if (lights.ambient) {
     lights.ambient.intensity = THREE.MathUtils.lerp(
-      AMBIENT_LIGHT_CLEAN,
+      baseAmbientIntensity,
       AMBIENT_LIGHT_DIRTY,
       deterioration,
     );
   }
   if (lights.sun) {
-    lights.sun.intensity = THREE.MathUtils.lerp(SUN_LIGHT_CLEAN, SUN_LIGHT_DIRTY, deterioration);
+    lights.sun.intensity = THREE.MathUtils.lerp(baseSunIntensity, SUN_LIGHT_DIRTY, deterioration);
   }
 }

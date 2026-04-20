@@ -86,6 +86,12 @@ export default function ThreeScene({
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
+    const hour = new Date().getHours();
+    const isNightTime = hour >= 18 || hour < 6;
+    const baseSkyColor = isNightTime ? new THREE.Color('#0042ad') : CLEAN_SKY_COLOR.clone();
+    const baseFogColor = isNightTime ? new THREE.Color('#70a7ff') : CLEAN_FOG_COLOR.clone();
+    const baseAmbientIntensity = isNightTime ? 0.45 : 0.7;
+    const baseSunIntensity = isNightTime ? 0.7 : 1.2;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -95,25 +101,23 @@ export default function ThreeScene({
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.background = CLEAN_SKY_COLOR.clone();
-    scene.fog = new THREE.Fog(CLEAN_FOG_COLOR.clone(), 20, 60);
+    scene.background = baseSkyColor.clone();
+    scene.fog = new THREE.Fog(baseFogColor.clone(), 20, 60);
     sceneRef.current = scene;
 
     const tintMaterials = tintMaterialsRef.current;
 
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, baseAmbientIntensity);
     scene.add(ambientLight);
     ambientLightRef.current = ambientLight;
 
-    const isNightTime = new Date().getHours() >= 18;
     const directionalLight = isNightTime
-      ? new THREE.DirectionalLight(0x9bbcff, 0.7)
-      : new THREE.DirectionalLight(0xffffff, 1.2);
+      ? new THREE.DirectionalLight(0x9bbcff, baseSunIntensity)
+      : new THREE.DirectionalLight(0xffffff, baseSunIntensity);
 
     if (isNightTime) {
       directionalLight.position.set(-6, 8, -5);
-      ambientLight.intensity = 0.45;
     } else {
       directionalLight.position.set(5, 10, 7.5);
       directionalLight.castShadow = true;
@@ -177,6 +181,12 @@ export default function ThreeScene({
         lights: { ambient: ambientLightRef.current, sun: sunLightRef.current },
         tintMap: tintMaterials,
         deterioration: currentDeteriorationRef.current,
+        baseline: {
+          skyColor: baseSkyColor,
+          fogColor: baseFogColor,
+          ambientIntensity: baseAmbientIntensity,
+          sunIntensity: baseSunIntensity,
+        },
       });
 
       let isTryingToMove = false;

@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 
 import HUD from './components/HUD.tsx';
+import NeonLoadingOverlay from './components/NeonLoadingOverlay.tsx';
 import ThreeScene from './components/ThreeScene.tsx';
 import { useHudData } from './hooks/useHudData.ts';
 import { useKeyboardControls } from './hooks/useKeyboardControls.ts';
@@ -14,6 +15,7 @@ export default function GamePage() {
   const { user, isAuth } = useAuth();
   const { teamId } = useTeam();
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [isReady, setIsReady] = useState(false);
   const localUid = useMemo(() => user?.uid ?? null, [user?.uid]);
   const keyboard = useKeyboardControls();
 
@@ -60,6 +62,10 @@ export default function GamePage() {
     return Math.max(0, Math.min(1, stats.hp / stats.maxHp));
   }, [stats.hp, stats.maxHp]);
 
+  const handleLoaded = useCallback(() => {
+    setIsReady(true);
+  }, []);
+
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-grey-900">
       <div className="absolute inset-0 z-0">
@@ -68,6 +74,7 @@ export default function GamePage() {
           remotePlayers={playersState}
           healthPercent={healthPercent}
           keyboard={keyboard}
+          onLoaded={handleLoaded}
           onLocalMove={(pos, rot) => {
             setLocalPos(pos);
             setLocalRot(rot);
@@ -76,6 +83,9 @@ export default function GamePage() {
       </div>
 
       <HUD stats={stats} session={session} />
+
+      {!isReady && <NeonLoadingOverlay />}
     </div>
   );
 }
+

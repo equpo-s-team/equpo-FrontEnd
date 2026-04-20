@@ -1,45 +1,23 @@
 import { ArrowRightLeft } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
 import { useSidebar } from './SidebarContext.jsx';
-
-function getInitials(name, uid) {
-  if (!name) return uid.slice(0, 2).toUpperCase();
-  const parts = name.trim().split(/\s+/);
-  return parts
-    .slice(0, 2)
-    .map((p) => p[0]?.toUpperCase() ?? '')
-    .join('');
-}
 
 export default function SidebarLogo() {
   const { collapsed } = useSidebar();
   const { teamId } = useTeam();
   const { data: teams = [] } = useTeams();
   const [isOpen, setIsOpen] = useState(false);
-  const [logoImageError, setLogoImageError] = useState(false);
   const navigate = useNavigate();
 
   const activeTeam = teams.find((t) => t.id === teamId);
   const teamName = activeTeam?.name || 'Cargando...';
   const teamPhotoUrl = activeTeam?.photoUrl || null;
-  const teamInitials = getInitials(activeTeam?.name ?? null, activeTeam?.id ?? 'eq');
-
-  useEffect(() => {
-    setLogoImageError(false);
-
-    if (!teamPhotoUrl) {
-      return;
-    }
-
-    const probe = new Image();
-    probe.onerror = () => setLogoImageError(true);
-    probe.src = teamPhotoUrl;
-  }, [teamPhotoUrl, teamId]);
 
   return (
     <div
@@ -48,15 +26,13 @@ export default function SidebarLogo() {
       {/* Logo mark */}
       <div className="relative flex-shrink-0">
         <div className="w-9 h-9 rounded-xl bg-gradient-purple-bg flex items-center justify-center shadow-blue-glow">
-          {teamPhotoUrl && !logoImageError ? (
-            <img
-              src={teamPhotoUrl}
-              alt={`Foto de ${teamName}`}
-              className="w-full h-full rounded-xl object-cover"
-            />
-          ) : (
-            <span className="text-white text-xs font-bold leading-none">{teamInitials}</span>
-          )}
+          <TeamAvatar
+            src={teamPhotoUrl}
+            name={teamName}
+            className="w-full h-full rounded-xl object-cover"
+            fallbackClassName="w-full h-full rounded-xl flex items-center justify-center text-white text-xs font-bold leading-none"
+            loading="eager"
+          />
         </div>
         {/* Online pulse */}
         <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green border-2 border-dark" />

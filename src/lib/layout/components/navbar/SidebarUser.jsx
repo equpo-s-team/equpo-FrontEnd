@@ -2,6 +2,7 @@ import { Ellipsis, SquareArrowRightExit, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { logOut, useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
@@ -38,18 +39,14 @@ export default function SidebarUser() {
         `}
     >
       <div className="relative flex-shrink-0">
-        {user?.photoURL ? (
-          <img
-            src={user.photoURL}
-            alt={userName}
-            className="w-8 h-8 rounded-lg object-cover"
-            referrerPolicy="no-referrer"
-          />
-        ) : (
-          <div className="w-8 h-8 rounded-lg bg-gradient-blue-bg flex items-center justify-center text-secondary text-xs font-maxwell font-bold select-none">
-            {initial}
-          </div>
-        )}
+        <UserAvatar
+          src={user?.photoURL}
+          alt={userName}
+          initials={initial}
+          className="w-8 h-8 rounded-full object-cover"
+          fallbackClassName="bg-gradient-blue-bg flex items-center justify-center text-secondary text-xs font-maxwell font-bold select-none"
+          loading="eager"
+        />
         <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green border-[1.5px] border-dark" />
       </div>
 

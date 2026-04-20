@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
@@ -366,11 +368,14 @@ export default function TeamSettings() {
                 className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center text-white text-2xl font-bold shadow-md"
                 style={{ background: photoPreview ? undefined : accent }}
               >
-                {photoPreview ? (
-                  <img src={photoPreview} alt="Team" className="w-full h-full object-cover" />
-                ) : (
-                  getInitials(team.name, team.id)
-                )}
+                <TeamAvatar
+                  src={photoPreview}
+                  name={team.name}
+                  className="w-full h-full rounded-2xl object-cover"
+                  fallbackClassName="w-full h-full rounded-2xl flex items-center justify-center text-white text-2xl font-bold"
+                  fallbackStyle={{ background: accent }}
+                  loading="eager"
+                />
               </div>
               <button
                 onClick={() => fileInputRef.current?.click()}
@@ -476,18 +481,16 @@ export default function TeamSettings() {
                   >
                     {/* Avatar */}
                     <div
-                      className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden"
-                      style={{ background: member.photoUrl ? undefined : grad }}
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden"
                     >
-                      {member.photoUrl ? (
-                        <img
-                          src={member.photoUrl}
-                          alt={member.displayName ?? member.uid}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        getInitials(member.displayName, member.uid)
-                      )}
+                      <UserAvatar
+                        src={member.photoUrl}
+                        alt={member.displayName ?? member.uid}
+                        initials={getInitials(member.displayName, member.uid)}
+                        className="w-full h-full object-cover"
+                        fallbackClassName="flex items-center justify-center text-white text-xs font-bold"
+                        fallbackStyle={{ background: grad }}
+                      />
                     </div>
 
                     {/* Name + role */}

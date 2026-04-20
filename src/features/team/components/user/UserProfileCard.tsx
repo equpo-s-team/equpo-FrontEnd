@@ -1,6 +1,8 @@
 import {Bolt} from "lucide-react";
 import React from 'react';
 
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+
 export interface UserProfile {
   uid: string;
   displayName: string;
@@ -37,24 +39,19 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
       >
         {/* Avatar */}
         <div className="relative shrink-0">
-          {user.photoURL ? (
-            <img
-              src={user.photoURL}
-              alt={user.displayName}
-              className="w-14 h-14 rounded-2xl object-cover"
-              style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.35)' }}
-            />
-          ) : (
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-bold text-lg"
-              style={{
-                background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-                boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
-              }}
-            >
-              {initials}
-            </div>
-          )}
+          <UserAvatar
+            src={user.photoURL}
+            alt={user.displayName}
+            initials={initials}
+            className="w-14 h-14 rounded-full object-cover"
+            style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.35)' }}
+            fallbackClassName="flex items-center justify-center text-white font-bold text-lg"
+            fallbackStyle={{
+              background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
+              boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
+            }}
+            loading="eager"
+          />
           {/* Level badge */}
           <div
             className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs font-bold border-2 border-white"

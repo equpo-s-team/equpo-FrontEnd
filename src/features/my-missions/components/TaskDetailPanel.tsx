@@ -1,6 +1,8 @@
 import { CalendarDays, Clock, Edit3, Tag, X, Zap } from 'lucide-react';
 
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import type { TeamTask } from '@/features/board/types';
+import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; border: string }> = {
   todo: {
@@ -47,7 +49,7 @@ interface TaskDetailPanelProps {
   task: TeamTask | null;
   onClose: () => void;
   onEdit: (task: TeamTask) => void;
-  members?: { uid: string; displayName: string | null }[];
+  members?: { uid: string; displayName: string | null; photoUrl?: string | null }[];
 }
 
 function formatDate(dateStr: string) {
@@ -218,14 +220,16 @@ export default function TaskDetailPanel({
                   realMember?.displayName ?? user.displayName ?? `Usuario ${user.uid.slice(0, 6)}`;
                 return (
                   <div key={user.uid} className="flex items-center gap-2.5">
-                    <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-                      style={{
+                    <UserAvatar
+                      src={realMember?.photoUrl ?? null}
+                      alt={displayName}
+                      initials={getInitials(displayName, 'U')}
+                      className="w-7 h-7 rounded-full object-cover flex-shrink-0"
+                      fallbackClassName="flex items-center justify-center text-xs font-bold text-white"
+                      fallbackStyle={{
                         background: AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length],
                       }}
-                    >
-                      {displayName.substring(0, 2).toUpperCase()}
-                    </div>
+                    />
                     <div>
                       <p className="text-xs font-semibold text-grey-700 font-body">{displayName}</p>
                     </div>

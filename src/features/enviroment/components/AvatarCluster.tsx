@@ -1,3 +1,4 @@
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { type ConnectedUser } from '@/features/enviroment/types/hud.ts';
 
 interface AvatarClusterProps {
@@ -14,19 +15,14 @@ export default function AvatarCluster({ connected, max, users }: AvatarClusterPr
     <div className="flex items-center gap-2.5">
       <div className="flex">
         {shown.map((u, i) => (
-          <div
-            key={u.uid}
-            title={u.name}
-            className={`
-              w-[22px] h-[22px] rounded-full
-              text-xs font-bold text-white
-              flex items-center justify-center
-              border-[1.5px] border-black/40
-              ${u.gradient}
-            `}
-            style={{ marginLeft: i > 0 ? '-5px' : 0 }}
-          >
-            {u.id}
+          <div key={u.uid} title={u.name} style={{ marginLeft: i > 0 ? '-5px' : 0 }}>
+            <UserAvatar
+              src={u.photoUrl}
+              alt={u.name}
+              initials={u.id}
+              className="w-[22px] h-[22px] rounded-full object-cover border-[1.5px] border-black/40"
+              fallbackClassName={`text-xs font-bold text-white flex items-center justify-center border-[1.5px] border-black/40 ${u.gradient}`}
+            />
           </div>
         ))}
         {extra > 0 && (

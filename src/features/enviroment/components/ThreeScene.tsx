@@ -104,11 +104,21 @@ export default function ThreeScene({
     scene.add(ambientLight);
     ambientLightRef.current = ambientLight;
 
-    const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    sunLight.position.set(5, 10, 7.5);
-    sunLight.castShadow = true;
-    scene.add(sunLight);
-    sunLightRef.current = sunLight;
+    const isNightTime = new Date().getHours() >= 18;
+    const directionalLight = isNightTime
+      ? new THREE.DirectionalLight(0x9bbcff, 0.7)
+      : new THREE.DirectionalLight(0xffffff, 1.2);
+
+    if (isNightTime) {
+      directionalLight.position.set(-6, 8, -5);
+      ambientLight.intensity = 0.45;
+    } else {
+      directionalLight.position.set(5, 10, 7.5);
+      directionalLight.castShadow = true;
+    }
+
+    scene.add(directionalLight);
+    sunLightRef.current = directionalLight;
 
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.set(-30, 10, 30);

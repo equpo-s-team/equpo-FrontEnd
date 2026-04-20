@@ -72,12 +72,14 @@ export default function ThreeScene({
   const loader = useRef(new GLTFLoader());
   const keyboardRef = useRef(keyboard);
   const onLocalMoveRef = useRef(onLocalMove);
+  const onLoadedRef = useRef(onLoaded);
   const remotePlayersRef = useRef(remotePlayers);
   const deteriorationRef = useRef(1 - normalizeHealthInput(healthPercent));
   const currentDeteriorationRef = useRef(deteriorationRef.current);
 
   useEffect(() => { keyboardRef.current = keyboard; }, [keyboard]);
   useEffect(() => { onLocalMoveRef.current = onLocalMove; }, [onLocalMove]);
+  useEffect(() => { onLoadedRef.current = onLoaded; }, [onLoaded]);
   useEffect(() => { remotePlayersRef.current = remotePlayers; }, [remotePlayers]);
   useEffect(() => { deteriorationRef.current = 1 - normalizeHealthInput(healthPercent); }, [healthPercent]);
 
@@ -151,7 +153,7 @@ export default function ThreeScene({
         }
       });
 
-      onLoaded?.();
+      onLoadedRef.current?.();
     });
 
     let lastTime = performance.now();

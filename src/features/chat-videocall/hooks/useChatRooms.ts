@@ -101,6 +101,8 @@ export function useChatRooms(teamId: string, groups: GroupLike[]) {
 
   return useQuery<ChatRoom[]>({
     queryKey,
+    queryFn: () => queryClient.getQueryData<ChatRoom[]>(queryKey) ?? [],
+    initialData: [],
     enabled: !!teamId,
     staleTime: Infinity,
   });

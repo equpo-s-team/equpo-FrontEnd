@@ -1,10 +1,7 @@
 import * as CANNON from 'cannon-es';
 import * as THREE from 'three';
 
-import {
-  GHOST_PHYSICS_RADIUS,
-  GHOST_SPAWN_Y,
-} from './physicsConstants';
+import { GHOST_PHYSICS_RADIUS, GHOST_SPAWN_Y } from './physicsConstants';
 
 export function isMesh(node: THREE.Object3D): node is THREE.Mesh {
   return (node as THREE.Mesh).isMesh === true;
@@ -45,8 +42,17 @@ export function createPlayerBody(startX = 0, startZ = 0): CANNON.Body {
 }
 
 const DECORATIVE_KEYWORDS = [
-  'cloud', 'leaf', 'particle', 'smoke', 'light', 'glow', 'flare',
-  'shadow', 'decal', 'foliage', 'emitter',
+  'cloud',
+  'leaf',
+  'particle',
+  'smoke',
+  'light',
+  'glow',
+  'flare',
+  'shadow',
+  'decal',
+  'foliage',
+  'emitter',
 ];
 
 /**
@@ -105,7 +111,12 @@ export function buildDioramaCollisionBodies(root: THREE.Object3D): CANNON.Body[]
     if (geometry.boundingBox) {
       const worldBounds = geometry.boundingBox.clone().applyMatrix4(node.matrixWorld);
       const size = worldBounds.getSize(new THREE.Vector3());
-      if (size.x < MIN_TRIMESH_WORLD_SIZE && size.y < MIN_TRIMESH_WORLD_SIZE && size.z < MIN_TRIMESH_WORLD_SIZE) return;
+      if (
+        size.x < MIN_TRIMESH_WORLD_SIZE &&
+        size.y < MIN_TRIMESH_WORLD_SIZE &&
+        size.z < MIN_TRIMESH_WORLD_SIZE
+      )
+        return;
     }
 
     const vertices = new Float32Array(vertexCount * 3);

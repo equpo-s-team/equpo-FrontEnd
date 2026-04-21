@@ -60,7 +60,12 @@ export default function MyMissions() {
   }>({ isOpen: false, task: null });
 
   const openEdit = useCallback((task: TeamTask) => {
-    setEditSidebar({ isOpen: true, task });
+    // If it's a projected task, restore its original ID for editing
+    const editTask =
+      'originalId' in task && typeof task.originalId === 'string'
+        ? { ...task, id: task.originalId }
+        : task;
+    setEditSidebar({ isOpen: true, task: editTask });
   }, []);
 
   const closeEdit = useCallback(() => {

@@ -1,7 +1,8 @@
-import { CalendarDays, Clock, Edit3, Tag, X, Zap } from 'lucide-react';
+import { AlertTriangle, CalendarDays, Clock, Edit3, RefreshCw, Tag, X, Zap } from 'lucide-react';
 
 import { TaskAssigneesPreview } from '@/features/board/components/TaskAssigneesPreview';
 import type { TeamTask } from '@/features/board/types';
+import { calculateNextRecurrenceDate,isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; border: string }> = {
   todo: {
@@ -85,9 +86,12 @@ export default function TaskDetailPanel({
   const status = STATUS_CONFIG[task.status] ?? STATUS_CONFIG.todo;
   const priority = PRIORITY_CONFIG[task.priority] ?? PRIORITY_CONFIG.medium;
   const selectedGroup = groups.find((group) => group.id === task.assignedGroupId) ?? null;
+  const isOverdue = isTaskOverdue(task);
 
   return (
-    <div className="rounded-2xl bg-white border border-grey-150 shadow-card flex flex-col overflow-hidden animate-fade-down">
+    <div
+      className={`rounded-2xl border shadow-card flex flex-col overflow-hidden animate-fade-down ${isOverdue ? 'bg-red/10 border-red/20' : 'bg-white border-grey-150'}`}
+    >
       {/* Close / actions header */}
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
         <span className="text-xs font-bold uppercase tracking-widest text-grey-400 font-body">
@@ -103,6 +107,16 @@ export default function TaskDetailPanel({
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-4 pb-4 custom-scrollbar">
+        {/* Overdue alert */}
+        {isOverdue && (
+          <div className="px-3 py-2 mb-2 flex items-center justify-center gap-2">
+            <AlertTriangle size={16} className="text-red" />
+            <span className="text-xs font-bold text-red font-body uppercase tracking-wider">
+              Tarea Vencida
+            </span>
+          </div>
+        )}
+
         {/* Status badge */}
         <div className="mb-3">
           <span
@@ -198,35 +212,55 @@ export default function TaskDetailPanel({
 
         {/* Recurring info */}
         {task.isRecurring && (
-          <div className="mt-3 p-2.5 rounded-xl bg-purple/5 border border-purple/15">
-            <p className="text-xs font-bold text-purple font-body">🔄 Tarea Recurrente</p>
-            <p className="text-xs text-grey-500 font-body mt-0.5">
-              Cada {task.recurringCount ?? 1}{' '}
-              {task.recurringInterval === 'days'
-                ? 'día(s)'
-                : task.recurringInterval === 'weeks'
-                  ? 'semana(s)'
-                  : task.recurringInterval === 'months'
-                    ? 'mes(es)'
-                    : 'año(s)'}
-            </p>
+          <div className="mt-3 p-3 rounded-xl bg-purple/5 border border-purple/15">
+            <div className="flex items-start gap-2">
+              <RefreshCw size={14} className="text-purple shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-xs font-bold text-purple font-body">Tarea Recurrente</p>
+                <p className="text-xs text-grey-500 font-body mt-0.5">
+                  Cada {task.recurringCount ?? 1}{' '}
+                  {task.recurringInterval === 'days'
+                    ? 'día(s)'
+                    : task.recurringInterval === 'weeks'
+                      ? 'semana(s)'
+                      : task.recurringInterval === 'months'
+                        ? 'mes(es)'
+                        : 'año(s)'}
+                </p>
+                {task.dueDate && task.recurringInterval && task.recurringCount && (
+                  <p className="text-xs text-purple font-body font-semibold mt-1.5 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-purple/60 shrink-0" />
+                    Siguiente:{' '}
+                    {formatDate(
+                      calculateNextRecurrenceDate(
+                        task.dueDate,
+                        task.recurringInterval,
+                        task.recurringCount,
+                      ).toISOString(),
+                    )}
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
         {/* Edit button */}
-        <button
-          onClick={() => onEdit(task)}
-          className="
-            mt-4 w-full flex items-center justify-center gap-2
-            py-2.5 rounded-xl font-body text-xs font-bold
-            bg-gradient-to-r from-blue to-purple text-white
-            hover:shadow-[0_4px_20px_rgba(89,97,249,0.4)]
-            active:scale-[0.98] transition-all duration-200
-          "
-        >
-          <Edit3 size={13} />
-          Editar tarea
-        </button>
+        {!isOverdue && (
+          <button
+            onClick={() => onEdit(task)}
+            className="
+              mt-4 w-full flex items-center justify-center gap-2
+              py-2.5 rounded-xl font-body text-xs font-bold
+              bg-gradient-to-r from-blue to-purple text-white
+              hover:shadow-[0_4px_20px_rgba(89,97,249,0.4)]
+              active:scale-[0.98] transition-all duration-200
+            "
+          >
+            <Edit3 size={13} />
+            Editar tarea
+          </button>
+        )}
       </div>
     </div>
   );

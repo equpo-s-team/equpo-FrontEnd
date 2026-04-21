@@ -2,7 +2,9 @@ type NeonLoadingOverlayProps = {
   message?: string;
 };
 
-export default function NeonLoadingOverlay({ message = 'Cargando ambiente...' }: NeonLoadingOverlayProps) {
+export default function NeonLoadingOverlay({
+  message = 'Cargando ambiente...',
+}: NeonLoadingOverlayProps) {
   return (
     <div className="pointer-events-none absolute inset-0 z-50 flex flex-col items-center justify-center bg-gray-100">
       <div className="relative h-24 w-24 animate-spin rounded-full bg-gray-100 shadow-neonBlue [animation-duration:1.2s]">
@@ -20,9 +22,3 @@ export default function NeonLoadingOverlay({ message = 'Cargando ambiente...' }:
     </div>
   );
 }
-
-
-
-
-
-

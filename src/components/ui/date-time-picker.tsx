@@ -81,10 +81,6 @@ export function DateTimePicker({
     }
   }
 
-  const displayText = date
-    ? format(date, "PPP", { locale: es }) + (time ? ` a las ${time}` : '')
-    : placeholder
-
   return (
     <div className={`space-y-2 ${className}`}>
       {showLabel && (
@@ -103,7 +99,7 @@ export function DateTimePicker({
                 error ? 'border-red' : 'border-grey-200 focus:border-blue'
               }`}
             >
-              {date ? format(date, "PPP", { locale: es }) : 'Seleccionar fecha'}
+              {date ? format(date, "PPP", { locale: es }) : placeholder}
               <ChevronDownIcon className="h-4 w-4" />
             </Button>
           </PopoverTrigger>

@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
-import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { auth, db } from '@/firebase';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 import type { ChatMessage } from '../types/chat';
 import MessageBubble from './MessageBubble';

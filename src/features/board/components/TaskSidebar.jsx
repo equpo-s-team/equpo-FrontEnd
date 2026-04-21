@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { useAudio } from '@/context/AudioContext';
 
 import { useCreateTask } from '../hooks/useCreateTask';
 import { useDeleteTask } from '../hooks/useDeleteTask';

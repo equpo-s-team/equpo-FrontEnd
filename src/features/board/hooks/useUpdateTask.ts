@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useAudio } from '@/context/AudioContext';
 import type { TeamTask, UpdateTaskPayload } from '@/features/board';
 
 import { tasksApi } from '../api/tasksApi';
-import { useAudio } from '@/context/AudioContext';
 
 type UpdateTaskVariables = {
   teamId: string;

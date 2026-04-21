@@ -52,15 +52,15 @@ export default function Sidebar() {
       <nav className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2 flex flex-col gap-5 scrollbar-hide">
         <SidebarSection label="Principal">
           <SidebarItem id="my-space" icon={Home} label="Mi Espacio" />
-          <SidebarItem id="missiones" icon={Star} label="Misiones del Equipo" badge="3" />
+          <SidebarItem id="missiones" icon={Star} label="Misiones del Equipo" />
           <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />
-          <SidebarItem id="chat" icon={MessageCircle} label="Chat" badge="12" />
+          <SidebarItem id="chat" icon={MessageCircle} label="Chat" />
         </SidebarSection>
 
-        <SidebarSection label="Moderation">
-          <SidebarItem id="reports" icon={ChartColumnBig} label="Reportes" badge="2" />
+        <SidebarSection label="Moderación">
+          <SidebarItem id="reports" icon={ChartColumnBig} label="Reportes" />
           {canAccessSettings && (
-            <SidebarItem id="settings" icon={Settings} label="Ajustes del Equipo" />
+            <SidebarItem id="settings" icon={Settings} label="Ajustes" />
           )}
         </SidebarSection>
       </nav>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { AppHeader } from '@/components/ui/app-header';
 import { useTeam } from '@/context/TeamContext.tsx';
 import TaskSidebar from '@/features/board/components/TaskSidebar';
 import type { TeamTask } from '@/features/board/types';
@@ -95,28 +96,10 @@ export default function MyMissions() {
   return (
     <div className="min-h-screen bg-offwhite font-body">
       {/* Header */}
-      <header
-        className="
-          sticky top-0 z-50
-          bg-primary border-b border-grey-200
-          shadow-[0_1px_8px_rgba(0,0,0,0.06)]
-          h-14 md:h-[62px]
-          flex items-center justify-between
-          px-4 md:px-8
-        "
-      >
-        <div className="flex items-center gap-2.5 font-maxwell tracking-tight text-grey-900 text-base md:text-lg font-bold select-none">
-          <span
-            className="w-2.5 h-2.5 rounded-full bg-purple animate-pulse-neon"
-            style={{
-              boxShadow: '0 0 8px #5961F9, 0 0 18px rgba(89,97,249,0.4)',
-            }}
-          />
-          Mis Misiones
-        </div>
-
-        {/* Action icons could go here in the future if needed, removed switcher from top bar */}
-      </header>
+      <AppHeader
+        title="Mis Misiones"
+        variant="purple"
+      />
 
       {/* Loading overlay */}
       {isLoading && (

@@ -1,6 +1,9 @@
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import {
   CalendarDays,
   ChevronDown,
+  ChevronDownIcon,
   Repeat,
   RotateCcw,
   SlidersHorizontal,
@@ -9,6 +12,20 @@ import {
   Zap,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 import { TAG_COLOR_CONFIG } from './columnConfig.js';
 
@@ -255,12 +272,31 @@ function DueDateFilter({ value, onChange }) {
           <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-2">
             Mostrar tareas antes de:
           </p>
-          <input
-            type="date"
-            value={value ?? ''}
-            onChange={(e) => onChange(e.target.value || null)}
-            className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150"
-          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-between text-left font-normal border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150"
+              >
+                {value ? format(new Date(value), "PPP", { locale: es }) : 'Seleccionar fecha'}
+                <ChevronDownIcon className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={value ? new Date(value) : undefined}
+                onSelect={(date) => {
+                  if (date) {
+                    onChange(date.toISOString().split('T')[0]);
+                  } else {
+                    onChange(null);
+                  }
+                }}
+                locale={es}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         <PanelFooter onClear={() => onChange(null)} onApply={() => setOpen(false)} />
       </DropPanel>
@@ -334,18 +370,27 @@ function RecurringFilter({
               <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-1.5">
                 Intervalo
               </p>
-              <select
-                value={interval ?? ''}
-                onChange={(e) => onIntervalChange(e.target.value || null)}
-                className="w-full px-3 py-2 rounded-[8px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-              >
-                <option value="">Todos</option>
-                {Object.entries(INTERVAL_LABELS).map(([val, lbl]) => (
-                  <option key={val} value={val}>
-                    {lbl}
-                  </option>
-                ))}
-              </select>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full px-3 py-2 rounded-[8px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
+                  >
+                    {interval ? INTERVAL_LABELS[interval] : 'Todos'}
+                    <ChevronDownIcon className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48" align="start">
+                  <DropdownMenuItem onClick={() => onIntervalChange(null)}>
+                    Todos
+                  </DropdownMenuItem>
+                  {Object.entries(INTERVAL_LABELS).map(([val, lbl]) => (
+                    <DropdownMenuItem key={val} onClick={() => onIntervalChange(val)}>
+                      {lbl}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <div>
               <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-1.5">

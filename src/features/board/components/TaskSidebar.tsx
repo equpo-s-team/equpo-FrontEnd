@@ -1,6 +1,14 @@
-import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { CalendarDays, ChevronDownIcon, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { DateTimePicker } from '@/components/ui/date-time-picker';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -13,7 +21,6 @@ import { useUpdateTask } from '../hooks/useUpdateTask';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 import {
   DESCRIPTION_MAX_LENGTH,
-  getMinDate,
   INTERVAL_OPTIONS,
   PRIORITY_OPTIONS,
   READONLY_PRIORITY_STYLE,
@@ -265,7 +272,14 @@ export default function TaskSidebar({
   }
 
   function handleBackdropClick(e: React.MouseEvent) {
-    if (e.target === backdropRef.current) onClose();
+    // Check if click is on backdrop and not on dropdown content
+    const target = e.target as HTMLElement;
+    const isDropdownContent = target.closest('[data-radix-dropdown-menu-content]');
+    const isDropdownTrigger = target.closest('[data-radix-dropdown-menu-trigger]');
+
+    if (e.target === backdropRef.current && !isDropdownContent && !isDropdownTrigger) {
+      onClose();
+    }
   }
 
   async function handleIADescriptionGeneration(inputDescription: string) {
@@ -587,12 +601,13 @@ export default function TaskSidebar({
                       <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
                       Fecha Límite
                     </FieldLabel>
-                    <input
-                      type="datetime-local"
+                    <DateTimePicker
                       value={dueDate}
-                      onChange={(e) => setDueDate(e.target.value)}
-                      min={getMinDate()}
-                      className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.dueDate ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+                      onChange={setDueDate}
+                      placeholder="Seleccionar fecha y hora"
+                      error={!!errors.dueDate}
+                      required={true}
+                      showLabel={false}
                     />
                     {errors.dueDate && <p className="mt-1 text-xs text-red">{errors.dueDate}</p>}
                   </div>
@@ -628,18 +643,38 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Usuario Asignado
                     </FieldLabel>
-                    <select
-                      value={assignedUserUid}
-                      onChange={(e) => setAssignedUserUid(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                    >
-                      <option value="">Sin asignar</option>
-                      {members.map((m) => (
-                        <option key={m.uid} value={m.uid}>
-                          {m.displayName || m.uid}
-                        </option>
-                      ))}
-                    </select>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
+                        >
+                          {assignedUserUid
+                            ? (members.find(m => m.uid === assignedUserUid)?.displayName || assignedUserUid)
+                            : 'Sin asignar'
+                          }
+                          <ChevronDownIcon className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48 z-[60]" align="start">
+                        <DropdownMenuItem onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setAssignedUserUid('');
+                        }}>
+                          Sin asignar
+                        </DropdownMenuItem>
+                        {members.map((m) => (
+                          <DropdownMenuItem key={m.uid} onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setAssignedUserUid(m.uid);
+                          }}>
+                            {m.displayName || m.uid}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   {/* Assigned Group */}
@@ -648,18 +683,38 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Grupo Asignado
                     </FieldLabel>
-                    <select
-                      value={assignedGroupId}
-                      onChange={(e) => setAssignedGroupId(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                    >
-                      <option value="">Sin asignar</option>
-                      {groups.map((g) => (
-                        <option key={g.id} value={g.id}>
-                          {g.groupName}
-                        </option>
-                      ))}
-                    </select>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
+                        >
+                          {assignedGroupId
+                            ? (groups.find(g => g.id === assignedGroupId)?.groupName || assignedGroupId)
+                            : 'Sin asignar'
+                          }
+                          <ChevronDownIcon className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48 z-[60]" align="start">
+                        <DropdownMenuItem onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setAssignedGroupId('');
+                        }}>
+                          Sin asignar
+                        </DropdownMenuItem>
+                        {groups.map((g) => (
+                          <DropdownMenuItem key={g.id} onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setAssignedGroupId(g.id);
+                          }}>
+                            {g.groupName}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   {/* Categories */}

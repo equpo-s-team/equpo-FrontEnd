@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   Camera,
   Check,
+  ChevronDown,
   Crown,
   Loader2,
   Shield,
@@ -12,6 +13,13 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { AppHeader } from '@/components/ui/app-header';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
@@ -329,26 +337,11 @@ export default function TeamSettings() {
       </div>
 
       {/* Header */}
-      <div
-        className="relative z-10 px-6 py-5 border-b border-grey-100 flex items-center gap-4 bg-white/80 backdrop-blur-sm"
-        style={{ boxShadow: '0 1px 0 rgba(0,0,0,0.04)' }}
-      >
-        <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-          style={{ background: accent, boxShadow: `0 4px 14px ${accentGlow}` }}
-        >
-          <Shield size={16} className="text-white" />
-        </div>
-        <div>
-          <h1
-            className="text-base font-bold text-grey-800 leading-tight"
-            style={{ letterSpacing: '-0.02em' }}
-          >
-            Ajustes del Equipo
-          </h1>
-          <p className="text-xs text-grey-400">{team.name}</p>
-        </div>
-      </div>
+      <AppHeader
+        title="Ajustes del Equipo"
+        subtitle={team.name}
+        variant="orange"
+      />
 
       {/* Scrollable body */}
       <div className="relative z-10 flex-1 overflow-y-auto px-4 py-6 space-y-6 sm:px-8">
@@ -513,23 +506,41 @@ export default function TeamSettings() {
 
                     {/* Role change — leader only */}
                     {isLeader && member.role !== 'leader' && !isCurrentUser && (
-                      <select
-                        value={member.role}
-                        onChange={(e) =>
-                          updateRole.mutate({
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            className="text-xs border border-grey-150 rounded-lg px-2 py-1 text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors flex items-center justify-between w-full"
+                          >
+                            {member.role === 'collaborator' && 'Colaborador'}
+                            {member.role === 'member' && 'Miembro'}
+                            {member.role === 'spectator' && 'Espectador'}
+                            <ChevronDown className="h-3 w-3 ml-auto" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-32" align="start">
+                          <DropdownMenuItem onClick={() => updateRole.mutate({
                             teamId,
                             userUid: member.uid,
-                            payload: {
-                              role: e.target.value as 'collaborator' | 'member' | 'spectator',
-                            },
-                          })
-                        }
-                        className="text-xs border border-grey-150 rounded-lg px-2 py-1 text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors"
-                      >
-                        <option value="collaborator">Colaborador</option>
-                        <option value="member">Miembro</option>
-                        <option value="spectator">Espectador</option>
-                      </select>
+                            payload: { role: 'collaborator' },
+                          })}>
+                            Colaborador
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateRole.mutate({
+                            teamId,
+                            userUid: member.uid,
+                            payload: { role: 'member' },
+                          })}>
+                            Miembro
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateRole.mutate({
+                            teamId,
+                            userUid: member.uid,
+                            payload: { role: 'spectator' },
+                          })}>
+                            Espectador
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     )}
 
                     {/* Kick button */}
@@ -578,17 +589,29 @@ export default function TeamSettings() {
                 onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
                 onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
               />
-              <select
-                value={inviteRole}
-                onChange={(e) =>
-                  setInviteRole(e.target.value as 'collaborator' | 'member' | 'spectator')
-                }
-                className="px-3 py-2 rounded-xl border border-grey-150 text-sm text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors"
-              >
-                <option value="collaborator">Colaborador</option>
-                <option value="member">Miembro</option>
-                <option value="spectator">Espectador</option>
-              </select>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="px-3 py-2 rounded-xl border border-grey-150 text-sm text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors flex items-center justify-between"
+                  >
+                    {inviteRole === 'collaborator' && 'Colaborador'}
+                    {inviteRole === 'member' && 'Miembro'}
+                    {inviteRole === 'spectator' && 'Espectador'}
+                    <ChevronDown className="h-3 w-3 ml-auto" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-32" align="start">
+                  <DropdownMenuItem onClick={() => setInviteRole('collaborator')}>
+                    Colaborador
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setInviteRole('member')}>
+                    Miembro
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setInviteRole('spectator')}>
+                    Espectador
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <button
                 onClick={handleInvite}
                 disabled={!inviteUid.trim() || addMember.isPending}

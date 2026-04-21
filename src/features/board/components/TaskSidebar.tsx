@@ -1,11 +1,10 @@
-import { ChevronDown, CalendarDays, ChevronDownIcon, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { CalendarDays, ChevronDownIcon, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { TimePicker } from '@/components/ui/time-picker';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-
+import { TimePicker } from '@/components/ui/time-picker';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -29,7 +28,6 @@ import { useUpdateTask } from '../hooks/useUpdateTask';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 import {
   DESCRIPTION_MAX_LENGTH,
-  getMinDate,
   INTERVAL_OPTIONS,
   PRIORITY_OPTIONS,
   READONLY_PRIORITY_STYLE,

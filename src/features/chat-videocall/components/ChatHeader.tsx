@@ -1,8 +1,7 @@
-import { Info, PhoneCall, Users, Video } from 'lucide-react';
+import { Info, PhoneCall, Video } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 import { AppHeader } from '@/components/ui/app-header';
-import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useActiveCalls } from '@/features/chat-videocall/hooks/useActiveCalls';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';

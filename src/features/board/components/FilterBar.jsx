@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import {
   CalendarDays,
   ChevronDown,
@@ -9,24 +11,21 @@ import {
   Users,
   Zap,
 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { useEffect, useRef, useState } from 'react';
 
 import { TAG_COLOR_CONFIG } from './columnConfig.js';
 

@@ -14,17 +14,16 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AppHeader } from '@/components/ui/app-header';
-import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
-import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import { useAuth } from '@/context/AuthContext';
-import { useTeam } from '@/context/TeamContext.tsx';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { useAuth } from '@/context/AuthContext';
+import { useTeam } from '@/context/TeamContext.tsx';
 import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';

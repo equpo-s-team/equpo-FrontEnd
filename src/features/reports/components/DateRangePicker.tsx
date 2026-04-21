@@ -1,7 +1,7 @@
-import React from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ChevronDownIcon, CalendarIcon } from 'lucide-react';
+import { CalendarIcon,ChevronDownIcon } from 'lucide-react';
+import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';

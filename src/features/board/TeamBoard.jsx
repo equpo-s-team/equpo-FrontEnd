@@ -112,9 +112,6 @@ export default function TeamBoard() {
     const card = fromCards[cardIndex];
     if (!card) return;
 
-    // Play drag start sound
-    play('dragStart');
-
     const nextStatus = COLUMN_TO_STATUS[toColumnId] ?? 'todo';
     const nextCard = {
       ...card,
@@ -139,7 +136,6 @@ export default function TeamBoard() {
 
       fromCards.splice(adjustedPosition, 0, nextCard);
       setLocalCards({ ...source, [fromColumnId]: fromCards });
-      play('dragEnd');
     } else {
       // Cross-column move: insert into a separate target array
       const toCards = [...(source[toColumnId] ?? [])];
@@ -151,8 +147,6 @@ export default function TeamBoard() {
         [fromColumnId]: fromCards,
         [toColumnId]: toCards,
       });
-      
-      play('drop');
       
       // Play completion sound if task is moved to done
       if (toColumnId === 'done') {
@@ -206,6 +200,19 @@ export default function TeamBoard() {
     setSidebar((prev) => ({ ...prev, isOpen: false }));
   };
 
+  // Funciones para reproducir sonidos de tareas
+  const handleTaskCreated = () => {
+    play('/sounds/task-created.mp3');
+  };
+
+  const handleTaskUpdated = () => {
+    play('/sounds/task-updated.mp3');
+  };
+
+  const handleTaskDeleted = () => {
+    play('/sounds/task-deleted.mp3');
+  };
+
   return (
     <div className="min-h-screen bg-offwhite font-body">
       <AppHeader />
@@ -250,6 +257,9 @@ export default function TeamBoard() {
         task={sidebar.task}
         teamId={teamId}
         defaultStatus={sidebar.defaultStatus}
+        onTaskCreated={handleTaskCreated}
+        onTaskUpdated={handleTaskUpdated}
+        onTaskDeleted={handleTaskDeleted}
       />
     </div>
   );

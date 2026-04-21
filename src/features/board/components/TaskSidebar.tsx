@@ -7,7 +7,7 @@ import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
 import { useCreateTask } from '../hooks/useCreateTask';
 import { useDeleteTask } from '../hooks/useDeleteTask';
-import { UseGenerateDescription } from '../hooks/useGenerateDescription';
+import { UseGenerateDescription } from '../hooks/useGenerateDescription.ts';
 import { useUpdateTask } from '../hooks/useUpdateTask';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 import {

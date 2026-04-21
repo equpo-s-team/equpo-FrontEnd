@@ -1,5 +1,16 @@
-import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { CalendarDays, ChevronDownIcon, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { TimePicker } from '@/components/ui/time-picker';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
@@ -557,13 +568,63 @@ export default function TaskSidebar({
                       <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
                       Fecha Límite
                     </FieldLabel>
-                    <input
-                      type="datetime-local"
-                      value={dueDate}
-                      onChange={(e) => setDueDate(e.target.value)}
-                      min={getMinDate()}
-                      className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.dueDate ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
-                    />
+                    
+                    {/* Date Picker */}
+                    <div className="mb-2">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={`w-full justify-between text-left font-normal ${errors.dueDate ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+                          >
+                            {dueDate ? format(new Date(dueDate), "PPP", { locale: es }) : 'Seleccionar fecha'}
+                            <ChevronDownIcon className="h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={dueDate ? new Date(dueDate) : undefined}
+                            onSelect={(date) => {
+                              if (date) {
+                                // Keep existing time or default to 23:59 (before midnight)
+                                const existingTime = dueDate ? dueDate.split('T')[1] : '23:59';
+                                const year = date.getFullYear();
+                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                const day = String(date.getDate()).padStart(2, '0');
+                                setDueDate(`${year}-${month}-${day}T${existingTime}`);
+                              } else {
+                                setDueDate('');
+                              }
+                            }}
+                            locale={es}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    
+                    {/* Time Picker */}
+                    <div>
+                      <TimePicker
+                        value={dueDate ? dueDate.split('T')[1] : undefined}
+                        onChange={(time) => {
+                          if (dueDate) {
+                            const datePart = dueDate.split('T')[0];
+                            setDueDate(`${datePart}T${time}`);
+                          } else {
+                            // Default to today if no date selected
+                            const today = new Date();
+                            const year = today.getFullYear();
+                            const month = String(today.getMonth() + 1).padStart(2, '0');
+                            const day = String(today.getDate()).padStart(2, '0');
+                            setDueDate(`${year}-${month}-${day}T${time}`);
+                          }
+                        }}
+                        placeholder="Seleccionar hora"
+                        className="w-full"
+                      />
+                    </div>
+                    
                     {errors.dueDate && <p className="mt-1 text-xs text-red">{errors.dueDate}</p>}
                   </div>
 

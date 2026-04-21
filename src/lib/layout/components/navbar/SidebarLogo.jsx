@@ -43,7 +43,7 @@ export default function SidebarLogo() {
         <div className="flex-1 flex items-center justify-between">
           <div>
             <p className="font-maxwell text-primary-foreground text-md font-semibold leading-tight tracking-tight whitespace-nowrap">
-              Equpo
+              equpo
             </p>
             <span className="inline-flex items-center gap-1 mt-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0" />

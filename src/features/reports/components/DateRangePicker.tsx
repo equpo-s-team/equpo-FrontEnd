@@ -23,10 +23,10 @@ interface DateRangePickerProps {
 export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
   const [dateRange, setDateRange] = React.useState<DateRange>({});
 
-  const handleDateRangeChange = (range: DateRange) => {
-    setDateRange(range);
+  const handleDateRangeChange = (range: DateRange | undefined) => {
+    setDateRange(range || {});
     
-    if (range.from && range.to) {
+    if (range?.from && range?.to) {
       const days = Math.round((range.to.getTime() - range.from.getTime()) / 86_400_000) + 1;
       onRangeChange?.(days);
     }
@@ -71,6 +71,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
           locale={es}
           numberOfMonths={2}
           className="rounded-2xl"
+          required={false}
         />
       </PopoverContent>
     </Popover>

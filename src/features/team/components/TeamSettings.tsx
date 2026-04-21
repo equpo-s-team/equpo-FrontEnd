@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   Camera,
   Check,
+  ChevronDown,
   Crown,
   Loader2,
   Shield,
@@ -16,6 +17,13 @@ import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
@@ -513,23 +521,41 @@ export default function TeamSettings() {
 
                     {/* Role change — leader only */}
                     {isLeader && member.role !== 'leader' && !isCurrentUser && (
-                      <select
-                        value={member.role}
-                        onChange={(e) =>
-                          updateRole.mutate({
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            className="text-xs border border-grey-150 rounded-lg px-2 py-1 text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors flex items-center justify-between w-full"
+                          >
+                            {member.role === 'collaborator' && 'Colaborador'}
+                            {member.role === 'member' && 'Miembro'}
+                            {member.role === 'spectator' && 'Espectador'}
+                            <ChevronDown className="h-3 w-3 ml-auto" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-32" align="start">
+                          <DropdownMenuItem onClick={() => updateRole.mutate({
                             teamId,
                             userUid: member.uid,
-                            payload: {
-                              role: e.target.value as 'collaborator' | 'member' | 'spectator',
-                            },
-                          })
-                        }
-                        className="text-xs border border-grey-150 rounded-lg px-2 py-1 text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors"
-                      >
-                        <option value="collaborator">Colaborador</option>
-                        <option value="member">Miembro</option>
-                        <option value="spectator">Espectador</option>
-                      </select>
+                            payload: { role: 'collaborator' },
+                          })}>
+                            Colaborador
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateRole.mutate({
+                            teamId,
+                            userUid: member.uid,
+                            payload: { role: 'member' },
+                          })}>
+                            Miembro
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateRole.mutate({
+                            teamId,
+                            userUid: member.uid,
+                            payload: { role: 'spectator' },
+                          })}>
+                            Espectador
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     )}
 
                     {/* Kick button */}
@@ -578,17 +604,29 @@ export default function TeamSettings() {
                 onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
                 onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
               />
-              <select
-                value={inviteRole}
-                onChange={(e) =>
-                  setInviteRole(e.target.value as 'collaborator' | 'member' | 'spectator')
-                }
-                className="px-3 py-2 rounded-xl border border-grey-150 text-sm text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors"
-              >
-                <option value="collaborator">Colaborador</option>
-                <option value="member">Miembro</option>
-                <option value="spectator">Espectador</option>
-              </select>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="px-3 py-2 rounded-xl border border-grey-150 text-sm text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors flex items-center justify-between"
+                  >
+                    {inviteRole === 'collaborator' && 'Colaborador'}
+                    {inviteRole === 'member' && 'Miembro'}
+                    {inviteRole === 'spectator' && 'Espectador'}
+                    <ChevronDown className="h-3 w-3 ml-auto" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-32" align="start">
+                  <DropdownMenuItem onClick={() => setInviteRole('collaborator')}>
+                    Colaborador
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setInviteRole('member')}>
+                    Miembro
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setInviteRole('spectator')}>
+                    Espectador
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <button
                 onClick={handleInvite}
                 disabled={!inviteUid.trim() || addMember.isPending}

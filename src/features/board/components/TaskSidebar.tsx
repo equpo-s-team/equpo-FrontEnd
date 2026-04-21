@@ -299,7 +299,8 @@ export default function TaskSidebar({
   const isSubmitDisabled = isSubmitting || !isFormValid || !hasChanges;
 
   // In readonly mode, view mode, or edit mode with edit panel closed → show detail view
-  const isReadOnlyView = mode === 'readonly' || ((mode === 'view' || mode === 'edit') && !isEditView);
+  const isReadOnlyView =
+    mode === 'readonly' || ((mode === 'view' || mode === 'edit') && !isEditView);
 
   // Resolved data for readonly view
   const selectedPriority =
@@ -365,7 +366,11 @@ export default function TaskSidebar({
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-grey-200">
           <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
-            {isReadOnlyView ? 'Detalle de Tarea' : (mode === 'edit' || mode === 'view') ? 'Editar Tarea' : 'Crear Tarea'}
+            {isReadOnlyView
+              ? 'Detalle de Tarea'
+              : mode === 'edit' || mode === 'view'
+                ? 'Editar Tarea'
+                : 'Crear Tarea'}
           </h2>
           <div className="flex items-center gap-2">
             {(mode === 'edit' || mode === 'view') && isReadOnlyView && (
@@ -762,7 +767,7 @@ export default function TaskSidebar({
               >
                 {isSubmitting
                   ? 'Guardando...'
-                  : (mode === 'edit' || mode === 'view')
+                  : mode === 'edit' || mode === 'view'
                     ? 'Guardar Cambios'
                     : 'Crear Tarea'}
               </button>

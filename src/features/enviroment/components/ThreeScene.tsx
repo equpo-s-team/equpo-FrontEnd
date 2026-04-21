@@ -34,25 +34,26 @@ import {
 } from '../lib/playerController';
 import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../types/realtime';
 
-
 interface ThreeSceneProps {
   localSlotId: SlotId | null;
-  remotePlayers: Record<string, { position: Vector3State; rotation: Vector3State; slotId: SlotId | null }>;
+  remotePlayers: Record<
+    string,
+    { position: Vector3State; rotation: Vector3State; slotId: SlotId | null }
+  >;
   onLocalMove: (position: Vector3State, rotation: Vector3State) => void;
   keyboard: { forward: boolean; backward: boolean; left: boolean; right: boolean };
   healthPercent: number;
   onLoaded?: () => void;
 }
 
-
 export default function ThreeScene({
-                                     localSlotId,
-                                     remotePlayers,
-                                     onLocalMove,
-                                     keyboard,
-                                     healthPercent,
-                                     onLoaded,
-                                   }: ThreeSceneProps) {
+  localSlotId,
+  remotePlayers,
+  onLocalMove,
+  keyboard,
+  healthPercent,
+  onLoaded,
+}: ThreeSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
 
   const physicsWorldRef = useRef<CANNON.World | null>(null);
@@ -77,11 +78,21 @@ export default function ThreeScene({
   const deteriorationRef = useRef(1 - normalizeHealthInput(healthPercent));
   const currentDeteriorationRef = useRef(deteriorationRef.current);
 
-  useEffect(() => { keyboardRef.current = keyboard; }, [keyboard]);
-  useEffect(() => { onLocalMoveRef.current = onLocalMove; }, [onLocalMove]);
-  useEffect(() => { onLoadedRef.current = onLoaded; }, [onLoaded]);
-  useEffect(() => { remotePlayersRef.current = remotePlayers; }, [remotePlayers]);
-  useEffect(() => { deteriorationRef.current = 1 - normalizeHealthInput(healthPercent); }, [healthPercent]);
+  useEffect(() => {
+    keyboardRef.current = keyboard;
+  }, [keyboard]);
+  useEffect(() => {
+    onLocalMoveRef.current = onLocalMove;
+  }, [onLocalMove]);
+  useEffect(() => {
+    onLoadedRef.current = onLoaded;
+  }, [onLoaded]);
+  useEffect(() => {
+    remotePlayersRef.current = remotePlayers;
+  }, [remotePlayers]);
+  useEffect(() => {
+    deteriorationRef.current = 1 - normalizeHealthInput(healthPercent);
+  }, [healthPercent]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -107,7 +118,6 @@ export default function ThreeScene({
 
     const tintMaterials = tintMaterialsRef.current;
 
-
     const ambientLight = new THREE.AmbientLight(0xffffff, baseAmbientIntensity);
     scene.add(ambientLight);
     ambientLightRef.current = ambientLight;
@@ -126,7 +136,12 @@ export default function ThreeScene({
     scene.add(directionalLight);
     sunLightRef.current = directionalLight;
 
-    const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      50,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      1000,
+    );
     camera.position.set(-30, 10, 30);
     camera.lookAt(0, 0, 0);
 
@@ -209,16 +224,21 @@ export default function ThreeScene({
 
       if (localSlotId && isTryingToMove && now - lastMoveSync > MOVE_SYNC_INTERVAL) {
         const { x, y, z } = localProxy.current.position;
-        onLocalMoveRef.current(
-          { x, y, z },
-          { x: 0, y: localProxy.current.rotation.y, z: 0 },
-        );
+        onLocalMoveRef.current({ x, y, z }, { x: 0, y: localProxy.current.rotation.y, z: 0 });
         lastMoveSync = now;
       }
 
       if (localSlotId) {
-        camera.position.x = THREE.MathUtils.lerp(camera.position.x, localProxy.current.position.x, 0.1);
-        camera.position.z = THREE.MathUtils.lerp(camera.position.z, localProxy.current.position.z + 20, 0.1);
+        camera.position.x = THREE.MathUtils.lerp(
+          camera.position.x,
+          localProxy.current.position.x,
+          0.1,
+        );
+        camera.position.z = THREE.MathUtils.lerp(
+          camera.position.z,
+          localProxy.current.position.z + 20,
+          0.1,
+        );
         camera.lookAt(localProxy.current.position);
       }
 
@@ -296,13 +316,21 @@ export default function ThreeScene({
 
           const ghost = glb.scene;
           ghost.scale.setScalar(GHOST_SCALE);
-          ghost.position.set(player.position.x, player.position.y + GHOST_Y_OFFSET, player.position.z);
+          ghost.position.set(
+            player.position.x,
+            player.position.y + GHOST_Y_OFFSET,
+            player.position.z,
+          );
           ghost.rotation.set(player.rotation.x, player.rotation.y, player.rotation.z);
           sceneRef.current.add(ghost);
           remoteGhosts.current.set(uid, ghost);
         });
       } else if (existing) {
-        existing.position.set(player.position.x, player.position.y + GHOST_Y_OFFSET, player.position.z);
+        existing.position.set(
+          player.position.x,
+          player.position.y + GHOST_Y_OFFSET,
+          player.position.z,
+        );
         existing.rotation.set(player.rotation.x, player.rotation.y, player.rotation.z);
       }
     });

@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
+import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 interface MissionStatsProps {
   tasks: TeamTask[];
@@ -10,26 +11,9 @@ interface MissionStatsProps {
 export default function MissionStats({ tasks }: MissionStatsProps) {
   const [isOverdueExpanded, setIsOverdueExpanded] = useState(false);
 
-  // Helper to determine if a task is overdue
-  const now = new Date();
-  const isOverdue = (t: TeamTask) => {
-    if (t.status === 'done') return false;
-    if (!t.dueDate) return false;
-
-    const isDateOnly = !t.dueDate.includes('T') || t.dueDate.endsWith('T00:00:00.000Z');
-    if (isDateOnly) {
-      const datePart = t.dueDate.split('T')[0];
-      const endOfDay = new Date(`${datePart}T23:59:59`);
-      return endOfDay.getTime() < now.getTime();
-    }
-
-    const dueDateObj = new Date(t.dueDate);
-    return dueDateObj.getTime() < now.getTime();
-  };
-
   // Split tasks
-  const overdueTasks = tasks.filter(isOverdue);
-  const onTimeTasks = tasks.filter((t) => !isOverdue(t));
+  const overdueTasks = tasks.filter(isTaskOverdue);
+  const onTimeTasks = tasks.filter((t) => !isTaskOverdue(t));
 
   // Regular stats (only on-time)
   const todo = onTimeTasks.filter((t) => t.status === 'todo').length;

@@ -61,23 +61,11 @@ export function applyMovementInput(
 }
 
 export function syncBodyToProxy(body: CANNON.Body, proxy: PlayerProxy): void {
-  proxy.position.set(
-    body.position.x,
-    body.position.y - GHOST_BODY_CENTER_Y,
-    body.position.z,
-  );
-
+  proxy.position.set(body.position.x, body.position.y - GHOST_BODY_CENTER_Y, body.position.z);
 }
 
-export function syncMeshToProxy(
-  mesh: THREE.Group,
-  proxy: PlayerProxy,
-): void {
-  mesh.position.set(
-    proxy.position.x,
-    proxy.position.y + GHOST_Y_OFFSET,
-    proxy.position.z,
-  );
+export function syncMeshToProxy(mesh: THREE.Group, proxy: PlayerProxy): void {
+  mesh.position.set(proxy.position.x, proxy.position.y + GHOST_Y_OFFSET, proxy.position.z);
   mesh.rotation.y = proxy.rotation.y;
 }
 

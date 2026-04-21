@@ -53,10 +53,7 @@ export function normalizeHealthInput(value: number): number {
  * Traverses the loaded diorama and collects all materials that have a `color`
  * property, storing their original base color so we can tint them at runtime.
  */
-export function collectTintMaterials(
-  root: THREE.Object3D,
-  tintMap: Map<string, TintEntry>,
-): void {
+export function collectTintMaterials(root: THREE.Object3D, tintMap: Map<string, TintEntry>): void {
   root.traverse((node) => {
     if (!(node as THREE.Mesh).isMesh) return;
     const mesh = node as THREE.Mesh;

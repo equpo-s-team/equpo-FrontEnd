@@ -2,8 +2,9 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
+import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
-import { getTaskColorClass } from '../utils/timelineStyles';
+import { getTaskClasses } from '../utils/timelineStyles';
 
 interface MonthTimelineProps {
   selectedDate: Date;
@@ -173,24 +174,25 @@ export default function MonthTimeline({
               >
                 <div
                   className={`
-                    w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body mb-1 shrink-0
+                    w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body shrink-0
                     ${isToday ? 'bg-blue text-white shadow-neonBlue mx-auto mt-0.5' : 'text-grey-700 ml-1'}
                   `}
                 >
                   {date.getDate()}
                 </div>
 
-                <div className="flex-1 flex flex-col gap-1 overflow-y-auto custom-scrollbar px-1 pb-1">
+                <div className="flex-1 flex flex-col gap-1 overflow-y-auto custom-scrollbar px-1.5 py-1.5">
                   {dayTasks.map((t) => {
                     const isActive = selectedTaskId === t.id;
+                    const isOverdue = isTaskOverdue(t);
                     return (
                       <button
                         key={t.id}
                         onClick={() => onTaskClick(t)}
                         className={`
-                          w-full text-left px-1.5 py-1 rounded-[4px] text-xs font-bold font-body truncate transition-transform
-                          ${getTaskColorClass(t.status)}
-                          ${isActive ? 'ring-2 ring-grey-800 ring-offset-1 scale-[1.05]' : 'hover:brightness-110'}
+                          w-full text-left px-1.5 py-1 rounded-[4px] border-l-[2px] text-xs font-bold text-white font-body truncate transition-all
+                          ${isOverdue ? 'bg-gradient-red-bg border-red text-white' : getTaskClasses(t.status)}
+                          ${isActive ? 'ring-2 ring-grey-400 shadow-neonGrey relative z-10' : 'hover:brightness-110'}
                         `}
                       >
                         {t.name}

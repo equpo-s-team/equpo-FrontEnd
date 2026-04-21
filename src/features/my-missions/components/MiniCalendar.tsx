@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
+import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 const DAYS_OF_WEEK = ['DO', 'LU', 'MA', 'MI', 'JU', 'VI', 'SA'];
 const MONTH_NAMES = [
@@ -118,8 +119,9 @@ export default function MiniCalendar({
           const isCurrentMonth = date.getMonth() === month;
           const isToday = dateKey === today;
           const isSelected = dateKey === selectedKey;
-          const tasksOnDay = tasksByDate.get(dateKey);
-          const hasTask = !!tasksOnDay?.length;
+          const tasksOnDay = tasksByDate.get(dateKey) || [];
+          const hasTask = tasksOnDay.length > 0;
+          const hasOverdueTask = tasksOnDay.some(isTaskOverdue);
 
           return (
             <button
@@ -145,7 +147,7 @@ export default function MiniCalendar({
                 <span
                   className={`
                     absolute bottom-0.5 w-1 h-1 rounded-full
-                    ${isSelected ? 'bg-white' : 'bg-blue'}
+                    ${hasOverdueTask ? 'bg-red shadow-[0_0_8px_rgba(246,90,112,0.6)]' : isSelected ? 'bg-white' : 'bg-blue'}
                   `}
                 />
               )}

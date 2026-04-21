@@ -7,6 +7,7 @@ import { tasksApi } from '@/features/board/api/tasksApi';
 import { useTasks } from '@/features/board/hooks/useTasks';
 import { useValidTaskIds } from '@/features/board/hooks/useValidTaskIds';
 import type { TeamTask } from '@/features/board/types';
+import { projectRecurringTasks } from '@/features/board/utils/taskUtils';
 import { db } from '@/firebase';
 
 interface AuthUser {
@@ -101,12 +102,15 @@ export function useMyTasks(teamId: string | undefined) {
   // Filter full task list to only user's tasks
   const myTasks = useMemo(() => {
     if (!taskData?.tasks?.length || validIdSet.size === 0) return [];
-    return taskData.tasks
+    const baseTasks = taskData.tasks
       .filter((t) => validIdSet.has(t.id))
       .map((task) => ({
         ...task,
         assignedUsers: assignmentsQuery.data?.get(task.id) ?? task.assignedUsers,
       }));
+
+    // Project recurring tasks up to 1 year ahead
+    return projectRecurringTasks(baseTasks, 365);
   }, [assignmentsQuery.data, taskData, validIdSet]);
 
   // Group by date (YYYY-MM-DD) for calendar dot indicators

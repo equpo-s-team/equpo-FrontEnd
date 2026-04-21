@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
+import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 import { getTaskClasses } from '../utils/timelineStyles';
 
@@ -47,7 +48,7 @@ function layoutTasks(tasks: TeamTask[]): Array<{ task: TeamTask; col: number; to
     (a, b) => getTaskHour(a) - getTaskHour(b) || a.id.localeCompare(b.id),
   );
 
-  const BLOCK_DURATION = 1.25; // hours per block
+  const BLOCK_DURATION = 1; // hours per block
 
   // Group overlapping tasks
   const groups: TeamTask[][] = [];
@@ -243,11 +244,12 @@ export default function WeekTimeline({
                       const hour = getTaskHour(task);
                       const clampedHour = Math.max(START_HOUR, Math.min(hour, END_HOUR - 1));
                       const top = (clampedHour - START_HOUR) * HOUR_HEIGHT + 4;
-                      const blockHeight = 1.25 * HOUR_HEIGHT - 8;
+                      const blockHeight = 1 * HOUR_HEIGHT - 8;
 
                       const widthPct = totalCols > 1 ? 100 / totalCols : 100;
                       const leftPct = col * widthPct;
                       const isActive = selectedTaskId === task.id;
+                      const isOverdue = isTaskOverdue(task);
 
                       return (
                         <button
@@ -257,8 +259,8 @@ export default function WeekTimeline({
                             absolute rounded-[6px] px-1.5 py-1 cursor-pointer border-l-[2.5px]
                             transition-all duration-200 text-left overflow-hidden
                             hover:brightness-110
-                            ${getTaskClasses(task.status)}
-                            ${isActive ? 'ring-2 ring-white scale-[1.02]' : ''}
+                            ${isOverdue ? 'bg-gradient-red-bg border-red text-white' : getTaskClasses(task.status)}
+                            ${isActive ? 'ring-2 ring-grey-400 shadow-neonGrey scale-[1.02]' : ''}
                           `}
                           style={{
                             top: `${top}px`,

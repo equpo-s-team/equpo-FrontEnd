@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
+import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 import { getTaskDotClass } from '../utils/timelineStyles';
 
@@ -48,6 +49,7 @@ export default function YearTimeline({
       const inProgress = monthTasks.filter((t) => t.status === 'in-progress');
       const inQa = monthTasks.filter((t) => t.status === 'in-qa');
       const done = monthTasks.filter((t) => t.status === 'done');
+      const overdue = monthTasks.filter((t) => isTaskOverdue(t));
 
       return {
         monthIndex,
@@ -56,6 +58,7 @@ export default function YearTimeline({
         inProgress,
         inQa,
         done,
+        overdue,
       };
     });
   }, [year, tasks]);
@@ -217,6 +220,14 @@ export default function YearTimeline({
                           {data.done.length} Completadas
                         </span>
                       </div>
+                      {data.overdue.length > 0 && (
+                        <div className="flex items-center gap-1.5 col-span-2 pt-1">
+                          <div className={`w-2 h-2 rounded-full bg-red`} />
+                          <span className="text-xs font-bold text-red font-body">
+                            {data.overdue.length} Tarea(s) Vencida(s)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

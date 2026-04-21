@@ -2,6 +2,7 @@ import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
+import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 import { getTaskClasses } from '../utils/timelineStyles';
 
@@ -68,7 +69,7 @@ function layoutTasks(tasks: TeamTask[]): Array<{ task: TeamTask; col: number; to
     (a, b) => getTaskHour(a) - getTaskHour(b) || a.id.localeCompare(b.id),
   );
 
-  const BLOCK_DURATION = 1.25; // hours per block
+  const BLOCK_DURATION = 1; // hours per block
 
   // Group overlapping tasks
   const groups: TeamTask[][] = [];
@@ -214,23 +215,24 @@ export default function DayTimeline({
             const hour = getTaskHour(task);
             const clampedHour = Math.max(START_HOUR, Math.min(hour, END_HOUR - 1));
             const top = (clampedHour - START_HOUR) * HOUR_HEIGHT + 4;
-            const blockHeight = 1.25 * HOUR_HEIGHT - 8;
+            const blockHeight = 1 * HOUR_HEIGHT - 8;
 
             const widthPct = totalCols > 1 ? 100 / totalCols : 100;
             const leftPct = col * widthPct;
 
             const isActive = selectedTaskId === task.id;
+            const isOverdue = isTaskOverdue(task);
 
             return (
               <button
                 key={task.id}
                 onClick={() => onTaskClick(task)}
                 className={`
-                  absolute rounded-xl px-3 py-2.5 cursor-pointer border-l-[3px]
+                  absolute rounded-[10px] px-2 py-1.5 cursor-pointer border-l-[3px]
                   transition-all duration-200 text-left overflow-hidden
                   hover:scale-[1.02] hover:-translate-y-0.5
-                  ${getTaskClasses(task.status)}
-                  ${isActive ? 'ring-2 ring-white ring-offset-2 ring-offset-grey-100 scale-[1.02]' : ''}
+                  ${isOverdue ? 'bg-gradient-red-bg border-red text-white' : getTaskClasses(task.status)}
+                  ${isActive ? 'ring-2 ring-grey-400 shadow-neonGrey scale-[1.02]' : ''}
                 `}
                 style={{
                   top: `${top}px`,
@@ -241,20 +243,22 @@ export default function DayTimeline({
                   zIndex: isActive ? 30 : 10 + col,
                 }}
               >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-white/90 font-body">
+                <div className="flex items-center justify-between mb-0.5">
+                  <span className="text-[10px] font-bold text-white/90 font-body leading-none mt-0.5">
                     {formatHour(hour)}
                   </span>
-                  <span className="text-xs font-semibold text-white/70 bg-white/15 px-1.5 py-0.5 rounded-md font-body">
+                  <span className="text-[9px] font-semibold text-white/70 bg-white/15 px-1 tracking-wide py-0.5 rounded font-body leading-none">
                     {STATUS_LABEL[task.status] ?? task.status}
                   </span>
                 </div>
-                <p className="text-xs font-bold text-white leading-tight line-clamp-1 font-body">
+                <p className="text-[11px] font-bold text-white leading-1 font-body truncate">
                   {task.name}
                 </p>
                 {task.categories?.length > 0 && (
-                  <p className="text-xs text-white/75 mt-0.5 line-clamp-1 font-body">
-                    {task.categories.join(' · ')}
+                  <p className="text-[9px] text-white/75 mt-1 line-clamp-1 font-body leading-none">
+                    {task.categories.length > 2
+                      ? `${task.categories.slice(0, 2).join(' · ')} + ${task.categories.length - 2} más`
+                      : task.categories.join(' · ')}
                   </p>
                 )}
               </button>

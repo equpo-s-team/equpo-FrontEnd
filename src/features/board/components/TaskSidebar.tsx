@@ -7,6 +7,7 @@ import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 
 import { useCreateTask } from '../hooks/useCreateTask';
 import { useDeleteTask } from '../hooks/useDeleteTask';
+import { UseGenerateDescription } from '../hooks/useGenerateDescription';
 import { useUpdateTask } from '../hooks/useUpdateTask';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 import {
@@ -58,7 +59,6 @@ export default function TaskSidebar({
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
 
-  // ── form state ──
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -75,8 +75,8 @@ export default function TaskSidebar({
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
 
-  // ── Populate / reset form ──
   useEffect(() => {
     if (!isOpen) return;
 
@@ -108,7 +108,6 @@ export default function TaskSidebar({
     setErrors({});
   }, [isOpen, mode, task]);
 
-  // Limpia errores que ya no aplican para evitar bloqueo del botón Guardar.
   useEffect(() => {
     setErrors((prev) => {
       if (!Object.keys(prev).length) return prev;
@@ -151,7 +150,6 @@ export default function TaskSidebar({
     recurringInterval,
   ]);
 
-  // ── Validation ──
   function validate() {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = 'El nombre es obligatorio';
@@ -177,7 +175,6 @@ export default function TaskSidebar({
     return Object.keys(e).length === 0;
   }
 
-  // ── Build payload ──
   function buildPayload() {
     const seenCategories = new Set();
     const catArray = categories
@@ -208,7 +205,6 @@ export default function TaskSidebar({
     };
   }
 
-  // ── Handlers ──
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
@@ -263,12 +259,31 @@ export default function TaskSidebar({
     onClose();
   }
 
-  // ── Close on backdrop click ──
   function handleBackdropClick(e: React.MouseEvent) {
     if (e.target === backdropRef.current) onClose();
   }
 
-  // ── Compute changes & validity ──
+  async function handleIADescriptionGeneration(inputDescription: string) {
+    if (!inputDescription.trim()) return;
+
+    setIsGeneratingDescription(true);
+    try {
+      const generatedDescription = await UseGenerateDescription(inputDescription);
+      setDescription(generatedDescription);
+      setErrors((prev) => {
+        if (!prev.form) return prev;
+        const next = { ...prev };
+        delete next.form;
+        return next;
+      });
+    } catch (err: unknown) {
+      const form = err instanceof Error ? err.message : 'Error al generar la descripción';
+      setErrors((prev) => ({ ...prev, form }));
+    } finally {
+      setIsGeneratingDescription(false);
+    }
+  }
+
   const originalDueDate = task?.dueDate ? toInputDatetime(task.dueDate) : '';
 
   const hasChanges =
@@ -298,11 +313,9 @@ export default function TaskSidebar({
 
   const isSubmitDisabled = isSubmitting || !isFormValid || !hasChanges;
 
-  // In readonly mode, view mode, or edit mode with edit panel closed → show detail view
   const isReadOnlyView =
     mode === 'readonly' || ((mode === 'view' || mode === 'edit') && !isEditView);
 
-  // Resolved data for readonly view
   const selectedPriority =
     PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? priority;
   const recurringLabel =
@@ -326,7 +339,6 @@ export default function TaskSidebar({
     });
   })();
 
-  // For the readonly assignees preview
   const selectedGroup = groups.find((g) => g.id === assignedGroupId) ?? null;
   const readonlyAssignedUsers = task?.assignedUsers?.length ? task.assignedUsers : [];
   const parsedCategories = categories
@@ -336,7 +348,6 @@ export default function TaskSidebar({
 
   return (
     <>
-      {/* Backdrop */}
       <div
         ref={backdropRef}
         role="button"
@@ -353,7 +364,6 @@ export default function TaskSidebar({
         `}
       />
 
-      {/* Sidebar panel */}
       <aside
         className={`
           fixed top-0 right-0 z-50 h-full w-full sm:w-[760px] xl:w-[920px]
@@ -539,10 +549,20 @@ export default function TaskSidebar({
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-5">
                 {/* Left: description */}
                 <div className="sm:col-span-3">
-                  <FieldLabel required>
-                    <Layers size={12} className="inline mr-1 -mt-0.5" />
-                    Descripción
-                  </FieldLabel>
+                  <div className="mb-1.5 flex items-center justify-between gap-2">
+                    <FieldLabel required>
+                      <Layers size={12} className="inline mr-1 -mt-0.5" />
+                      Descripción
+                    </FieldLabel>
+                    <button
+                      type="button"
+                      onClick={() => void handleIADescriptionGeneration(description)}
+                      disabled={isSubmitting || isGeneratingDescription || !description.trim()}
+                      className="px-3 py-1.5 rounded-[10px] text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isGeneratingDescription ? 'Generando...' : 'Generar con IA'}
+                    </button>
+                  </div>
                   <MarkdownDescriptionEditor
                     value={description}
                     onChange={setDescription}

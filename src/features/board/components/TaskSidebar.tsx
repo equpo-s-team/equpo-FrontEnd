@@ -1,4 +1,4 @@
-import { CalendarDays, ChevronDownIcon, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { ChevronDown, CalendarDays, ChevronDownIcon, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -6,6 +6,12 @@ import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { TimePicker } from '@/components/ui/time-picker';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Popover,
   PopoverContent,
@@ -271,7 +277,14 @@ export default function TaskSidebar({
   }
 
   function handleBackdropClick(e: React.MouseEvent) {
-    if (e.target === backdropRef.current) onClose();
+    // Check if click is on backdrop and not on dropdown content
+    const target = e.target as HTMLElement;
+    const isDropdownContent = target.closest('[data-radix-dropdown-menu-content]');
+    const isDropdownTrigger = target.closest('[data-radix-dropdown-menu-trigger]');
+    
+    if (e.target === backdropRef.current && !isDropdownContent && !isDropdownTrigger) {
+      onClose();
+    }
   }
 
   async function handleIADescriptionGeneration(inputDescription: string) {
@@ -593,7 +606,7 @@ export default function TaskSidebar({
                       <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
                       Fecha Límite
                     </FieldLabel>
-                    
+
                     {/* Date Picker */}
                     <div className="mb-2">
                       <Popover>
@@ -627,7 +640,7 @@ export default function TaskSidebar({
                         </PopoverContent>
                       </Popover>
                     </div>
-                    
+
                     {/* Time Picker */}
                     <div>
                       <TimePicker
@@ -649,7 +662,7 @@ export default function TaskSidebar({
                         className="w-full"
                       />
                     </div>
-                    
+
                     {errors.dueDate && <p className="mt-1 text-xs text-red">{errors.dueDate}</p>}
                   </div>
 
@@ -684,18 +697,38 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Usuario Asignado
                     </FieldLabel>
-                    <select
-                      value={assignedUserUid}
-                      onChange={(e) => setAssignedUserUid(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                    >
-                      <option value="">Sin asignar</option>
-                      {members.map((m) => (
-                        <option key={m.uid} value={m.uid}>
-                          {m.displayName || m.uid}
-                        </option>
-                      ))}
-                    </select>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
+                        >
+                          {assignedUserUid
+                            ? (members.find(m => m.uid === assignedUserUid)?.displayName || assignedUserUid)
+                            : 'Sin asignar'
+                          }
+                          <ChevronDownIcon className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48 z-[60]" align="start">
+                        <DropdownMenuItem onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setAssignedUserUid('');
+                        }}>
+                          Sin asignar
+                        </DropdownMenuItem>
+                        {members.map((m) => (
+                          <DropdownMenuItem key={m.uid} onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setAssignedUserUid(m.uid);
+                          }}>
+                            {m.displayName || m.uid}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   {/* Assigned Group */}
@@ -704,18 +737,38 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Grupo Asignado
                     </FieldLabel>
-                    <select
-                      value={assignedGroupId}
-                      onChange={(e) => setAssignedGroupId(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                    >
-                      <option value="">Sin asignar</option>
-                      {groups.map((g) => (
-                        <option key={g.id} value={g.id}>
-                          {g.groupName}
-                        </option>
-                      ))}
-                    </select>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
+                        >
+                          {assignedGroupId
+                            ? (groups.find(g => g.id === assignedGroupId)?.groupName || assignedGroupId)
+                            : 'Sin asignar'
+                          }
+                          <ChevronDownIcon className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48 z-[60]" align="start">
+                        <DropdownMenuItem onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setAssignedGroupId('');
+                        }}>
+                          Sin asignar
+                        </DropdownMenuItem>
+                        {groups.map((g) => (
+                          <DropdownMenuItem key={g.id} onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setAssignedGroupId(g.id);
+                          }}>
+                            {g.groupName}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   {/* Categories */}

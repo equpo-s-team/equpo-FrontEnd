@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 import { useCreateTask } from '../hooks/useCreateTask';
 import { useDeleteTask } from '../hooks/useDeleteTask';
@@ -55,6 +56,7 @@ export default function TaskSidebar({
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
+  const { play } = useSoundEffects();
 
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
@@ -214,8 +216,10 @@ export default function TaskSidebar({
       const payload = buildPayload();
       if (mode !== 'create' && task) {
         await updateTask.mutateAsync({ teamId, taskId: task.id, payload });
+        play('taskUpdated');
       } else {
         await createTask.mutateAsync({ teamId, payload });
+        play('taskCreated');
       }
       onClose();
     } catch (err: unknown) {
@@ -231,6 +235,7 @@ export default function TaskSidebar({
     setIsSubmitting(true);
     try {
       await deleteTask.mutateAsync({ teamId, taskId: task.id });
+      play('taskDeleted');
       onClose();
     } catch (err: unknown) {
       const form = err instanceof Error ? err.message : 'Error al eliminar la tarea';

@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 
 import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
@@ -60,6 +61,7 @@ export default function TeamBoard() {
   const { data, isLoading } = useTasks(teamId);
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
+  const { play } = useSoundEffects();
 
   // ── Filter logic ──
   const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
@@ -145,6 +147,11 @@ export default function TeamBoard() {
         [fromColumnId]: fromCards,
         [toColumnId]: toCards,
       });
+
+      // Play completion sound if task is moved to done
+      if (toColumnId === 'done') {
+        play('taskCompleted');
+      }
     }
 
     // If the column changed, sync the new status to the backend
@@ -193,6 +200,19 @@ export default function TeamBoard() {
     setSidebar((prev) => ({ ...prev, isOpen: false }));
   };
 
+  // Funciones para reproducir sonidos de tareas
+  const handleTaskCreated = () => {
+    play('/sounds/task-created.mp3');
+  };
+
+  const handleTaskUpdated = () => {
+    play('/sounds/task-updated.mp3');
+  };
+
+  const handleTaskDeleted = () => {
+    play('/sounds/task-deleted.mp3');
+  };
+
   return (
     <div className="min-h-screen bg-offwhite font-body">
       <AppHeader />
@@ -237,6 +257,9 @@ export default function TeamBoard() {
         task={sidebar.task}
         teamId={teamId}
         defaultStatus={sidebar.defaultStatus}
+        onTaskCreated={handleTaskCreated}
+        onTaskUpdated={handleTaskUpdated}
+        onTaskDeleted={handleTaskDeleted}
       />
     </div>
   );

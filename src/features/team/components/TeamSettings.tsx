@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { AppHeader } from '@/components/ui/app-header';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
@@ -337,26 +338,11 @@ export default function TeamSettings() {
       </div>
 
       {/* Header */}
-      <div
-        className="relative z-10 px-6 py-5 border-b border-grey-100 flex items-center gap-4 bg-white/80 backdrop-blur-sm"
-        style={{ boxShadow: '0 1px 0 rgba(0,0,0,0.04)' }}
-      >
-        <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-          style={{ background: accent, boxShadow: `0 4px 14px ${accentGlow}` }}
-        >
-          <Shield size={16} className="text-white" />
-        </div>
-        <div>
-          <h1
-            className="text-base font-bold text-grey-800 leading-tight"
-            style={{ letterSpacing: '-0.02em' }}
-          >
-            Ajustes del Equipo
-          </h1>
-          <p className="text-xs text-grey-400">{team.name}</p>
-        </div>
-      </div>
+      <AppHeader
+        title="Ajustes del Equipo"
+        subtitle={team.name}
+        variant="orange"
+      />
 
       {/* Scrollable body */}
       <div className="relative z-10 flex-1 overflow-y-auto px-4 py-6 space-y-6 sm:px-8">

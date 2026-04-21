@@ -1,8 +1,29 @@
-import { createContext, useContext, useEffect, useRef,useState } from 'react';
+import { createContext, type ReactNode,useContext, useEffect, useRef, useState } from 'react';
 
-const AudioContext = createContext();
+export interface AudioContextType {
+  isPlaying: boolean;
+  volume: number;
+  soundEnabled: boolean;
+  musicEnabled: boolean;
+  isMuted: boolean;
+  currentTrack: number;
+  tracks: string[];
+  playBackgroundMusic: () => void;
+  pauseBackgroundMusic: () => void;
+  toggleBackgroundMusic: () => void;
+  playSoundEffect: (soundFile: string) => void;
+  setVolume: (volume: number) => void;
+  setSoundEnabled: (enabled: boolean) => void;
+  setMusicEnabled: (enabled: boolean) => void;
+  toggleMute: () => void;
+  nextTrack: () => void;
+  prevTrack: () => void;
+  changeTrack: (trackIndex: number) => void;
+}
 
-export const useAudio = () => {
+const AudioContext = createContext<AudioContextType | undefined>(undefined);
+
+export const useAudio = (): AudioContextType => {
   const context = useContext(AudioContext);
   if (!context) {
     throw new Error('useAudio must be used within an AudioProvider');
@@ -10,16 +31,19 @@ export const useAudio = () => {
   return context;
 };
 
-export const AudioProvider = ({ children }) => {
+interface AudioProviderProps {
+  children: ReactNode;
+}
+
+export const AudioProvider = ({ children }: AudioProviderProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.3);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [musicEnabled, setMusicEnabled] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
-  const backgroundMusicRef = useRef(null);
+  const backgroundMusicRef = useRef<HTMLAudioElement | null>(null);
   const [currentTrack, setCurrentTrack] = useState(0);
 
-  // Cargar preferencias desde localStorage
   useEffect(() => {
     const savedVolume = localStorage.getItem('audioVolume');
     const savedSoundEnabled = localStorage.getItem('soundEnabled');
@@ -32,7 +56,6 @@ export const AudioProvider = ({ children }) => {
     if (savedIsMuted) setIsMuted(savedIsMuted === 'true');
   }, []);
 
-  // Guardar preferencias en localStorage
   useEffect(() => {
     localStorage.setItem('audioVolume', volume.toString());
   }, [volume]);
@@ -49,16 +72,18 @@ export const AudioProvider = ({ children }) => {
     localStorage.setItem('isMuted', isMuted.toString());
   }, [isMuted]);
 
-  // Inicializar música de fondo
   useEffect(() => {
     if (backgroundMusicRef.current) {
       backgroundMusicRef.current.volume = isMuted ? 0 : volume;
       backgroundMusicRef.current.loop = true;
 
-      // Add event listener to ensure loop works
       backgroundMusicRef.current.addEventListener('ended', () => {
-        backgroundMusicRef.current.currentTime = 0;
-        backgroundMusicRef.current.play();
+        if (backgroundMusicRef.current) {
+          backgroundMusicRef.current.currentTime = 0;
+          backgroundMusicRef.current.play().catch((err: unknown) => {
+            console.error('Error re-playing background music:', err);
+          });
+        }
       });
     }
   }, [volume, isMuted]);
@@ -76,8 +101,8 @@ export const AudioProvider = ({ children }) => {
       backgroundMusicRef.current.load();
       backgroundMusicRef.current.play().then(() => {
         setIsPlaying(true);
-      }).catch(err => {
-        console.log('Error playing background music:', err);
+      }).catch((err: unknown) => {
+        console.error('Error playing background music:', err);
       });
     }
   };
@@ -101,19 +126,19 @@ export const AudioProvider = ({ children }) => {
     setIsMuted(!isMuted);
   };
 
-  const playSoundEffect = (soundFile) => {
+  const playSoundEffect = (soundFile: string) => {
     if (!soundEnabled) return;
 
     const audio = new Audio(soundFile);
-    audio.volume = Math.min(volume * 1.2, 1.0); // Efectos un poco más altos, pero máximo 1.0
+    audio.volume = Math.min(volume * 1.2, 1.0);
 
     audio.load();
-    audio.play().catch(err => {
-      console.log('Error playing sound effect:', err);
+    audio.play().catch((err: unknown) => {
+      console.error('Error playing sound effect:', err);
     });
   };
 
-  const changeTrack = (trackIndex) => {
+  const changeTrack = (trackIndex: number) => {
     if (trackIndex >= 0 && trackIndex < tracks.length) {
       const wasPlaying = isPlaying;
       pauseBackgroundMusic();

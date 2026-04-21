@@ -1,6 +1,6 @@
 import { ChartColumnBig, Home, MessageCircle, Pause, Play, Settings, Star, UserCheck, Volume2, VolumeX } from 'lucide-react';
 
-import { useAudio } from '@/context/AudioContext';
+import { useAudio } from '@/context/AudioContext.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams';
@@ -20,7 +20,6 @@ export default function Sidebar() {
   const {
     isPlaying,
     volume,
-    musicEnabled,
     isMuted,
     playBackgroundMusic,
     pauseBackgroundMusic,

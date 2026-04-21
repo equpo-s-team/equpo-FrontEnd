@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 
 import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
@@ -147,7 +147,7 @@ export default function TeamBoard() {
         [fromColumnId]: fromCards,
         [toColumnId]: toCards,
       });
-      
+
       // Play completion sound if task is moved to done
       if (toColumnId === 'done') {
         play('taskCompleted');

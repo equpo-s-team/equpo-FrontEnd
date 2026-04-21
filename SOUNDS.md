@@ -31,7 +31,7 @@ public/sounds/
 
 1. **Coloca el archivo MP3** en la carpeta `public/sounds/`
 2. **Usa un nombre descriptivo** (ej: `notification-success.mp3`)
-3. **Agrega el sonido al hook** en `src/hooks/useSoundEffects.js`:
+3. **Agrega el sonido al hook** en `src/hooks/useSoundEffects.ts`:
 
 ```javascript
 const sounds = {

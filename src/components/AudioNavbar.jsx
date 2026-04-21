@@ -1,13 +1,12 @@
 import {Minimize2, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { useEffect,useState } from 'react';
 
-import { useAudio } from '@/context/AudioContext';
+import { useAudio } from '@/context/AudioContext.tsx';
 
 export default function AudioNavbar() {
   const {
     isPlaying,
     volume,
-    musicEnabled,
     isMuted,
     playBackgroundMusic,
     pauseBackgroundMusic,
@@ -23,7 +22,6 @@ export default function AudioNavbar() {
     const navbar = document.querySelector('[data-audio-navbar]');
     if (navbar) {
       navbar.setAttribute('data-audio-navbar', 'true');
-      console.log('AudioNavbar mounted and visible');
     }
   }, []);
 
@@ -40,12 +38,6 @@ export default function AudioNavbar() {
       pauseBackgroundMusic();
       setMusicEnabled(false);
     }
-  };
-
-
-  const getVolumeIcon = () => {
-    if (isMuted || volume === 0) return <VolumeX size={16} />;
-    return <Volume2 size={16} />;
   };
 
   return (

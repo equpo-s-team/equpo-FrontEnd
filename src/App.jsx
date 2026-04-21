@@ -1,6 +1,6 @@
 import './app.css';
 
-import { AudioProvider } from '@/context/AudioContext';
+import { AudioProvider } from '@/context/AudioContext.tsx';
 
 import Router from './Router';
 

@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { tasksApi } from '../api/tasksApi';
 import { useAudio } from '@/context/AudioContext';
+
+import { tasksApi } from '../api/tasksApi';
 
 export function useDeleteTask() {
   const queryClient = useQueryClient();

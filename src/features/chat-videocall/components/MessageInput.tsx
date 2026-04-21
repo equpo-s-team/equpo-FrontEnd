@@ -6,8 +6,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
-import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { storage } from '@/firebase';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 export default function MessageInput() {
   const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId } = useChatContext();

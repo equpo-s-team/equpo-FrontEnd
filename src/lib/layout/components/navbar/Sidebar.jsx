@@ -1,7 +1,7 @@
 import { ChartColumnBig, Home, MessageCircle, Pause, Play, Settings, Star, UserCheck, Volume2, VolumeX } from 'lucide-react';
 
-import { useAuth } from '@/context/AuthContext';
 import { useAudio } from '@/context/AudioContext';
+import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams';
 

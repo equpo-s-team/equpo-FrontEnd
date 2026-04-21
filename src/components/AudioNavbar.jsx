@@ -1,6 +1,7 @@
-import { Volume2, VolumeX, Play, Pause, Minimize2, Maximize2 } from 'lucide-react';
+import {Minimize2, Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { useEffect,useState } from 'react';
+
 import { useAudio } from '@/context/AudioContext';
-import { useState, useEffect } from 'react';
 
 export default function AudioNavbar() {
   const {

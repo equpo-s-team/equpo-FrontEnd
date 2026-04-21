@@ -1,7 +1,8 @@
 import './app.css';
 
-import Router from './Router';
 import { AudioProvider } from '@/context/AudioContext';
+
+import Router from './Router';
 
 export default function App() {
   return (

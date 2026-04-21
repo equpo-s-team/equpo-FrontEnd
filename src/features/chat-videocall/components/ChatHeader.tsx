@@ -1,6 +1,7 @@
 import { Info, PhoneCall, Users, Video } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
+import { AppHeader } from '@/components/ui/app-header';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useActiveCalls } from '@/features/chat-videocall/hooks/useActiveCalls';
@@ -29,32 +30,22 @@ export default function ChatHeader() {
   const isCallActive = activeCalls.some((c) => c.roomId === activeRoom.id);
 
   return (
-    <div className="flex flex-col flex-shrink-0 bg-primary border-b border-grey-150">
-      <div className="flex items-center justify-between px-5 py-3">
-        {/* Room avatar + name */}
-        <div className="flex items-center gap-3">
-          <GroupAvatar src={activeRoom.photoUrl} name={activeRoom.name} />
-          <div>
-            <h3 className="font-body font-semibold text-grey-900 text-sm leading-tight">
-              {activeRoom.name}
-            </h3>
-            <p className="font-body text-xs leading-tight text-grey-400 flex items-center gap-1">
-              <Users size={10} />
-              Grupo
-            </p>
+    <>
+      <AppHeader
+        title={activeRoom.name}
+        subtitle="Grupo"
+        variant="green"
+        actions={
+          <div className="flex items-center gap-1">
+            <ActionButton onClick={() => startCall(true)} title="Videollamada">
+              <Video size={16} />
+            </ActionButton>
+            <ActionButton onClick={() => setShowInfo(true)} title="Información">
+              <Info size={16} />
+            </ActionButton>
           </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-1">
-          <ActionButton onClick={() => startCall(true)} title="Videollamada">
-            <Video size={16} />
-          </ActionButton>
-          <ActionButton onClick={() => setShowInfo(true)} title="Información">
-            <Info size={16} />
-          </ActionButton>
-        </div>
-      </div>
+        }
+      />
 
       {/* Active Call Banner */}
       {isCallActive && (
@@ -72,7 +63,7 @@ export default function ChatHeader() {
       )}
 
       {showInfo && <ChatInfoModal onClose={() => setShowInfo(false)} usersInfo={usersInfo} />}
-    </div>
+    </>
   );
 }
 

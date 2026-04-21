@@ -2,7 +2,7 @@ import { AlertTriangle, CalendarDays, Clock, Edit3, RefreshCw, Tag, X, Zap } fro
 
 import { TaskAssigneesPreview } from '@/features/board/components/TaskAssigneesPreview';
 import type { TeamTask } from '@/features/board/types';
-import { calculateNextRecurrenceDate,isTaskOverdue } from '@/features/board/utils/taskUtils';
+import { calculateNextRecurrenceDate, isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; border: string }> = {
   todo: {

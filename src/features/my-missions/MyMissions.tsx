@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.tsx';
 import TaskSidebar from '@/features/board/components/TaskSidebar';
@@ -52,6 +52,16 @@ export default function MyMissions() {
 
   // ── Selected task ──
   const [selectedTask, setSelectedTask] = useState<TeamTask | null>(null);
+
+  // Clear selected task or open edit sidebar if the task gets deleted remotely
+  useEffect(() => {
+    if (selectedTask && !myTasks.some((t) => t.id === selectedTask.id)) {
+      setSelectedTask(null);
+    }
+    if (editSidebar.isOpen && editSidebar.task && !myTasks.some((t) => t.id === editSidebar.task?.id)) {
+      setEditSidebar((prev) => ({ ...prev, isOpen: false }));
+    }
+  }, [myTasks, selectedTask, editSidebar.isOpen, editSidebar.task]);
 
   // ── TaskSidebar (edit mode) ──
   const [editSidebar, setEditSidebar] = useState<{

@@ -127,7 +127,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const playSoundEffect = (soundFile: string) => {
-    if (!soundEnabled) return;
+    if (!soundEnabled || isMuted) return;
 
     const audio = new Audio(soundFile);
     audio.volume = Math.min(volume * 1.2, 1.0);

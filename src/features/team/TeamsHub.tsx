@@ -1,9 +1,10 @@
 import log from 'loglevel';
+import { Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { EmptyState } from '@/components/ui/EmptyState';
 import { useAuth } from '@/context/AuthContext';
-import { NewTeamCard } from '@/features/team/components/NewTeamCard';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
@@ -13,6 +14,7 @@ import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
+import { toastError, toastSuccess } from '@/lib/toast';
 
 import {
   type Achievement,
@@ -136,7 +138,17 @@ export const TeamsHub: React.FC = () => {
         description: payload.description || null,
         memberUids: payload.memberUids,
       },
-      { onSuccess: () => closeModal() },
+      {
+        onSuccess: () => {
+          closeModal();
+          toastSuccess('Equipo creado', `"${payload.name}" fue creado correctamente.`);
+        },
+        onError: (err) =>
+          toastError(
+            'Error al crear equipo',
+            err instanceof Error ? err.message : 'Intenta de nuevo.',
+          ),
+      },
     );
   };
 
@@ -150,7 +162,17 @@ export const TeamsHub: React.FC = () => {
       updatePayload.description = payload.description || null;
     updateTeam.mutate(
       { teamId, payload: updatePayload, memberUids: payload.memberUids },
-      { onSuccess: () => closeModal() },
+      {
+        onSuccess: () => {
+          closeModal();
+          toastSuccess('Equipo actualizado', 'Los cambios se guardaron correctamente.');
+        },
+        onError: (err) =>
+          toastError(
+            'Error al actualizar equipo',
+            err instanceof Error ? err.message : 'Intenta de nuevo.',
+          ),
+      },
     );
   };
 
@@ -279,9 +301,13 @@ export const TeamsHub: React.FC = () => {
                   </p>
                 </div>
               ) : filtered.length === 0 && !search ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                  <NewTeamCard onClick={openCreate} />
-                </div>
+                <EmptyState
+                  icon={Users}
+                  title="Aún no tienes equipos"
+                  description="Crea tu primer equipo e invita a tus compañeros para empezar a colaborar."
+                  action={{ label: '+ Crear equipo', onClick: openCreate }}
+                  size="lg"
+                />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                   {filtered.map((team) => (

@@ -65,7 +65,11 @@ export default function MyMissions() {
     if (selectedTask && !myTasks.some((t) => t.id === selectedTask.id)) {
       setSelectedTask(null);
     }
-    if (editSidebar.isOpen && editSidebar.task && !myTasks.some((t) => t.id === editSidebar.task?.id)) {
+    if (
+      editSidebar.isOpen &&
+      editSidebar.task &&
+      !myTasks.some((t) => t.id === editSidebar.task?.id)
+    ) {
       setEditSidebar((prev) => ({ ...prev, isOpen: false }));
     }
   }, [myTasks, selectedTask, editSidebar.isOpen, editSidebar.task]);
@@ -96,10 +100,7 @@ export default function MyMissions() {
   return (
     <div className="min-h-screen bg-offwhite font-body">
       {/* Header */}
-      <AppHeader
-        title="Mis Misiones"
-        variant="purple"
-      />
+      <AppHeader title="Mis Misiones" variant="purple" />
 
       {/* Loading overlay */}
       {isLoading && (

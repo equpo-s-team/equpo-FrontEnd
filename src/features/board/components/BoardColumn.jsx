@@ -1,7 +1,34 @@
+import { CheckSquare, LayoutGrid, Loader, ShieldCheck } from 'lucide-react';
 import { Plus } from 'lucide-react';
+
+import { AppTooltip } from '@/components/ui/AppTooltip';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 import BoardCard from './BoardCard.tsx';
 import { COLUMN_CONFIG } from './columnConfig.js';
+
+const COLUMN_EMPTY = {
+  todo: {
+    icon: LayoutGrid,
+    title: 'Sin tareas pendientes',
+    description: 'Crea una tarea para comenzar el sprint.',
+  },
+  progress: {
+    icon: Loader,
+    title: 'Nada en progreso',
+    description: 'Mueve una tarea aquí cuando empiece el trabajo.',
+  },
+  qa: {
+    icon: ShieldCheck,
+    title: 'Sin tareas en revisión',
+    description: 'Las tareas listas para QA aparecerán aquí.',
+  },
+  done: {
+    icon: CheckSquare,
+    title: 'Nada completado aún',
+    description: 'Las tareas completadas se verán en esta columna.',
+  },
+};
 
 function ColIndicator({ accent }) {
   const cfg = COLUMN_CONFIG[accent];
@@ -42,6 +69,7 @@ function DropZone({ onDrop, position }) {
 export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, onCardClick }) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
+  const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
 
   const handleExternalDrop = (cardId, fromColumnId, position) => {
     onMoveCard(cardId, fromColumnId, id, position);
@@ -82,12 +110,14 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
             {cards.length}
           </span>
         </div>
-        <button
-          onClick={() => onCreateTask?.(id)}
-          className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
-        >
-          <Plus size={14} />
-        </button>
+        <AppTooltip content="Crear tarea" side="top">
+          <button
+            onClick={() => onCreateTask?.(id)}
+            className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
+          >
+            <Plus size={14} />
+          </button>
+        </AppTooltip>
       </div>
 
       <div
@@ -114,19 +144,29 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
           e.currentTarget.classList.remove('bg-blue/5');
         }}
       >
-        {cards.map((card, index) => (
-          <div key={card.id}>
-            <BoardCard
-              card={card}
-              accent={accent}
-              columnId={id}
-              onMoveCard={onMoveCard}
-              onCardClick={onCardClick}
-              position={index}
-            />
-            <DropZone onDrop={handleExternalDrop} position={index + 1} />
-          </div>
-        ))}
+        {cards.length === 0 ? (
+          <EmptyState
+            icon={emptyConfig.icon}
+            title={emptyConfig.title}
+            description={emptyConfig.description}
+            size="sm"
+            className="flex-1"
+          />
+        ) : (
+          cards.map((card, index) => (
+            <div key={card.id}>
+              <BoardCard
+                card={card}
+                accent={accent}
+                columnId={id}
+                onMoveCard={onMoveCard}
+                onCardClick={onCardClick}
+                position={index}
+              />
+              <DropZone onDrop={handleExternalDrop} position={index + 1} />
+            </div>
+          ))
+        )}
       </div>
 
       <div className="mx-3 mb-3">

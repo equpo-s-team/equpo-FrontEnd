@@ -3,7 +3,6 @@ import {
   AlertTriangle,
   Camera,
   Check,
-  ChevronDown,
   Crown,
   Loader2,
   Shield,
@@ -14,12 +13,8 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AppHeader } from '@/components/ui/app-header';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { AppTooltip } from '@/components/ui/AppTooltip';
+import { RoleSelect } from '@/components/ui/RoleSelect';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
@@ -33,6 +28,7 @@ import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import type { TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
+import { toastError, toastSuccess } from '@/lib/toast';
 
 // ── Color helpers ──────────────────────────────────────────────────────────────
 
@@ -176,12 +172,10 @@ export default function TeamSettings() {
   const [photoPreview, setPhotoPreview] = useState<string | null>(team?.photoUrl ?? null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Invite state ─────────────────────────────────────────────────────────────
   const [inviteUid, setInviteUid] = useState('');
   const [inviteRole, setInviteRole] = useState<'collaborator' | 'member' | 'spectator'>('member');
-  const [inviteError, setInviteError] = useState<string | null>(null);
 
   // Delete dialog ────────────────────────────────────────────────────────────
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -191,10 +185,8 @@ export default function TeamSettings() {
     setDescription(team?.description ?? '');
     setPhotoPreview(team?.photoUrl ?? null);
     setUploadError(null);
-    setSaveSuccess(false);
     setInviteUid('');
     setInviteRole('member');
-    setInviteError(null);
     setShowDeleteDialog(false);
 
     if (fileInputRef.current) {
@@ -271,10 +263,10 @@ export default function TeamSettings() {
     updateTeam.mutate(
       { teamId, payload },
       {
-        onSuccess: () => {
-          setSaveSuccess(true);
-          setTimeout(() => setSaveSuccess(false), 2500);
-        },
+        onSuccess: () =>
+          toastSuccess('Equipo actualizado', 'Los cambios se guardaron correctamente.'),
+        onError: (err) =>
+          toastError('Error al guardar', err instanceof Error ? err.message : 'Intenta de nuevo.'),
       },
     );
   };
@@ -283,21 +275,40 @@ export default function TeamSettings() {
   const handleInvite = () => {
     const uid = inviteUid.trim();
     if (!uid) return;
-    setInviteError(null);
 
     addMember.mutate(
       { teamId, payload: { userUid: uid, role: inviteRole } },
       {
-        onSuccess: () => setInviteUid(''),
+        onSuccess: () => {
+          setInviteUid('');
+          toastSuccess(
+            'Usuario invitado',
+            `El usuario fue añadido al equipo como ${ROLE_CONFIG[inviteRole]?.label ?? inviteRole}.`,
+          );
+        },
         onError: (err) =>
-          setInviteError(err instanceof Error ? err.message : 'Error al invitar al usuario.'),
+          toastError(
+            'Error al invitar',
+            err instanceof Error ? err.message : 'Verifica el UID e intenta de nuevo.',
+          ),
       },
     );
   };
 
   // ── Kick ───────────────────────────────────────────────────────────────────
   const handleKick = (member: TeamMember) => {
-    removeMember.mutate({ teamId, userUid: member.uid });
+    removeMember.mutate(
+      { teamId, userUid: member.uid },
+      {
+        onSuccess: () =>
+          toastSuccess(
+            'Miembro eliminado',
+            `${member.displayName ?? member.uid} fue removido del equipo.`,
+          ),
+        onError: (err) =>
+          toastError('Error al eliminar', err instanceof Error ? err.message : 'Intenta de nuevo.'),
+      },
+    );
   };
 
   const canKick = (member: TeamMember): boolean => {
@@ -310,7 +321,15 @@ export default function TeamSettings() {
 
   // ── Delete team ─────────────────────────────────────────────────────────────
   const handleDeleteTeam = () => {
-    deleteTeam.mutate(teamId);
+    deleteTeam.mutate(teamId, {
+      onSuccess: () =>
+        toastSuccess('Equipo eliminado', 'El equipo y todos sus datos fueron eliminados.'),
+      onError: (err) =>
+        toastError(
+          'Error al eliminar el equipo',
+          err instanceof Error ? err.message : 'Intenta de nuevo.',
+        ),
+    });
   };
 
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
@@ -337,11 +356,7 @@ export default function TeamSettings() {
       </div>
 
       {/* Header */}
-      <AppHeader
-        title="Ajustes del Equipo"
-        subtitle={team.name}
-        variant="orange"
-      />
+      <AppHeader title="Ajustes del Equipo" subtitle={team.name} variant="orange" />
 
       {/* Scrollable body */}
       <div className="relative z-10 flex-1 overflow-y-auto px-4 py-6 space-y-6 sm:px-8">
@@ -442,12 +457,9 @@ export default function TeamSettings() {
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-60"
             style={{ background: accent, boxShadow: `0 4px 16px ${accentGlow}` }}
           >
-            {updateTeam.isPending ? (
-              <Loader2 size={14} className="animate-spin" />
-            ) : saveSuccess ? (
-              <Check size={14} />
-            ) : null}
-            {saveSuccess ? '¡Guardado!' : 'Guardar cambios'}
+            {updateTeam.isPending && <Loader2 size={14} className="animate-spin" />}
+            {updateTeam.isSuccess && <Check size={14} />}
+            Guardar cambios
           </button>
         </section>
 
@@ -506,61 +518,72 @@ export default function TeamSettings() {
 
                     {/* Role change — leader only */}
                     {isLeader && member.role !== 'leader' && !isCurrentUser && (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button
-                            className="text-xs border border-grey-150 rounded-lg px-2 py-1 text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors flex items-center justify-between w-full"
-                          >
-                            {member.role === 'collaborator' && 'Colaborador'}
-                            {member.role === 'member' && 'Miembro'}
-                            {member.role === 'spectator' && 'Espectador'}
-                            <ChevronDown className="h-3 w-3 ml-auto" />
-                          </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-32" align="start">
-                          <DropdownMenuItem onClick={() => updateRole.mutate({
-                            teamId,
-                            userUid: member.uid,
-                            payload: { role: 'collaborator' },
-                          })}>
-                            Colaborador
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateRole.mutate({
-                            teamId,
-                            userUid: member.uid,
-                            payload: { role: 'member' },
-                          })}>
-                            Miembro
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateRole.mutate({
-                            teamId,
-                            userUid: member.uid,
-                            payload: { role: 'spectator' },
-                          })}>
-                            Espectador
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <RoleSelect
+                        value={member.role}
+                        onChange={(role) =>
+                          updateRole.mutate(
+                            {
+                              teamId,
+                              userUid: member.uid,
+                              payload: { role: role as 'collaborator' | 'member' | 'spectator' },
+                            },
+                            {
+                              onSuccess: () =>
+                                toastSuccess(
+                                  'Rol actualizado',
+                                  `${member.displayName ?? member.uid} ahora es ${ROLE_CONFIG[role]?.label ?? role}.`,
+                                ),
+                              onError: (err) =>
+                                toastError(
+                                  'Error al cambiar rol',
+                                  err instanceof Error ? err.message : 'Intenta de nuevo.',
+                                ),
+                            },
+                          )
+                        }
+                        roles={[
+                          {
+                            value: 'collaborator',
+                            label: 'Colaborador',
+                            color: ROLE_CONFIG.collaborator.color,
+                            bg: ROLE_CONFIG.collaborator.bg,
+                          },
+                          {
+                            value: 'member',
+                            label: 'Miembro',
+                            color: ROLE_CONFIG.member.color,
+                            bg: ROLE_CONFIG.member.bg,
+                          },
+                          {
+                            value: 'spectator',
+                            label: 'Espectador',
+                            color: ROLE_CONFIG.spectator.color,
+                            bg: ROLE_CONFIG.spectator.bg,
+                          },
+                        ]}
+                      />
                     )}
 
                     {/* Kick button */}
                     {canKick(member) && (
-                      <button
-                        onClick={() => handleKick(member)}
-                        disabled={removeMember.isPending}
-                        title="Eliminar del equipo"
-                        className="w-7 h-7 rounded-lg flex items-center justify-center transition-all hover:bg-red/10 hover:text-red disabled:opacity-40"
-                        style={{ color: '#B0ADA7' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = '#F65A70')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = '#B0ADA7')}
-                      >
-                        <UserMinus size={15} />
-                      </button>
+                      <AppTooltip content="Eliminar del equipo" side="top">
+                        <button
+                          onClick={() => handleKick(member)}
+                          disabled={removeMember.isPending}
+                          className="w-7 h-7 rounded-lg flex items-center justify-center transition-all text-grey-400 hover:bg-red/10 hover:text-red disabled:opacity-40"
+                        >
+                          <UserMinus size={15} />
+                        </button>
+                      </AppTooltip>
                     )}
 
                     {/* Leader crown icon */}
                     {member.role === 'leader' && (
-                      <Crown size={15} style={{ color: '#60AFFF' }} className="shrink-0" />
+                      <AppTooltip content="Líder del equipo" side="top">
+                        <span className="shrink-0 flex items-center">
+                          <Crown size={15} className="text-blue" />
+                        </span>
+                      </AppTooltip>
                     )}
                   </div>
                 );
@@ -589,29 +612,30 @@ export default function TeamSettings() {
                 onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
                 onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
               />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    className="px-3 py-2 rounded-xl border border-grey-150 text-sm text-grey-700 bg-white outline-none cursor-pointer hover:border-grey-300 transition-colors flex items-center justify-between"
-                  >
-                    {inviteRole === 'collaborator' && 'Colaborador'}
-                    {inviteRole === 'member' && 'Miembro'}
-                    {inviteRole === 'spectator' && 'Espectador'}
-                    <ChevronDown className="h-3 w-3 ml-auto" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-32" align="start">
-                  <DropdownMenuItem onClick={() => setInviteRole('collaborator')}>
-                    Colaborador
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setInviteRole('member')}>
-                    Miembro
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setInviteRole('spectator')}>
-                    Espectador
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <RoleSelect
+                value={inviteRole}
+                onChange={(v) => setInviteRole(v as 'collaborator' | 'member' | 'spectator')}
+                roles={[
+                  {
+                    value: 'collaborator',
+                    label: 'Colaborador',
+                    color: ROLE_CONFIG.collaborator.color,
+                    bg: ROLE_CONFIG.collaborator.bg,
+                  },
+                  {
+                    value: 'member',
+                    label: 'Miembro',
+                    color: ROLE_CONFIG.member.color,
+                    bg: ROLE_CONFIG.member.bg,
+                  },
+                  {
+                    value: 'spectator',
+                    label: 'Espectador',
+                    color: ROLE_CONFIG.spectator.color,
+                    bg: ROLE_CONFIG.spectator.bg,
+                  },
+                ]}
+              />
               <button
                 onClick={handleInvite}
                 disabled={!inviteUid.trim() || addMember.isPending}
@@ -626,16 +650,6 @@ export default function TeamSettings() {
                 Invitar
               </button>
             </div>
-            {inviteError && (
-              <p className="text-xs mt-2" style={{ color: '#F65A70' }}>
-                {inviteError}
-              </p>
-            )}
-            {addMember.isSuccess && (
-              <p className="text-xs mt-2 text-green" style={{ color: '#2e9660' }}>
-                ✓ Usuario añadido correctamente.
-              </p>
-            )}
           </div>
         </section>
 

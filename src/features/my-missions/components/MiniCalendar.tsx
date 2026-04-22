@@ -4,11 +4,7 @@ import { ChevronDownIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { TeamTask } from '@/features/board/types';
 
 interface MiniCalendarProps {
@@ -36,14 +32,11 @@ export default function MiniCalendar({
           {tasksByDate.get(toDateKey(selectedDate))?.length || 0} tareas
         </div>
       </div>
-      
+
       <Popover>
         <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="w-full justify-between text-left font-normal"
-          >
-            {format(selectedDate, "PPP", { locale: es })}
+          <Button variant="outline" className="w-full justify-between text-left font-normal">
+            {format(selectedDate, 'PPP', { locale: es })}
             <ChevronDownIcon className="h-4 w-4" />
           </Button>
         </PopoverTrigger>
@@ -59,12 +52,12 @@ export default function MiniCalendar({
             modifiers={{
               hasTask: (date) => {
                 return !!tasksByDate.get(toDateKey(date))?.length;
-              }
+              },
             }}
             modifiersStyles={{
               hasTask: {
-                position: 'relative'
-              }
+                position: 'relative',
+              },
             }}
           />
         </PopoverContent>

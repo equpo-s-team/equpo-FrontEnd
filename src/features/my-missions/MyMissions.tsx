@@ -115,7 +115,7 @@ export default function MyMissions() {
       {/* Main 3-panel layout */}
       <div className="flex h-[calc(100dvh-62px)] overflow-hidden">
         {/* Left panel: Calendar + Categories */}
-        <aside className="hidden lg:flex flex-col w-64 min-w-[256px] border-r border-grey-150 bg-grey-50/50 p-4 gap-4 overflow-y-auto custom-scrollbar">
+        <aside className="hidden lg:flex flex-col w-[340px] min-w-[340px] border-r border-grey-150 bg-grey-50/50 p-4 gap-4 overflow-y-auto custom-scrollbar">
           <MiniCalendar
             selectedDate={selectedDate}
             onDateSelect={setSelectedDate}

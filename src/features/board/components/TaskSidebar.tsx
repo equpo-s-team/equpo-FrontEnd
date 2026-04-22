@@ -1,26 +1,10 @@
-import {
-  CalendarDays,
-  ChevronDownIcon,
-  Layers,
-  Repeat,
-  Tag,
-  Type,
-  Users,
-  X,
-  Zap,
-} from 'lucide-react';
+import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { AppProgress } from '@/components/ui/AppProgress';
 import { AppSelect } from '@/components/ui/AppSelect';
-import { Button } from '@/components/ui/button';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -92,7 +76,7 @@ export default function TaskSidebar({
   const [recurringInterval, setRecurringInterval] = useState<'days' | 'weeks' | 'months' | 'years'>(
     'days',
   );
-  const [recurringCount, setRecurringCount] = useState(1);
+  const [recurringCount, setRecurringCount] = useState<number | ''>(1);
   const [isEditView, setIsEditView] = useState(mode === 'create' || mode === 'edit');
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -154,7 +138,8 @@ export default function TaskSidebar({
       if (next.dueDate && dueDate && new Date(dueDate) > new Date()) delete next.dueDate;
       if (next.priority && priority) delete next.priority;
       if (next.categories && !hasInvalidCategory) delete next.categories;
-      if (next.recurringCount && (!isRecurring || recurringCount >= 1)) delete next.recurringCount;
+      if (next.recurringCount && (!isRecurring || (recurringCount !== '' && recurringCount >= 1)))
+        delete next.recurringCount;
       if (next.form) delete next.form;
 
       return Object.keys(next).length === Object.keys(prev).length ? prev : next;
@@ -182,7 +167,7 @@ export default function TaskSidebar({
     if (!dueDate) e.dueDate = 'La fecha es obligatoria';
     else if (new Date(dueDate) <= new Date()) e.dueDate = 'Debe ser una fecha futura';
     if (!priority) e.priority = 'La prioridad es obligatoria';
-    if (isRecurring && (!recurringCount || recurringCount < 1))
+    if (isRecurring && (recurringCount === '' || recurringCount < 1))
       e.recurringCount = 'Ingresa un número válido';
 
     const catArray = categories
@@ -221,7 +206,7 @@ export default function TaskSidebar({
       categories: catArray,
       isRecurring,
       recurringInterval: isRecurring ? recurringInterval : 'days',
-      recurringCount: isRecurring ? recurringCount : null,
+      recurringCount: isRecurring ? Number(recurringCount) || 1 : null,
       assignedUserUid: assignedUserUid || null,
       assignedGroupId: assignedGroupId || null,
     };
@@ -344,7 +329,7 @@ export default function TaskSidebar({
     Boolean(dueDate) &&
     Boolean(priority) &&
     Object.keys(errors).length === 0 &&
-    (!isRecurring || recurringCount >= 1);
+    (!isRecurring || (recurringCount !== '' && recurringCount >= 1));
 
   const isSubmitDisabled = isSubmitting || !isFormValid || !hasChanges;
 
@@ -652,43 +637,15 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Usuario Asignado
                     </FieldLabel>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
-                        >
-                          {assignedUserUid
-                            ? members.find((m) => m.uid === assignedUserUid)?.displayName ||
-                              assignedUserUid
-                            : 'Sin asignar'}
-                          <ChevronDownIcon className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-48 z-[60]" align="start">
-                        <DropdownMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setAssignedUserUid('');
-                          }}
-                        >
-                          Sin asignar
-                        </DropdownMenuItem>
-                        {members.map((m) => (
-                          <DropdownMenuItem
-                            key={m.uid}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setAssignedUserUid(m.uid);
-                            }}
-                          >
-                            {m.displayName || m.uid}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <AppSelect
+                      value={assignedUserUid}
+                      onChange={setAssignedUserUid}
+                      options={[
+                        { value: '', label: 'Sin asignar' },
+                        ...members.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                      ]}
+                      triggerClassName="w-full"
+                    />
                   </div>
 
                   {/* Assigned Group */}
@@ -697,43 +654,15 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Grupo Asignado
                     </FieldLabel>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
-                        >
-                          {assignedGroupId
-                            ? groups.find((g) => g.id === assignedGroupId)?.groupName ||
-                              assignedGroupId
-                            : 'Sin asignar'}
-                          <ChevronDownIcon className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-48 z-[60]" align="start">
-                        <DropdownMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setAssignedGroupId('');
-                          }}
-                        >
-                          Sin asignar
-                        </DropdownMenuItem>
-                        {groups.map((g) => (
-                          <DropdownMenuItem
-                            key={g.id}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setAssignedGroupId(g.id);
-                            }}
-                          >
-                            {g.groupName}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <AppSelect
+                      value={assignedGroupId}
+                      onChange={setAssignedGroupId}
+                      options={[
+                        { value: '', label: 'Sin asignar' },
+                        ...groups.map((g) => ({ value: g.id, label: g.groupName })),
+                      ]}
+                      triggerClassName="w-full"
+                    />
                   </div>
 
                   {/* Categories */}
@@ -798,12 +727,14 @@ export default function TaskSidebar({
                     {isRecurring && (
                       <div className="flex items-center gap-2 mt-3">
                         <span className="text-xs text-grey-600">Cada</span>
-                        <input
+                        <Input
                           type="number"
                           min={1}
                           max={365}
                           value={recurringCount}
-                          onChange={(e) => setRecurringCount(Math.max(1, Number(e.target.value)))}
+                          onChange={(e) =>
+                            setRecurringCount(e.target.value === '' ? '' : Number(e.target.value))
+                          }
                           className={`w-16 px-2 py-1.5 rounded-[8px] border-[1.5px] text-sm font-body text-center bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
                         />
                         <AppSelect

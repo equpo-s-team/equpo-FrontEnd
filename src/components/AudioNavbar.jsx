@@ -1,6 +1,7 @@
 import { Minimize2, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { useAudio } from '@/context/AudioContext.tsx';
 
 export default function AudioNavbar() {
@@ -109,20 +110,21 @@ export default function AudioNavbar() {
         /* Expanded State */
         <>
           {/* Collapse button */}
-          <button
-            onClick={() => setIsCollapsed(true)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setIsCollapsed(true);
-              }
-            }}
-            className="p-1.5 rounded-lg text-grey-500 hover:text-grey-700 hover:bg-grey-100 hover:scale-105 active:scale-95 transition-all duration-200 border border-grey-200/50 hover:border-grey-300/70"
-            title="Colapsar controles de audio"
-            aria-label="Colapsar controles de audio"
-          >
-            <Minimize2 size={12} />
-          </button>
+          <AppTooltip content="Colapsar controles de audio">
+            <button
+              onClick={() => setIsCollapsed(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsCollapsed(true);
+                }
+              }}
+              className="p-1.5 rounded-lg text-grey-500 hover:text-grey-700 hover:bg-grey-100 hover:scale-105 active:scale-95 transition-all duration-200 border border-grey-200/50 hover:border-grey-300/70"
+              aria-label="Colapsar controles de audio"
+            >
+              <Minimize2 size={12} />
+            </button>
+          </AppTooltip>
 
           {/* Mute/Unmute Global */}
           <button

@@ -4,6 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Paperclip, Send, Smile, X } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
 import { storage } from '@/firebase';
@@ -150,14 +151,15 @@ export default function MessageInput() {
           className="hidden"
           onChange={(e) => void handleFileUpload(e)}
         />
-        <button
-          disabled={!activeRoom || isUploading}
-          onClick={() => fileInputRef.current?.click()}
-          className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
-          title="Adjuntar archivo"
-        >
-          <Paperclip size={16} />
-        </button>
+        <AppTooltip content="Adjuntar archivo">
+          <button
+            disabled={!activeRoom || isUploading}
+            onClick={() => fileInputRef.current?.click()}
+            className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+          >
+            <Paperclip size={16} />
+          </button>
+        </AppTooltip>
 
         {/* Input */}
         <input
@@ -177,33 +179,35 @@ export default function MessageInput() {
         />
 
         {/* Emoji */}
-        <button
-          ref={emojiButtonRef}
-          disabled={!activeRoom || isUploading}
-          onClick={() => setShowEmojiPicker((prev) => !prev)}
-          className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
-          title="Emojis"
-        >
-          <Smile size={16} />
-        </button>
+        <AppTooltip content="Emojis">
+          <button
+            ref={emojiButtonRef}
+            disabled={!activeRoom || isUploading}
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+          >
+            <Smile size={16} />
+          </button>
+        </AppTooltip>
 
         {/* Send */}
-        <button
-          onClick={handleSend}
-          disabled={!canSend}
-          title="Enviar"
-          className={`
-            w-8 h-8 rounded-xl flex items-center justify-center
-            transition-all duration-200
-            ${
-              canSend
-                ? 'bg-gradient-purple-bg text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
-                : 'bg-grey-200 text-grey-400 cursor-not-allowed'
-            }
-          `}
-        >
-          <Send size={14} />
-        </button>
+        <AppTooltip content="Enviar">
+          <button
+            onClick={handleSend}
+            disabled={!canSend}
+            className={`
+              w-8 h-8 rounded-xl flex items-center justify-center
+              transition-all duration-200
+              ${
+                canSend
+                  ? 'bg-gradient-purple-bg text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
+                  : 'bg-grey-200 text-grey-400 cursor-not-allowed'
+              }
+            `}
+          >
+            <Send size={14} />
+          </button>
+        </AppTooltip>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { Mic, MicOff, PhoneOff, Video, VideoOff } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
@@ -119,19 +120,20 @@ export default function CallModal() {
           )}
 
           {/* End call */}
-          <button
-            onClick={endCall}
-            title="Terminar llamada"
-            className="
-              w-14 h-14 rounded-2xl
-              bg-gradient-to-br from-red to-orange
-              flex items-center justify-center text-white
-              shadow-neonRed hover:scale-105 active:scale-95
-              transition-all duration-200
-            "
-          >
-            <PhoneOff size={22} />
-          </button>
+          <AppTooltip content="Terminar llamada">
+            <button
+              onClick={endCall}
+              className="
+                w-14 h-14 rounded-2xl
+                bg-gradient-to-br from-red to-orange
+                flex items-center justify-center text-white
+                shadow-neonRed hover:scale-105 active:scale-95
+                transition-all duration-200
+              "
+            >
+              <PhoneOff size={22} />
+            </button>
+          </AppTooltip>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { ArrowRightLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
@@ -57,13 +58,14 @@ export default function SidebarLogo() {
           </div>
 
           <div className="relative">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              title="Cambiar de equipo"
-              className="p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-colors"
-            >
-              <ArrowRightLeft size={16} />
-            </button>
+            <AppTooltip content="Cambiar de equipo">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <ArrowRightLeft size={16} />
+              </button>
+            </AppTooltip>
 
             {isOpen && (
               <>

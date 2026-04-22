@@ -27,7 +27,7 @@ export function RoleSelect({ value, onChange, roles, disabled, className }: Role
   return (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
       <SelectTrigger
-        className={`h-auto border-grey-150 rounded-xl text-xs font-body text-grey-700 bg-white hover:border-grey-300 focus:ring-0 focus:ring-offset-0 px-2 py-1 min-w-[108px] ${className ?? ''}`}
+        className={`h-auto border-grey-150 rounded-xl text-xs font-body text-grey-700 bg-white hover:border-grey-300 focus:ring-0 focus:ring-offset-0 px-2 py-1 ${className ?? ''}`}
       >
         {current ? (
           <span

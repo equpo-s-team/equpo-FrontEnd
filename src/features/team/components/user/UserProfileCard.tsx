@@ -1,6 +1,8 @@
 import { Bolt } from 'lucide-react';
 import React from 'react';
 
+import { AppProgress } from '@/components/ui/AppProgress';
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 
 export interface UserProfile {
@@ -63,13 +65,14 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
             >
               {user.displayName}
             </h3>
-            <button
-              onClick={onOpenSettings}
-              className="w-7 h-7 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-grey-100 transition-all shrink-0"
-              title="Configuración de perfil"
-            >
-              <Bolt />
-            </button>
+            <AppTooltip content="Configuración de perfil">
+              <button
+                onClick={onOpenSettings}
+                className="w-7 h-7 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-grey-100 transition-all shrink-0"
+              >
+                <Bolt />
+              </button>
+            </AppTooltip>
           </div>
 
           <p className="text-xs text-grey-400 font-mono mb-2 truncate" title={user.uid}>
@@ -87,16 +90,12 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
                 XP
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-grey-150 overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-700"
-                style={{
-                  width: `${xpPercent}%`,
-                  background: 'linear-gradient(90deg, #60AFFF 0%, #9b7fe1 100%)',
-                  boxShadow: '0 0 8px rgba(155,127,225,0.5)',
-                }}
-              />
-            </div>
+            <AppProgress
+              value={xpPercent}
+              gradientStyle="linear-gradient(90deg, #60AFFF 0%, #9b7fe1 100%)"
+              glow="0 0 8px rgba(155,127,225,0.5)"
+              height="h-1.5"
+            />
           </div>
         </div>
       </div>

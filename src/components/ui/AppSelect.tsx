@@ -19,6 +19,10 @@ interface AppSelectProps {
   triggerClassName?: string;
 }
 
+/* Radix Select.Item forbids value="". Use a private sentinel so callers
+   can keep passing empty strings for "unassigned / none" options. */
+const NONE_VALUE = '__none__';
+
 export function AppSelect({
   value,
   onChange,
@@ -27,10 +31,18 @@ export function AppSelect({
   className,
   triggerClassName,
 }: AppSelectProps) {
-  const current = options.find((o) => o.value === value);
+  const internalValue = value === '' ? NONE_VALUE : value;
+
+  const internalOptions = options.map((o) => (o.value === '' ? { ...o, value: NONE_VALUE } : o));
+
+  const current = internalOptions.find((o) => o.value === internalValue);
+
+  function handleChange(v: string) {
+    onChange(v === NONE_VALUE ? '' : v);
+  }
 
   return (
-    <Select value={value} onValueChange={onChange} disabled={disabled}>
+    <Select value={internalValue} onValueChange={handleChange} disabled={disabled}>
       <SelectTrigger
         className={cn(
           'h-auto border-grey-150 rounded-xl text-xs font-body text-grey-700 bg-white hover:border-grey-300 focus:ring-0 focus:ring-offset-0 px-2.5 py-1.5',
@@ -50,7 +62,7 @@ export function AppSelect({
         )}
       </SelectTrigger>
       <SelectContent className={cn('rounded-xl border-grey-150 font-body text-xs', className)}>
-        {options.map((opt) => (
+        {internalOptions.map((opt) => (
           <SelectItem
             key={opt.value}
             value={opt.value}

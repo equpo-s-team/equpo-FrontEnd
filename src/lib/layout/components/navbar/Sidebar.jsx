@@ -142,7 +142,7 @@ export default function Sidebar() {
                         '0 0 8px rgba(96, 175, 255, 0.4), 0 0 18px rgba(96, 175, 255, 0.2)',
                     }}
                   />
-                  <style jsx>{`
+                  <style>{`
                     input[type='range']::-webkit-slider-thumb {
                       appearance: none;
                       width: 12px;

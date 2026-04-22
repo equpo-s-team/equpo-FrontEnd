@@ -385,19 +385,20 @@ export default function TeamSettings() {
                   loading="eager"
                 />
               </div>
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-                className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 disabled:opacity-60"
-                style={{ background: accent, boxShadow: `0 3px 10px ${accentGlow}` }}
-                title="Cambiar foto del equipo"
-              >
-                {isUploading ? (
-                  <Loader2 size={13} className="animate-spin" />
-                ) : (
-                  <Camera size={13} />
-                )}
-              </button>
+              <AppTooltip content="Cambiar foto del equipo">
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 disabled:opacity-60"
+                  style={{ background: accent, boxShadow: `0 3px 10px ${accentGlow}` }}
+                >
+                  {isUploading ? (
+                    <Loader2 size={13} className="animate-spin" />
+                  ) : (
+                    <Camera size={13} />
+                  )}
+                </button>
+              </AppTooltip>
               <input
                 ref={fileInputRef}
                 type="file"

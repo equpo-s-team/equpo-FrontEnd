@@ -2,6 +2,7 @@ import { Ellipsis, SquareArrowRightExit, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { logOut, useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.tsx';
@@ -66,13 +67,14 @@ export default function SidebarUser() {
 
       {/* Menu Options */}
       <div className="relative">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          title="Opciones"
-          className={`flex-shrink-0 p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-all duration-200 ${collapsed ? 'mt-1' : ''} `}
-        >
-          <Ellipsis size={18} />
-        </button>
+        <AppTooltip content="Opciones">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className={`flex-shrink-0 p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-all duration-200 ${collapsed ? 'mt-1' : ''} `}
+          >
+            <Ellipsis size={18} />
+          </button>
+        </AppTooltip>
 
         {isOpen && (
           <>

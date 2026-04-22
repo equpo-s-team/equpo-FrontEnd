@@ -18,7 +18,6 @@ export default function SidebarToggle() {
       <ChevronsLeft
         className={`transition-transform duration-300 ${collapsed ? 'rotate-180' : ''}`}
       />
-
-          </button>
+    </button>
   );
 }

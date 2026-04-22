@@ -32,6 +32,6 @@ export const useSoundEffects = () => {
 
   return {
     play,
-    sounds: SOUND_EFFECTS
+    sounds: SOUND_EFFECTS,
   };
 };

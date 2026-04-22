@@ -21,11 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 import { TAG_COLOR_CONFIG } from './columnConfig.js';
 
@@ -278,7 +274,7 @@ function DueDateFilter({ value, onChange }) {
                 variant="outline"
                 className="w-full justify-between text-left font-normal border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150"
               >
-                {value ? format(new Date(value), "PPP", { locale: es }) : 'Seleccionar fecha'}
+                {value ? format(new Date(value), 'PPP', { locale: es }) : 'Seleccionar fecha'}
                 <ChevronDownIcon className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
@@ -381,9 +377,7 @@ function RecurringFilter({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48" align="start">
-                  <DropdownMenuItem onClick={() => onIntervalChange(null)}>
-                    Todos
-                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onIntervalChange(null)}>Todos</DropdownMenuItem>
                   {Object.entries(INTERVAL_LABELS).map(([val, lbl]) => (
                     <DropdownMenuItem key={val} onClick={() => onIntervalChange(val)}>
                       {lbl}

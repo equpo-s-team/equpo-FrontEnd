@@ -1,4 +1,15 @@
-import { ChartColumnBig, Home, MessageCircle, Pause, Play, Settings, Star, UserCheck, Volume2, VolumeX } from 'lucide-react';
+import {
+  ChartColumnBig,
+  Home,
+  MessageCircle,
+  Pause,
+  Play,
+  Settings,
+  Star,
+  UserCheck,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 
 import { useAudio } from '@/context/AudioContext.tsx';
 import { useAuth } from '@/context/AuthContext';
@@ -25,7 +36,7 @@ export default function Sidebar() {
     pauseBackgroundMusic,
     setVolume,
     setMusicEnabled,
-    toggleMute
+    toggleMute,
   } = useAudio();
 
   // Determine the current user's role in the active team
@@ -59,17 +70,19 @@ export default function Sidebar() {
 
         <SidebarSection label="Moderación">
           <SidebarItem id="reports" icon={ChartColumnBig} label="Reportes" />
-          {canAccessSettings && (
-            <SidebarItem id="settings" icon={Settings} label="Ajustes" />
-          )}
+          {canAccessSettings && <SidebarItem id="settings" icon={Settings} label="Ajustes" />}
         </SidebarSection>
       </nav>
 
       {/* Audio Controls Section */}
-      <div className={`px-2 py-3 transition-all duration-300 ${collapsed ? 'flex justify-center' : ''}`}>
+      <div
+        className={`px-2 py-3 transition-all duration-300 ${collapsed ? 'flex justify-center' : ''}`}
+      >
         {!collapsed ? (
           <div className="space-y-2">
-            <div className="px-3 pt-1 pb-0.5 text-xs font-body font-semibold tracking-widest uppercase text-purple select-none">Audio</div>
+            <div className="px-3 pt-1 pb-0.5 text-xs font-body font-semibold tracking-widest uppercase text-purple select-none">
+              Audio
+            </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2 p-2">
                 <button
@@ -77,7 +90,11 @@ export default function Sidebar() {
                   className="p-1.5 rounded-lg text-grey-600 hover:text-grey-800 hover:bg-grey-200 transition-all duration-200"
                   title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
                 >
-                  {isMuted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} className="text-grey-600" />}
+                  {isMuted ? (
+                    <VolumeX size={14} className="text-red-500" />
+                  ) : (
+                    <Volume2 size={14} className="text-grey-600" />
+                  )}
                 </button>
                 <button
                   onClick={() => {
@@ -97,7 +114,9 @@ export default function Sidebar() {
                         ? 'text-blue-500 hover:text-blue-600 hover:bg-blue-100'
                         : 'text-grey-600 hover:text-grey-800 hover:bg-grey-200'
                   }`}
-                  title={isMuted ? 'Audio muteado' : (isPlaying ? 'Pausar música' : 'Reproducir música')}
+                  title={
+                    isMuted ? 'Audio muteado' : isPlaying ? 'Pausar música' : 'Reproducir música'
+                  }
                 >
                   {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                 </button>
@@ -119,48 +138,57 @@ export default function Sidebar() {
                       borderRadius: '0.25rem',
                       WebkitAppearance: 'none',
                       MozAppearance: 'none',
-                      boxShadow: '0 0 8px rgba(96, 175, 255, 0.4), 0 0 18px rgba(96, 175, 255, 0.2)'
+                      boxShadow:
+                        '0 0 8px rgba(96, 175, 255, 0.4), 0 0 18px rgba(96, 175, 255, 0.2)',
                     }}
                   />
                   <style jsx>{`
-                    input[type="range"]::-webkit-slider-thumb {
+                    input[type='range']::-webkit-slider-thumb {
                       appearance: none;
                       width: 12px;
                       height: 12px;
-                      background: #60AFFF;
+                      background: #60afff;
                       border-radius: 50%;
                       cursor: pointer;
                       border: none;
                       transition: all 0.2s ease;
-                      box-shadow: 0 0 8px rgba(96, 175, 255, 0.6), 0 0 18px rgba(96, 175, 255, 0.3);
+                      box-shadow:
+                        0 0 8px rgba(96, 175, 255, 0.6),
+                        0 0 18px rgba(96, 175, 255, 0.3);
                     }
-                    input[type="range"]::-webkit-slider-thumb:hover {
-                      background: #4A9FEF;
+                    input[type='range']::-webkit-slider-thumb:hover {
+                      background: #4a9fef;
                       transform: scale(1.1);
-                      box-shadow: 0 0 12px rgba(96, 175, 255, 0.8), 0 0 24px rgba(96, 175, 255, 0.4);
+                      box-shadow:
+                        0 0 12px rgba(96, 175, 255, 0.8),
+                        0 0 24px rgba(96, 175, 255, 0.4);
                     }
-                    input[type="range"]::-moz-range-thumb {
+                    input[type='range']::-moz-range-thumb {
                       width: 12px;
                       height: 12px;
-                      background: #60AFFF;
+                      background: #60afff;
                       border-radius: 50%;
                       cursor: pointer;
                       border: none;
                       transition: all 0.2s ease;
-                      box-shadow: 0 0 8px rgba(96, 175, 255, 0.6), 0 0 18px rgba(96, 175, 255, 0.3);
+                      box-shadow:
+                        0 0 8px rgba(96, 175, 255, 0.6),
+                        0 0 18px rgba(96, 175, 255, 0.3);
                     }
-                    input[type="range"]::-moz-range-thumb:hover {
-                      background: #4A9FEF;
+                    input[type='range']::-moz-range-thumb:hover {
+                      background: #4a9fef;
                       transform: scale(1.1);
-                      box-shadow: 0 0 12px rgba(96, 175, 255, 0.8), 0 0 24px rgba(96, 175, 255, 0.4);
+                      box-shadow:
+                        0 0 12px rgba(96, 175, 255, 0.8),
+                        0 0 24px rgba(96, 175, 255, 0.4);
                     }
-                    input[type="range"]:disabled::-webkit-slider-thumb {
+                    input[type='range']:disabled::-webkit-slider-thumb {
                       background: rgb(209, 213, 235);
                       cursor: not-allowed;
                       transform: scale(1);
                       box-shadow: none;
                     }
-                    input[type="range"]:disabled::-moz-range-thumb {
+                    input[type='range']:disabled::-moz-range-thumb {
                       background: rgb(209, 213, 235);
                       cursor: not-allowed;
                       transform: scale(1);

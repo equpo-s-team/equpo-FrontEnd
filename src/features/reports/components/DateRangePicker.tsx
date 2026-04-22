@@ -1,15 +1,11 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { CalendarIcon,ChevronDownIcon } from 'lucide-react';
+import { CalendarIcon, ChevronDownIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface DateRange {
   from?: Date;
@@ -25,7 +21,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
 
   const handleDateRangeChange = (range: DateRange | undefined) => {
     setDateRange(range || {});
-    
+
     if (range?.from && range?.to) {
       const days = Math.round((range.to.getTime() - range.from.getTime()) / 86_400_000) + 1;
       onRangeChange?.(days);
@@ -45,11 +41,11 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
           {dateRange?.from ? (
             dateRange.to ? (
               <>
-                {format(dateRange.from, "dd MMM", { locale: es })} -{" "}
-                {format(dateRange.to, "dd MMM yyyy", { locale: es })}
+                {format(dateRange.from, 'dd MMM', { locale: es })} -{' '}
+                {format(dateRange.to, 'dd MMM yyyy', { locale: es })}
               </>
             ) : (
-              format(dateRange.from, "dd MMM yyyy", { locale: es })
+              format(dateRange.from, 'dd MMM yyyy', { locale: es })
             )
           ) : (
             <span className="text-sm font-medium text-grey-700">Seleccionar rango</span>
@@ -57,15 +53,15 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
           <ChevronDownIcon className="ml-auto h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent 
-        className="w-auto p-0 bg-white border border-grey-200 rounded-2xl shadow-lg" 
+      <PopoverContent
+        className="w-auto p-0 bg-white border border-grey-200 rounded-2xl shadow-lg"
         align="start"
       >
         <Calendar
           mode="range"
           selected={{
             from: dateRange?.from,
-            to: dateRange?.to
+            to: dateRange?.to,
           }}
           onSelect={handleDateRangeChange}
           locale={es}

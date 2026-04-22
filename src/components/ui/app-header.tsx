@@ -57,19 +57,11 @@ export function AppHeader({
         />
         <div className="flex flex-col">
           <span>{title}</span>
-          {subtitle && (
-            <span className="text-xs text-grey-400 font-normal">
-              {subtitle}
-            </span>
-          )}
+          {subtitle && <span className="text-xs text-grey-400 font-normal">{subtitle}</span>}
         </div>
       </div>
 
-      {actions && (
-        <div className="flex items-center gap-3">
-          {actions}
-        </div>
-      )}
+      {actions && <div className="flex items-center gap-3">{actions}</div>}
     </header>
   );
 }

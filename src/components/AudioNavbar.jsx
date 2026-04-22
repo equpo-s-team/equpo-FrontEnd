@@ -1,5 +1,5 @@
-import {Minimize2, Pause, Play, Volume2, VolumeX } from 'lucide-react';
-import { useEffect,useState } from 'react';
+import { Minimize2, Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { useAudio } from '@/context/AudioContext.tsx';
 
@@ -12,7 +12,7 @@ export default function AudioNavbar() {
     pauseBackgroundMusic,
     setVolume,
     setMusicEnabled,
-    toggleMute
+    toggleMute,
   } = useAudio();
 
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -59,7 +59,7 @@ export default function AudioNavbar() {
           ? '0 4px 20px rgba(59, 130, 246, 0.1), 0 2px 10px rgba(59, 130, 246, 0.08)'
           : '0 8px 30px rgba(59, 130, 246, 0.08), 0 4px 15px rgba(59, 130, 246, 0.06)',
         transform: isCollapsed ? 'scale(0.95)' : 'scale(1)',
-        transformOrigin: 'center'
+        transformOrigin: 'center',
       }}
     >
       {isCollapsed ? (
@@ -84,8 +84,16 @@ export default function AudioNavbar() {
             }
           }}
           className="w-full h-full rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 flex items-center justify-center"
-          title={isMuted ? 'Desmutear audio (doble clic para expandir)' : (isPlaying ? 'Pausar música (doble clic para expandir)' : 'Reproducir música (doble clic para expandir)')}
-          aria-label={isMuted ? 'Desmutear audio' : (isPlaying ? 'Pausar música' : 'Reproducir música')}
+          title={
+            isMuted
+              ? 'Desmutear audio (doble clic para expandir)'
+              : isPlaying
+                ? 'Pausar música (doble clic para expandir)'
+                : 'Reproducir música (doble clic para expandir)'
+          }
+          aria-label={
+            isMuted ? 'Desmutear audio' : isPlaying ? 'Pausar música' : 'Reproducir música'
+          }
         >
           <div className="flex items-center justify-center">
             {isMuted ? (
@@ -138,7 +146,7 @@ export default function AudioNavbar() {
             className={`p-2 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 ${
               isMuted ? 'opacity-50 cursor-not-allowed' : ''
             }`}
-            title={isMuted ? 'Sonidos muteados' : (isPlaying ? 'Pausar música' : 'Reproducir música')}
+            title={isMuted ? 'Sonidos muteados' : isPlaying ? 'Pausar música' : 'Reproducir música'}
           >
             <div className="flex items-center justify-center">
               {isPlaying ? (
@@ -167,7 +175,7 @@ export default function AudioNavbar() {
                   boxShadow: isMuted
                     ? 'inset 0 1px 2px rgba(0, 0, 0, 0.05)'
                     : '0 1px 4px rgba(59, 130, 246, 0.15), 0 0 0 0.5px rgba(59, 130, 246, 0.08)',
-                  borderRadius: '0.75rem'
+                  borderRadius: '0.75rem',
                 }}
               />
             </div>

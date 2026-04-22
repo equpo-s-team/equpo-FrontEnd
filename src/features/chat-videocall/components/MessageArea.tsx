@@ -85,11 +85,11 @@ export default function MessageArea() {
     // Play sound only for new messages received after initialization
     const previousMessages = messagesRef.current;
     const newMessages = messages.filter(
-      msg => !previousMessages.find(prev => prev.id === msg.id)
+      (msg) => !previousMessages.find((prev) => prev.id === msg.id),
     );
 
     // Play sound only for messages from other users
-    newMessages.forEach(msg => {
+    newMessages.forEach((msg) => {
       if (msg.senderUid !== currentUid && msg.type !== 'system') {
         play('messageReceived');
       }

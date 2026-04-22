@@ -2,11 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface TimePickerProps {
   value?: string; // HH:MM format
@@ -19,7 +15,7 @@ export function TimePicker({
   value,
   onChange,
   placeholder = 'Seleccionar hora',
-  className = 'w-full'
+  className = 'w-full',
 }: TimePickerProps) {
   const [selectedHour, selectedMinute] = value?.split(':') || ['', ''];
   const [isOpen, setIsOpen] = React.useState(false);
@@ -27,7 +23,7 @@ export function TimePicker({
   const handleHourChange = (newHour: string) => {
     const hour = parseInt(newHour);
     if (isNaN(hour)) return;
-    
+
     const clampedHour = Math.max(0, Math.min(23, hour));
     const formattedHour = String(clampedHour).padStart(2, '0');
     onChange(`${formattedHour}:${selectedMinute || '00'}`);
@@ -36,7 +32,7 @@ export function TimePicker({
   const handleMinuteChange = (newMinute: string) => {
     const minute = parseInt(newMinute);
     if (isNaN(minute)) return;
-    
+
     const clampedMinute = Math.max(0, Math.min(59, minute));
     const formattedMinute = String(clampedMinute).padStart(2, '0');
     onChange(`${selectedHour || '00'}:${formattedMinute}`);
@@ -65,10 +61,7 @@ export function TimePicker({
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={`${className} justify-between text-left font-normal`}
-        >
+        <Button variant="outline" className={`${className} justify-between text-left font-normal`}>
           {value ? `${value} hrs` : placeholder}
           <ChevronDownIcon className="h-4 w-4" />
         </Button>
@@ -89,12 +82,7 @@ export function TimePicker({
             <div>
               <label className="text-xs font-medium text-grey-600 mb-2 block">Hora</label>
               <div className="flex items-center gap-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={decrementHour}
-                  className="h-8 w-8 p-0"
-                >
+                <Button variant="outline" size="sm" onClick={decrementHour} className="h-8 w-8 p-0">
                   <ChevronDownIcon className="h-3 w-3" />
                 </Button>
                 <input
@@ -105,17 +93,12 @@ export function TimePicker({
                   placeholder="00"
                   maxLength={2}
                 />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={incrementHour}
-                  className="h-8 w-8 p-0"
-                >
+                <Button variant="outline" size="sm" onClick={incrementHour} className="h-8 w-8 p-0">
                   <ChevronUpIcon className="h-3 w-3" />
                 </Button>
               </div>
             </div>
-            
+
             {/* Minutes */}
             <div>
               <label className="text-xs font-medium text-grey-600 mb-2 block">Minutos</label>

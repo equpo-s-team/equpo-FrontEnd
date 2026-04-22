@@ -24,7 +24,7 @@ function TaskDayButton({
   ...props
 }: React.ComponentProps<typeof CalendarDayButton>) {
   const hasTask = modifiers.hasTask;
-  
+
   return (
     <CalendarDayButton
       className={cn(
@@ -60,7 +60,7 @@ export default function MiniCalendar({
           {tasksByDate.get(toDateKey(selectedDate))?.length || 0} tareas
         </div>
       </div>
-      
+
       <div className="w-full overflow-visible">
         <Calendar
           mode="single"

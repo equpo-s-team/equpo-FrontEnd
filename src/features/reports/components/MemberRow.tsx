@@ -1,3 +1,4 @@
+import { AppProgress } from '@/components/ui/AppProgress';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 
 import type { ReportMemberRow } from '../types/types.ts';
@@ -82,16 +83,12 @@ export function MemberRow({ member }: MemberRowProps) {
             {member.completed}/{member.total}
           </span>
         </div>
-        <div className="w-full h-[5px] bg-grey-150 rounded-full overflow-hidden">
-          <div
-            className="h-full rounded-full"
-            style={{
-              width: `${pct}%`,
-              background: member.barGradient,
-              boxShadow: member.barGlow,
-            }}
-          />
-        </div>
+        <AppProgress
+          value={pct}
+          gradientStyle={member.barGradient}
+          glow={member.barGlow}
+          height="h-[5px]"
+        />
       </div>
 
       {/* Percentage */}

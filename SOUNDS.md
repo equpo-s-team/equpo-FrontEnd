@@ -3,19 +3,23 @@
 ## Sonidos Disponibles
 
 ### Efectos de Tareas
+
 - `task-created.mp3` - Se reproduce al crear una nueva tarea
 - `task-updated.mp3` - Se reproduce al modificar una tarea existente
 - `task-completed.mp3` - Se reproduce al mover una tarea a "Completada"
 - `task-deleted.mp3` - Se reproduce al eliminar una tarea
 
 ### Efectos de Chat
+
 - `message-sent.mp3` - Se reproduce al enviar un mensaje
 - `message-received.mp3` - Se reproduce al recibir un mensaje
 
 ### Notificaciones
+
 - `ring_tone.mp3` - Para llamadas y alertas
 
 ### Música de Fondo
+
 - `guitar-melody-1.mp3`
 - `guitar-melody-2.mp3`
 - `guitar-melody-3.mp3`
@@ -23,6 +27,7 @@
 ## Ubicación
 
 Todos los archivos de sonido están en:
+
 ```
 public/sounds/
 ```

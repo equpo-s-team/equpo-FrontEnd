@@ -1,4 +1,4 @@
-import { createContext, type ReactNode,useContext, useEffect, useRef, useState } from 'react';
+import { createContext, type ReactNode, useContext, useEffect, useRef, useState } from 'react';
 
 export interface AudioContextType {
   isPlaying: boolean;
@@ -91,7 +91,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const tracks = [
     '/sounds/guitar-melody-1.mp3',
     '/sounds/guitar-melody-2.mp3',
-    '/sounds/guitar-melody-3.mp3'
+    '/sounds/guitar-melody-3.mp3',
   ];
 
   const playBackgroundMusic = () => {
@@ -99,11 +99,14 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
 
     if (backgroundMusicRef.current) {
       backgroundMusicRef.current.load();
-      backgroundMusicRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch((err: unknown) => {
-        console.error('Error playing background music:', err);
-      });
+      backgroundMusicRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err: unknown) => {
+          console.error('Error playing background music:', err);
+        });
     }
   };
 
@@ -127,7 +130,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const playSoundEffect = (soundFile: string) => {
-    if (!soundEnabled) return;
+    if (!soundEnabled || isMuted) return;
 
     const audio = new Audio(soundFile);
     audio.volume = Math.min(volume * 1.2, 1.0);
@@ -180,14 +183,10 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         toggleMute,
         nextTrack,
         prevTrack,
-        changeTrack
+        changeTrack,
       }}
     >
-      <audio
-        ref={backgroundMusicRef}
-        src={tracks[currentTrack]}
-        onEnded={nextTrack}
-      />
+      <audio ref={backgroundMusicRef} src={tracks[currentTrack]} onEnded={nextTrack} />
       {children}
     </AudioContext.Provider>
   );

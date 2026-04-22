@@ -1,18 +1,15 @@
-import { CalendarDays, ChevronDownIcon, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
+import { AppProgress } from '@/components/ui/AppProgress';
+import { AppSelect } from '@/components/ui/AppSelect';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { toastError, toastSuccess } from '@/lib/toast';
 
 import { useCreateTask } from '../hooks/useCreateTask';
 import { useDeleteTask } from '../hooks/useDeleteTask';
@@ -79,7 +76,7 @@ export default function TaskSidebar({
   const [recurringInterval, setRecurringInterval] = useState<'days' | 'weeks' | 'months' | 'years'>(
     'days',
   );
-  const [recurringCount, setRecurringCount] = useState(1);
+  const [recurringCount, setRecurringCount] = useState<number | ''>(1);
   const [isEditView, setIsEditView] = useState(mode === 'create' || mode === 'edit');
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -141,7 +138,8 @@ export default function TaskSidebar({
       if (next.dueDate && dueDate && new Date(dueDate) > new Date()) delete next.dueDate;
       if (next.priority && priority) delete next.priority;
       if (next.categories && !hasInvalidCategory) delete next.categories;
-      if (next.recurringCount && (!isRecurring || recurringCount >= 1)) delete next.recurringCount;
+      if (next.recurringCount && (!isRecurring || (recurringCount !== '' && recurringCount >= 1)))
+        delete next.recurringCount;
       if (next.form) delete next.form;
 
       return Object.keys(next).length === Object.keys(prev).length ? prev : next;
@@ -169,7 +167,7 @@ export default function TaskSidebar({
     if (!dueDate) e.dueDate = 'La fecha es obligatoria';
     else if (new Date(dueDate) <= new Date()) e.dueDate = 'Debe ser una fecha futura';
     if (!priority) e.priority = 'La prioridad es obligatoria';
-    if (isRecurring && (!recurringCount || recurringCount < 1))
+    if (isRecurring && (recurringCount === '' || recurringCount < 1))
       e.recurringCount = 'Ingresa un número válido';
 
     const catArray = categories
@@ -208,7 +206,7 @@ export default function TaskSidebar({
       categories: catArray,
       isRecurring,
       recurringInterval: isRecurring ? recurringInterval : 'days',
-      recurringCount: isRecurring ? recurringCount : null,
+      recurringCount: isRecurring ? Number(recurringCount) || 1 : null,
       assignedUserUid: assignedUserUid || null,
       assignedGroupId: assignedGroupId || null,
     };
@@ -224,14 +222,16 @@ export default function TaskSidebar({
       if (mode !== 'create' && task) {
         await updateTask.mutateAsync({ teamId, taskId: task.id, payload });
         play('taskUpdated');
+        toastSuccess('Tarea actualizada', 'Los cambios se guardaron correctamente.');
       } else {
         await createTask.mutateAsync({ teamId, payload });
         play('taskCreated');
+        toastSuccess('Tarea creada', `"${payload.name}" fue añadida al tablero.`);
       }
       onClose();
     } catch (err: unknown) {
-      const form = err instanceof Error ? err.message : 'Error al guardar la tarea';
-      setErrors({ form });
+      const msg = err instanceof Error ? err.message : 'Error al guardar la tarea';
+      toastError('Error al guardar', msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -243,10 +243,11 @@ export default function TaskSidebar({
     try {
       await deleteTask.mutateAsync({ teamId, taskId: task.id });
       play('taskDeleted');
+      toastSuccess('Tarea eliminada', 'La tarea fue eliminada permanentemente.');
       onClose();
     } catch (err: unknown) {
-      const form = err instanceof Error ? err.message : 'Error al eliminar la tarea';
-      setErrors({ form });
+      const msg = err instanceof Error ? err.message : 'Error al eliminar la tarea';
+      toastError('Error al eliminar', msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -328,7 +329,7 @@ export default function TaskSidebar({
     Boolean(dueDate) &&
     Boolean(priority) &&
     Object.keys(errors).length === 0 &&
-    (!isRecurring || recurringCount >= 1);
+    (!isRecurring || (recurringCount !== '' && recurringCount >= 1));
 
   const isSubmitDisabled = isSubmitting || !isFormValid || !hasChanges;
 
@@ -524,19 +525,7 @@ export default function TaskSidebar({
                       {progress}%
                     </span>
                   </div>
-                  <div className="h-1 bg-secondary rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full relative ${progressCfg.progressFill} transition-[width] duration-500 ease-out`}
-                      style={{ width: `${progress}%` }}
-                    >
-                      {progress > 0 && (
-                        <div
-                          className="absolute right-0 top-0 bottom-0 w-1.5 blur-[2px] rounded-full"
-                          style={{ background: 'inherit' }}
-                        />
-                      )}
-                    </div>
-                  </div>
+                  <AppProgress value={progress} gradient={progressCfg.progressFill} />
                 </div>
               </div>
             </div>
@@ -618,23 +607,28 @@ export default function TaskSidebar({
                       <Zap size={12} className="inline mr-1 -mt-0.5" />
                       Prioridad
                     </FieldLabel>
-                    <div className="flex gap-2">
-                      {PRIORITY_OPTIONS.map((opt) => (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => setPriority(opt.value as 'high' | 'medium' | 'low')}
-                          className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-[10px] border-[1.5px] text-xs font-semibold transition-all duration-150 cursor-pointer ${
-                            priority === opt.value
-                              ? 'border-blue bg-blue/8 text-blue'
-                              : 'border-grey-200 text-grey-500 hover:border-grey-300'
-                          }`}
-                        >
-                          <span className={`w-2 h-2 rounded-full ${opt.dot}`} />
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
+                    <AppSelect
+                      value={priority}
+                      onChange={(v) => setPriority(v as 'high' | 'medium' | 'low')}
+                      options={[
+                        {
+                          value: 'high',
+                          label: 'Alta',
+                          icon: <span className="w-2 h-2 rounded-full bg-red shrink-0" />,
+                        },
+                        {
+                          value: 'medium',
+                          label: 'Media',
+                          icon: <span className="w-2 h-2 rounded-full bg-orange-dark shrink-0" />,
+                        },
+                        {
+                          value: 'low',
+                          label: 'Baja',
+                          icon: <span className="w-2 h-2 rounded-full bg-green shrink-0" />,
+                        },
+                      ]}
+                      triggerClassName="w-full"
+                    />
                   </div>
 
                   {/* Assigned User */}
@@ -643,38 +637,15 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Usuario Asignado
                     </FieldLabel>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
-                        >
-                          {assignedUserUid
-                            ? (members.find(m => m.uid === assignedUserUid)?.displayName || assignedUserUid)
-                            : 'Sin asignar'
-                          }
-                          <ChevronDownIcon className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-48 z-[60]" align="start">
-                        <DropdownMenuItem onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setAssignedUserUid('');
-                        }}>
-                          Sin asignar
-                        </DropdownMenuItem>
-                        {members.map((m) => (
-                          <DropdownMenuItem key={m.uid} onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setAssignedUserUid(m.uid);
-                          }}>
-                            {m.displayName || m.uid}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <AppSelect
+                      value={assignedUserUid}
+                      onChange={setAssignedUserUid}
+                      options={[
+                        { value: '', label: 'Sin asignar' },
+                        ...members.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                      ]}
+                      triggerClassName="w-full"
+                    />
                   </div>
 
                   {/* Assigned Group */}
@@ -683,38 +654,15 @@ export default function TaskSidebar({
                       <Users size={12} className="inline mr-1 -mt-0.5" />
                       Grupo Asignado
                     </FieldLabel>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
-                        >
-                          {assignedGroupId
-                            ? (groups.find(g => g.id === assignedGroupId)?.groupName || assignedGroupId)
-                            : 'Sin asignar'
-                          }
-                          <ChevronDownIcon className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-48 z-[60]" align="start">
-                        <DropdownMenuItem onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setAssignedGroupId('');
-                        }}>
-                          Sin asignar
-                        </DropdownMenuItem>
-                        {groups.map((g) => (
-                          <DropdownMenuItem key={g.id} onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setAssignedGroupId(g.id);
-                          }}>
-                            {g.groupName}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <AppSelect
+                      value={assignedGroupId}
+                      onChange={setAssignedGroupId}
+                      options={[
+                        { value: '', label: 'Sin asignar' },
+                        ...groups.map((g) => ({ value: g.id, label: g.groupName })),
+                      ]}
+                      triggerClassName="w-full"
+                    />
                   </div>
 
                   {/* Categories */}
@@ -779,29 +727,27 @@ export default function TaskSidebar({
                     {isRecurring && (
                       <div className="flex items-center gap-2 mt-3">
                         <span className="text-xs text-grey-600">Cada</span>
-                        <input
+                        <Input
                           type="number"
                           min={1}
                           max={365}
                           value={recurringCount}
-                          onChange={(e) => setRecurringCount(Math.max(1, Number(e.target.value)))}
+                          onChange={(e) =>
+                            setRecurringCount(e.target.value === '' ? '' : Number(e.target.value))
+                          }
                           className={`w-16 px-2 py-1.5 rounded-[8px] border-[1.5px] text-sm font-body text-center bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
                         />
-                        <select
+                        <AppSelect
                           value={recurringInterval}
-                          onChange={(e) =>
-                            setRecurringInterval(
-                              e.target.value as 'days' | 'weeks' | 'months' | 'years',
-                            )
+                          onChange={(v) =>
+                            setRecurringInterval(v as 'days' | 'weeks' | 'months' | 'years')
                           }
-                          className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 text-sm font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-                        >
-                          {INTERVAL_OPTIONS.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                              {opt.label}
-                            </option>
-                          ))}
-                        </select>
+                          options={INTERVAL_OPTIONS.map((opt) => ({
+                            value: opt.value,
+                            label: opt.label,
+                          }))}
+                          triggerClassName="flex-1"
+                        />
                       </div>
                     )}
                     {errors.recurringCount && (
@@ -810,13 +756,6 @@ export default function TaskSidebar({
                   </div>
                 </div>
               </div>
-
-              {/* Form Error */}
-              {errors.form && (
-                <div className="mt-5 px-3 py-2 rounded-[10px] bg-red/10 border border-red/30 text-xs text-red">
-                  {errors.form}
-                </div>
-              )}
             </form>
 
             {/* ── Footer ── */}

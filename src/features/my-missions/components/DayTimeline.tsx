@@ -124,7 +124,6 @@ export default function DayTimeline({
 
   const laidOut = useMemo(() => layoutTasks(tasks), [tasks]);
 
-  // Current time indicator
   const now = new Date();
   const isToday = now.toISOString().slice(0, 10) === selectedDate.toISOString().slice(0, 10);
   const nowMinutes = now.getHours() * 60 + now.getMinutes();

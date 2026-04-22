@@ -1,15 +1,9 @@
-import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ChevronDownIcon } from 'lucide-react';
+import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Calendar, CalendarDayButton } from '@/components/ui/calendar';
 import type { TeamTask } from '@/features/board/types';
+import { cn } from '@/lib/utils';
 
 interface MiniCalendarProps {
   selectedDate: Date;
@@ -21,54 +15,77 @@ function toDateKey(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
-export default function MiniCalendar({
-  selectedDate,
-  onDateSelect,
-  tasksByDate,
-}: MiniCalendarProps) {
+function TaskDayButton({
+                         className,
+                         day,
+                         modifiers,
+                         ...props
+                       }: React.ComponentProps<typeof CalendarDayButton>) {
+  const hasTask = modifiers.hasTask;
+  const hasOverdueTask = modifiers.hasOverdueTask;
+
   return (
-    <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-bold text-grey-800 font-body">
-          {format(selectedDate, 'MMMM yyyy', { locale: es })}
-        </h3>
-        <div className="text-xs text-grey-500">
-          {tasksByDate.get(toDateKey(selectedDate))?.length || 0} tareas
+    <CalendarDayButton
+      className={cn(
+        className,
+        "relative"
+      )}
+      day={day}
+      modifiers={modifiers}
+      {...props}
+    >
+      {day.date.getDate()}
+      {hasTask && (
+        <div className="absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5 sm:bottom-1 sm:gap-1">
+          <div className={cn(
+            "h-1 w-1 rounded-full sm:h-1.5 sm:w-1.5",
+            hasOverdueTask ? "bg-red-500" : "bg-blue-500"
+          )} />
         </div>
+      )}
+    </CalendarDayButton>
+  );
+}
+
+export default function MiniCalendar({
+                                       selectedDate,
+                                       onDateSelect,
+                                       tasksByDate,
+                                     }: MiniCalendarProps) {
+  return (
+    <div className="w-full rounded-xl border border-grey-150 bg-white px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
+
+      <div className="w-full overflow-visible">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={(date) => {
+            if (date) onDateSelect(date);
+          }}
+          defaultMonth={selectedDate}
+          locale={es}
+          className="w-full p-0"
+          modifiers={{
+            hasTask: (date) => {
+              return !!tasksByDate.get(toDateKey(date))?.length;
+            },
+            hasOverdueTask: (date) => {
+              const tasks = tasksByDate.get(toDateKey(date));
+              if (!tasks || tasks.length === 0) return false;
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return tasks.some(task => {
+                const dueDate = new Date(task.dueDate);
+                dueDate.setHours(0, 0, 0, 0);
+                return dueDate < today && task.status !== 'done';
+              });
+            }
+          }}
+          components={{
+            DayButton: TaskDayButton
+          }}
+        />
       </div>
-      
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="w-full justify-between text-left font-normal"
-          >
-            {format(selectedDate, "PPP", { locale: es })}
-            <ChevronDownIcon className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={(date) => {
-              if (date) onDateSelect(date);
-            }}
-            defaultMonth={selectedDate}
-            locale={es}
-            modifiers={{
-              hasTask: (date) => {
-                return !!tasksByDate.get(toDateKey(date))?.length;
-              }
-            }}
-            modifiersStyles={{
-              hasTask: {
-                position: 'relative'
-              }
-            }}
-          />
-        </PopoverContent>
-      </Popover>
     </div>
   );
 }

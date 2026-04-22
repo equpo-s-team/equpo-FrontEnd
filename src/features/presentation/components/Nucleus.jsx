@@ -1,5 +1,8 @@
+import Autoplay from 'embla-carousel-autoplay';
 import { Globe, Heart, Rocket, TrendingUp, Zap } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { Carousel, CarouselContent, CarouselItem, useCarousel } from '@/components/ui/carousel';
 
 import { SectionLabel } from './WhatIsEqupo.jsx';
 
@@ -56,49 +59,93 @@ const SLIDES = [
   },
 ];
 
-const CARD_W = 320 + 16;
+function NucleusDots({ count, activeIdx, onDotClick }) {
+  return (
+    <div className="flex justify-center gap-2.5 mt-7">
+      {Array.from({ length: count }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => onDotClick(i)}
+          aria-label={`Ir a diapositiva ${i + 1}`}
+          className="border-none cursor-pointer transition-all rounded-full"
+          style={{
+            width: i === activeIdx ? '24px' : '8px',
+            height: '8px',
+            background: i === activeIdx ? SLIDES[i % SLIDES.length].grad : 'rgba(0,0,0,0.15)',
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function NucleusCarouselInner() {
+  const { api } = useCarousel();
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!api) return;
+    setActiveIdx(api.selectedScrollSnap());
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+    api.on('select', onSelect);
+    return () => {
+      api.off('select', onSelect);
+    };
+  }, [api, onSelect]);
+
+  const goTo = useCallback(
+    (idx) => {
+      if (!api) return;
+      api.scrollTo(idx);
+    },
+    [api],
+  );
+
+  return (
+    <>
+      <CarouselContent className="-ml-4">
+        {SLIDES.map((slide) => (
+          <CarouselItem key={slide.num} className="pl-4 basis-full sm:basis-1/2 md:basis-1/3">
+            <div
+              className="slide-card-inner rounded-[22px] p-8 h-full relative overflow-hidden"
+              style={{
+                background: slide.lightGrad,
+                border: `1.5px solid ${slide.border}`,
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <span
+                className="font-maxwell text-6xl absolute top-4 right-5 leading-none select-none"
+                style={{ color: slide.numColor }}
+              >
+                {slide.num}
+              </span>
+
+              <div
+                className="w-[46px] h-[46px] rounded-xl flex items-center justify-center text-white mb-5"
+                style={{ background: slide.grad, boxShadow: `0 6px 20px ${slide.border}` }}
+              >
+                {slide.icon}
+              </div>
+
+              <h3 className="font-maxwell text-lg text-grey-900 mb-3">{slide.title}</h3>
+              <p className="font-body text-sm leading-[1.7] text-grey-500">{slide.text}</p>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <NucleusDots count={SLIDES.length} activeIdx={activeIdx} onDotClick={goTo} />
+    </>
+  );
+}
+
+const autoplayPlugin = Autoplay({ delay: 3200, stopOnInteraction: false, stopOnMouseEnter: true });
 
 export default function Nucleus() {
-  const trackRef = useRef(null);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const isDown = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
-
-  const updateDots = () => {
-    const sl = trackRef.current.scrollLeft;
-    const idx = Math.round((sl / CARD_W) * 4);
-    setActiveIdx(Math.min(idx, SLIDES.length - 1));
-  };
-
-  const onMouseDown = (e) => {
-    isDown.current = true;
-    trackRef.current.classList.add('dragging');
-    startX.current = e.pageX - trackRef.current.offsetLeft;
-    scrollLeft.current = trackRef.current.scrollLeft;
-  };
-  const onMouseLeave = () => {
-    isDown.current = false;
-    trackRef.current.classList.remove('dragging');
-  };
-  const onMouseUp = () => {
-    isDown.current = false;
-    trackRef.current.classList.remove('dragging');
-  };
-  const onMouseMove = (e) => {
-    if (!isDown.current) return;
-    e.preventDefault();
-    const x = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.5;
-    trackRef.current.scrollLeft = scrollLeft.current - walk;
-    updateDots();
-  };
-
-  const goTo = (idx) => {
-    const boundedIdx = Math.min(idx, SLIDES.length - 1);
-    trackRef.current.scrollTo({ left: boundedIdx * CARD_W, behavior: 'smooth' });
-    setActiveIdx(boundedIdx);
-  };
+  const pluginRef = useRef([autoplayPlugin]);
 
   return (
     <section
@@ -106,7 +153,6 @@ export default function Nucleus() {
       className="relative py-24 px-[5vw] overflow-hidden"
       style={{ background: 'linear-gradient(160deg, #fafffe 0%, #f5f8ff 50%, #fff8fa 100%)' }}
     >
-      {/* Decorative blobs */}
       <div
         className="absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(89,97,249,0.08), transparent 70%)' }}
@@ -117,7 +163,6 @@ export default function Nucleus() {
       />
 
       <div className="max-w-[1160px] mx-auto relative z-10">
-        {/* Header */}
         <div className="text-center max-w-[680px] mx-auto mb-14">
           <SectionLabel
             gradient="linear-gradient(90deg, #d99aee, #5961F9)"
@@ -137,64 +182,13 @@ export default function Nucleus() {
           </p>
         </div>
 
-        {/* Carousel */}
-        <button
-          className="carousel-track"
-          ref={trackRef}
-          onMouseDown={onMouseDown}
-          onMouseLeave={onMouseLeave}
-          onMouseUp={onMouseUp}
-          onMouseMove={onMouseMove}
-          onScroll={updateDots}
+        <Carousel
+          opts={{ loop: true, align: 'start' }}
+          plugins={pluginRef.current}
+          className="w-full"
         >
-          {SLIDES.map((slide) => (
-            <div key={slide.num} className="slide-card">
-              <div
-                className="slide-card-inner rounded-[22px] p-8 h-full relative overflow-hidden"
-                style={{
-                  background: slide.lightGrad,
-                  border: `1.5px solid ${slide.border}`,
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                {/* Big decorative number */}
-                <span
-                  className="font-maxwell text-6xl absolute top-4 right-5 leading-none select-none"
-                  style={{ color: slide.numColor }}
-                >
-                  {slide.num}
-                </span>
-
-                {/* Icon */}
-                <div
-                  className="w-[46px] h-[46px] rounded-xl flex items-center justify-center text-white mb-5"
-                  style={{ background: slide.grad, boxShadow: `0 6px 20px ${slide.border}` }}
-                >
-                  {slide.icon}
-                </div>
-
-                <h3 className="font-maxwell text-lg text-grey-900 mb-3">{slide.title}</h3>
-                <p className="font-body text-sm leading-[1.7] text-grey-500">{slide.text}</p>
-              </div>
-            </div>
-          ))}
-        </button>
-
-        {/* Dots */}
-        <div className="flex justify-center gap-2.5 mt-7">
-          {SLIDES.map((slide, i) => (
-            <button
-              key={i}
-              onClick={() => goTo(i)}
-              className="border-none cursor-pointer transition-all rounded-full"
-              style={{
-                width: i === activeIdx ? '24px' : '8px',
-                height: '8px',
-                background: i === activeIdx ? SLIDES[i].grad : 'rgba(0,0,0,0.15)',
-              }}
-            />
-          ))}
-        </div>
+          <NucleusCarouselInner />
+        </Carousel>
       </div>
     </section>
   );

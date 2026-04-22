@@ -25,14 +25,12 @@ export default function MyMissions() {
   const { teamId } = useTeam();
   const { myTasks, tasksByDate, allCategories, isLoading } = useMyTasks(teamId);
 
-  // Prefetch team members to ensure cache has their displayNames for TaskDetailPanel
   const { data: teamMembers = [] } = useTeamMembers(teamId ?? '');
   const { data: teamGroups = [] } = useTeamGroups(teamId ?? '');
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [view, setView] = useState<'day' | 'week' | 'month' | 'year'>('day');
 
-  // ── Category filter state ──
   const [activeCategories, setActiveCategories] = useState<Set<string>>(new Set());
 
   const toggleCategory = useCallback((cat: string) => {
@@ -51,27 +49,27 @@ export default function MyMissions() {
     setActiveCategories(new Set());
   }, []);
 
-  // ── Selected task ──
   const [selectedTask, setSelectedTask] = useState<TeamTask | null>(null);
 
-  // ── TaskSidebar (edit mode) ──
   const [editSidebar, setEditSidebar] = useState<{
     isOpen: boolean;
     task: TeamTask | null;
   }>({ isOpen: false, task: null });
 
-  // Clear selected task or open edit sidebar if the task gets deleted remotely
   useEffect(() => {
     if (selectedTask && !myTasks.some((t) => t.id === selectedTask.id)) {
       setSelectedTask(null);
     }
-    if (editSidebar.isOpen && editSidebar.task && !myTasks.some((t) => t.id === editSidebar.task?.id)) {
+    if (
+      editSidebar.isOpen &&
+      editSidebar.task &&
+      !myTasks.some((t) => t.id === editSidebar.task?.id)
+    ) {
       setEditSidebar((prev) => ({ ...prev, isOpen: false }));
     }
   }, [myTasks, selectedTask, editSidebar.isOpen, editSidebar.task]);
 
   const openEdit = useCallback((task: TeamTask) => {
-    // If it's a projected task, restore its original ID for editing
     const editTask =
       'originalId' in task && typeof task.originalId === 'string'
         ? { ...task, id: task.originalId }
@@ -83,25 +81,21 @@ export default function MyMissions() {
     setEditSidebar((prev) => ({ ...prev, isOpen: false }));
   }, []);
 
-  // ── Tasks for the selected day, filtered by active categories ──
   const dayTasks = useMemo(() => {
     const dateKey = toDateKey(selectedDate);
     const tasksForDay = tasksByDate.get(dateKey) ?? [];
 
-    if (activeCategories.size === 0) return tasksForDay; // no filter = show all
+    if (activeCategories.size === 0) return tasksForDay;
 
     return tasksForDay.filter((t) => t.categories?.some((c) => activeCategories.has(c)));
   }, [selectedDate, tasksByDate, activeCategories]);
 
   return (
-    <div className="min-h-screen bg-offwhite font-body">
+    <div className="min-h-screen bg-offwhite font-body overflow-hidden">
       {/* Header */}
-      <AppHeader
-        title="Mis Misiones"
-        variant="purple"
-      />
+      <AppHeader title="Mis Misiones" variant="purple" />
 
-      {/* Loading overlay */}
+      {/* Loading */}
       {isLoading && (
         <div className="px-8 py-6 text-center text-grey-400 text-sm">
           <div
@@ -112,26 +106,30 @@ export default function MyMissions() {
         </div>
       )}
 
-      {/* Main 3-panel layout */}
-      <div className="flex h-[calc(100dvh-62px)] overflow-hidden">
+      <div className="flex h-[92vh] overflow-hidden">
         {/* Left panel: Calendar + Categories */}
-        <aside className="hidden lg:flex flex-col w-64 min-w-[256px] border-r border-grey-150 bg-grey-50/50 p-4 gap-4 overflow-y-auto custom-scrollbar">
-          <MiniCalendar
-            selectedDate={selectedDate}
-            onDateSelect={setSelectedDate}
-            tasksByDate={tasksByDate}
-          />
-          <CategoryFilter
-            allCategories={allCategories}
-            activeCategories={activeCategories}
-            onToggle={toggleCategory}
-            onSelectAll={selectAllCategories}
-          />
-          <MissionStats tasks={myTasks} />
+        <aside className="hidden h-full lg:flex flex-col w-1/5 border-r border-grey-150 bg-grey-50/50 p-4 gap-4 overflow-hidden">
+          <div className="max-h-[42%] w-full">
+            <MiniCalendar
+              selectedDate={selectedDate}
+              onDateSelect={setSelectedDate}
+              tasksByDate={tasksByDate}
+            />
+          </div>
+          <div className="max-h-[28%] w-full">
+            <CategoryFilter
+              allCategories={allCategories}
+              activeCategories={activeCategories}
+              onToggle={toggleCategory}
+              onSelectAll={selectAllCategories}
+            />
+          </div>
+          <div className="max-h-[20%] w-full">
+            <MissionStats tasks={myTasks} />
+          </div>
         </aside>
 
-        {/* Center: Day Timeline */}
-        <main className="flex-1 min-w-0 p-4">
+        <main className="flex-1 w-3/5 p-4">
           {view === 'day' && (
             <DayTimeline
               selectedDate={selectedDate}
@@ -179,8 +177,7 @@ export default function MyMissions() {
           )}
         </main>
 
-        {/* Right panel: Task Detail */}
-        <aside className="hidden xl:flex flex-col w-72 min-w-[288px] border-l border-grey-150 bg-grey-50/50 p-4 overflow-y-auto custom-scrollbar">
+        <aside className="hidden xl:flex flex-col w-1/5 border-l border-grey-150 bg-grey-50/50 p-4 overflow-y-auto custom-scrollbar">
           <TaskDetailPanel
             task={selectedTask}
             onClose={() => setSelectedTask(null)}

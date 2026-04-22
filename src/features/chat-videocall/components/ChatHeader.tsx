@@ -1,6 +1,7 @@
 import { Info, PhoneCall, Users, Video } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useActiveCalls } from '@/features/chat-videocall/hooks/useActiveCalls';
@@ -47,10 +48,10 @@ export default function ChatHeader() {
 
         {/* Actions */}
         <div className="flex items-center gap-1">
-          <ActionButton onClick={() => startCall(true)} title="Videollamada">
+          <ActionButton onClick={() => startCall(true)} tooltipContent="Videollamada">
             <Video size={16} />
           </ActionButton>
-          <ActionButton onClick={() => setShowInfo(true)} title="Información">
+          <ActionButton onClick={() => setShowInfo(true)} tooltipContent="Información">
             <Info size={16} />
           </ActionButton>
         </div>
@@ -78,24 +79,25 @@ export default function ChatHeader() {
 
 function ActionButton({
   onClick,
-  title,
+  tooltipContent,
   children,
 }: {
   onClick: () => void;
-  title: string;
+  tooltipContent: string;
   children: React.ReactNode;
 }) {
   return (
-    <button
-      onClick={onClick}
-      title={title}
-      className="
-        w-8 h-8 rounded-xl flex items-center justify-center
-        text-grey-500 hover:text-grey-900 hover:bg-grey-100
-        transition-all duration-200
-      "
-    >
-      {children}
-    </button>
+    <AppTooltip content={tooltipContent}>
+      <button
+        onClick={onClick}
+        className="
+          w-8 h-8 rounded-xl flex items-center justify-center
+          text-grey-500 hover:text-grey-900 hover:bg-grey-100
+          transition-all duration-200
+        "
+      >
+        {children}
+      </button>
+    </AppTooltip>
   );
 }

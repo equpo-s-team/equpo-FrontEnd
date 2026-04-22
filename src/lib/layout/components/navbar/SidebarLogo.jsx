@@ -2,6 +2,7 @@ import { ArrowRightLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
@@ -18,6 +19,7 @@ export default function SidebarLogo() {
   const activeTeam = teams.find((t) => t.id === teamId);
   const teamName = activeTeam?.name || 'Cargando...';
   const teamPhotoUrl = activeTeam?.photoUrl || null;
+  const activeUsersCount = activeTeam?.members?.length ?? 0;
 
   return (
     <div
@@ -41,29 +43,32 @@ export default function SidebarLogo() {
       {/* Team name & Switcher */}
       {!collapsed && (
         <div className="flex-1 flex items-center justify-between">
-          <div>
-            <p className="font-maxwell text-primary-foreground text-md font-semibold leading-tight tracking-tight whitespace-nowrap">
-              equpo
-            </p>
-            <span className="inline-flex items-center gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0" />
+          <div className="flex flex-col">
+            <span className="flex flex-col gap-1 mt-0.5">
               <p
-                className="text-cyan text-sm font-body font-medium tracking-wide whitespace-nowrap truncate max-w-[110px]"
+                className="text-cyan text-md font-body font-bold tracking-wide whitespace-nowrap truncate max-w-[110px]"
                 title={teamName}
               >
                 {teamName}
               </p>
             </span>
+            <span
+              className="inline-flex items-center rounded-full border border-green/50 bg-green/30 px-1 py-0.5 text-[10px] font-bold tracking-wide text-green-500 gap-0.5"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-green flex-shrink-0" />
+              {activeUsersCount + (activeUsersCount === 1 ? " miembro" : " miembros")}
+            </span>
           </div>
 
           <div className="relative">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              title="Cambiar de equipo"
-              className="p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-colors"
-            >
-              <ArrowRightLeft size={16} />
-            </button>
+            <AppTooltip content="Cambiar de equipo">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <ArrowRightLeft size={16} />
+              </button>
+            </AppTooltip>
 
             {isOpen && (
               <>

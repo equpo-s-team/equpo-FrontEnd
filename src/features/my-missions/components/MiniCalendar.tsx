@@ -36,9 +36,9 @@ function TaskDayButton({
     >
       {day.date.getDate()}
       {hasTask && (
-        <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-0.5">
+        <div className="absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5 sm:bottom-1 sm:gap-1">
           <div className={cn(
-            "w-1 h-1 rounded-full",
+            "h-1 w-1 rounded-full sm:h-1.5 sm:w-1.5",
             hasOverdueTask ? "bg-red-500" : "bg-blue-500"
           )} />
         </div>
@@ -53,7 +53,7 @@ export default function MiniCalendar({
                                        tasksByDate,
                                      }: MiniCalendarProps) {
   return (
-    <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-4 w-full">
+    <div className="w-full rounded-xl border border-grey-150 bg-white px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
 
       <div className="w-full overflow-visible">
         <Calendar
@@ -64,7 +64,7 @@ export default function MiniCalendar({
           }}
           defaultMonth={selectedDate}
           locale={es}
-          className="w-full"
+          className="w-full p-0"
           modifiers={{
             hasTask: (date) => {
               return !!tasksByDate.get(toDateKey(date))?.length;

@@ -43,8 +43,8 @@ export default function SidebarLogo() {
       {/* Team name & Switcher */}
       {!collapsed && (
         <div className="flex-1 flex items-center justify-between">
-          <div>
-            <span className="inline-flex items-center gap-1 mt-0.5">
+          <div className="flex flex-col">
+            <span className="flex flex-col gap-1 mt-0.5">
               <p
                 className="text-cyan text-md font-body font-bold tracking-wide whitespace-nowrap truncate max-w-[110px]"
                 title={teamName}
@@ -53,10 +53,10 @@ export default function SidebarLogo() {
               </p>
             </span>
             <span
-              className="mt-1 inline-flex items-center rounded-full border border-green/50 bg-green/30 px-1 py-0.5 text-[10px] font-bold tracking-wide text-green-500 gap-0.5"
+              className="inline-flex items-center rounded-full border border-green/50 bg-green/30 px-1 py-0.5 text-[10px] font-bold tracking-wide text-green-500 gap-0.5"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-green flex-shrink-0" />
-              {activeUsersCount + " miembros"}
+              {activeUsersCount + (activeUsersCount === 1 ? " miembro" : " miembros")}
             </span>
           </div>
 

@@ -91,7 +91,7 @@ export default function MyMissions() {
   }, [selectedDate, tasksByDate, activeCategories]);
 
   return (
-    <div className="min-h-screen bg-offwhite font-body">
+    <div className="min-h-screen bg-offwhite font-body overflow-hidden">
       {/* Header */}
       <AppHeader title="Mis Misiones" variant="purple" />
 
@@ -106,17 +106,17 @@ export default function MyMissions() {
         </div>
       )}
 
-      <div className="flex h-[calc(100dvh-62px)] overflow-hidden">
+      <div className="flex h-[92vh] overflow-hidden">
         {/* Left panel: Calendar + Categories */}
-        <aside className="hidden lg:flex flex-col w-1/5 border-r border-grey-150 bg-grey-50/50 p-4 gap-4 overflow-hidden">
-          <div className="max-h-[40%]">
+        <aside className="hidden h-full lg:flex flex-col w-1/5 border-r border-grey-150 bg-grey-50/50 p-4 gap-4 overflow-hidden">
+          <div className="max-h-[42%] w-full">
             <MiniCalendar
               selectedDate={selectedDate}
               onDateSelect={setSelectedDate}
               tasksByDate={tasksByDate}
             />
           </div>
-          <div className="max-h-[30%]">
+          <div className="max-h-[28%] w-full">
             <CategoryFilter
               allCategories={allCategories}
               activeCategories={activeCategories}
@@ -124,7 +124,7 @@ export default function MyMissions() {
               onSelectAll={selectAllCategories}
             />
           </div>
-          <div className="max-h-[20%]">
+          <div className="max-h-[20%] w-full">
             <MissionStats tasks={myTasks} />
           </div>
         </aside>

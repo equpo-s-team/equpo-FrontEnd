@@ -19,6 +19,7 @@ export default function SidebarLogo() {
   const activeTeam = teams.find((t) => t.id === teamId);
   const teamName = activeTeam?.name || 'Cargando...';
   const teamPhotoUrl = activeTeam?.photoUrl || null;
+  const activeUsersCount = activeTeam?.members?.length ?? 0;
 
   return (
     <div
@@ -43,17 +44,19 @@ export default function SidebarLogo() {
       {!collapsed && (
         <div className="flex-1 flex items-center justify-between">
           <div>
-            <p className="font-maxwell text-primary-foreground text-md font-semibold leading-tight tracking-tight whitespace-nowrap">
-              equpo
-            </p>
             <span className="inline-flex items-center gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue flex-shrink-0" />
               <p
-                className="text-cyan text-sm font-body font-medium tracking-wide whitespace-nowrap truncate max-w-[110px]"
+                className="text-cyan text-md font-body font-bold tracking-wide whitespace-nowrap truncate max-w-[110px]"
                 title={teamName}
               >
                 {teamName}
               </p>
+            </span>
+            <span
+              className="mt-1 inline-flex items-center rounded-full border border-green/50 bg-green/30 px-1 py-0.5 text-[10px] font-bold tracking-wide text-green-500 gap-0.5"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-green flex-shrink-0" />
+              {activeUsersCount + " miembros"}
             </span>
           </div>
 

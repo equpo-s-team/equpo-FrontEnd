@@ -39,7 +39,6 @@ export default function Sidebar() {
     toggleMute,
   } = useAudio();
 
-  // Determine the current user's role in the active team
   const currentTeam = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
   const myRole = (() => {
@@ -74,7 +73,6 @@ export default function Sidebar() {
         </SidebarSection>
       </nav>
 
-      {/* Audio Controls Section */}
       <div
         className={`px-2 py-3 transition-all duration-300 ${collapsed ? 'flex justify-center' : ''}`}
       >

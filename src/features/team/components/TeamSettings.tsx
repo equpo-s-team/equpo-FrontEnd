@@ -30,8 +30,6 @@ import type { TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
 import { toastError, toastSuccess } from '@/lib/toast';
 
-// ── Color helpers ──────────────────────────────────────────────────────────────
-
 const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   leader: { label: 'Líder', color: '#60AFFF', bg: 'rgba(96,175,255,0.12)' },
   collaborator: { label: 'Colaborador', color: '#9b7fe1', bg: 'rgba(155,127,225,0.12)' },
@@ -136,8 +134,6 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
   );
 }
 
-// ── Main Component ─────────────────────────────────────────────────────────────
-
 export default function TeamSettings() {
   const { teamId } = useTeam();
   const { user } = useAuth();
@@ -152,7 +148,6 @@ export default function TeamSettings() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Derive current team and user's role ──────────────────────────────────────
   const team = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
 
@@ -166,18 +161,15 @@ export default function TeamSettings() {
   const isCollaborator = myRole === 'collaborator';
   const canEdit = isLeader || isCollaborator;
 
-  // Local form state ─────────────────────────────────────────────────────────
   const [name, setName] = useState(team?.name ?? '');
   const [description, setDescription] = useState(team?.description ?? '');
   const [photoPreview, setPhotoPreview] = useState<string | null>(team?.photoUrl ?? null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  // Invite state ─────────────────────────────────────────────────────────────
   const [inviteUid, setInviteUid] = useState('');
   const [inviteRole, setInviteRole] = useState<'collaborator' | 'member' | 'spectator'>('member');
 
-  // Delete dialog ────────────────────────────────────────────────────────────
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
@@ -219,7 +211,6 @@ export default function TeamSettings() {
     );
   }
 
-  // ── Photo upload ────────────────────────────────────────────────────────────
   const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -239,7 +230,7 @@ export default function TeamSettings() {
 
       setPhotoPreview(downloadUrl);
 
-      // Persist the URL to the backend
+
       await updateTeam.mutateAsync({
         teamId,
         payload: { photoUrl: downloadUrl },
@@ -252,7 +243,6 @@ export default function TeamSettings() {
     }
   };
 
-  // ── Save info ───────────────────────────────────────────────────────────────
   const handleSave = () => {
     const payload: Record<string, string | null> = {};
     if (name.trim() !== team.name) payload.name = name.trim();
@@ -271,7 +261,6 @@ export default function TeamSettings() {
     );
   };
 
-  // ── Invite ─────────────────────────────────────────────────────────────────
   const handleInvite = () => {
     const uid = inviteUid.trim();
     if (!uid) return;
@@ -295,7 +284,6 @@ export default function TeamSettings() {
     );
   };
 
-  // ── Kick ───────────────────────────────────────────────────────────────────
   const handleKick = (member: TeamMember) => {
     removeMember.mutate(
       { teamId, userUid: member.uid },
@@ -319,7 +307,6 @@ export default function TeamSettings() {
     return isCollaborator;
   };
 
-  // ── Delete team ─────────────────────────────────────────────────────────────
   const handleDeleteTeam = () => {
     deleteTeam.mutate(teamId, {
       onSuccess: () =>
@@ -355,12 +342,9 @@ export default function TeamSettings() {
         />
       </div>
 
-      {/* Header */}
       <AppHeader title="Ajustes del Equipo" subtitle={team.name} variant="orange" />
 
-      {/* Scrollable body */}
       <div className="relative z-10 flex-1 overflow-y-auto px-4 py-6 space-y-6 sm:px-8">
-        {/* ── TEAM INFO CARD ─────────────────────────────────────────────── */}
         <section
           className="rounded-2xl border border-grey-100 bg-white p-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
@@ -369,7 +353,6 @@ export default function TeamSettings() {
             Información del equipo
           </p>
 
-          {/* Photo upload */}
           <div className="flex items-center gap-5 mb-5">
             <div className="relative shrink-0">
               <div
@@ -421,7 +404,6 @@ export default function TeamSettings() {
             </div>
           </div>
 
-          {/* Name */}
           <div className="mb-4">
             <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
               Nombre del equipo *
@@ -436,7 +418,6 @@ export default function TeamSettings() {
             />
           </div>
 
-          {/* Description */}
           <div className="mb-5">
             <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
               Descripción
@@ -519,9 +500,10 @@ export default function TeamSettings() {
 
                     {/* Role change — leader only */}
                     {isLeader && member.role !== 'leader' && !isCurrentUser && (
-                      <RoleSelect
-                        value={member.role}
-                        onChange={(role) =>
+                      <div className="flex w-[16vw] lg:w-[6vw] shrink-0">
+                        <RoleSelect
+                          value={member.role}
+                          onChange={(role) =>
                           updateRole.mutate(
                             {
                               teamId,
@@ -562,7 +544,8 @@ export default function TeamSettings() {
                             bg: ROLE_CONFIG.spectator.bg,
                           },
                         ]}
-                      />
+                        />
+                      </div>
                     )}
 
                     {/* Kick button */}
@@ -613,30 +596,32 @@ export default function TeamSettings() {
                 onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
                 onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
               />
-              <RoleSelect
-                value={inviteRole}
-                onChange={(v) => setInviteRole(v as 'collaborator' | 'member' | 'spectator')}
-                roles={[
-                  {
-                    value: 'collaborator',
-                    label: 'Colaborador',
-                    color: ROLE_CONFIG.collaborator.color,
-                    bg: ROLE_CONFIG.collaborator.bg,
-                  },
-                  {
-                    value: 'member',
-                    label: 'Miembro',
-                    color: ROLE_CONFIG.member.color,
-                    bg: ROLE_CONFIG.member.bg,
-                  },
-                  {
-                    value: 'spectator',
-                    label: 'Espectador',
-                    color: ROLE_CONFIG.spectator.color,
-                    bg: ROLE_CONFIG.spectator.bg,
-                  },
-                ]}
-              />
+              <div className="flex w-[24vw] lg:w-[8vw]">
+                <RoleSelect
+                  value={inviteRole}
+                  onChange={(v) => setInviteRole(v as 'collaborator' | 'member' | 'spectator')}
+                  roles={[
+                    {
+                      value: 'collaborator',
+                      label: 'Colaborador',
+                      color: ROLE_CONFIG.collaborator.color,
+                      bg: ROLE_CONFIG.collaborator.bg,
+                    },
+                    {
+                      value: 'member',
+                      label: 'Miembro',
+                      color: ROLE_CONFIG.member.color,
+                      bg: ROLE_CONFIG.member.bg,
+                    },
+                    {
+                      value: 'spectator',
+                      label: 'Espectador',
+                      color: ROLE_CONFIG.spectator.color,
+                      bg: ROLE_CONFIG.spectator.bg,
+                    },
+                  ]}
+                />
+              </div>
               <button
                 onClick={handleInvite}
                 disabled={!inviteUid.trim() || addMember.isPending}
@@ -654,7 +639,6 @@ export default function TeamSettings() {
           </div>
         </section>
 
-        {/* ── DANGER ZONE ────────────────────────────────────────────────── */}
         {isLeader && (
           <section
             className="rounded-2xl border p-5"

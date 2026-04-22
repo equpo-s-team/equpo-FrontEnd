@@ -31,7 +31,7 @@ export function RoleSelect({ value, onChange, roles, disabled, className }: Role
       >
         {current ? (
           <span
-            className="inline-flex items-center gap-1.5 font-semibold"
+            className="inline-flex items-center w-full gap-1.5 font-semibold"
             style={{ color: current.color }}
           >
             <span

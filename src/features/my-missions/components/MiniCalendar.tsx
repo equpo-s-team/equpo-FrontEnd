@@ -1,14 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ChevronDownIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import type { TeamTask } from '@/features/board/types';
 
 interface MiniCalendarProps {
@@ -37,38 +30,26 @@ export default function MiniCalendar({
         </div>
       </div>
       
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="w-full justify-between text-left font-normal"
-          >
-            {format(selectedDate, "PPP", { locale: es })}
-            <ChevronDownIcon className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={(date) => {
-              if (date) onDateSelect(date);
-            }}
-            defaultMonth={selectedDate}
-            locale={es}
-            modifiers={{
-              hasTask: (date) => {
-                return !!tasksByDate.get(toDateKey(date))?.length;
-              }
-            }}
-            modifiersStyles={{
-              hasTask: {
-                position: 'relative'
-              }
-            }}
-          />
-        </PopoverContent>
-      </Popover>
+      <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={(date) => {
+          if (date) onDateSelect(date);
+        }}
+        defaultMonth={selectedDate}
+        locale={es}
+        className="w-full"
+        modifiers={{
+          hasTask: (date) => {
+            return !!tasksByDate.get(toDateKey(date))?.length;
+          }
+        }}
+        modifiersStyles={{
+          hasTask: {
+            position: 'relative'
+          }
+        }}
+      />
     </div>
   );
 }

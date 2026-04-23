@@ -2,6 +2,7 @@ import { AlertTriangle, CalendarDays, Clock, Edit3, RefreshCw, Tag, X, Zap } fro
 
 import { TaskAssigneesPreview } from '@/features/board/components/TaskAssigneesPreview';
 import type { TeamTask } from '@/features/board/types';
+import { editorHtmlToMarkdown, markdownToEditorHtml } from '@/features/board/utils/markdownUtils';
 import { calculateNextRecurrenceDate, isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; border: string }> = {
@@ -87,6 +88,11 @@ export default function TaskDetailPanel({
   const priority = PRIORITY_CONFIG[task.priority] ?? PRIORITY_CONFIG.medium;
   const selectedGroup = groups.find((group) => group.id === task.assignedGroupId) ?? null;
   const isOverdue = isTaskOverdue(task);
+  const rawDescription = task.description?.trim() ?? '';
+  const normalizedDescription = rawDescription.includes('<')
+    ? editorHtmlToMarkdown(rawDescription)
+    : rawDescription;
+  const descriptionHtml = normalizedDescription ? markdownToEditorHtml(normalizedDescription) : '';
 
   return (
     <div
@@ -189,12 +195,19 @@ export default function TaskDetailPanel({
         <hr className="border-grey-100 my-3" />
 
         {/* Description */}
-        {task.description && (
+        {descriptionHtml && (
           <div className="mb-4">
             <p className="text-xs font-bold uppercase tracking-widest text-grey-400 mb-1.5 font-body">
               Descripción
             </p>
-            <p className="text-xs text-grey-600 font-body leading-relaxed">{task.description}</p>
+            <div
+              className={
+                'text-xs text-grey-600 font-body leading-relaxed [&_p]:mb-1.5 [&_p:last-child]:mb-0 ' +
+                '[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-4 [&_ol]:pl-4 [&_li]:mb-1 ' +
+                '[&_strong]:font-bold [&_em]:italic [&_h1]:text-sm [&_h1]:font-bold [&_h2]:font-semibold'
+              }
+              dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+            />
           </div>
         )}
 

@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-
 import { AchievementBadge } from '@/features/team/components/Achievements/AchievementBadge.tsx';
 
 import { type Achievement } from '../../types/';
@@ -9,14 +7,10 @@ interface AchievementsSectionProps {
 }
 
 export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements }) => {
-  const [showAll, setShowAll] = useState(false);
 
   const unlocked = achievements.filter((a) => !!a.unlockedAt);
   const locked = achievements.filter((a) => !a.unlockedAt);
   const sorted = [...unlocked, ...locked];
-
-  const visible = showAll ? sorted : sorted.slice(0, 8);
-  const hasMore = sorted.length > 8;
 
   if (achievements.length === 0) return null;
 
@@ -42,20 +36,11 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achiev
             {unlocked.length}/{achievements.length}
           </span>
         </div>
-
-        {hasMore && (
-          <button
-            onClick={() => setShowAll((v) => !v)}
-            className="text-xs font-semibold text-grey-400 hover:text-grey-700 transition-colors"
-          >
-            {showAll ? 'Ver menos' : `Ver todos (${sorted.length})`}
-          </button>
-        )}
       </div>
 
       {/* Badges grid */}
-      <div className="grid grid-cols-3 gap-2">
-        {visible.map((achievement) => (
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-1.5 overflow-y-auto">
+        {sorted.map((achievement) => (
           <AchievementBadge key={achievement.id} achievement={achievement} />
         ))}
       </div>

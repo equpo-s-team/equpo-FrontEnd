@@ -53,7 +53,7 @@ export default function MiniCalendar({
                                        tasksByDate,
                                      }: MiniCalendarProps) {
   return (
-    <div className="w-full rounded-xl border border-grey-150 bg-white px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
+    <div className="w-full rounded-xl border border-grey-150 bg-white p-3 shadow-card sm:rounded-2xl sm:p-4 md:p-5">
 
       <div className="w-full overflow-visible">
         <Calendar
@@ -64,7 +64,7 @@ export default function MiniCalendar({
           }}
           defaultMonth={selectedDate}
           locale={es}
-          className="w-full p-0"
+          className="w-full [--cell-size:2rem] sm:[--cell-size:2.25rem] md:[--cell-size:2.5rem]"
           modifiers={{
             hasTask: (date) => {
               return !!tasksByDate.get(toDateKey(date))?.length;

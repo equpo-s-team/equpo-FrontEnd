@@ -16,17 +16,20 @@ function toDateKey(d: Date) {
 }
 
 function TaskDayButton({
-  className,
-  day,
-  modifiers,
-  ...props
-}: React.ComponentProps<typeof CalendarDayButton>) {
+                         className,
+                         day,
+                         modifiers,
+                         ...props
+                       }: React.ComponentProps<typeof CalendarDayButton>) {
   const hasTask = modifiers.hasTask;
   const hasOverdueTask = modifiers.hasOverdueTask;
 
   return (
     <CalendarDayButton
-      className={cn(className, 'relative')}
+      className={cn(
+        className,
+        "relative"
+      )}
       day={day}
       modifiers={modifiers}
       {...props}
@@ -34,12 +37,10 @@ function TaskDayButton({
       {day.date.getDate()}
       {hasTask && (
         <div className="absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5 sm:bottom-1 sm:gap-1">
-          <div
-            className={cn(
-              'h-1 w-1 rounded-full sm:h-1.5 sm:w-1.5',
-              hasOverdueTask ? 'bg-red' : 'bg-blue-500',
-            )}
-          />
+          <div className={cn(
+            "h-1 w-1 rounded-full sm:h-1.5 sm:w-1.5",
+            hasOverdueTask ? "bg-red-500" : "bg-blue-500"
+          )} />
         </div>
       )}
     </CalendarDayButton>
@@ -47,12 +48,13 @@ function TaskDayButton({
 }
 
 export default function MiniCalendar({
-  selectedDate,
-  onDateSelect,
-  tasksByDate,
-}: MiniCalendarProps) {
+                                       selectedDate,
+                                       onDateSelect,
+                                       tasksByDate,
+                                     }: MiniCalendarProps) {
   return (
-    <div className="w-full rounded-xl border border-grey-150 bg-white px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
+    <div className="w-full rounded-xl border border-grey-150 bg-white p-3 shadow-card sm:rounded-2xl sm:p-4 md:p-5">
+
       <div className="w-full overflow-visible">
         <Calendar
           mode="single"
@@ -62,7 +64,7 @@ export default function MiniCalendar({
           }}
           defaultMonth={selectedDate}
           locale={es}
-          className="w-full p-0"
+          className="w-full [--cell-size:2rem] sm:[--cell-size:2.25rem] md:[--cell-size:2.5rem]"
           modifiers={{
             hasTask: (date) => {
               return !!tasksByDate.get(toDateKey(date))?.length;
@@ -72,15 +74,15 @@ export default function MiniCalendar({
               if (!tasks || tasks.length === 0) return false;
               const today = new Date();
               today.setHours(0, 0, 0, 0);
-              return tasks.some((task) => {
+              return tasks.some(task => {
                 const dueDate = new Date(task.dueDate);
                 dueDate.setHours(0, 0, 0, 0);
                 return dueDate < today && task.status !== 'done';
               });
-            },
+            }
           }}
           components={{
-            DayButton: TaskDayButton,
+            DayButton: TaskDayButton
           }}
         />
       </div>

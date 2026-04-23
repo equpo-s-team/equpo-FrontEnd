@@ -20,7 +20,11 @@ export default function SidebarToggle() {
         <ChevronsLeft
           className={`transition-transform duration-300 ${collapsed ? 'rotate-180' : ''}`}
         />
-        <span className={`text-xs font-maxwell font-semibold tracking-widest ${collapsed ? 'hidden' : ''} `}>colapsar</span>
+        <span
+          className={`text-xs font-maxwell font-semibold tracking-widest ${collapsed ? 'hidden' : ''} `}
+        >
+          colapsar
+        </span>
       </button>
     </AppTooltip>
   );

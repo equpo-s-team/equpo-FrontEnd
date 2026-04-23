@@ -3,7 +3,9 @@ import { request } from '@/lib/api/core.ts';
 import type {
   CreateTaskPayload,
   GetTeamTasksOptions,
+  TaskCommentary,
   TaskListMeta,
+  TaskStep,
   TeamTask,
   UpdateTaskPayload,
 } from '../types/taskSchema.ts';
@@ -31,4 +33,56 @@ export const tasksApi = {
     request<{ deletedTaskId: string }>(`/teams/${teamId}/tasks/${taskId}`, 'DELETE'),
   getMyValidIds: (teamId: string) =>
     request<{ taskIds: string[] }>(`/teams/${teamId}/tasks/my-valid-ids`, 'GET'),
+
+  // Steps
+  listSteps: (teamId: string, taskId: string) =>
+    request<{ steps: TaskStep[] }>(`/teams/${teamId}/tasks/${taskId}/steps`, 'GET'),
+  createStep: (teamId: string, taskId: string, payload: { step: string }) =>
+    request<{ step: TaskStep }>(`/teams/${teamId}/tasks/${taskId}/steps`, 'POST', payload),
+  toggleStep: (teamId: string, taskId: string, stepId: string, payload: { isDone: boolean }) =>
+    request<{ step: TaskStep; newStatus: string }>(
+      `/teams/${teamId}/tasks/${taskId}/steps/${encodeURIComponent(stepId)}/toggle`,
+      'PATCH',
+      payload,
+    ),
+  updateStep: (teamId: string, taskId: string, stepId: string, payload: { step: string }) =>
+    request<{ step: TaskStep }>(
+      `/teams/${teamId}/tasks/${taskId}/steps/${encodeURIComponent(stepId)}`,
+      'PATCH',
+      payload,
+    ),
+  deleteStep: (teamId: string, taskId: string, stepId: string) =>
+    request<{ deletedStepId: string }>(
+      `/teams/${teamId}/tasks/${taskId}/steps/${encodeURIComponent(stepId)}`,
+      'DELETE',
+    ),
+
+  // Commentaries
+  listCommentaries: (teamId: string, taskId: string) =>
+    request<{ commentaries: TaskCommentary[] }>(
+      `/teams/${teamId}/tasks/${taskId}/commentaries`,
+      'GET',
+    ),
+  createCommentary: (teamId: string, taskId: string, payload: { commentary: string }) =>
+    request<{ commentary: TaskCommentary }>(
+      `/teams/${teamId}/tasks/${taskId}/commentaries`,
+      'POST',
+      payload,
+    ),
+  updateCommentary: (
+    teamId: string,
+    taskId: string,
+    commentaryId: string,
+    payload: { commentary: string },
+  ) =>
+    request<{ commentary: TaskCommentary }>(
+      `/teams/${teamId}/tasks/${taskId}/commentaries/${encodeURIComponent(commentaryId)}`,
+      'PATCH',
+      payload,
+    ),
+  deleteCommentary: (teamId: string, taskId: string, commentaryId: string) =>
+    request<{ deletedCommentaryId: string }>(
+      `/teams/${teamId}/tasks/${taskId}/commentaries/${encodeURIComponent(commentaryId)}`,
+      'DELETE',
+    ),
 };

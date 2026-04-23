@@ -120,6 +120,9 @@ export function useTasks(teamId: string, options: GetTeamTasksOptions = {}) {
           updatedAt: toIsoString(data.updatedAt),
           categories: data.category || [],
           assignedUsers: mappedAssignedUsers,
+          // Steps counts come from REST API; Firestore doesn't store them
+          stepsTotal: 0,
+          stepsDone: 0,
         };
       });
 

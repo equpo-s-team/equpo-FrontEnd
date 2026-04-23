@@ -29,6 +29,8 @@ import { FieldLabel } from './FieldLabel';
 import { MarkdownDescriptionEditor } from './MarkdownDescriptionEditor';
 import { TagChip } from './TagChip';
 import { TaskAssigneesPreview } from './TaskAssigneesPreview';
+import TaskCommentarySection from './TaskCommentarySection';
+import TaskStepsSection from './TaskStepsSection';
 
 type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
 
@@ -46,6 +48,13 @@ interface TaskSidebarProps {
   task?: TeamTask | null;
   teamId: string;
   defaultStatus?: string;
+  onTaskCreated?: () => void;
+  onTaskUpdated?: () => void;
+  onTaskDeleted?: () => void;
+  /** Current user's role in the team */
+  myRole?: string;
+  /** Current user's Firebase UID */
+  currentUserUid?: string | null;
 }
 
 export default function TaskSidebar({
@@ -55,6 +64,8 @@ export default function TaskSidebar({
   task,
   teamId,
   defaultStatus,
+  myRole = 'member',
+  currentUserUid = null,
 }: TaskSidebarProps) {
   const backdropRef = useRef<HTMLDivElement>(null);
   const createTask = useCreateTask();
@@ -82,6 +93,8 @@ export default function TaskSidebar({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
+  // Steps for create mode
+  const [localSteps, setLocalSteps] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -110,6 +123,7 @@ export default function TaskSidebar({
       setRecurringInterval('days');
       setRecurringCount(1);
       setIsEditView(true);
+      setLocalSteps([]);
     }
     setErrors({});
   }, [isOpen, mode, task]);
@@ -170,6 +184,11 @@ export default function TaskSidebar({
     if (isRecurring && (recurringCount === '' || recurringCount < 1))
       e.recurringCount = 'Ingresa un número válido';
 
+    // Require at least one step in create mode
+    if (mode === 'create' && localSteps.length === 0) {
+      e.steps = 'Agrega al menos un paso antes de crear la tarea';
+    }
+
     const catArray = categories
       .split(',')
       .map((c) => c.trim())
@@ -200,15 +219,14 @@ export default function TaskSidebar({
       description: description.trim(),
       dueDate: new Date(dueDate).toISOString(),
       priority,
-      status: (mode !== 'create'
-        ? (task?.status ?? defaultStatus ?? 'todo')
-        : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done',
+      status: 'todo' as const,
       categories: catArray,
       isRecurring,
       recurringInterval: isRecurring ? recurringInterval : 'days',
       recurringCount: isRecurring ? Number(recurringCount) || 1 : null,
       assignedUserUid: assignedUserUid || null,
       assignedGroupId: assignedGroupId || null,
+      steps: mode === 'create' ? localSteps : undefined,
     };
   }
 
@@ -529,6 +547,28 @@ export default function TaskSidebar({
                 </div>
               </div>
             </div>
+
+            {/* Steps section — visible in view mode */}
+            {task?.id && (
+              <TaskStepsSection
+                teamId={teamId}
+                taskId={task.id}
+                taskStatus={task.status}
+                currentUserUid={currentUserUid}
+                myRole={myRole}
+                assignedUserUids={(task.assignedUsers ?? []).map((u) => u.uid)}
+                canEdit={isEditView}
+              />
+            )}
+
+            {/* Commentary section — visible in view mode */}
+            {task?.id && (
+              <TaskCommentarySection
+                teamId={teamId}
+                taskId={task.id}
+                currentUserUid={currentUserUid}
+              />
+            )}
           </section>
         ) : (
           <>
@@ -580,6 +620,21 @@ export default function TaskSidebar({
                   {errors.description && (
                     <p className="mt-1 text-xs text-red">{errors.description}</p>
                   )}
+
+                  {/* Steps section in create/edit mode */}
+                  <TaskStepsSection
+                    teamId={teamId}
+                    taskId={task?.id ?? ''}
+                    taskStatus={task?.status ?? 'todo'}
+                    currentUserUid={currentUserUid}
+                    myRole={myRole}
+                    assignedUserUids={(task?.assignedUsers ?? []).map((u) => u.uid)}
+                    canEdit={true}
+                    createMode={mode === 'create'}
+                    localSteps={localSteps}
+                    onLocalStepsChange={setLocalSteps}
+                  />
+                  {errors.steps && <p className="mt-1 text-xs text-red">{errors.steps}</p>}
                 </div>
 
                 {/* Right: rest of task attributes */}

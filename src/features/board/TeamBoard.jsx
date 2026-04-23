@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import { useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -29,9 +30,19 @@ const COLUMN_TO_STATUS = {
   done: 'done',
 };
 
+// Ordered column list (index = precedence)
+const COLUMN_ORDER = ['todo', 'progress', 'qa', 'done'];
+
+/**
+ * Return true if moving from `fromCol` to `toCol` is a forward drag.
+ * Forward = toCol index > fromCol index.
+ */
+function isForwardDrag(fromCol, toCol) {
+  return COLUMN_ORDER.indexOf(toCol) > COLUMN_ORDER.indexOf(fromCol);
+}
+
 /**
  * Transform flat API task list into column-grouped cards.
- * Falls back to mock data when the API hasn't returned results yet.
  */
 function groupTasksByColumn(tasks) {
   const grouped = { todo: [], progress: [], qa: [], done: [] };
@@ -48,6 +59,8 @@ function groupTasksByColumn(tasks) {
         (u) => u.displayName?.substring(0, 2).toUpperCase() ?? u.uid.substring(0, 2).toUpperCase(),
       ),
       status: task.status,
+      stepsTotal: task.stepsTotal ?? 0,
+      stepsDone: task.stepsDone ?? 0,
       // preserve full task for edit sidebar
       _raw: task,
     });
@@ -58,18 +71,26 @@ function groupTasksByColumn(tasks) {
 
 export default function TeamBoard() {
   const { teamId } = useTeam();
+  const { user } = useAuth();
   const { data, isLoading } = useTasks(teamId);
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
   const { play } = useSoundEffects();
+
+  // Determine current user's role for permission gating
+  const myRole = useMemo(() => {
+    if (!user?.uid || !members.length) return 'member';
+    return members.find((m) => m.userUid === user.uid)?.role ?? 'member';
+  }, [user, members]);
+
+  const isLeaderOrCollaborator = myRole === 'leader' || myRole === 'collaborator';
 
   // ── Filter logic ──
   const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
 
   const apiTasks = data?.tasks;
 
-  // Extract unique categories from ALL tasks (before filtering) so the filter
-  // dropdown always shows the full list of available categories.
+  // Extract unique categories from ALL tasks (before filtering)
   const allCategories = useMemo(() => {
     if (!apiTasks?.length) return [];
     const set = new Set();
@@ -92,7 +113,7 @@ export default function TeamBoard() {
     [filteredTasks],
   );
 
-  // ── local drag-and-drop state (operates on top of API data or mock) ──
+  // ── local drag-and-drop state ──
   const [localCards, setLocalCards] = useState(null);
   const displayCards = localCards ?? cards;
 
@@ -112,6 +133,19 @@ export default function TeamBoard() {
     const card = fromCards[cardIndex];
     if (!card) return;
 
+    // ── Drag restrictions ──
+    if (fromColumnId !== toColumnId) {
+      const forward = isForwardDrag(fromColumnId, toColumnId);
+
+      if (forward) {
+        // Only allow: todo → progress
+        // Block: anything → qa or done (those are auto-transitions only)
+        const allowed = fromColumnId === 'todo' && toColumnId === 'progress';
+        if (!allowed) return;
+      }
+      // Backward drags (done → *, qa → *, progress → *) are always allowed
+    }
+
     const nextStatus = COLUMN_TO_STATUS[toColumnId] ?? 'todo';
     const nextCard = {
       ...card,
@@ -126,18 +160,12 @@ export default function TeamBoard() {
     fromCards.splice(cardIndex, 1);
 
     if (fromColumnId === toColumnId) {
-      // Same-column reorder: use the SAME array (card already removed above)
       const clampedPosition = Math.max(0, Math.min(position, fromCards.length));
-      // If the card was before the target position, the target shifts down by 1
       const adjustedPosition = cardIndex < clampedPosition ? clampedPosition - 1 : clampedPosition;
-
-      // Skip if the card would land back in the same spot
       if (adjustedPosition === cardIndex) return;
-
       fromCards.splice(adjustedPosition, 0, nextCard);
       setLocalCards({ ...source, [fromColumnId]: fromCards });
     } else {
-      // Cross-column move: insert into a separate target array
       const toCards = [...(source[toColumnId] ?? [])];
       const clampedPosition = Math.max(0, Math.min(position, toCards.length));
       toCards.splice(clampedPosition, 0, nextCard);
@@ -148,7 +176,6 @@ export default function TeamBoard() {
         [toColumnId]: toCards,
       });
 
-      // Play completion sound if task is moved to done
       if (toColumnId === 'done') {
         play('taskCompleted');
       }
@@ -176,17 +203,17 @@ export default function TeamBoard() {
     defaultStatus: 'todo',
   });
 
-  const openCreate = (columnId) => {
+  // Single global create — always opens with status 'todo'
+  const openCreate = () => {
     setSidebar({
       isOpen: true,
       mode: 'create',
       task: null,
-      defaultStatus: COLUMN_TO_STATUS[columnId] ?? 'todo',
+      defaultStatus: 'todo',
     });
   };
 
   const openEdit = (card) => {
-    // Use raw API task data if available, otherwise use the card object
     const taskData = card._raw ?? card;
     setSidebar({
       isOpen: true,
@@ -200,7 +227,6 @@ export default function TeamBoard() {
     setSidebar((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // Funciones para reproducir sonidos de tareas
   const handleTaskCreated = () => {
     play('/sounds/task-created.mp3');
   };
@@ -224,6 +250,7 @@ export default function TeamBoard() {
         allCategories={allCategories}
         members={members}
         groups={groups}
+        onCreateTask={openCreate}
       />
 
       {isLoading && (
@@ -242,9 +269,9 @@ export default function TeamBoard() {
               column={col}
               cards={displayCards[col.id] ?? []}
               onMoveCard={moveCard}
-              onCreateTask={openCreate}
               onCardClick={openEdit}
               columnIndex={index}
+              isLeaderOrCollaborator={isLeaderOrCollaborator}
             />
           </div>
         ))}
@@ -260,6 +287,8 @@ export default function TeamBoard() {
         onTaskCreated={handleTaskCreated}
         onTaskUpdated={handleTaskUpdated}
         onTaskDeleted={handleTaskDeleted}
+        myRole={myRole}
+        currentUserUid={user?.uid ?? null}
       />
     </div>
   );

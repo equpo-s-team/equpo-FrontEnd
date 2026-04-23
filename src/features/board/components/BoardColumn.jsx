@@ -1,7 +1,5 @@
 import { CheckSquare, LayoutGrid, Loader, ShieldCheck } from 'lucide-react';
-import { Plus } from 'lucide-react';
 
-import { AppTooltip } from '@/components/ui/AppTooltip';
 import { EmptyState } from '@/components/ui/EmptyState';
 
 import BoardCard from './BoardCard.tsx';
@@ -66,7 +64,7 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, onCardClick }) {
+export default function BoardColumn({ column, cards, onMoveCard, onCardClick }) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
@@ -110,14 +108,6 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
             {cards.length}
           </span>
         </div>
-        <AppTooltip content="Crear tarea" side="top">
-          <button
-            onClick={() => onCreateTask?.(id)}
-            className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
-          >
-            <Plus size={14} />
-          </button>
-        </AppTooltip>
       </div>
 
       <div
@@ -167,15 +157,6 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
             </div>
           ))
         )}
-      </div>
-
-      <div className="mx-3 mb-3">
-        <button
-          onClick={() => onCreateTask?.(id)}
-          className="w-full py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[10px] text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer"
-        >
-          + Agregar tarea
-        </button>
       </div>
     </div>
   );

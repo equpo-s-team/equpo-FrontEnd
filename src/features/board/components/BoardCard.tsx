@@ -8,9 +8,8 @@ import { useRef } from 'react';
 import { UserAvatar as AppUserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
-import type { TaskPriority, TaskStatus } from '../types';
+import type { TaskPriority } from '../types';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
-import { STATUS_TO_PROGRESS } from '../utils/taskUtils';
 import { COLUMN_CONFIG, PRIORITY_CONFIG, USER_GRADIENT } from './columnConfig';
 import { TagChip } from './TagChip';
 
@@ -23,6 +22,8 @@ type BoardCardData = {
   priority?: TaskPriority;
   categories?: string[];
   assignees?: string[];
+  stepsTotal?: number;
+  stepsDone?: number;
 };
 
 type BoardCardProps = {
@@ -44,13 +45,6 @@ type PointerTracking = {
   y: number;
   t: number;
   dragged: boolean;
-};
-
-const COLUMN_TO_STATUS: Record<BoardColumnId, TaskStatus> = {
-  todo: 'todo',
-  progress: 'in-progress',
-  qa: 'in-qa',
-  done: 'done',
 };
 
 function BoardAssigneeAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
@@ -76,7 +70,11 @@ export default function BoardCard({
 }: BoardCardProps) {
   const cfg = COLUMN_CONFIG[accent];
   const prio = PRIORITY_CONFIG[card.priority ?? 'medium'];
-  const progress = STATUS_TO_PROGRESS[COLUMN_TO_STATUS[columnId]];
+
+  // Step-based progress: use stepsTotal/stepsDone when available
+  const stepsTotal = card.stepsTotal ?? 0;
+  const stepsDone = card.stepsDone ?? 0;
+  const progress = stepsTotal > 0 ? Math.round((stepsDone / stepsTotal) * 100) : 0;
 
   const pointerRef = useRef<PointerTracking>({ x: 0, y: 0, t: 0, dragged: false });
 
@@ -193,7 +191,7 @@ export default function BoardCard({
             Progreso
           </span>
           <span className={`font-maxwell text-[10px] font-bold ${cfg.progressColor}`}>
-            {progress}%
+            {stepsTotal > 0 ? `${stepsDone}/${stepsTotal} pasos` : `${progress}%`}
           </span>
         </div>
         <div className="h-1 bg-secondary rounded-full overflow-hidden">

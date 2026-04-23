@@ -4,6 +4,7 @@ import {
   CalendarDays,
   ChevronDown,
   ChevronDownIcon,
+  Plus,
   Repeat,
   RotateCcw,
   SlidersHorizontal,
@@ -534,6 +535,7 @@ export default function FilterBar({
   allCategories,
   members,
   groups,
+  onCreateTask,
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -613,6 +615,17 @@ export default function FilterBar({
         px-8 py-2.5 items-center gap-2.5 flex-wrap
       "
       >
+        {/* Global create button — to the left of filters */}
+        <button
+          onClick={onCreateTask}
+          id="crear-mision-btn"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold text-white
+            bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-400 hover:to-blue-400
+            shadow-sm hover:shadow transition-all duration-200 cursor-pointer shrink-0 mr-2 font-body"
+        >
+          <Plus size={13} strokeWidth={2.5} />
+          Crear Misión
+        </button>
         <span className="text-[11px] font-bold uppercase tracking-[0.9px] text-grey-400 mr-1 shrink-0">
           Filtros
         </span>
@@ -625,10 +638,19 @@ export default function FilterBar({
         flex md:hidden
         sticky top-14 z-40
         bg-primary border-b border-grey-200
-        px-4 py-2 items-center justify-between
+        px-4 py-2 items-center justify-between gap-2
       "
       >
-        <span className="text-[12px] font-semibold text-grey-600">Tablero de tareas</span>
+        <button
+          onClick={onCreateTask}
+          id="crear-mision-btn-mobile"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white
+            bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-400 hover:to-blue-400
+            transition-all duration-200 cursor-pointer font-body shrink-0"
+        >
+          <Plus size={12} strokeWidth={2.5} />
+          Crear Misión
+        </button>
         <button
           onClick={() => setMobileOpen((o) => !o)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] border-[1.5px] font-body transition-all duration-200 cursor-pointer

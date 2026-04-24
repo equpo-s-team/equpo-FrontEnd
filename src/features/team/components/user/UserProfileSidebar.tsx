@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Clipboard } from 'lucide-react';
 
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { toastSuccess } from '@/lib/toast';
 import { type UserProfileSaveInput } from '@/features/team/types';
 
 import { type UserProfile } from './UserProfileCard.tsx';
@@ -22,6 +24,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<{ displayName?: string; form?: string }>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     requestAnimationFrame(() => setIsVisible(true));
@@ -31,6 +34,29 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     if (isSaving) return;
     setIsVisible(false);
     setTimeout(onClose, 300);
+  };
+
+  const handleCopyUid = async () => {
+    try {
+      await navigator.clipboard.writeText(user.uid);
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+
+      // Resetear el estado después de 2 segundos
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (error) {
+      // Fallback para navegadores que no soportan clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = user.uid;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+      setTimeout(() => setIsCopied(false), 2000);
+    }
   };
 
   const handleSave = async () => {
@@ -235,18 +261,40 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-1.5 block">
               UID
             </label>
-            <div
-              className="w-full px-4 py-2.5 rounded-xl border text-sm text-grey-400 font-mono select-all break-all"
-              style={{
-                borderColor: 'rgba(0,0,0,0.06)',
-                background: 'rgba(250,250,248,0.8)',
-                fontFamily: 'monospace',
-                fontSize: '11px',
-              }}
-            >
-              {user.uid}
+            <div className="flex gap-2">
+              <div
+                className={`flex-1 px-4 py-2.5 rounded-xl border text-sm font-mono select-all break-all transition-all duration-200 ${
+                  isCopied
+                    ? 'bg-green-50 border-green-200 text-green-700'
+                    : 'text-grey-400'
+                }`}
+                style={{
+                  borderColor: isCopied ? 'rgba(34,197,94,0.2)' : 'rgba(0,0,0,0.06)',
+                  background: isCopied ? 'rgba(34,197,94,0.05)' : 'rgba(250,250,248,0.8)',
+                  fontFamily: 'monospace',
+                  fontSize: '11px',
+                }}
+              >
+                {user.uid}
+              </div>
+              <button
+                onClick={handleCopyUid}
+                className={`px-3 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center ${
+                  isCopied
+                    ? 'bg-green-500 text-white border-green-500'
+                    : 'bg-white border-grey-200 text-grey-600 hover:border-grey-300 hover:bg-grey-50'
+                }`}
+                title={isCopied ? '¡Copiado!' : 'Copiar UID'}
+              >
+                <Clipboard
+                  size={16}
+                  className={isCopied ? 'text-white' : 'text-grey-500'}
+                />
+              </button>
             </div>
-            <p className="text-xs text-grey-400 mt-1">El UID no se puede modificar</p>
+            <p className="text-xs text-grey-400 mt-1">
+              {isCopied ? '¡UID copiado al portapapeles!' : 'El UID no se puede modificar'}
+            </p>
           </div>
 
           <div className="flex-grow" />

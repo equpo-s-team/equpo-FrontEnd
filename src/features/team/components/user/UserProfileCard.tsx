@@ -1,9 +1,10 @@
-import {Bolt, Coins} from 'lucide-react';
-import React from 'react';
+import { Bolt, Clipboard, Coins} from 'lucide-react';
+import React, { useState } from 'react';
 
 import { AppProgress } from '@/components/ui/AppProgress';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { toastSuccess } from '@/lib/toast';
 import {type Rank, ranks} from "@/features/team/types/rankTypes.ts";
 
 export interface UserProfile {
@@ -40,7 +41,29 @@ export function levelToRank(nivel: number): Rank {
 
 
 export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSettings }) => {
+  const [isCopied, setIsCopied] = useState(false);
   const xpPercent = Math.min(100, Math.round((user.experience / user.experienceToNextLevel) * 100));
+
+  const handleCopyUid = async () => {
+    try {
+      await navigator.clipboard.writeText(user.uid);
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (error) {
+      const textArea = document.createElement('textarea');
+      textArea.value = user.uid;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  };
 
   const rankName:string = levelToRank(user.level).name;
   const rankColor:string = levelToRank(user.level).color;
@@ -64,18 +87,18 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
             src={user.photoURL}
             alt={user.displayName}
             initials={initials}
-            className="w-14 h-14"
-            style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.35)' }}
-            fallbackClassName="text-white text-lg"
+            className="w-20 h-20"
+            style={{ boxShadow: '0 6px 20px rgba(96,175,255,0.4)' }}
+            fallbackClassName="text-white text-xl"
             fallbackStyle={{
               background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-              boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
+              boxShadow: '0 6px 20px rgba(96,175,255,0.5)',
             }}
             loading="eager"
           />
           {/* Level badge */}
           <div
-            className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs font-bold border-2 border-white"
+            className="absolute -bottom-2 -right-2 w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold border-2 border-white"
             style={{ background: 'linear-gradient(135deg, #9b7fe1, #5961F9)' }}
           >
             {user.level}
@@ -84,20 +107,45 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2 mb-0.5">
-            <h3
-              className="font-bold text-grey-800 text-lg leading-tight truncate"
-              style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
-            >
-              {user.displayName}
-            </h3>
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="flex-1 min-w-0">
+              <h3
+                className="font-bold text-grey-800 text-xl leading-tight mb-2"
+                style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
+              >
+                {user.displayName}
+              </h3>
+
+              <div className="flex items-center gap-2">
+                <p
+                  className={`text-sm font-mono transition-colors duration-200 ${
+                    isCopied ? 'text-green-600' : 'text-grey-400'
+                  }`}
+                  title={user.uid}
+                >
+                  {user.uid}
+                </p>
+                <AppTooltip content={isCopied ? '¡Copiado!' : 'Copiar UID'}>
+                  <button
+                    onClick={handleCopyUid}
+                    className={`p-2 rounded-lg transition-all duration-200 transform hover:scale-105 ${
+                      isCopied
+                        ? 'bg-green-100 text-green-600'
+                        : 'text-grey-400 hover:text-grey-600 hover:bg-grey-100'
+                    }`}
+                  >
+                    <Clipboard size={16} />
+                  </button>
+                </AppTooltip>
+              </div>
+            </div>
 
             <AppTooltip content="Configuración de perfil">
               <button
                 onClick={onOpenSettings}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-grey-100 transition-all shrink-0"
+                className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:shadow-lg hover:scale-105 transition-all shrink-0"
               >
-                <Bolt />
+                <Bolt size={20} />
               </button>
             </AppTooltip>
           </div>

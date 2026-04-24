@@ -1,11 +1,12 @@
 import log from 'loglevel';
-import { Users } from 'lucide-react';
+import { LogOut, Users } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import { useAuth } from '@/context/AuthContext';
+import { logOut } from '@/context/AuthContext';
 import DarkModeToggle from '@/features/team/components/DarkModeToggle.tsx';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
@@ -180,6 +181,15 @@ export const TeamsHub: React.FC = () => {
 
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      navigate('/');
+    } catch (error) {
+      toastError('Error al cerrar sesión', 'No se pudo cerrar la sesión. Intenta de nuevo.');
+    }
+  };
+
   return (
     <div className="h-[100dvh] bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col">
       {/* Header */}
@@ -191,6 +201,12 @@ export const TeamsHub: React.FC = () => {
           <span className="font-bold text-grey-800 dark:text-gray-100 text-lg">Equpo</span>
         </div>
         <DarkModeToggle />
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-sm font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
+        >
+          <LogOut size={16} />
+        </button>
       </div>
 
       {/* Main content - Responsive grid */}

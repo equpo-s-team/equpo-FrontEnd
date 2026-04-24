@@ -24,7 +24,11 @@ export interface FirebaseAuthResult {
 }
 
 const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
+googleProvider.setCustomParameters({ 
+  prompt: 'select_account',
+  access_type: 'offline',
+  include_granted_scopes: 'true'
+});
 
 const mapFirebaseError = (error: AuthError): string => {
   switch (error.code) {
@@ -132,7 +136,18 @@ export const useFirebaseAuth = () => {
   const loginWithGoogle = useCallback(async (): Promise<FirebaseAuthResult> => {
     setIsLoading(true);
     try {
-      const credential = await signInWithPopup(auth, googleProvider);
+      // Limpiar caché de autenticación para evitar el bug de múltiples cuentas
+      await auth.signOut();
+      
+      // Crear un nuevo provider para asegurar parámetros frescos
+      const freshProvider = new GoogleAuthProvider();
+      freshProvider.setCustomParameters({ 
+        prompt: 'select_account',
+        access_type: 'offline',
+        include_granted_scopes: 'true'
+      });
+      
+      const credential = await signInWithPopup(auth, freshProvider);
 
       const displayName =
         credential.user.displayName ?? credential.user.email?.split('@')[0] ?? 'Usuario';

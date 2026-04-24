@@ -17,6 +17,7 @@ import { AppTooltip } from '@/components/ui/AppTooltip';
 import { RoleSelect } from '@/components/ui/RoleSelect';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { UserPreviewCard } from './UserPreviewCard.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
@@ -26,6 +27,7 @@ import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
+import { useUserSearch } from '@/features/team/hooks/useUserSearch';
 import type { TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
 import { toastError, toastSuccess } from '@/lib/toast';
@@ -261,9 +263,40 @@ export default function TeamSettings() {
     );
   };
 
+  // Hook para buscar usuario por UID
+  const { data: searchedUser, isLoading: isSearchingUser } = useUserSearch(inviteUid.trim());
+
+  // Validación de formato UID
+  const isValidUidFormat = (uid: string) => {
+    const trimmedUid = uid.trim();
+    return trimmedUid.length >= 10 && /^[a-zA-Z0-9_-]+$/.test(trimmedUid);
+  };
+
+  // Verificar si el usuario ya está en el equipo
+  const isUserAlreadyInTeam = (uid: string) => {
+    return members.some(member => member.uid === uid);
+  };
+
+  // Verificar si el usuario existe
+  const doesUserExist = (uid: string) => {
+    return !!searchedUser && searchedUser.uid === uid;
+  };
+
   const handleInvite = () => {
     const uid = inviteUid.trim();
     if (!uid) return;
+
+    // Verificar si el usuario ya está en el equipo
+    if (isUserAlreadyInTeam(uid)) {
+      toastError('Usuario ya en el equipo', 'Este usuario ya es miembro del equipo.');
+      return;
+    }
+
+    // Verificar si el usuario existe
+    if (!doesUserExist(uid)) {
+      toastError('Usuario no encontrado', 'No se encontró un usuario con ese UID.');
+      return;
+    }
 
     addMember.mutate(
       { teamId, payload: { userUid: uid, role: inviteRole } },
@@ -624,7 +657,13 @@ export default function TeamSettings() {
               </div>
               <button
                 onClick={handleInvite}
-                disabled={!inviteUid.trim() || addMember.isPending}
+                disabled={
+                  !inviteUid.trim() ||
+                  addMember.isPending ||
+                  !isValidUidFormat(inviteUid) ||
+                  isUserAlreadyInTeam(inviteUid.trim()) ||
+                  !doesUserExist(inviteUid.trim())
+                }
                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 shrink-0"
                 style={{ background: accent }}
               >
@@ -636,6 +675,18 @@ export default function TeamSettings() {
                 Invitar
               </button>
             </div>
+
+            {/* User Preview */}
+            {inviteUid.trim() && (
+              <div className="mt-3">
+                <UserPreviewCard
+                  user={searchedUser}
+                  isLoading={isSearchingUser}
+                  isValidFormat={isValidUidFormat(inviteUid)}
+                  isAlreadyInTeam={isUserAlreadyInTeam(inviteUid.trim())}
+                />
+              </div>
+            )}
           </div>
         </section>
 

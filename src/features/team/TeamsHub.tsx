@@ -1,10 +1,11 @@
 import log from 'loglevel';
-import { Users } from 'lucide-react';
+import { LogOut, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useAuth } from '@/context/AuthContext';
+import { logOut } from '@/context/AuthContext';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
@@ -213,6 +214,15 @@ export const TeamsHub: React.FC = () => {
 
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      navigate('/');
+    } catch (error) {
+      toastError('Error al cerrar sesión', 'No se pudo cerrar la sesión. Intenta de nuevo.');
+    }
+  };
+
   return (
     <div className="h-[100dvh] bg-white relative overflow-hidden">
       <div className="relative h-full w-full flex flex-col">
@@ -223,6 +233,14 @@ export const TeamsHub: React.FC = () => {
             </div>
             <span className="font-bold text-grey-800 text-lg">Equpo</span>
           </div>
+          
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-sm font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
+          >
+            <LogOut size={16} />
+            Cerrar sesión
+          </button>
         </div>
 
         <div className="grid flex-1 min-h-0 gap-6 px-5 pb-5 lg:px-6 lg:grid-cols-4 lg:grid-rows-[auto_minmax(0,1fr)]">

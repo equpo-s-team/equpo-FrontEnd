@@ -69,8 +69,8 @@ export const UserPreviewCard: React.FC<UserPreviewCardProps> = ({
 
   return (
     <div className={`flex items-center gap-3 p-3 rounded-lg border ${
-      isAlreadyInTeam 
-        ? 'bg-grey-50 border-grey-200' 
+      isAlreadyInTeam
+        ? 'bg-grey-50 border-grey-200'
         : 'bg-green-50 border-green-200'
     }`}>
       {isAlreadyInTeam ? (
@@ -85,7 +85,7 @@ export const UserPreviewCard: React.FC<UserPreviewCardProps> = ({
         className="w-10 h-10"
         fallbackClassName="text-white text-sm font-medium"
         fallbackStyle={{
-          background: isAlreadyInTeam 
+          background: isAlreadyInTeam
             ? 'linear-gradient(135deg, #9ca3af, #6b7280)'
             : 'linear-gradient(135deg, #10b981, #059669)',
         }}

@@ -1,10 +1,11 @@
 import log from 'loglevel';
-import { Users } from 'lucide-react';
+import { LogOut, Users } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useAuth } from '@/context/AuthContext';
+import { logOut } from '@/context/AuthContext';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
@@ -179,22 +180,39 @@ export const TeamsHub: React.FC = () => {
 
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      navigate('/');
+    } catch (error) {
+      toastError('Error al cerrar sesión', 'No se pudo cerrar la sesión. Intenta de nuevo.');
+    }
+  };
+
   return (
-    <div className="h-[100dvh] bg-white relative overflow-hidden flex flex-col">
-      {/* Header */}
-      <div className="shrink-0 flex w-full items-center justify-between p-4 lg:p-6 border-b border-grey-150">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
-            <span className="text-white text-sm font-bold">U</span>
+    <div className="h-[100dvh] bg-white relative overflow-hidden">
+      <div className="relative h-full w-full flex flex-col">
+        <div className="shrink-0 flex w-full items-center justify-between mb-4 shadow-sm p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
+              <span className="text-white text-sm font-bold">U</span>
+            </div>
+            <span className="font-bold text-grey-800 text-lg">Equpo</span>
           </div>
-          <span className="font-bold text-grey-800 text-lg">Equpo</span>
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-sm font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
+          >
+            <LogOut size={16} />
+            Cerrar sesión
+          </button>
         </div>
-      </div>
 
       {/* Main content - Responsive grid */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
-          
+
           {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
@@ -202,7 +220,7 @@ export const TeamsHub: React.FC = () => {
 
           {/* Teams Section - Main content */}
           <section className="lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
-            
+
             {/* Teams Header with Search and Create */}
             <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>

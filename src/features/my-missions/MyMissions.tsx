@@ -6,6 +6,7 @@ import TaskSidebar from '@/features/board/components/TaskSidebar';
 import type { TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useAuth } from '@/hooks/useAuth';
 
 import CategoryFilter from './components/CategoryFilter';
 import DayTimeline from './components/DayTimeline';
@@ -24,9 +25,16 @@ function toDateKey(d: Date) {
 export default function MyMissions() {
   const { teamId } = useTeam();
   const { myTasks, tasksByDate, allCategories, isLoading } = useMyTasks(teamId);
+  const { user } = useAuth();
 
   const { data: teamMembers = [] } = useTeamMembers(teamId ?? '');
   const { data: teamGroups = [] } = useTeamGroups(teamId ?? '');
+
+  const currentUserUid = user?.uid ?? null;
+  const myRole = useMemo(() => {
+    if (!currentUserUid || !teamMembers.length) return 'member';
+    return teamMembers.find((m) => m.uid === currentUserUid)?.role ?? 'member';
+  }, [currentUserUid, teamMembers]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [view, setView] = useState<'day' | 'week' | 'month' | 'year'>('day');
@@ -184,6 +192,8 @@ export default function MyMissions() {
             onEdit={openEdit}
             members={teamMembers}
             groups={teamGroups}
+            currentUserUid={currentUserUid}
+            myRole={myRole}
           />
         </aside>
       </div>
@@ -195,6 +205,8 @@ export default function MyMissions() {
         task={editSidebar.task}
         teamId={teamId ?? ''}
         defaultStatus={editSidebar.task?.status ?? 'todo'}
+        myRole={myRole}
+        currentUserUid={currentUserUid}
       />
     </div>
   );

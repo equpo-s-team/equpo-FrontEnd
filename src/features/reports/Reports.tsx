@@ -103,7 +103,11 @@ export default function Reports() {
 
   const kpi = kpiQuery.data?.kpi ?? EMPTY_KPI;
   const members = useMemo(
-    () => mapMembersToRows(overviewQuery.data?.members ?? [], memberPhotoByUid),
+    () =>
+      mapMembersToRows(
+        (overviewQuery.data?.members ?? []).filter((m) => m.role !== 'spectator'),
+        memberPhotoByUid,
+      ),
     [memberPhotoByUid, overviewQuery.data?.members],
   );
   const overdueTasks = useMemo(

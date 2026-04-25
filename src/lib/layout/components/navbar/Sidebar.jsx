@@ -63,7 +63,9 @@ export default function Sidebar() {
         <SidebarSection label="Principal">
           <SidebarItem id="my-space" icon={Home} label="Mi Espacio" />
           <SidebarItem id="missiones" icon={Star} label="Misiones del Equipo" />
-          <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />
+          {myRole !== 'spectator' && (
+            <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />
+          )}
           <SidebarItem id="chat" icon={MessageCircle} label="Chat" />
         </SidebarSection>
 

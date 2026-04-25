@@ -3,6 +3,7 @@ import { doc, onSnapshot, type Unsubscribe } from 'firebase/firestore';
 import { useEffect, useRef } from 'react';
 
 import { db } from '@/firebase';
+
 import type { FirestoreStepsMap, TaskStep } from '../types/taskSchema';
 
 function toIso(v: { toDate: () => Date } | string | null | undefined): string {
@@ -48,8 +49,7 @@ export function useTaskStepsRealtime(teamId: string, taskId: string) {
 
   return useQuery<{ steps: TaskStep[] }>({
     queryKey,
-    queryFn: () =>
-      (queryClient.getQueryData(queryKey) as { steps: TaskStep[] }) ?? { steps: [] },
+    queryFn: () => (queryClient.getQueryData(queryKey) as { steps: TaskStep[] }) ?? { steps: [] },
     enabled: Boolean(teamId && taskId),
     staleTime: Infinity,
   });

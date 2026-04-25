@@ -191,7 +191,7 @@ export default function BoardCard({
             Progreso
           </span>
           <span className={`font-maxwell text-[10px] font-bold ${cfg.progressColor}`}>
-            {stepsTotal > 0 ? `${stepsDone}/${stepsTotal} pasos` : `${progress}%`}
+            {progress}%
           </span>
         </div>
         <div className="h-1 bg-secondary rounded-full overflow-hidden">

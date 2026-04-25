@@ -126,10 +126,7 @@ export function projectRecurringTasks(
           originalId: task.id,
           dueDate: currentDueDate.toISOString(),
           isProjected: true,
-          // A projected task is technically not "overdue" in the future,
-          // but its status is cloned. If the original is done, the projected shouldn't be 'done'.
-          // However, our backend lazily updates, so the base task might be overdue or 'todo'.
-          // We'll leave status as is, but it's visual.
+          status: 'todo',
         });
       }
     }

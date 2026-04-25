@@ -1,7 +1,10 @@
 import { Edit2, MessageSquarePlus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { UserAvatar } from '@/components/ui/UserAvatar';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useAuth } from '@/hooks/useAuth';
+
 import { useCreateTaskCommentary } from '../hooks/useCreateTaskCommentary';
 import { useDeleteTaskCommentary } from '../hooks/useDeleteTaskCommentary';
 import { useTaskCommentariesRealtime } from '../hooks/useTaskCommentariesRealtime';
@@ -23,7 +26,7 @@ function timeAgo(dateStr: string): string {
   return `hace ${days} d`;
 }
 
-function authorInitials(name: string | null): string {
+function getInitialsFrom(name: string | null): string {
   if (!name) return '?';
   return name
     .split(' ')
@@ -32,17 +35,30 @@ function authorInitials(name: string | null): string {
     .join('');
 }
 
+interface AuthorInfo {
+  displayName: string | null;
+  photoURL: string | null;
+}
+
 interface CommentaryItemProps {
   commentary: TaskCommentary;
   currentUserUid: string | null;
+  resolveAuthor: (uid: string) => AuthorInfo;
   onEdit: (id: string, text: string) => void;
   onDelete: (id: string) => void;
 }
 
-function CommentaryItem({ commentary, currentUserUid, onEdit, onDelete }: CommentaryItemProps) {
+function CommentaryItem({
+  commentary,
+  currentUserUid,
+  resolveAuthor,
+  onEdit,
+  onDelete,
+}: CommentaryItemProps) {
   const [editMode, setEditMode] = useState(false);
   const [editText, setEditText] = useState(commentary.commentary);
   const isOwner = commentary.userUid === currentUserUid;
+  const author = resolveAuthor(commentary.userUid);
 
   const handleSaveEdit = () => {
     if (editText.trim()) {
@@ -55,21 +71,19 @@ function CommentaryItem({ commentary, currentUserUid, onEdit, onDelete }: Commen
 
   return (
     <div className="flex gap-2.5 group">
-      {/* Avatar */}
       <div className="shrink-0 mt-0.5">
         <UserAvatar
-          src={commentary.photoURL ?? null}
-          alt={commentary.displayName ?? commentary.userUid}
-          initials={authorInitials(commentary.displayName)}
+          src={author.photoURL ?? null}
+          alt={author.displayName ?? commentary.userUid}
+          initials={getInitialsFrom(author.displayName)}
           className="w-7 h-7 text-[10px]"
         />
       </div>
 
       <div className="flex-1 min-w-0">
-        {/* Header */}
         <div className="flex items-center gap-2 mb-1">
           <span className="text-[12px] font-semibold text-grey-800 truncate">
-            {commentary.displayName ?? commentary.userUid}
+            {author.displayName ?? commentary.userUid}
           </span>
           <span className="text-[11px] text-grey-400 shrink-0">
             {timeAgo(commentary.createdAt)}
@@ -79,7 +93,6 @@ function CommentaryItem({ commentary, currentUserUid, onEdit, onDelete }: Commen
           )}
         </div>
 
-        {/* Body */}
         {editMode ? (
           <div className="mt-1">
             <MarkdownDescriptionEditor
@@ -113,7 +126,6 @@ function CommentaryItem({ commentary, currentUserUid, onEdit, onDelete }: Commen
         )}
       </div>
 
-      {/* Edit / Delete (own comments only) */}
       {isOwner && !editMode && (
         <div className="flex items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-0.5">
           <button
@@ -138,21 +150,49 @@ interface TaskCommentarySectionProps {
   teamId: string;
   taskId: string;
   currentUserUid: string | null;
+  myRole?: string;
 }
 
 export default function TaskCommentarySection({
   teamId,
   taskId,
   currentUserUid,
+  myRole = 'member',
 }: TaskCommentarySectionProps) {
   const [newText, setNewText] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const formRef = useRef<HTMLDivElement | null>(null);
+
+  const { user: authUser } = useAuth();
+  const { data: members } = useTeamMembers(teamId);
+
   const { data, isLoading } = useTaskCommentariesRealtime(teamId, taskId);
   const createCommentary = useCreateTaskCommentary();
   const updateCommentary = useUpdateTaskCommentary();
   const deleteCommentary = useDeleteTaskCommentary();
 
   const commentaries: TaskCommentary[] = data?.commentaries ?? [];
+  const canPost = myRole !== 'spectator';
+
+  useEffect(() => {
+    if (showForm && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }, [showForm]);
+
+  function resolveAuthor(uid: string): AuthorInfo {
+    if (authUser?.uid === uid) {
+      return {
+        displayName: authUser.displayName ?? null,
+        photoURL: (authUser.photoURL as string | null | undefined) ?? null,
+      };
+    }
+    const member = members?.find((m) => m.uid === uid);
+    return {
+      displayName: member?.displayName ?? null,
+      photoURL: (member as { photoUrl?: string } | undefined)?.photoUrl ?? null,
+    };
+  }
 
   const handlePublish = () => {
     if (!newText.trim()) return;
@@ -182,22 +222,21 @@ export default function TaskCommentarySection({
             </span>
           )}
         </div>
-        <button
-          onClick={() => setShowForm((v) => !v)}
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-[7px] border border-grey-200 text-grey-500 text-[12px] font-semibold hover:border-blue hover:text-blue cursor-pointer transition-colors"
-        >
-          <MessageSquarePlus size={13} />
-          Agregar comentario
-        </button>
+        {canPost && (
+          <button
+            onClick={() => setShowForm((v) => !v)}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-[7px] border border-grey-200 text-grey-500 text-[12px] font-semibold hover:border-blue hover:text-blue cursor-pointer transition-colors"
+          >
+            <MessageSquarePlus size={13} />
+            Agregar comentario
+          </button>
+        )}
       </div>
 
-      {/* Existing commentaries */}
       {isLoading ? (
         <p className="text-[12px] text-grey-300 py-2">Cargando comentarios…</p>
       ) : commentaries.length === 0 ? (
-        <p className="text-[12px] text-grey-400 italic py-2">
-          No hay comentarios aún. ¡Sé el primero!
-        </p>
+        <p className="text-[12px] text-grey-400 italic py-2">No hay comentarios aún.</p>
       ) : (
         <div className="flex flex-col gap-3 mb-4">
           {commentaries.map((c) => (
@@ -205,6 +244,7 @@ export default function TaskCommentarySection({
               key={c.createdAt}
               commentary={c}
               currentUserUid={currentUserUid}
+              resolveAuthor={resolveAuthor}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
@@ -212,9 +252,8 @@ export default function TaskCommentarySection({
         </div>
       )}
 
-      {/* New commentary form — shown only when toggled */}
-      {showForm && (
-        <div className="mt-3">
+      {showForm && canPost && (
+        <div ref={formRef} className="mt-3">
           <MarkdownDescriptionEditor
             value={newText}
             onChange={setNewText}

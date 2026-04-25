@@ -5,6 +5,7 @@ import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
+import { toastError } from '@/lib/toast';
 
 import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
@@ -29,17 +30,6 @@ const COLUMN_TO_STATUS = {
   qa: 'in-qa',
   done: 'done',
 };
-
-// Ordered column list (index = precedence)
-const COLUMN_ORDER = ['todo', 'progress', 'qa', 'done'];
-
-/**
- * Return true if moving from `fromCol` to `toCol` is a forward drag.
- * Forward = toCol index > fromCol index.
- */
-function isForwardDrag(fromCol, toCol) {
-  return COLUMN_ORDER.indexOf(toCol) > COLUMN_ORDER.indexOf(fromCol);
-}
 
 /**
  * Transform flat API task list into column-grouped cards.
@@ -80,7 +70,7 @@ export default function TeamBoard() {
   // Determine current user's role for permission gating
   const myRole = useMemo(() => {
     if (!user?.uid || !members.length) return 'member';
-    return members.find((m) => m.userUid === user.uid)?.role ?? 'member';
+    return members.find((m) => m.uid === user.uid)?.role ?? 'member';
   }, [user, members]);
 
   const isLeaderOrCollaborator = myRole === 'leader' || myRole === 'collaborator';
@@ -134,16 +124,25 @@ export default function TeamBoard() {
     if (!card) return;
 
     // ── Drag restrictions ──
+    // Only todo ↔ progress is allowed via drag; all other columns are auto-transition only.
+    // progress → todo requires all steps to be unchecked.
     if (fromColumnId !== toColumnId) {
-      const forward = isForwardDrag(fromColumnId, toColumnId);
-
-      if (forward) {
-        // Only allow: todo → progress
-        // Block: anything → qa or done (those are auto-transitions only)
-        const allowed = fromColumnId === 'todo' && toColumnId === 'progress';
-        if (!allowed) return;
+      if (fromColumnId === 'todo' && toColumnId === 'progress') {
+        const raw = card._raw ?? {};
+        const hasAssignment =
+          (raw.assignedUsers?.length ?? 0) > 0 || Boolean(raw.assignedGroupId);
+        if (!hasAssignment) {
+          toastError(
+            'No se puede iniciar',
+            'Asigna un usuario o grupo a la tarea antes de moverla a En Progreso.',
+          );
+          return;
+        }
+      } else if (fromColumnId === 'progress' && toColumnId === 'todo') {
+        if ((card.stepsDone ?? 0) > 0) return;
+      } else {
+        return;
       }
-      // Backward drags (done → *, qa → *, progress → *) are always allowed
     }
 
     const nextStatus = COLUMN_TO_STATUS[toColumnId] ?? 'todo';
@@ -217,7 +216,7 @@ export default function TeamBoard() {
     const taskData = card._raw ?? card;
     setSidebar({
       isOpen: true,
-      mode: 'view',
+      mode: myRole === 'spectator' ? 'readonly' : 'view',
       task: taskData,
       defaultStatus: taskData.status ?? 'todo',
     });

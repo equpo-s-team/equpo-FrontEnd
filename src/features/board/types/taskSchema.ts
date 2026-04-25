@@ -44,8 +44,6 @@ export const TaskStepSchema = z.object({
 export const TaskCommentarySchema = z.object({
   taskId: z.string(),
   userUid: z.string(),
-  displayName: z.string().nullable(),
-  photoURL: z.string().nullable().optional(),
   commentary: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -111,8 +109,6 @@ export type FirestoreStepsMap = Record<string, FirestoreTaskStep>;
 
 export type FirestoreTaskCommentary = {
   userUid: string;
-  displayName: string | null;
-  photoURL: string | null;
   commentary: string;
   createdAt: FirestoreTimestamp;
   updatedAt: FirestoreTimestamp;

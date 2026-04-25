@@ -57,6 +57,12 @@ export const tasksApi = {
       'DELETE',
     ),
 
+  // Recurring rollover
+  rollover: (teamId: string, taskId: string, expectedDueDate: string) =>
+    request<{ rolledOver: boolean }>(`/teams/${teamId}/tasks/${taskId}/rollover`, 'POST', {
+      expectedDueDate,
+    }),
+
   // Commentaries
   listCommentaries: (teamId: string, taskId: string) =>
     request<{ commentaries: TaskCommentary[] }>(

@@ -3,6 +3,7 @@ import { doc, onSnapshot, type Unsubscribe } from 'firebase/firestore';
 import { useEffect, useRef } from 'react';
 
 import { db } from '@/firebase';
+
 import type { FirestoreCommentariesMap, TaskCommentary } from '../types/taskSchema';
 
 function toIso(v: { toDate: () => Date } | string | null | undefined): string {
@@ -30,15 +31,11 @@ export function useTaskCommentariesRealtime(teamId: string, taskId: string) {
           .map((c) => ({
             taskId,
             userUid: c.userUid,
-            displayName: c.displayName ?? null,
-            photoURL: c.photoURL ?? null,
             commentary: c.commentary,
             createdAt: toIso(c.createdAt),
             updatedAt: toIso(c.updatedAt),
           }))
-          .sort(
-            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          );
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         queryClient.setQueryData(queryKey, { commentaries });
       },
       (error) => console.error('[useTaskCommentariesRealtime]', error),

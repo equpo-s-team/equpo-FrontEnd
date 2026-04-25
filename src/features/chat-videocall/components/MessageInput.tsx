@@ -11,7 +11,8 @@ import { storage } from '@/firebase';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 export default function MessageInput() {
-  const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId } = useChatContext();
+  const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId, myRole } = useChatContext();
+  const isSpectator = myRole === 'spectator';
   const { play } = useSoundEffects();
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -117,7 +118,7 @@ export default function MessageInput() {
     setValue((prev) => prev + emoji.native);
   };
 
-  const canSend = Boolean(value.trim() && activeRoom) && !isUploading;
+  const canSend = Boolean(value.trim() && activeRoom) && !isUploading && !isSpectator;
 
   return (
     <div className="px-4 py-3 border-t border-grey-150 bg-primary flex-shrink-0 relative">
@@ -153,7 +154,7 @@ export default function MessageInput() {
         />
         <AppTooltip content="Adjuntar archivo">
           <button
-            disabled={!activeRoom || isUploading}
+            disabled={!activeRoom || isUploading || isSpectator}
             onClick={() => fileInputRef.current?.click()}
             className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
           >
@@ -168,8 +169,14 @@ export default function MessageInput() {
           value={value}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          disabled={!activeRoom}
-          placeholder={activeRoom ? 'Escribe un mensaje...' : 'Selecciona una sala'}
+          disabled={!activeRoom || isSpectator}
+          placeholder={
+            isSpectator
+              ? 'Solo lectura — los espectadores no pueden enviar mensajes'
+              : activeRoom
+                ? 'Escribe un mensaje...'
+                : 'Selecciona una sala'
+          }
           className="
             flex-1 bg-transparent outline-none
             font-body text-sm text-grey-800 placeholder:text-grey-400
@@ -182,7 +189,7 @@ export default function MessageInput() {
         <AppTooltip content="Emojis">
           <button
             ref={emojiButtonRef}
-            disabled={!activeRoom || isUploading}
+            disabled={!activeRoom || isUploading || isSpectator}
             onClick={() => setShowEmojiPicker((prev) => !prev)}
             className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
           >

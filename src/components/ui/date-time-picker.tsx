@@ -32,7 +32,7 @@ export function DateTimePicker({
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(value ? new Date(value) : undefined);
   const [time, setTime] = React.useState<string>(
-    value ? value.split('T')[1]?.slice(0, 5) || '23:59' : '23:59',
+    value ? value.split('T')[1]?.slice(0, 5) || '23:00' : '23:00',
   );
 
   React.useEffect(() => {
@@ -40,11 +40,11 @@ export function DateTimePicker({
       const newDate = new Date(value);
       if (!isNaN(newDate.getTime())) {
         setDate(newDate);
-        setTime(value.split('T')[1]?.slice(0, 5) || '23:59');
+        setTime(value.split('T')[1]?.slice(0, 5) || '23:00');
       }
     } else {
       setDate(undefined);
-      setTime('23:59');
+      setTime('23:00');
     }
   }, [value]);
 

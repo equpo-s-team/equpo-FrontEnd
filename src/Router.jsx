@@ -19,6 +19,7 @@ import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/Side
 function Dashboard() {
   const { activeItem } = useSidebar();
   const { teamId } = useTeam();
+  const { user } = useAuth();
   const { data: teams = [], isLoading } = useTeams();
 
   if (isLoading) {
@@ -37,6 +38,12 @@ function Dashboard() {
     return <Navigate to="/teams" replace />;
   }
 
+  const myRole = (() => {
+    if (!activeTeam || !user?.uid) return null;
+    if (activeTeam.leaderUid === user.uid) return 'leader';
+    return activeTeam.members.find((m) => m.userUid === user.uid)?.role ?? null;
+  })();
+
   const renderContent = () => {
     switch (activeItem) {
       case 'my-space':
@@ -44,7 +51,7 @@ function Dashboard() {
       case 'missiones':
         return <TeamBoard />;
       case 'my-missions':
-        return <MyMissions />;
+        return myRole === 'spectator' ? <div>Mi Espacio</div> : <MyMissions />;
       case 'chat':
         return <ChatPage />;
       case 'video-call':

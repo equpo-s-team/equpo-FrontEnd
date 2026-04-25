@@ -1,14 +1,22 @@
 import { CheckSquare, ChevronLeft, ChevronRight, Lock, Plus, Shield, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { useCreateTaskStep } from '../hooks/useCreateTaskStep';
-import { useDeleteTaskStep } from '../hooks/useDeleteTaskStep';
+import { toastError } from '@/lib/toast';
+
 import { useTaskStepsRealtime } from '../hooks/useTaskStepsRealtime';
 import { useToggleTaskStep } from '../hooks/useToggleTaskStep';
-import { useUpdateTaskStep } from '../hooks/useUpdateTaskStep';
 import type { TaskStep } from '../types/taskSchema';
 
 const STEPS_PER_PAGE = 5;
+
+/**
+ * A step under local edit. `originalStep` is the step's text on the server at
+ * the time we entered edit (null if newly added in this session).
+ */
+export type LocalStepDraft = {
+  originalStep: string | null;
+  step: string;
+};
 
 interface TaskStepsSectionProps {
   teamId: string;
@@ -26,6 +34,13 @@ interface TaskStepsSectionProps {
   createMode?: boolean;
   localSteps?: string[];
   onLocalStepsChange?: (steps: string[]) => void;
+  /** Edit-mode drafts (non-create); add/edit/delete operate on these locally and
+   * are flushed to the API only when the parent commits the form. */
+  editDrafts?: LocalStepDraft[];
+  onEditDraftsChange?: (drafts: LocalStepDraft[]) => void;
+  /** Whether the task has at least one assigned user or group; used to gate the
+   * status-auto-transitioning toggle when the task is still in 'todo'. */
+  taskHasAssignment?: boolean;
 }
 
 function StepRow({
@@ -107,7 +122,7 @@ function StepRow({
               ${step.isDone ? 'line-through text-grey-400' : 'text-grey-800'}
               ${isSupero ? 'font-semibold text-violet-700' : ''}
               ${canEdit && !isSupero ? 'cursor-text' : 'cursor-default'}`}
-            onDoubleClick={() => canEdit && !isSupero && setEditMode(true)}
+            onClick={() => canEdit && !isSupero && setEditMode(true)}
           >
             {step.step}
           </button>
@@ -152,18 +167,27 @@ export default function TaskStepsSection({
   createMode = false,
   localSteps = [],
   onLocalStepsChange,
+  editDrafts,
+  onEditDraftsChange,
+  taskHasAssignment = true,
 }: TaskStepsSectionProps) {
   const [page, setPage] = useState(0);
   const [newStepText, setNewStepText] = useState('');
 
-  const { data, isLoading } = useTaskStepsRealtime(createMode ? '' : teamId, createMode ? '' : taskId);
-  const createStep = useCreateTaskStep();
+  const { data, isLoading } = useTaskStepsRealtime(
+    createMode ? '' : teamId,
+    createMode ? '' : taskId,
+  );
   const toggleStep = useToggleTaskStep();
-  const updateStep = useUpdateTaskStep();
-  const deleteStep = useDeleteTaskStep();
 
+  const isSpectator = myRole === 'spectator';
   const isLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
   const isAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
+
+  // Edit task (add/delete/edit steps): reviewers + leadership can edit, assigned workers cannot.
+  const canEditTask = !isSpectator && (isLeaderOrCollab || !isAssigned);
+  // Toggle regular steps: the assigned worker + leadership can mark progress.
+  const canToggleRegularStep = !isSpectator && (isLeaderOrCollab || isAssigned);
 
   // In create mode, work with localSteps; otherwise with API steps
   const allApiSteps: TaskStep[] = data?.steps ?? [];
@@ -200,8 +224,6 @@ export default function TaskStepsSection({
     const totalLocal = displaySteps.length;
     const totalPages = Math.ceil(totalLocal / STEPS_PER_PAGE);
     const pageSteps = displaySteps.slice(page * STEPS_PER_PAGE, (page + 1) * STEPS_PER_PAGE);
-    const doneCnt = 0;
-
     return (
       <div className="flex flex-col mt-4 gap-2">
         <div className="flex items-center justify-between mb-2">
@@ -209,7 +231,7 @@ export default function TaskStepsSection({
             Pasos de la tarea
           </span>
           <span className="text-[11px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-full">
-            {doneCnt}/{totalLocal}
+            0%
           </span>
         </div>
 
@@ -301,31 +323,59 @@ export default function TaskStepsSection({
     );
   }
 
-  // ── View / edit mode (API-driven) ──────────────────────────────────────────
-  const nonSupero = allApiSteps.filter((s) => s.step !== 'Supero Review');
+  // ── View / edit mode ───────────────────────────────────────────────────────
+  // In edit mode (canEdit && !createMode), the regular-step list is sourced from
+  // `editDrafts` (parent-owned). All add/edit/delete operations mutate that
+  // local draft and are flushed by the parent on form submit.
+  // In view (read-only) mode, regular steps come from realtime (`allApiSteps`)
+  // and toggle uses immediate API mutation.
+  const isDraftEditing = canEdit && !createMode;
+  const apiNonSupero = allApiSteps.filter((s) => s.step !== 'Supero Review');
   const superoStep = allApiSteps.find((s) => s.step === 'Supero Review');
 
+  const draftSteps: TaskStep[] = (editDrafts ?? []).map((d, i) => ({
+    taskId: taskId ?? '',
+    step: d.step,
+    isDone: false,
+    position: i,
+  }));
+
+  const nonSupero = isDraftEditing ? draftSteps : apiNonSupero;
   const totalSteps = allApiSteps.length;
   const stepsDone = allApiSteps.filter((s) => s.isDone).length;
   const totalPages = Math.ceil(nonSupero.length / STEPS_PER_PAGE);
   const pageSteps = nonSupero.slice(page * STEPS_PER_PAGE, (page + 1) * STEPS_PER_PAGE);
 
   const handleToggle = (step: TaskStep, isDone: boolean) => {
+    const isSuperoStep = step.step === 'Supero Review';
+    // Toggling a regular step done while task is 'todo' would auto-transition
+    // it to 'in-progress' on the backend; require an assignment first.
+    if (!isSuperoStep && taskStatus === 'todo' && isDone && !taskHasAssignment) {
+      toastError(
+        'No se puede iniciar',
+        'Asigna un usuario o grupo a la tarea antes de marcar pasos.',
+      );
+      return;
+    }
     toggleStep.mutate({ teamId, taskId, stepId: step.step, isDone });
   };
 
   const handleDelete = (step: TaskStep) => {
-    deleteStep.mutate({ teamId, taskId, stepId: step.step });
+    if (!isDraftEditing || !onEditDraftsChange || !editDrafts) return;
+    onEditDraftsChange(editDrafts.filter((d) => d.step !== step.step));
   };
 
   const handleEdit = (step: TaskStep, text: string) => {
-    updateStep.mutate({ teamId, taskId, stepId: step.step, step: text });
+    if (!isDraftEditing || !onEditDraftsChange || !editDrafts) return;
+    onEditDraftsChange(editDrafts.map((d) => (d.step === step.step ? { ...d, step: text } : d)));
   };
 
   const handleAdd = () => {
+    if (!isDraftEditing || !onEditDraftsChange || !editDrafts) return;
     const text = newStepText.trim();
-    if (!text || nonSupero.length >= 14) return;
-    createStep.mutate({ teamId, taskId, step: text });
+    if (!text || editDrafts.length >= 14) return;
+    if (editDrafts.some((d) => d.step === text)) return;
+    onEditDraftsChange([...editDrafts, { originalStep: null, step: text }]);
     setNewStepText('');
   };
 
@@ -335,16 +385,16 @@ export default function TaskStepsSection({
         <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400">
           Pasos de la tarea
         </span>
-        {isLoading ? (
+        {isLoading && !isDraftEditing ? (
           <span className="text-[11px] text-grey-300">Cargando…</span>
         ) : (
           <span className="text-[11px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-full">
-            {stepsDone}/{totalSteps}
+            {totalSteps > 0 ? Math.round((stepsDone / totalSteps) * 100) : 0}%
           </span>
         )}
       </div>
 
-      {!isLoading && (
+      {(!isLoading || isDraftEditing) && (
         <>
           {/* Regular steps (paginated) */}
           <div className="flex flex-col gap-1 mb-2">
@@ -354,8 +404,8 @@ export default function TaskStepsSection({
                 step={step}
                 isSupero={false}
                 isBlocked={false}
-                canEdit={canEdit && isLeaderOrCollab}
-                canToggle={!canEdit}
+                canEdit={canEdit && canEditTask}
+                canToggle={!canEdit && canToggleRegularStep}
                 onToggle={(isDone) => handleToggle(step, isDone)}
                 onDelete={() => handleDelete(step)}
                 onEdit={(text) => handleEdit(step, text)}
@@ -390,7 +440,7 @@ export default function TaskStepsSection({
           )}
 
           {/* Add step input — above Supero Review */}
-          {canEdit && isLeaderOrCollab && nonSupero.length < 14 && (
+          {canEdit && canEditTask && nonSupero.length < 14 && (
             <div className="flex gap-2 mt-1 mb-2">
               <input
                 value={newStepText}
@@ -402,7 +452,7 @@ export default function TaskStepsSection({
               />
               <button
                 onClick={handleAdd}
-                disabled={!newStepText.trim() || createStep.isPending}
+                disabled={!newStepText.trim()}
                 className="px-3 py-1.5 rounded-[8px] bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
               >
                 <Plus size={14} />
@@ -411,23 +461,24 @@ export default function TaskStepsSection({
           )}
 
           {/* Supero Review — always at bottom */}
-          {superoStep && (() => {
-            const isBlocked = taskStatus !== 'in-qa';
-            const canToggle = !isBlocked && (!isAssigned || isLeaderOrCollab);
-            return (
-              <StepRow
-                key={superoStep.step}
-                step={superoStep}
-                isSupero={true}
-                isBlocked={isBlocked}
-                canEdit={false}
-                canToggle={canToggle}
-                onToggle={(isDone) => handleToggle(superoStep, isDone)}
-                onDelete={() => {}}
-                onEdit={() => {}}
-              />
-            );
-          })()}
+          {superoStep &&
+            (() => {
+              const isBlocked = taskStatus !== 'in-qa';
+              const canToggle = !isBlocked && canEditTask;
+              return (
+                <StepRow
+                  key={superoStep.step}
+                  step={superoStep}
+                  isSupero={true}
+                  isBlocked={isBlocked}
+                  canEdit={false}
+                  canToggle={canToggle}
+                  onToggle={(isDone) => handleToggle(superoStep, isDone)}
+                  onDelete={() => {}}
+                  onEdit={() => {}}
+                />
+              );
+            })()}
         </>
       )}
     </div>

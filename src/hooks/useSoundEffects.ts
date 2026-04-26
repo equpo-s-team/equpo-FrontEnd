@@ -6,6 +6,8 @@ export const SOUND_EFFECTS = {
   taskUpdated: '/sounds/task-updated.mp3',
   taskDeleted: '/sounds/task-deleted.mp3',
 
+  stepChecked: '/sounds/step-checked.mp3',
+
   messageSent: '/sounds/message-sent.mp3',
   messageReceived: '/sounds/message-received.mp3',
 

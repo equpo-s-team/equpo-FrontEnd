@@ -201,7 +201,9 @@ export default function YearTimeline({
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-progress')}`} />
+                        <div
+                          className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-progress')}`}
+                        />
                         <span className="text-grey-600 font-body truncate">
                           {data.inProgress.length} Proceso
                         </span>

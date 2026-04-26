@@ -2,11 +2,11 @@ import { Check, CheckCheck, FileText, Pencil, Reply, Trash2, X } from 'lucide-re
 import { useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip';
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { auth } from '@/firebase';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 import type { ChatMessage } from '../types/chat';
 

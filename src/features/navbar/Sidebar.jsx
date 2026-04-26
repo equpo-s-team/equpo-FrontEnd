@@ -12,9 +12,9 @@ import {
 } from 'lucide-react';
 
 import { useAudio } from '@/context/AudioContext.tsx';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.tsx';
-import { useTeams } from '@/features/team/hooks/useTeams';
+import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
 import { useSidebar } from './SidebarContext.jsx';
 import SidebarItem from './SidebarItem.jsx';
@@ -63,7 +63,9 @@ export default function Sidebar() {
         <SidebarSection label="Principal">
           <SidebarItem id="my-space" icon={Home} label="Mi Espacio" />
           <SidebarItem id="missiones" icon={Star} label="Misiones del Equipo" />
-          <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />
+          {myRole !== 'spectator' && (
+            <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />
+          )}
           <SidebarItem id="chat" icon={MessageCircle} label="Chat" />
         </SidebarSection>
 
@@ -89,7 +91,7 @@ export default function Sidebar() {
                   title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
                 >
                   {isMuted ? (
-                    <VolumeX size={14} className="text-red-500" />
+                    <VolumeX size={14} className="text-red" />
                   ) : (
                     <Volume2 size={14} className="text-grey-600" />
                   )}
@@ -206,7 +208,7 @@ export default function Sidebar() {
             className="w-full flex items-center justify-center gap-3 px-3 py-2.5 rounded-xl text-primary-foreground hover:text-tertiary-foreground hover:bg-secondary transition-all duration-200"
             title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
           >
-            {isMuted ? <VolumeX size={18} className="text-red-500" /> : <Volume2 size={18} />}
+            {isMuted ? <VolumeX size={18} className="text-red" /> : <Volume2 size={18} />}
           </button>
         )}
       </div>

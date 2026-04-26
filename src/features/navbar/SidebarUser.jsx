@@ -2,7 +2,7 @@ import { Ellipsis, SquareArrowRightExit, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppTooltip } from '@/components/ui/AppTooltip';
+import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { logOut, useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.tsx';

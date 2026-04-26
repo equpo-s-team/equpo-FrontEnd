@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
-import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
+import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 
 function useCallTimer(isActive: boolean) {
   const [seconds, setSeconds] = useState(0);

@@ -1,21 +1,30 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { AppProgress } from '@/components/ui/AppProgress';
-import { AppSelect } from '@/components/ui/AppSelect';
-import { DateTimePicker } from '@/components/ui/date-time-picker';
-import { Input } from '@/components/ui/input';
+import { AppProgress } from '@/components/ui/AppProgress.tsx';
+import { AppSelect } from '@/components/ui/AppSelect.tsx';
+import { DateTimePicker } from '@/components/ui/date-time-picker.tsx';
+import { Input } from '@/components/ui/input.tsx';
+import { TagChip} from "@/components/ui/TagChip.tsx";
 import type { TaskStatus, TeamTask } from '@/features/board/types';
-import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
-import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { useSoundEffects } from '@/hooks/useSoundEffects';
-import { toastError, toastSuccess } from '@/lib/toast';
+import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
+import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
+import { toastError, toastSuccess } from '@/lib/toast.ts';
 
-import { useCreateTask } from '../hooks/useCreateTask';
-import { useDeleteTask } from '../hooks/useDeleteTask';
-import { UseGenerateDescription } from '../hooks/useGenerateDescription.ts';
-import { useUpdateTask } from '../hooks/useUpdateTask';
-import { markdownToEditorHtml } from '../utils/markdownUtils';
+import { FieldLabel } from '../../../../components/ui/FieldLabel.tsx';
+import { useCreateTask } from '../../hooks/useCreateTask.ts';
+import { useCreateTaskStep } from '../../hooks/useCreateTaskStep.ts';
+import { useDeleteTask } from '../../hooks/useDeleteTask.ts';
+import { useDeleteTaskStep } from '../../hooks/useDeleteTaskStep.ts';
+import { UseGenerateDescription } from '../../hooks/useGenerateDescription.ts';
+import { useRecurringRollover } from '../../hooks/useRecurringRollover.ts';
+import { useUpdateTask } from '../../hooks/useUpdateTask.ts';
+import { useUpdateTaskStep } from '../../hooks/useUpdateTaskStep.ts';
+import type { TaskStep } from '../../types/taskSchema.ts';
+import { markdownToEditorHtml } from '../../utils/markdownUtils.ts';
+import { needsRollover } from '../../utils/recurringRollover.ts';
 import {
   DESCRIPTION_MAX_LENGTH,
   INTERVAL_OPTIONS,
@@ -23,12 +32,13 @@ import {
   READONLY_PRIORITY_STYLE,
   STATUS_TO_PROGRESS,
   toInputDatetime,
-} from '../utils/taskUtils';
-import { COLUMN_CONFIG } from './columnConfig';
-import { FieldLabel } from './FieldLabel';
-import { MarkdownDescriptionEditor } from './MarkdownDescriptionEditor';
-import { TagChip } from './TagChip';
+} from '../../utils/taskUtils.ts';
+import { COLUMN_CONFIG } from '../columnConfig';
+import { MarkdownDescriptionEditor } from '../MarkdownDescriptionEditor.tsx';
 import { TaskAssigneesPreview } from './TaskAssigneesPreview';
+import TaskCommentarySection from './TaskCommentarySection';
+import type { LocalStepDraft } from './TaskStepsSection';
+import TaskStepsSection from './TaskStepsSection';
 
 type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
 
@@ -46,6 +56,13 @@ interface TaskSidebarProps {
   task?: TeamTask | null;
   teamId: string;
   defaultStatus?: string;
+  onTaskCreated?: () => void;
+  onTaskUpdated?: () => void;
+  onTaskDeleted?: () => void;
+  /** Current user's role in the team */
+  myRole?: string;
+  /** Current user's Firebase UID */
+  currentUserUid?: string | null;
 }
 
 export default function TaskSidebar({
@@ -55,15 +72,21 @@ export default function TaskSidebar({
   task,
   teamId,
   defaultStatus,
+  myRole = 'member',
+  currentUserUid = null,
 }: TaskSidebarProps) {
   const backdropRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
   const { play } = useSoundEffects();
+  const { rollover } = useRecurringRollover();
 
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
+
+  const assignableMembers = members.filter((m) => m.role !== 'spectator');
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -82,6 +105,23 @@ export default function TaskSidebar({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
+  // Steps for create mode
+  const [localSteps, setLocalSteps] = useState<string[]>([]);
+  // Edit-mode step drafts and the original snapshot at edit-entry. Used to
+  // batch step add/edit/delete until the user confirms with Guardar Cambios.
+  const [editStepDrafts, setEditStepDrafts] = useState<LocalStepDraft[] | null>(null);
+  const [originalEditSteps, setOriginalEditSteps] = useState<TaskStep[]>([]);
+
+  const createTaskStep = useCreateTaskStep();
+  const updateTaskStep = useUpdateTaskStep();
+  const deleteTaskStep = useDeleteTaskStep();
+
+  useEffect(() => {
+    if (isOpen && task && needsRollover(task)) {
+      rollover(task);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, task?.id, task?.dueDate]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -110,8 +150,11 @@ export default function TaskSidebar({
       setRecurringInterval('days');
       setRecurringCount(1);
       setIsEditView(true);
+      setLocalSteps([]);
     }
     setErrors({});
+    setEditStepDrafts(null);
+    setOriginalEditSteps([]);
   }, [isOpen, mode, task]);
 
   useEffect(() => {
@@ -140,6 +183,9 @@ export default function TaskSidebar({
       if (next.categories && !hasInvalidCategory) delete next.categories;
       if (next.recurringCount && (!isRecurring || (recurringCount !== '' && recurringCount >= 1)))
         delete next.recurringCount;
+      const hasSteps =
+        mode === 'create' ? localSteps.length > 0 : (editStepDrafts?.length ?? 0) > 0;
+      if (next.steps && hasSteps) delete next.steps;
       if (next.form) delete next.form;
 
       return Object.keys(next).length === Object.keys(prev).length ? prev : next;
@@ -155,6 +201,9 @@ export default function TaskSidebar({
     assignedUserUid,
     assignedGroupId,
     recurringInterval,
+    localSteps,
+    editStepDrafts,
+    mode,
   ]);
 
   function validate() {
@@ -169,6 +218,15 @@ export default function TaskSidebar({
     if (!priority) e.priority = 'La prioridad es obligatoria';
     if (isRecurring && (recurringCount === '' || recurringCount < 1))
       e.recurringCount = 'Ingresa un número válido';
+
+    // Require at least one step in create mode
+    if (mode === 'create' && localSteps.length === 0) {
+      e.steps = 'Agrega al menos un paso antes de crear la tarea';
+    }
+    // Require at least one step in edit mode when drafts are loaded
+    if (mode !== 'create' && editStepDrafts !== null && editStepDrafts.length === 0) {
+      e.steps = 'La tarea debe tener al menos un paso';
+    }
 
     const catArray = categories
       .split(',')
@@ -200,15 +258,14 @@ export default function TaskSidebar({
       description: description.trim(),
       dueDate: new Date(dueDate).toISOString(),
       priority,
-      status: (mode !== 'create'
-        ? (task?.status ?? defaultStatus ?? 'todo')
-        : (defaultStatus ?? 'todo')) as 'todo' | 'in-progress' | 'in-qa' | 'done',
+      status: mode === 'create' ? ('todo' as const) : (task?.status ?? 'todo'),
       categories: catArray,
       isRecurring,
       recurringInterval: isRecurring ? recurringInterval : 'days',
       recurringCount: isRecurring ? Number(recurringCount) || 1 : null,
       assignedUserUid: assignedUserUid || null,
       assignedGroupId: assignedGroupId || null,
+      steps: mode === 'create' ? localSteps : undefined,
     };
   }
 
@@ -218,12 +275,40 @@ export default function TaskSidebar({
 
     setIsSubmitting(true);
     try {
-      const payload = buildPayload();
       if (mode !== 'create' && task) {
-        await updateTask.mutateAsync({ teamId, taskId: task.id, payload });
+        // Flush step drafts: deletes → updates → creates
+        if (stepsChanged && editStepDrafts !== null) {
+          const draftsOriginalSet = new Set(
+            editStepDrafts.map((d) => d.originalStep).filter((s): s is string => s !== null),
+          );
+          for (const orig of originalEditSteps) {
+            if (!draftsOriginalSet.has(orig.step)) {
+              await deleteTaskStep.mutateAsync({ teamId, taskId: task.id, stepId: orig.step });
+            }
+          }
+          for (const draft of editStepDrafts) {
+            if (draft.originalStep !== null && draft.originalStep !== draft.step) {
+              await updateTaskStep.mutateAsync({
+                teamId,
+                taskId: task.id,
+                stepId: draft.originalStep,
+                step: draft.step,
+              });
+            }
+          }
+          for (const draft of editStepDrafts) {
+            if (draft.originalStep === null) {
+              await createTaskStep.mutateAsync({ teamId, taskId: task.id, step: draft.step });
+            }
+          }
+        }
+        if (fieldsChanged) {
+          await updateTask.mutateAsync({ teamId, taskId: task.id, payload: buildPayload() });
+        }
         play('taskUpdated');
         toastSuccess('Tarea actualizada', 'Los cambios se guardaron correctamente.');
       } else {
+        const payload = buildPayload();
         await createTask.mutateAsync({ teamId, payload });
         play('taskCreated');
         toastSuccess('Tarea creada', `"${payload.name}" fue añadida al tablero.`);
@@ -266,6 +351,8 @@ export default function TaskSidebar({
       setRecurringInterval(task?.recurringInterval ?? 'days');
       setRecurringCount(task?.recurringCount ?? 1);
       setErrors({});
+      setEditStepDrafts(null);
+      setOriginalEditSteps([]);
       setIsEditView(false);
       return;
     }
@@ -304,9 +391,27 @@ export default function TaskSidebar({
     }
   }
 
+  const stepsKey = ['task', teamId, task?.id ?? '', 'steps'] as const;
+  const { data: cachedSteps } = useQuery<{ steps: TaskStep[] } | null>({
+    queryKey: stepsKey,
+    queryFn: () => (queryClient.getQueryData(stepsKey) as { steps: TaskStep[] }) ?? null,
+    enabled: Boolean(teamId && task?.id),
+    staleTime: Infinity,
+  });
+
+  // Seed edit-mode drafts exactly once per edit session, after the first Firestore snapshot.
+  useEffect(() => {
+    if (!isEditView || mode === 'create' || !isOpen || !task?.id) return;
+    if (editStepDrafts !== null) return; // already seeded
+    if (!cachedSteps) return; // snapshot not yet received
+    const nonSupero = cachedSteps.steps.filter((s) => s.step !== 'Supero Review');
+    setEditStepDrafts(nonSupero.map((s) => ({ originalStep: s.step, step: s.step })));
+    setOriginalEditSteps(nonSupero);
+  }, [isEditView, isOpen, mode, task?.id, cachedSteps, editStepDrafts]);
+
   const originalDueDate = task?.dueDate ? toInputDatetime(task.dueDate) : '';
 
-  const hasChanges =
+  const fieldsChanged =
     mode === 'create' ||
     name.trim() !== (task?.name ?? '') ||
     description.trim() !== (task?.description ?? '') ||
@@ -323,6 +428,13 @@ export default function TaskSidebar({
     recurringInterval !== (task?.recurringInterval ?? 'days') ||
     recurringCount !== (task?.recurringCount ?? 1);
 
+  const stepsChanged =
+    editStepDrafts !== null &&
+    (editStepDrafts.length !== originalEditSteps.length ||
+      editStepDrafts.some((d) => d.originalStep === null || d.originalStep !== d.step) ||
+      originalEditSteps.some((o) => !editStepDrafts.some((d) => d.originalStep === o.step)));
+  const hasChanges = fieldsChanged || stepsChanged;
+
   const isFormValid =
     Boolean(name.trim()) &&
     Boolean(description.trim()) &&
@@ -336,6 +448,14 @@ export default function TaskSidebar({
   const isReadOnlyView =
     mode === 'readonly' || ((mode === 'view' || mode === 'edit') && !isEditView);
 
+  const assignedUserUids = (task?.assignedUsers ?? []).map((u) => u.uid);
+  const isSidebarSpectator = myRole === 'spectator';
+  const isSidebarLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
+  const isSidebarAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
+  const isTaskDone = task?.status === 'done';
+  const canEditTask =
+    !isSidebarSpectator && (isSidebarLeaderOrCollab || !isSidebarAssigned) && !isTaskDone;
+
   const selectedPriority =
     PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? priority;
   const recurringLabel =
@@ -345,7 +465,15 @@ export default function TaskSidebar({
   const currentStatus = (
     mode !== 'create' ? (task?.status ?? defaultStatus ?? 'todo') : (defaultStatus ?? 'todo')
   ) as 'todo' | 'in-progress' | 'in-qa' | 'done';
-  const progress = STATUS_TO_PROGRESS[currentStatus] ?? 0;
+  const liveSteps = cachedSteps?.steps ?? [];
+  const liveTotal = liveSteps.length;
+  const liveDone = liveSteps.filter((s) => s.isDone).length;
+  const progress =
+    liveTotal > 0
+      ? Math.round((liveDone / liveTotal) * 100)
+      : task && task.stepsTotal > 0
+        ? Math.round((task.stepsDone / task.stepsTotal) * 100)
+        : (STATUS_TO_PROGRESS[currentStatus] ?? 0);
   const progressColumn = STATUS_TO_COLUMN[currentStatus];
   const progressCfg = COLUMN_CONFIG[progressColumn];
 
@@ -403,7 +531,7 @@ export default function TaskSidebar({
                 : 'Crear Tarea'}
           </h2>
           <div className="flex items-center gap-2">
-            {(mode === 'edit' || mode === 'view') && isReadOnlyView && (
+            {(mode === 'edit' || mode === 'view') && isReadOnlyView && canEditTask && (
               <button
                 type="button"
                 onClick={() => setIsEditView(true)}
@@ -478,7 +606,7 @@ export default function TaskSidebar({
                   </FieldLabel>
                   <TaskAssigneesPreview
                     assignedUsers={readonlyAssignedUsers}
-                    members={members}
+                    members={assignableMembers}
                     assignedGroup={selectedGroup ?? null}
                     usersPerPage={10}
                     teamId={teamId}
@@ -529,6 +657,32 @@ export default function TaskSidebar({
                 </div>
               </div>
             </div>
+
+            {/* Steps section — visible in view mode */}
+            {task?.id && (
+              <TaskStepsSection
+                teamId={teamId}
+                taskId={task.id}
+                taskStatus={task.status}
+                currentUserUid={currentUserUid}
+                myRole={myRole}
+                assignedUserUids={(task.assignedUsers ?? []).map((u) => u.uid)}
+                canEdit={isEditView}
+                taskHasAssignment={
+                  (task.assignedUsers?.length ?? 0) > 0 || Boolean(task.assignedGroupId)
+                }
+              />
+            )}
+
+            {/* Commentary section — visible in view mode */}
+            {task?.id && (
+              <TaskCommentarySection
+                teamId={teamId}
+                taskId={task.id}
+                currentUserUid={currentUserUid}
+                myRole={myRole}
+              />
+            )}
           </section>
         ) : (
           <>
@@ -580,6 +734,26 @@ export default function TaskSidebar({
                   {errors.description && (
                     <p className="mt-1 text-xs text-red">{errors.description}</p>
                   )}
+
+                  {/* Steps section in create/edit mode */}
+                  <TaskStepsSection
+                    teamId={teamId}
+                    taskId={task?.id ?? ''}
+                    taskStatus={task?.status ?? 'todo'}
+                    currentUserUid={currentUserUid}
+                    myRole={myRole}
+                    assignedUserUids={(task?.assignedUsers ?? []).map((u) => u.uid)}
+                    canEdit={true}
+                    createMode={mode === 'create'}
+                    localSteps={localSteps}
+                    onLocalStepsChange={setLocalSteps}
+                    editDrafts={mode !== 'create' ? (editStepDrafts ?? []) : undefined}
+                    onEditDraftsChange={mode !== 'create' ? setEditStepDrafts : undefined}
+                    taskHasAssignment={
+                      (task?.assignedUsers?.length ?? 0) > 0 || Boolean(task?.assignedGroupId)
+                    }
+                  />
+                  {errors.steps && <p className="mt-1 text-xs text-red">{errors.steps}</p>}
                 </div>
 
                 {/* Right: rest of task attributes */}
@@ -642,7 +816,7 @@ export default function TaskSidebar({
                       onChange={setAssignedUserUid}
                       options={[
                         { value: '', label: 'Sin asignar' },
-                        ...members.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                        ...assignableMembers.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
                       ]}
                       triggerClassName="w-full"
                     />

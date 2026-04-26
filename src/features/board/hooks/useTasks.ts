@@ -1,11 +1,14 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { collection, orderBy, type Query, query } from 'firebase/firestore';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 
 import { db } from '@/firebase';
 import { useFirestoreSubscription } from '@/hooks/useFirestoreSubscription';
 
 import type { GetTeamTasksOptions, TaskListMeta, TeamTask } from '../types';
+import type { FirestoreStepsMap } from '../types/taskSchema';
+import { needsRollover } from '../utils/recurringRollover';
+import { useRecurringRollover } from './useRecurringRollover';
 
 type FirestoreDateValue = string | { toDate: () => Date } | undefined;
 
@@ -22,6 +25,7 @@ type FirestoreTaskDoc = {
   assignedGroup?: string;
   updatedAt?: FirestoreDateValue;
   category?: string[];
+  steps?: FirestoreStepsMap;
 };
 
 const EMPTY_META: TaskListMeta = {
@@ -61,6 +65,9 @@ export function useTasks(teamId: string, options: GetTeamTasksOptions = {}) {
     [teamId, stableOptions],
   );
   const queryClient = useQueryClient();
+  const { rollover } = useRecurringRollover();
+  const rolloverRef = useRef(rollover);
+  rolloverRef.current = rollover;
 
   const firestoreQuery = useMemo<Query<FirestoreTaskDoc> | null>(() => {
     if (!teamId) {
@@ -120,8 +127,13 @@ export function useTasks(teamId: string, options: GetTeamTasksOptions = {}) {
           updatedAt: toIsoString(data.updatedAt),
           categories: data.category || [],
           assignedUsers: mappedAssignedUsers,
+          stepsTotal: Object.keys(data.steps ?? {}).length,
+          stepsDone: Object.values(data.steps ?? {}).filter((s) => s.isDone).length,
         };
       });
+
+      // Fire rollover for any recurring task whose due date has passed
+      tasks.filter(needsRollover).forEach((t) => rolloverRef.current(t));
 
       return {
         tasks,

@@ -8,5 +8,6 @@ package-lock.json
 pnpm-lock.yaml
 yarn.lock
 dataconnect-generated/*
+src/dataconnect-generated/**
 dataconnect/*
 scene.splinecode

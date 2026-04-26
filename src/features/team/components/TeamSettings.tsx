@@ -230,7 +230,6 @@ export default function TeamSettings() {
 
       setPhotoPreview(downloadUrl);
 
-
       await updateTeam.mutateAsync({
         teamId,
         payload: { photoUrl: downloadUrl },
@@ -504,46 +503,46 @@ export default function TeamSettings() {
                         <RoleSelect
                           value={member.role}
                           onChange={(role) =>
-                          updateRole.mutate(
+                            updateRole.mutate(
+                              {
+                                teamId,
+                                userUid: member.uid,
+                                payload: { role: role as 'collaborator' | 'member' | 'spectator' },
+                              },
+                              {
+                                onSuccess: () =>
+                                  toastSuccess(
+                                    'Rol actualizado',
+                                    `${member.displayName ?? member.uid} ahora es ${ROLE_CONFIG[role]?.label ?? role}.`,
+                                  ),
+                                onError: (err) =>
+                                  toastError(
+                                    'Error al cambiar rol',
+                                    err instanceof Error ? err.message : 'Intenta de nuevo.',
+                                  ),
+                              },
+                            )
+                          }
+                          roles={[
                             {
-                              teamId,
-                              userUid: member.uid,
-                              payload: { role: role as 'collaborator' | 'member' | 'spectator' },
+                              value: 'collaborator',
+                              label: 'Colaborador',
+                              color: ROLE_CONFIG.collaborator.color,
+                              bg: ROLE_CONFIG.collaborator.bg,
                             },
                             {
-                              onSuccess: () =>
-                                toastSuccess(
-                                  'Rol actualizado',
-                                  `${member.displayName ?? member.uid} ahora es ${ROLE_CONFIG[role]?.label ?? role}.`,
-                                ),
-                              onError: (err) =>
-                                toastError(
-                                  'Error al cambiar rol',
-                                  err instanceof Error ? err.message : 'Intenta de nuevo.',
-                                ),
+                              value: 'member',
+                              label: 'Miembro',
+                              color: ROLE_CONFIG.member.color,
+                              bg: ROLE_CONFIG.member.bg,
                             },
-                          )
-                        }
-                        roles={[
-                          {
-                            value: 'collaborator',
-                            label: 'Colaborador',
-                            color: ROLE_CONFIG.collaborator.color,
-                            bg: ROLE_CONFIG.collaborator.bg,
-                          },
-                          {
-                            value: 'member',
-                            label: 'Miembro',
-                            color: ROLE_CONFIG.member.color,
-                            bg: ROLE_CONFIG.member.bg,
-                          },
-                          {
-                            value: 'spectator',
-                            label: 'Espectador',
-                            color: ROLE_CONFIG.spectator.color,
-                            bg: ROLE_CONFIG.spectator.bg,
-                          },
-                        ]}
+                            {
+                              value: 'spectator',
+                              label: 'Espectador',
+                              color: ROLE_CONFIG.spectator.color,
+                              bg: ROLE_CONFIG.spectator.bg,
+                            },
+                          ]}
                         />
                       </div>
                     )}

@@ -1,8 +1,8 @@
 import { ChartColumnBig, Home, MessageCircle, Settings, Star } from 'lucide-react';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.tsx';
-import { useTeams } from '@/features/team/hooks/useTeams';
+import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
 import { useSidebar } from './SidebarContext.jsx';
 

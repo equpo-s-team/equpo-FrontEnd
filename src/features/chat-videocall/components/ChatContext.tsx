@@ -1,8 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.tsx';
+import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
-import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useAuth } from '@/hooks/useAuth';
 
 import { useChatRooms } from '../hooks/useChatRooms';
 import { useDeleteMessage } from '../hooks/useDeleteMessage';
@@ -27,6 +29,7 @@ interface VideoCallSession {
 
 interface ChatContextType {
   teamId: string;
+  myRole: string;
   /* rooms */
   rooms: ChatRoom[];
   activeRoom: ChatRoom | null;
@@ -81,6 +84,14 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   // ── Sidebar ───────────────────────────────────────────────────────────────
   const { setActiveItem } = useSidebar();
+
+  // ── Role ─────────────────────────────────────────────────────────────────
+  const { user } = useAuth();
+  const { data: teamMembers = [] } = useTeamMembers(teamId);
+  const myRole = useMemo(() => {
+    if (!user?.uid || !teamMembers.length) return 'member';
+    return teamMembers.find((m) => m.uid === user.uid)?.role ?? 'member';
+  }, [user?.uid, teamMembers]);
 
   // ── Groups → ChatRooms ──────────────────────────────────────────────────────
   const { data: groups = [] } = useTeamGroups(teamId);
@@ -244,6 +255,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     <ChatContext.Provider
       value={{
         teamId,
+        myRole,
         rooms: filteredRooms,
         activeRoom,
         selectRoom,

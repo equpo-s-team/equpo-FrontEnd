@@ -3,9 +3,9 @@ import { createContext, useContext, useState } from 'react';
 const SidebarContext = createContext(null);
 
 function getInitialActiveItem() {
-  if (typeof window === 'undefined') return 'my-space';
+  if (typeof window === 'undefined') return 'missiones';
   const roomID = new URLSearchParams(window.location.search).get('roomID');
-  return roomID ? 'video-call' : 'my-space';
+  return roomID ? 'video-call' : 'missiones';
 }
 
 export function SidebarProvider({ children }) {

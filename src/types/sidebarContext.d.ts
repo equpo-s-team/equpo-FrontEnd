@@ -5,7 +5,7 @@ interface SidebarContextValue {
   setActiveItem: (item: string) => void;
 }
 
-declare module '@/lib/layout/components/navbar/SidebarContext.jsx' {
+declare module '@/features/navbar/SidebarContext.jsx' {
   import type { ReactNode } from 'react';
 
   export function SidebarProvider(props: { children: ReactNode }): JSX.Element;

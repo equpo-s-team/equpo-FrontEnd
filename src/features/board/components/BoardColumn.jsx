@@ -1,34 +1,7 @@
-import { CheckSquare, LayoutGrid, Loader, ShieldCheck } from 'lucide-react';
-import { Plus } from 'lucide-react';
-
-import { AppTooltip } from '@/components/ui/AppTooltip';
 import { EmptyState } from '@/components/ui/EmptyState';
 
 import BoardCard from './BoardCard.tsx';
-import { COLUMN_CONFIG } from './columnConfig.js';
-
-const COLUMN_EMPTY = {
-  todo: {
-    icon: LayoutGrid,
-    title: 'Sin tareas pendientes',
-    description: 'Crea una tarea para comenzar el sprint.',
-  },
-  progress: {
-    icon: Loader,
-    title: 'Nada en progreso',
-    description: 'Mueve una tarea aquí cuando empiece el trabajo.',
-  },
-  qa: {
-    icon: ShieldCheck,
-    title: 'Sin tareas en revisión',
-    description: 'Las tareas listas para QA aparecerán aquí.',
-  },
-  done: {
-    icon: CheckSquare,
-    title: 'Nada completado aún',
-    description: 'Las tareas completadas se verán en esta columna.',
-  },
-};
+import {COLUMN_CONFIG, COLUMN_EMPTY} from './columnConfig.js';
 
 function ColIndicator({ accent }) {
   const cfg = COLUMN_CONFIG[accent];
@@ -66,7 +39,7 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, onCardClick }) {
+export default function BoardColumn({ column, cards, onMoveCard, onCardClick, canMoveCard = true }) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
@@ -110,14 +83,6 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
             {cards.length}
           </span>
         </div>
-        <AppTooltip content="Crear tarea" side="top">
-          <button
-            onClick={() => onCreateTask?.(id)}
-            className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
-          >
-            <Plus size={14} />
-          </button>
-        </AppTooltip>
       </div>
 
       <div
@@ -125,6 +90,7 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
         className="flex flex-col gap-3 px-3 pb-3 flex-1"
         onDrop={(e) => {
           e.preventDefault();
+          if (!canMoveCard) return;
           const cardId = e.dataTransfer.getData('text/card-id');
           const fromColumnId = e.dataTransfer.getData('text/from-column');
 
@@ -162,20 +128,12 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
                 onMoveCard={onMoveCard}
                 onCardClick={onCardClick}
                 position={index}
+                canMoveCard={canMoveCard}
               />
-              <DropZone onDrop={handleExternalDrop} position={index + 1} />
+              {canMoveCard && <DropZone onDrop={handleExternalDrop} position={index + 1} />}
             </div>
           ))
         )}
-      </div>
-
-      <div className="mx-3 mb-3">
-        <button
-          onClick={() => onCreateTask?.(id)}
-          className="w-full py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[10px] text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer"
-        >
-          + Agregar tarea
-        </button>
       </div>
     </div>
   );

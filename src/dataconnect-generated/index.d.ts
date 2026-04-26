@@ -1,12 +1,4 @@
-import {
-  ConnectorConfig,
-  DataConnect,
-  QueryRef,
-  QueryPromise,
-  ExecuteQueryOptions,
-  MutationRef,
-  MutationPromise,
-} from 'firebase/data-connect';
+import { ConnectorConfig, DataConnect, QueryRef, QueryPromise, ExecuteQueryOptions, MutationRef, MutationPromise } from 'firebase/data-connect';
 
 export const connectorConfig: ConnectorConfig;
 
@@ -14,6 +6,9 @@ export type TimestampString = string;
 export type UUIDString = string;
 export type Int64String = string;
 export type DateString = string;
+
+
+
 
 export interface Achievement_Key {
   id: UUIDString;
@@ -63,6 +58,18 @@ export interface TaskCategory_Key {
   taskId: UUIDString;
   name: string;
   __typename?: 'TaskCategory_Key';
+}
+
+export interface TaskCommentary_Key {
+  taskId: UUIDString;
+  commentary: string;
+  __typename?: 'TaskCommentary_Key';
+}
+
+export interface TaskStep_Key {
+  taskId: UUIDString;
+  step: string;
+  __typename?: 'TaskStep_Key';
 }
 
 export interface Task_Key {
@@ -126,13 +133,8 @@ interface CreateUserRef {
 }
 export const createUserRef: CreateUserRef;
 
-export function createUser(
-  vars: CreateUserVariables,
-): MutationPromise<CreateUserData, CreateUserVariables>;
-export function createUser(
-  dc: DataConnect,
-  vars: CreateUserVariables,
-): MutationPromise<CreateUserData, CreateUserVariables>;
+export function createUser(vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
+export function createUser(dc: DataConnect, vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
 
 interface TouchUserLastActiveRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -144,31 +146,19 @@ interface TouchUserLastActiveRef {
 export const touchUserLastActiveRef: TouchUserLastActiveRef;
 
 export function touchUserLastActive(): MutationPromise<TouchUserLastActiveData, undefined>;
-export function touchUserLastActive(
-  dc: DataConnect,
-): MutationPromise<TouchUserLastActiveData, undefined>;
+export function touchUserLastActive(dc: DataConnect): MutationPromise<TouchUserLastActiveData, undefined>;
 
 interface UpdateUserProfileRef {
   /* Allow users to create refs without passing in DataConnect */
-  (
-    vars: UpdateUserProfileVariables,
-  ): MutationRef<UpdateUserProfileData, UpdateUserProfileVariables>;
+  (vars: UpdateUserProfileVariables): MutationRef<UpdateUserProfileData, UpdateUserProfileVariables>;
   /* Allow users to pass in custom DataConnect instances */
-  (
-    dc: DataConnect,
-    vars: UpdateUserProfileVariables,
-  ): MutationRef<UpdateUserProfileData, UpdateUserProfileVariables>;
+  (dc: DataConnect, vars: UpdateUserProfileVariables): MutationRef<UpdateUserProfileData, UpdateUserProfileVariables>;
   operationName: string;
 }
 export const updateUserProfileRef: UpdateUserProfileRef;
 
-export function updateUserProfile(
-  vars: UpdateUserProfileVariables,
-): MutationPromise<UpdateUserProfileData, UpdateUserProfileVariables>;
-export function updateUserProfile(
-  dc: DataConnect,
-  vars: UpdateUserProfileVariables,
-): MutationPromise<UpdateUserProfileData, UpdateUserProfileVariables>;
+export function updateUserProfile(vars: UpdateUserProfileVariables): MutationPromise<UpdateUserProfileData, UpdateUserProfileVariables>;
+export function updateUserProfile(dc: DataConnect, vars: UpdateUserProfileVariables): MutationPromise<UpdateUserProfileData, UpdateUserProfileVariables>;
 
 interface GetUserRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -180,7 +170,5 @@ interface GetUserRef {
 export const getUserRef: GetUserRef;
 
 export function getUser(options?: ExecuteQueryOptions): QueryPromise<GetUserData, undefined>;
-export function getUser(
-  dc: DataConnect,
-  options?: ExecuteQueryOptions,
-): QueryPromise<GetUserData, undefined>;
+export function getUser(dc: DataConnect, options?: ExecuteQueryOptions): QueryPromise<GetUserData, undefined>;
+

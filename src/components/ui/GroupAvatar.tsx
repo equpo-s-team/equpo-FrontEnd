@@ -1,5 +1,5 @@
-import { useAvatarState } from '@/lib/avatar/avatarCore.ts';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
+import { useAvatarState } from '@/components/ui/avatar/avatarCore.ts';
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { cn } from '@/lib/utils.ts';
 
 interface GroupAvatarProps {

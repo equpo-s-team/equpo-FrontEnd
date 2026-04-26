@@ -2,7 +2,7 @@ import { ArrowRightLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppTooltip } from '@/components/ui/AppTooltip';
+import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
@@ -52,11 +52,9 @@ export default function SidebarLogo() {
                 {teamName}
               </p>
             </span>
-            <span
-              className="inline-flex items-center rounded-full border border-green/50 bg-green/30 px-1 py-0.5 text-[10px] font-bold tracking-wide text-green-500 gap-0.5"
-            >
+            <span className="inline-flex items-center rounded-full border border-green/50 bg-green/30 px-1 py-0.5 text-[10px] font-bold tracking-wide text-green-500 gap-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-green flex-shrink-0" />
-              {activeUsersCount + (activeUsersCount === 1 ? " miembro" : " miembros")}
+              {activeUsersCount + (activeUsersCount === 1 ? ' miembro' : ' miembros')}
             </span>
           </div>
 

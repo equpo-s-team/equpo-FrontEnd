@@ -1,7 +1,7 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import log from 'loglevel';
 
-import { storage } from '@/firebase';
+import { storage } from '@/firebase.ts';
 import { request } from '@/lib/api/core.ts';
 
 const USER_PROFILE_AVATAR_PATH = (uid: string): string => `users/${uid}/profile`;

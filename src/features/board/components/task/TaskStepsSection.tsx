@@ -6,6 +6,7 @@ import { toastError } from '@/lib/toast.ts';
 import { useTaskStepsRealtime } from '../../hooks/useTaskStepsRealtime.ts';
 import { useToggleTaskStep } from '../../hooks/useToggleTaskStep.ts';
 import type { TaskStep } from '../../types/taskSchema.ts';
+import {useSoundEffects} from "@/hooks/useSoundEffects.ts";
 
 const STEPS_PER_PAGE = 5;
 
@@ -178,6 +179,7 @@ export default function TaskStepsSection({
     createMode ? '' : teamId,
     createMode ? '' : taskId,
   );
+  const { play } = useSoundEffects();
   const toggleStep = useToggleTaskStep();
 
   const isSpectator = myRole === 'spectator';
@@ -357,6 +359,7 @@ export default function TaskStepsSection({
       );
       return;
     }
+    play('stepChecked');
     toggleStep.mutate({ teamId, taskId, stepId: step.step, isDone });
   };
 

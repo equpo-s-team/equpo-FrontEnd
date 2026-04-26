@@ -8,7 +8,7 @@ import { useReportsKpi, useReportsOverview, useReportsTaskSync } from '@/feature
 import type { ReportsMember, ReportsOverdueTask } from '@/features/reports/types';
 import type { KpiData, OverdueTaskRow, ReportMemberRow } from '@/features/reports/types';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 
 const EMPTY_KPI: KpiData = {
   todo: 0,

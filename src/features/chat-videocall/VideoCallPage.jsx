@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { rtdb } from '@/firebase';
-import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
+import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 
 import { chatApi } from './api/chatApi';
 

@@ -6,7 +6,7 @@ import {
   type UpdateUserProfileResult,
 } from '@/features/team/types/userTypes.ts';
 import { auth } from '@/firebase';
-import { uploadUserProfileFile } from '@/lib/avatar/avatarStorage';
+import { uploadUserProfileFile } from '@/components/ui/avatar/avatarStorage';
 
 let isUpdateUserProfileUnavailable = false;
 

@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 
 import { createUser, getUser } from '@/dataconnect-generated';
 import { auth } from '@/firebase.ts';
-import { resolveCanonicalAvatarUrl } from '@/lib/avatar/avatarStorage';
+import { resolveCanonicalAvatarUrl } from '@/components/ui/avatar/avatarStorage';
 
 const AuthContext = createContext(null);
 

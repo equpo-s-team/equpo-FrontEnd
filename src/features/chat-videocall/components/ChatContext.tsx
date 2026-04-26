@@ -4,7 +4,7 @@ import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useAuth } from '@/hooks/useAuth';
-import { useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
+import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 
 import { useChatRooms } from '../hooks/useChatRooms';
 import { useDeleteMessage } from '../hooks/useDeleteMessage';

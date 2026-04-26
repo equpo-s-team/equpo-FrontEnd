@@ -7,7 +7,7 @@ import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { teamsApi } from '@/features/team/api/teamsApi';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { db } from '@/firebase';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 
 import { useActiveCalls } from '../hooks/useActiveCalls';
 import { useChatContext } from './ChatContext';

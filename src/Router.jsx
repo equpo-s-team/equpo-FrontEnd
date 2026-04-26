@@ -13,8 +13,8 @@ import Reports from '@/features/reports/Reports.tsx';
 import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
-import AppLayout from '@/lib/layout/components/AppLayout.jsx';
-import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
+import AppLayout from '@/components/AppLayout.jsx';
+import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.jsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -51,7 +51,7 @@ function Dashboard() {
       case 'missiones':
         return <TeamBoard />;
       case 'my-missions':
-        return myRole === 'spectator' ? <div>Mi Espacio</div> : <MyMissions />;
+        return myRole === 'spectator' ? <TeamBoard /> : <MyMissions />;
       case 'chat':
         return <ChatPage />;
       case 'video-call':
@@ -61,7 +61,7 @@ function Dashboard() {
       case 'settings':
         return <TeamSettings />;
       default:
-        return <div>Mi Espacio</div>;
+        return <TeamBoard/>;
     }
   };
 

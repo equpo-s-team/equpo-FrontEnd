@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { db } from '@/firebase.ts';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 
 interface AssignedUser {
   uid: string;

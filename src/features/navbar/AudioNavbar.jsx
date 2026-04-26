@@ -1,7 +1,7 @@
 import { Minimize2, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { AppTooltip } from '@/components/ui/AppTooltip';
+import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 import { useAudio } from '@/context/AudioContext.tsx';
 
 export default function AudioNavbar() {

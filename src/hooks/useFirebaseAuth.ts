@@ -12,7 +12,7 @@ import {
 import { useCallback, useState } from 'react';
 
 import { auth } from '@/firebase';
-import { resolveCanonicalAvatarUrl } from '@/lib/avatar/avatarStorage';
+import { resolveCanonicalAvatarUrl } from '@/components/ui/avatar/avatarStorage';
 
 import { useDatabaseUser } from './useDatabaseUser';
 

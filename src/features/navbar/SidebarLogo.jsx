@@ -2,7 +2,7 @@ import { ArrowRightLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppTooltip } from '@/components/ui/AppTooltip';
+import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';

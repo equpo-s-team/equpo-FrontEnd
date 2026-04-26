@@ -11,7 +11,7 @@ interface AuthSwitchProps {
   onClose?: () => void;
 }
 
-export const Component = ({ onClose }: AuthSwitchProps) => {
+export const AuthSwitch = ({ onClose }: AuthSwitchProps) => {
   const [isClosing, setIsClosing] = useState(false);
   const navigate = useNavigate();
 
@@ -68,7 +68,7 @@ export const Component = ({ onClose }: AuthSwitchProps) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
-              className="w-[85vw] max-w-6xl h-[85vh] md:w-[700px] md:h-[600px]"
+              className="w-[85vw] h-[90vh] md:w-[50vw] md:h-[75vh]"
             >
               <div className="bg-white/10 backdrop-blur-2xl rounded-[1.5rem] border border-white/20 shadow-2xl overflow-hidden h-full">
                 <div className="flex h-full">
@@ -93,4 +93,4 @@ export const Component = ({ onClose }: AuthSwitchProps) => {
   );
 };
 
-export default Component;
+export default AuthSwitch;

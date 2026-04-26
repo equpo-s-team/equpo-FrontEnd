@@ -78,6 +78,12 @@ export default function TeamBoard() {
   }, [user, members]);
 
   const isLeaderOrCollaborator = myRole === 'leader' || myRole === 'collaborator';
+  const canMoveCard = myRole !== 'spectator';
+
+  const assignableMembers = useMemo(
+    () => members.filter((m) => m.role !== 'spectator'),
+    [members]
+  );
 
   const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
 
@@ -116,6 +122,11 @@ export default function TeamBoard() {
   const updateTask = useUpdateTask();
 
   const moveCard = async (cardId, fromColumnId, toColumnId, position) => {
+    if (myRole === 'spectator') {
+      toastError('Acceso denegado', 'Los espectadores no pueden mover tareas.');
+      return;
+    }
+
     const source = { ...displayCards };
     const fromCards = [...(source[fromColumnId] ?? [])];
     const cardIndex = fromCards.findIndex((c) => c.id === cardId);
@@ -270,7 +281,7 @@ export default function TeamBoard() {
         resetFilters={resetFilters}
         activeFilterCount={activeFilterCount}
         allCategories={allCategories}
-        members={members}
+        members={assignableMembers}
         groups={groups}
         onCreateTask={openCreate}
         canCreateTask={myRole !== 'spectator'}
@@ -295,6 +306,7 @@ export default function TeamBoard() {
               onCardClick={openEdit}
               columnIndex={index}
               isLeaderOrCollaborator={isLeaderOrCollaborator}
+              canMoveCard={canMoveCard}
             />
           </div>
         ))}

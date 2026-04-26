@@ -35,6 +35,7 @@ type BoardCardProps = {
   ) => void;
   onCardClick?: (card: BoardCardData) => void;
   position: number;
+  canMoveCard?: boolean;
 };
 
 type PointerTracking = {
@@ -51,6 +52,7 @@ export default function BoardCard({
   onMoveCard,
   onCardClick,
   position,
+  canMoveCard = true,
 }: BoardCardProps) {
   const cfg = COLUMN_CONFIG[accent];
   const prio = PRIORITY_CONFIG[card.priority ?? 'medium'];
@@ -123,16 +125,17 @@ export default function BoardCard({
     <div
       role="button"
       tabIndex={0}
-      draggable
+      draggable={canMoveCard}
       onMouseDown={handlePointerDown}
       onMouseUp={handlePointerUp}
-      onDragStart={handleDragStart}
+      onDragStart={canMoveCard ? handleDragStart : undefined}
       onDragEnd={handleDragEnd}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       className={`
-        bg-primary rounded-[10px] p-3.5 cursor-grab active:cursor-grabbing
+        bg-primary rounded-[10px] p-3.5 
+        ${canMoveCard ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}
         border-[1.5px] transition-all duration-200
         ${cfg.cardBorder} ${cfg.cardShadow}
         ${cfg.cardBorderHover} ${cfg.cardShadowHover}

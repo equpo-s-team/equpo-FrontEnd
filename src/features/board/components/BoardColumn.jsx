@@ -39,7 +39,7 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ column, cards, onMoveCard, onCardClick }) {
+export default function BoardColumn({ column, cards, onMoveCard, onCardClick, canMoveCard = true }) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
@@ -90,6 +90,7 @@ export default function BoardColumn({ column, cards, onMoveCard, onCardClick }) 
         className="flex flex-col gap-3 px-3 pb-3 flex-1"
         onDrop={(e) => {
           e.preventDefault();
+          if (!canMoveCard) return;
           const cardId = e.dataTransfer.getData('text/card-id');
           const fromColumnId = e.dataTransfer.getData('text/from-column');
 
@@ -127,8 +128,9 @@ export default function BoardColumn({ column, cards, onMoveCard, onCardClick }) 
                 onMoveCard={onMoveCard}
                 onCardClick={onCardClick}
                 position={index}
+                canMoveCard={canMoveCard}
               />
-              <DropZone onDrop={handleExternalDrop} position={index + 1} />
+              {canMoveCard && <DropZone onDrop={handleExternalDrop} position={index + 1} />}
             </div>
           ))
         )}

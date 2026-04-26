@@ -86,6 +86,8 @@ export default function TaskSidebar({
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
 
+  const assignableMembers = members.filter((m) => m.role !== 'spectator');
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -604,7 +606,7 @@ export default function TaskSidebar({
                   </FieldLabel>
                   <TaskAssigneesPreview
                     assignedUsers={readonlyAssignedUsers}
-                    members={members}
+                    members={assignableMembers}
                     assignedGroup={selectedGroup ?? null}
                     usersPerPage={10}
                     teamId={teamId}
@@ -814,7 +816,7 @@ export default function TaskSidebar({
                       onChange={setAssignedUserUid}
                       options={[
                         { value: '', label: 'Sin asignar' },
-                        ...members.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                        ...assignableMembers.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
                       ]}
                       triggerClassName="w-full"
                     />

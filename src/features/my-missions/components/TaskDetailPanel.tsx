@@ -51,7 +51,7 @@ interface TaskDetailPanelProps {
   task: TeamTask | null;
   onClose: () => void;
   onEdit: (task: TeamTask) => void;
-  members?: { uid: string; displayName: string | null; photoUrl?: string | null }[];
+  members?: { uid: string; displayName: string | null; photoUrl?: string | null; role?: string }[];
   groups?: { id: string; groupName: string; photoUrl?: string | null }[];
   currentUserUid?: string | null;
   myRole?: string;
@@ -118,6 +118,8 @@ export default function TaskDetailPanel({
   const isPanelLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
   const isPanelAssigned = currentUserUid ? panelAssignedUids.includes(currentUserUid) : false;
   const canEditTask = !isPanelSpectator && (isPanelLeaderOrCollab || !isPanelAssigned);
+
+  const assignableMembers = members.filter((m) => m.role !== 'spectator');
 
   return (
     <div className="flex flex-col gap-3">
@@ -236,7 +238,7 @@ export default function TaskDetailPanel({
             <div className="mb-4">
               <TaskAssigneesPreview
                 assignedUsers={task.assignedUsers ?? []}
-                members={members}
+                members={assignableMembers}
                 assignedGroup={selectedGroup}
                 usersPerPage={10}
               />

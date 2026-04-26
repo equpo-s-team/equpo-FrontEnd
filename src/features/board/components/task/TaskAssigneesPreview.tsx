@@ -56,24 +56,26 @@ export function TaskAssigneesPreview({
   });
 
   const allUserUids = Array.from(new Set([...assignedUsers.map((u) => u.uid), ...groupMemberUids]));
+  // Resolve full member info (photoUrl, displayName) for each assigned user
+  const resolved = allUserUids
+    .map((uid) => {
+      const passedIn = assignedUsers.find((u) => u.uid === uid);
+      const found = members.find((m) => m.uid === uid);
+      if (!found) return null; // If not in the provided members array (e.g. spectator filtered out), don't render them
+      return {
+        uid,
+        displayName: passedIn?.displayName ?? found.displayName ?? `Usuario ${uid.slice(0, 6)}`,
+        photoUrl: found.photoUrl ?? null,
+      };
+    })
+    .filter((u): u is NonNullable<typeof u> => u !== null);
 
-  const hasUsers = allUserUids.length > 0;
+  const hasUsers = resolved.length > 0;
   const hasGroup = !!assignedGroup;
 
   if (!hasUsers && !hasGroup) {
     return <p className="text-sm font-body text-grey-400">Sin asignar</p>;
   }
-
-  // Resolve full member info (photoUrl, displayName) for each assigned user
-  const resolved = allUserUids.map((uid) => {
-    const passedIn = assignedUsers.find((u) => u.uid === uid);
-    const found = members.find((m) => m.uid === uid);
-    return {
-      uid,
-      displayName: passedIn?.displayName ?? found?.displayName ?? `Usuario ${uid.slice(0, 6)}`,
-      photoUrl: found?.photoUrl ?? null,
-    };
-  });
 
   const totalPages = Math.ceil(resolved.length / usersPerPage);
   const pageItems = resolved.slice(page * usersPerPage, (page + 1) * usersPerPage);

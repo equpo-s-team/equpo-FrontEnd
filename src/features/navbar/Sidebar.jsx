@@ -91,7 +91,7 @@ export default function Sidebar() {
                   title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
                 >
                   {isMuted ? (
-                    <VolumeX size={14} className="text-red-500" />
+                    <VolumeX size={14} className="text-red" />
                   ) : (
                     <Volume2 size={14} className="text-grey-600" />
                   )}
@@ -208,7 +208,7 @@ export default function Sidebar() {
             className="w-full flex items-center justify-center gap-3 px-3 py-2.5 rounded-xl text-primary-foreground hover:text-tertiary-foreground hover:bg-secondary transition-all duration-200"
             title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
           >
-            {isMuted ? <VolumeX size={18} className="text-red-500" /> : <Volume2 size={18} />}
+            {isMuted ? <VolumeX size={18} className="text-red" /> : <Volume2 size={18} />}
           </button>
         )}
       </div>

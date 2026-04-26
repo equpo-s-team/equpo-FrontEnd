@@ -1,12 +1,12 @@
 import { updateProfile } from 'firebase/auth';
 
+import { uploadUserProfileFile } from '@/components/ui/avatar/avatarStorage';
 import {
   type GeneratedDataConnectModule,
   type UpdateUserProfileInput,
   type UpdateUserProfileResult,
 } from '@/features/team/types/userTypes.ts';
 import { auth } from '@/firebase';
-import { uploadUserProfileFile } from '@/components/ui/avatar/avatarStorage';
 
 let isUpdateUserProfileUnavailable = false;
 

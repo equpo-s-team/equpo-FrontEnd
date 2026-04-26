@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
-import { rtdb } from '@/firebase';
 import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
+import { rtdb } from '@/firebase';
 
 import { chatApi } from './api/chatApi';
 

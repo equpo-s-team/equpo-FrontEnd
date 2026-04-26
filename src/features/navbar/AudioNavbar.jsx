@@ -98,7 +98,7 @@ export default function AudioNavbar() {
         >
           <div className="flex items-center justify-center">
             {isMuted ? (
-              <VolumeX size={16} className="text-red-500" />
+              <VolumeX size={16} className="text-red" />
             ) : isPlaying ? (
               <Pause size={16} className="text-blue-500" />
             ) : (
@@ -134,7 +134,7 @@ export default function AudioNavbar() {
           >
             <div className="flex items-center justify-center">
               {isMuted ? (
-                <VolumeX size={14} className="text-red-500" />
+                <VolumeX size={14} className="text-red" />
               ) : (
                 <Volume2 size={14} className="text-grey-600" />
               )}

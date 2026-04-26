@@ -37,7 +37,7 @@ function TaskDayButton({
           <div
             className={cn(
               'h-1 w-1 rounded-full sm:h-1.5 sm:w-1.5',
-              hasOverdueTask ? 'bg-red-500' : 'bg-blue-500',
+              hasOverdueTask ? 'bg-red' : 'bg-blue-500',
             )}
           />
         </div>

@@ -1,12 +1,12 @@
 import { Check, ChevronLeft, ChevronRight, Lock, Plus, Shield, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import {useSoundEffects} from "@/hooks/useSoundEffects.ts";
 import { toastError } from '@/lib/toast.ts';
 
 import { useTaskStepsRealtime } from '../../hooks/useTaskStepsRealtime.ts';
 import { useToggleTaskStep } from '../../hooks/useToggleTaskStep.ts';
 import type { TaskStep } from '../../types/taskSchema.ts';
-import {useSoundEffects} from "@/hooks/useSoundEffects.ts";
 
 const STEPS_PER_PAGE = 5;
 
@@ -81,7 +81,7 @@ function StepRow({
   return (
     <div
       className={`flex items-center gap-2.5 py-2 px-3 rounded-[8px] group transition-colors
-        ${isSupero ? 'bg-violet-50 border border-violet-200/60' : 'hover:bg-secondary/60'}`}
+        ${isSupero ? 'bg-purple/20 border border-purple/20' : 'hover:bg-secondary/60'}`}
     >
       {/* Checkbox */}
       <button
@@ -94,7 +94,7 @@ function StepRow({
               : isBlocked
                 ? 'border-grey-200 bg-grey-100 cursor-not-allowed'
                 : canToggle
-                  ? 'border-grey-300 hover:border-green-400 cursor-pointer'
+                  ? 'border-grey-300 hover:border-green cursor-pointer'
                   : 'border-grey-200 cursor-not-allowed'
           }`}
       >
@@ -121,7 +121,7 @@ function StepRow({
             type="button"
             className={`text-left text-[13px] font-body leading-snug break-words w-full
               ${step.isDone ? 'line-through text-grey-400' : 'text-grey-800'}
-              ${isSupero ? 'font-semibold text-violet-700' : ''}
+              ${isSupero ? 'font-semibold text-purple' : ''}
               ${canEdit && !isSupero ? 'cursor-text' : 'cursor-default'}`}
             onClick={() => canEdit && !isSupero && setEditMode(true)}
           >
@@ -134,12 +134,12 @@ function StepRow({
       {isSupero && (
         <div className="flex items-center gap-1 shrink-0">
           {isBlocked ? (
-            <span className="flex items-center gap-1 text-[10px] text-violet-400 font-semibold">
+            <span className="flex items-center gap-1 text-[10px] text-purple-foreground font-semibold">
               <Lock size={10} />
               Bloqueado
             </span>
           ) : (
-            <Shield size={13} className="text-violet-500" />
+            <Shield size={13} className="text-purple-foreground" />
           )}
         </div>
       )}
@@ -148,7 +148,7 @@ function StepRow({
       {canEdit && !isSupero && (
         <button
           onClick={onDelete}
-          className="shrink-0 opacity-0 group-hover:opacity-100 text-grey-400 hover:text-red-500 transition-all duration-150 cursor-pointer"
+          className="shrink-0 opacity-0 group-hover:opacity-100 text-grey-400 hover:text-red transition-all duration-150 cursor-pointer"
         >
           <Trash2 size={13} />
         </button>
@@ -283,7 +283,7 @@ export default function TaskStepsSection({
                 {!isSupero && (
                   <button
                     onClick={() => handleDeleteLocal(globalIndex)}
-                    className="text-grey-400 hover:text-red-500 cursor-pointer transition-colors"
+                    className="text-grey-400 hover:text-red cursor-pointer transition-colors"
                   >
                     <Trash2 size={13} />
                   </button>

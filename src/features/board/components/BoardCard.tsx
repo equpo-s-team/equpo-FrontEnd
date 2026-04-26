@@ -5,10 +5,11 @@ import type {
 } from 'react';
 import { useRef } from 'react';
 
+import { TagChip } from '@/components/ui/TagChip.tsx';
+
 import type { TaskPriority } from '../types';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 import { COLUMN_CONFIG, PRIORITY_CONFIG } from './columnConfig';
-import { TagChip } from '@/components/ui/TagChip.tsx';
 
 type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
 

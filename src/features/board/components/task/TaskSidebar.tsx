@@ -6,12 +6,14 @@ import { AppProgress } from '@/components/ui/AppProgress.tsx';
 import { AppSelect } from '@/components/ui/AppSelect.tsx';
 import { DateTimePicker } from '@/components/ui/date-time-picker.tsx';
 import { Input } from '@/components/ui/input.tsx';
+import { TagChip} from "@/components/ui/TagChip.tsx";
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 import { toastError, toastSuccess } from '@/lib/toast.ts';
 
+import { FieldLabel } from '../../../../components/ui/FieldLabel.tsx';
 import { useCreateTask } from '../../hooks/useCreateTask.ts';
 import { useCreateTaskStep } from '../../hooks/useCreateTaskStep.ts';
 import { useDeleteTask } from '../../hooks/useDeleteTask.ts';
@@ -21,7 +23,6 @@ import { useRecurringRollover } from '../../hooks/useRecurringRollover.ts';
 import { useUpdateTask } from '../../hooks/useUpdateTask.ts';
 import { useUpdateTaskStep } from '../../hooks/useUpdateTaskStep.ts';
 import type { TaskStep } from '../../types/taskSchema.ts';
-import type { LocalStepDraft } from './TaskStepsSection';
 import { markdownToEditorHtml } from '../../utils/markdownUtils.ts';
 import { needsRollover } from '../../utils/recurringRollover.ts';
 import {
@@ -33,11 +34,10 @@ import {
   toInputDatetime,
 } from '../../utils/taskUtils.ts';
 import { COLUMN_CONFIG } from '../columnConfig';
-import { FieldLabel } from '../../../../components/ui/FieldLabel.tsx';
 import { MarkdownDescriptionEditor } from '../MarkdownDescriptionEditor.tsx';
 import { TaskAssigneesPreview } from './TaskAssigneesPreview';
-import { TagChip} from "@/components/ui/TagChip.tsx";
 import TaskCommentarySection from './TaskCommentarySection';
+import type { LocalStepDraft } from './TaskStepsSection';
 import TaskStepsSection from './TaskStepsSection';
 
 type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';

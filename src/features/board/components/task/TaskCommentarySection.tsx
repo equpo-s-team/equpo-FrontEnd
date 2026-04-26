@@ -136,7 +136,7 @@ function CommentaryItem({
           </button>
           <button
             onClick={() => onDelete(commentary.commentary)}
-            className="p-1 rounded text-grey-400 hover:text-red-500 transition-colors cursor-pointer"
+            className="p-1 rounded text-grey-400 hover:text-red transition-colors cursor-pointer"
           >
             <Trash2 size={12} />
           </button>

@@ -87,14 +87,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             className={cn(
               'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.email ? 'border-red-500' : 'border-gray-200',
+              errors.email ? 'border-red' : 'border-gray-200',
             )}
             aria-label="Correo electrónico"
             aria-describedby={errors.email ? 'email-error' : undefined}
           />
         </div>
         {errors.email && (
-          <p id="email-error" className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <p id="email-error" className="text-red text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.email}
           </p>
@@ -114,7 +114,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             className={cn(
               'w-full pl-10 pr-12 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.password ? 'border-red-500' : 'border-gray-200',
+              errors.password ? 'border-red' : 'border-gray-200',
             )}
             aria-label="Contraseña"
             aria-describedby={errors.password ? 'password-error' : undefined}
@@ -129,7 +129,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           </button>
         </div>
         {errors.password && (
-          <p id="password-error" className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <p id="password-error" className="text-red text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.password}
           </p>

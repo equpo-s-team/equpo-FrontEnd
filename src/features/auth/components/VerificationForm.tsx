@@ -44,7 +44,7 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({
             onBlur={() => onFieldBlur('verificationCode')}
             className={cn(
               'w-full text-center py-3 px-4 bg-white/50 border rounded-xl text-2xl font-mono tracking-widest placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.verificationCode ? 'border-red-500' : 'border-gray-200',
+              errors.verificationCode ? 'border-red' : 'border-gray-200',
             )}
             maxLength={6}
             aria-label="Verification Code"
@@ -53,7 +53,7 @@ export const VerificationForm: React.FC<VerificationFormProps> = ({
           {errors.verificationCode && (
             <p
               id="code-error"
-              className="text-red-500 text-xs mt-1 flex items-center gap-1 justify-center"
+              className="text-red text-xs mt-1 flex items-center gap-1 justify-center"
             >
               <AlertTriangle className="h-3 w-3" />
               {errors.verificationCode}

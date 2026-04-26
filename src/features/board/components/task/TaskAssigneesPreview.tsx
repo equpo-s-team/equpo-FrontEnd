@@ -3,10 +3,10 @@ import { collection, getDocs } from 'firebase/firestore';
 import { ChevronLeft, ChevronRight, Users } from 'lucide-react';
 import { useState } from 'react';
 
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { db } from '@/firebase.ts';
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 
 interface AssignedUser {
   uid: string;

@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import AppLayout from '@/components/AppLayout.jsx';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
@@ -8,13 +9,12 @@ import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.t
 import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import MyMissions from '@/features/my-missions/MyMissions.tsx';
+import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import LandingPage from '@/features/presentation/page.jsx';
 import Reports from '@/features/reports/Reports.tsx';
 import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
-import AppLayout from '@/components/AppLayout.jsx';
-import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.jsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();

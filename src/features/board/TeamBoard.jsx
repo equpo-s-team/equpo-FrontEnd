@@ -10,13 +10,18 @@ import { toastError } from '@/lib/toast';
 import AppHeader from './components/AppHeader.tsx';
 import BoardColumn from './components/BoardColumn.jsx';
 import FilterBar from './components/FilterBar.jsx';
-import { COLUMNS } from './components/kanbanData.js';
-import TaskSidebar from './components/TaskSidebar.tsx';
+import TaskSidebar from './components/task/TaskSidebar.tsx';
 import { useTaskFilters } from './hooks/useTaskFilters';
 import { useTasks } from './hooks/useTasks';
 import { useUpdateTask } from './hooks/useUpdateTask';
 
-/** Map backend status values to column IDs used in the UI */
+export const COLUMNS = [
+  { id: 'todo', label: 'To Do', accent: 'todo' },
+  { id: 'progress', label: 'In Progress', accent: 'progress' },
+  { id: 'qa', label: 'In QA', accent: 'qa' },
+  { id: 'done', label: 'Done', accent: 'done' },
+];
+
 const STATUS_TO_COLUMN = {
   todo: 'todo',
   'in-progress': 'progress',
@@ -67,7 +72,6 @@ export default function TeamBoard() {
   const { data: groups = [] } = useTeamGroups(teamId);
   const { play } = useSoundEffects();
 
-  // Determine current user's role for permission gating
   const myRole = useMemo(() => {
     if (!user?.uid || !members.length) return 'member';
     return members.find((m) => m.uid === user.uid)?.role ?? 'member';
@@ -75,12 +79,10 @@ export default function TeamBoard() {
 
   const isLeaderOrCollaborator = myRole === 'leader' || myRole === 'collaborator';
 
-  // ── Filter logic ──
   const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
 
   const apiTasks = data?.tasks;
 
-  // Extract unique categories from ALL tasks (before filtering)
   const allCategories = useMemo(() => {
     if (!apiTasks?.length) return [];
     const set = new Set();
@@ -90,7 +92,6 @@ export default function TeamBoard() {
     return [...set].sort();
   }, [apiTasks]);
 
-  // Apply filters → group into columns
   const filteredTasks = useMemo(
     () => (apiTasks?.length ? applyFilters(apiTasks) : []),
     [apiTasks, applyFilters],
@@ -103,11 +104,9 @@ export default function TeamBoard() {
     [filteredTasks],
   );
 
-  // ── local drag-and-drop state ──
   const [localCards, setLocalCards] = useState(null);
   const displayCards = localCards ?? cards;
 
-  // Reset local overrides whenever the underlying data / filters change
   const [prevFilteredTasks, setPrevFilteredTasks] = useState(filteredTasks);
   if (filteredTasks !== prevFilteredTasks) {
     setPrevFilteredTasks(filteredTasks);
@@ -139,7 +138,31 @@ export default function TeamBoard() {
           return;
         }
       } else if (fromColumnId === 'progress' && toColumnId === 'todo') {
-        if ((card.stepsDone ?? 0) > 0) return;
+        if ((card.stepsDone ?? 0) > 0) {
+          toastError(
+            'No se puede regresar',
+            'Desmarca todos los pasos completados antes de mover la tarea a Por Hacer.',
+          );
+          return;
+        }
+      } else if (fromColumnId === 'todo' && (toColumnId === 'qa' || toColumnId === 'done')) {
+        toastError(
+          'Transición no permitida',
+          'Las tareas deben pasar por En Progreso antes de ir a QA o Done.',
+        );
+        return;
+      } else if (fromColumnId === 'progress' && (toColumnId === 'qa' || toColumnId === 'done')) {
+        toastError(
+          'Transición automática',
+          'La tarea no puede pasar a revisión sin haber sido terminados todos sus pasos.',
+        );
+        return;
+      } else if (fromColumnId === 'qa' || fromColumnId === 'done') {
+        toastError(
+          'Transición no permitida',
+          'Las tareas en Revisión o Terminadas no se pueden mover manualmente.',
+        );
+        return;
       } else {
         return;
       }

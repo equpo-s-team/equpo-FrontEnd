@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { AppHeader } from '@/components/ui/app-header';
 import { useTeam } from '@/context/TeamContext.tsx';
-import TaskSidebar from '@/features/board/components/TaskSidebar';
+import TaskSidebar from '@/features/board/components/task/TaskSidebar';
 import type { TeamTask } from '@/features/board/types';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';

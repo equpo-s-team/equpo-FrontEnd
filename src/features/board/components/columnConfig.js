@@ -1,6 +1,7 @@
 // src/utils/columnConfig.js
 // Maps accent keys → Tailwind class strings
 // All classes must be complete (no dynamic construction) so Tailwind can scan them.
+import { CheckSquare, LayoutGrid, Loader, ShieldCheck } from 'lucide-react';
 
 export const COLUMN_CONFIG = {
   todo: {
@@ -10,12 +11,12 @@ export const COLUMN_CONFIG = {
     indicator: 'bg-kanban-todo shadow-neonGrey',
     indicatorAnim: '',
     title: 'text-kanban-todo',
-    // card
+
     cardBorder: 'border-kanban-todo/30',
     cardShadow: 'shadow-card-todo',
     cardBorderHover: 'hover:border-kanban-todo/75',
     cardShadowHover: 'hover:shadow-card-todo-hover',
-    // progress fill
+
     progressFill: 'bg-gradient-to-r from-grey-400 to-grey-300',
     progressColor: 'text-kanban-todo',
   },
@@ -96,7 +97,6 @@ export const TAG_COLOR_CONFIG = {
   purple: { bg: 'bg-purple/10', text: 'text-purple', border: 'border-purple/30' },
 };
 
-// Map tag label → color key
 export const TAG_LABEL_TO_COLOR = {
   Frontend: 'blue',
   Backend: 'green',
@@ -110,7 +110,6 @@ export const TAG_LABEL_TO_COLOR = {
   Research: 'orange',
 };
 
-// User avatar gradients (mapped to Tailwind background classes)
 export const USER_GRADIENT = {
   AT: 'bg-avatar-at',
   JR: 'bg-avatar-jr',
@@ -119,4 +118,27 @@ export const USER_GRADIENT = {
   LV: 'bg-avatar-lv',
   DM: 'bg-avatar-dm',
   SR: 'bg-avatar-sr',
+};
+
+export const COLUMN_EMPTY = {
+  todo: {
+    icon: LayoutGrid,
+    title: 'Sin tareas pendientes',
+    description: 'Crea una tarea para comenzar el sprint.',
+  },
+  progress: {
+    icon: Loader,
+    title: 'Nada en progreso',
+    description: 'Mueve una tarea aquí cuando empiece el trabajo.',
+  },
+  qa: {
+    icon: ShieldCheck,
+    title: 'Sin tareas en revisión',
+    description: 'Las tareas listas para QA aparecerán aquí.',
+  },
+  done: {
+    icon: CheckSquare,
+    title: 'Nada completado aún',
+    description: 'Las tareas completadas se verán en esta columna.',
+  },
 };

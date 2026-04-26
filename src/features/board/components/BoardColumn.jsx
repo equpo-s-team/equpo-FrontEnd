@@ -1,32 +1,7 @@
-import { CheckSquare, LayoutGrid, Loader, ShieldCheck } from 'lucide-react';
-
 import { EmptyState } from '@/components/ui/EmptyState';
 
 import BoardCard from './BoardCard.tsx';
-import { COLUMN_CONFIG } from './columnConfig.js';
-
-const COLUMN_EMPTY = {
-  todo: {
-    icon: LayoutGrid,
-    title: 'Sin tareas pendientes',
-    description: 'Crea una tarea para comenzar el sprint.',
-  },
-  progress: {
-    icon: Loader,
-    title: 'Nada en progreso',
-    description: 'Mueve una tarea aquí cuando empiece el trabajo.',
-  },
-  qa: {
-    icon: ShieldCheck,
-    title: 'Sin tareas en revisión',
-    description: 'Las tareas listas para QA aparecerán aquí.',
-  },
-  done: {
-    icon: CheckSquare,
-    title: 'Nada completado aún',
-    description: 'Las tareas completadas se verán en esta columna.',
-  },
-};
+import {COLUMN_CONFIG, COLUMN_EMPTY} from './columnConfig.js';
 
 function ColIndicator({ accent }) {
   const cfg = COLUMN_CONFIG[accent];

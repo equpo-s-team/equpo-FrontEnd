@@ -26,10 +26,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 import { TAG_COLOR_CONFIG } from './columnConfig.js';
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Tiny reusable primitives                                                */
-/* ────────────────────────────────────────────────────────────────────────── */
-
 function Pill({ active, children, onClick, className = '' }) {
   return (
     <button
@@ -114,10 +110,6 @@ function CheckRow({ label, icon, checked, onClick }) {
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Category Tag Pill                                                       */
-/* ────────────────────────────────────────────────────────────────────────── */
-
 const CATEGORY_PALETTE = [
   TAG_COLOR_CONFIG.blue,
   TAG_COLOR_CONFIG.green,
@@ -151,10 +143,6 @@ function CategoryPill({ label, selected, onClick }) {
     </button>
   );
 }
-
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Individual Filter Sections                                              */
-/* ────────────────────────────────────────────────────────────────────────── */
 
 function CategoriesFilter({ categories, selected, onChange }) {
   const [open, setOpen] = useState(false);
@@ -350,7 +338,6 @@ function RecurringFilter({
               checked={isRecurring === item.value}
               onClick={() => {
                 onIsRecurringChange(item.value);
-                // Clear sub-filters when switching away from recurring
                 if (item.value !== true) {
                   onIntervalChange(null);
                   onCountChange(null);
@@ -360,7 +347,6 @@ function RecurringFilter({
           ))}
         </div>
 
-        {/* Sub-filters: interval + count — only when "recurring" is selected */}
         {isRecurring === true && (
           <div className="px-3 pb-3 space-y-3 border-t border-grey-100 pt-3">
             <div>
@@ -449,7 +435,6 @@ function AssignedUserFilter({ members, selected, onChange }) {
         />
       </Pill>
       <DropPanel open={open} onClose={() => setOpen(false)} className="min-w-[240px]">
-        {/* Search */}
         <div className="px-3 pt-3 pb-2 border-b border-grey-100">
           <input
             value={query}
@@ -523,9 +508,6 @@ function AssignedGroupFilter({ groups, selected, onChange }) {
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  FilterBar (main export)                                                 */
-/* ────────────────────────────────────────────────────────────────────────── */
 
 export default function FilterBar({
   filters,
@@ -613,23 +595,26 @@ export default function FilterBar({
         bg-primary border-b border-grey-200
         shadow-[0_2px_8px_rgba(0,0,0,0.04)]
         px-8 py-2.5 items-center gap-2.5 flex-wrap
+        justify-between
       "
       >
-        {/* Global create button — to the left of filters */}
+        <div className="flex items-center gap-2.5">
+          <span className="text-[11px] font-bold uppercase tracking-[0.9px] text-grey-400 mr-1 shrink-0">
+          Filtros
+        </span>
+          {filterControls}
+        </div>
+
         <button
           onClick={onCreateTask}
           id="crear-mision-btn"
           className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold text-white
-            bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-400 hover:to-blue-400
-            shadow-sm hover:shadow transition-all duration-200 cursor-pointer shrink-0 mr-2 font-body"
+            bg-gradient-blue-bg
+            shadow-neonBlue hover:shadow transition-all duration-200 cursor-pointer shrink-0 mr-2 font-body"
         >
           <Plus size={13} strokeWidth={2.5} />
           Crear Misión
         </button>
-        <span className="text-[11px] font-bold uppercase tracking-[0.9px] text-grey-400 mr-1 shrink-0">
-          Filtros
-        </span>
-        {filterControls}
       </div>
 
       {/* Mobile toggle */}

@@ -2,9 +2,9 @@ import { AlertTriangle, CalendarDays, Clock, Edit3, RefreshCw, Tag, X, Zap } fro
 import { useEffect } from 'react';
 
 import { useTeam } from '@/context/TeamContext.tsx';
-import { TaskAssigneesPreview } from '@/features/board/components/TaskAssigneesPreview';
-import TaskCommentarySection from '@/features/board/components/TaskCommentarySection';
-import TaskStepsSection from '@/features/board/components/TaskStepsSection';
+import { TaskAssigneesPreview } from '@/features/board/components/task/TaskAssigneesPreview.tsx';
+import TaskCommentarySection from '@/features/board/components/task/TaskCommentarySection.tsx';
+import TaskStepsSection from '@/features/board/components/task/TaskStepsSection.tsx';
 import { useRecurringRollover } from '@/features/board/hooks/useRecurringRollover';
 import type { TeamTask } from '@/features/board/types';
 import { needsRollover } from '@/features/board/utils/recurringRollover';

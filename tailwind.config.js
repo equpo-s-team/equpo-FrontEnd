@@ -35,7 +35,7 @@ export default {
           foreground: '#9b7fe1',
         },
         green: {
-          DEFAULT: '#9CEDC1',
+          DEFAULT: '#65d295',
           foreground: '#CEFB7C',
         },
         grey: {

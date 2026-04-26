@@ -5,13 +5,10 @@ import type {
 } from 'react';
 import { useRef } from 'react';
 
-import { UserAvatar as AppUserAvatar } from '@/components/ui/UserAvatar.tsx';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
-
 import type { TaskPriority } from '../types';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
-import { COLUMN_CONFIG, PRIORITY_CONFIG, USER_GRADIENT } from './columnConfig';
-import { TagChip } from './TagChip';
+import { COLUMN_CONFIG, PRIORITY_CONFIG } from './columnConfig';
+import { TagChip } from '@/components/ui/TagChip.tsx';
 
 type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
 
@@ -46,19 +43,6 @@ type PointerTracking = {
   t: number;
   dragged: boolean;
 };
-
-function BoardAssigneeAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
-  const dim = size === 'sm' ? 'w-5.5 h-5.5 text-[7.5px]' : 'w-7 h-7 text-[10px]';
-  return (
-    <AppUserAvatar
-      alt={userId}
-      initials={getInitials(userId, userId)}
-      className={`${dim} rounded-full object-cover border-2 border-primary`}
-      fallbackClassName="font-bold text-white flex items-center justify-center"
-      fallbackStyle={{ background: USER_GRADIENT[userId] }}
-    />
-  );
-}
 
 export default function BoardCard({
   card,
@@ -206,16 +190,6 @@ export default function BoardCard({
               />
             )}
           </div>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex">
-          {card.assignees?.map((uid: string, i: number) => (
-            <div key={uid} style={{ marginLeft: i > 0 ? '-5px' : 0 }}>
-              <BoardAssigneeAvatar userId={uid} />
-            </div>
-          ))}
         </div>
       </div>
     </div>

@@ -1,17 +1,17 @@
 import { Edit2, MessageSquarePlus, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { UserAvatar } from '@/components/ui/UserAvatar';
-import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useAuth } from '@/hooks/useAuth';
 
-import { useCreateTaskCommentary } from '../hooks/useCreateTaskCommentary';
-import { useDeleteTaskCommentary } from '../hooks/useDeleteTaskCommentary';
-import { useTaskCommentariesRealtime } from '../hooks/useTaskCommentariesRealtime';
-import { useUpdateTaskCommentary } from '../hooks/useUpdateTaskCommentary';
-import type { TaskCommentary } from '../types/taskSchema';
-import { markdownToEditorHtml } from '../utils/markdownUtils';
-import { MarkdownDescriptionEditor } from './MarkdownDescriptionEditor';
+import { useCreateTaskCommentary } from '../../hooks/useCreateTaskCommentary.ts';
+import { useDeleteTaskCommentary } from '../../hooks/useDeleteTaskCommentary.ts';
+import { useTaskCommentariesRealtime } from '../../hooks/useTaskCommentariesRealtime.ts';
+import { useUpdateTaskCommentary } from '../../hooks/useUpdateTaskCommentary.ts';
+import type { TaskCommentary } from '../../types/taskSchema.ts';
+import { markdownToEditorHtml } from '../../utils/markdownUtils.ts';
+import { MarkdownDescriptionEditor } from '../MarkdownDescriptionEditor.tsx';
 
 const MAX_COMMENTARY_LENGTH = 500;
 

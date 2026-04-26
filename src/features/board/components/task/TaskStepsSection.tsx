@@ -1,11 +1,11 @@
-import { CheckSquare, ChevronLeft, ChevronRight, Lock, Plus, Shield, Trash2 } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Lock, Plus, Shield, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { toastError } from '@/lib/toast';
+import { toastError } from '@/lib/toast.ts';
 
-import { useTaskStepsRealtime } from '../hooks/useTaskStepsRealtime';
-import { useToggleTaskStep } from '../hooks/useToggleTaskStep';
-import type { TaskStep } from '../types/taskSchema';
+import { useTaskStepsRealtime } from '../../hooks/useTaskStepsRealtime.ts';
+import { useToggleTaskStep } from '../../hooks/useToggleTaskStep.ts';
+import type { TaskStep } from '../../types/taskSchema.ts';
 
 const STEPS_PER_PAGE = 5;
 
@@ -89,7 +89,7 @@ function StepRow({
         className={`shrink-0 w-4 h-4 rounded border-[1.5px] flex items-center justify-center transition-all duration-200
           ${
             step.isDone
-              ? 'bg-green-500 border-green-500 text-white'
+              ? 'bg-green border-green text-white'
               : isBlocked
                 ? 'border-grey-200 bg-grey-100 cursor-not-allowed'
                 : canToggle
@@ -97,7 +97,7 @@ function StepRow({
                   : 'border-grey-200 cursor-not-allowed'
           }`}
       >
-        {step.isDone && <CheckSquare size={10} strokeWidth={3} />}
+        {step.isDone && <Check size={10} strokeWidth={3} />}
       </button>
 
       {/* Label / edit input */}

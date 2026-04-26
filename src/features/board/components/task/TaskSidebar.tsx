@@ -2,28 +2,28 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { AppProgress } from '@/components/ui/AppProgress';
-import { AppSelect } from '@/components/ui/AppSelect';
-import { DateTimePicker } from '@/components/ui/date-time-picker';
-import { Input } from '@/components/ui/input';
+import { AppProgress } from '@/components/ui/AppProgress.tsx';
+import { AppSelect } from '@/components/ui/AppSelect.tsx';
+import { DateTimePicker } from '@/components/ui/date-time-picker.tsx';
+import { Input } from '@/components/ui/input.tsx';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
-import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
-import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { useSoundEffects } from '@/hooks/useSoundEffects';
-import { toastError, toastSuccess } from '@/lib/toast';
+import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
+import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
+import { toastError, toastSuccess } from '@/lib/toast.ts';
 
-import { useCreateTask } from '../hooks/useCreateTask';
-import { useCreateTaskStep } from '../hooks/useCreateTaskStep';
-import { useDeleteTask } from '../hooks/useDeleteTask';
-import { useDeleteTaskStep } from '../hooks/useDeleteTaskStep';
-import { UseGenerateDescription } from '../hooks/useGenerateDescription.ts';
-import { useRecurringRollover } from '../hooks/useRecurringRollover';
-import { useUpdateTask } from '../hooks/useUpdateTask';
-import { useUpdateTaskStep } from '../hooks/useUpdateTaskStep';
-import type { TaskStep } from '../types/taskSchema';
+import { useCreateTask } from '../../hooks/useCreateTask.ts';
+import { useCreateTaskStep } from '../../hooks/useCreateTaskStep.ts';
+import { useDeleteTask } from '../../hooks/useDeleteTask.ts';
+import { useDeleteTaskStep } from '../../hooks/useDeleteTaskStep.ts';
+import { UseGenerateDescription } from '../../hooks/useGenerateDescription.ts';
+import { useRecurringRollover } from '../../hooks/useRecurringRollover.ts';
+import { useUpdateTask } from '../../hooks/useUpdateTask.ts';
+import { useUpdateTaskStep } from '../../hooks/useUpdateTaskStep.ts';
+import type { TaskStep } from '../../types/taskSchema.ts';
 import type { LocalStepDraft } from './TaskStepsSection';
-import { markdownToEditorHtml } from '../utils/markdownUtils';
-import { needsRollover } from '../utils/recurringRollover';
+import { markdownToEditorHtml } from '../../utils/markdownUtils.ts';
+import { needsRollover } from '../../utils/recurringRollover.ts';
 import {
   DESCRIPTION_MAX_LENGTH,
   INTERVAL_OPTIONS,
@@ -31,12 +31,12 @@ import {
   READONLY_PRIORITY_STYLE,
   STATUS_TO_PROGRESS,
   toInputDatetime,
-} from '../utils/taskUtils';
-import { COLUMN_CONFIG } from './columnConfig';
-import { FieldLabel } from './FieldLabel';
-import { MarkdownDescriptionEditor } from './MarkdownDescriptionEditor';
-import { TagChip } from './TagChip';
+} from '../../utils/taskUtils.ts';
+import { COLUMN_CONFIG } from '../columnConfig';
+import { FieldLabel } from '../../../../components/ui/FieldLabel.tsx';
+import { MarkdownDescriptionEditor } from '../MarkdownDescriptionEditor.tsx';
 import { TaskAssigneesPreview } from './TaskAssigneesPreview';
+import { TagChip} from "@/components/ui/TagChip.tsx";
 import TaskCommentarySection from './TaskCommentarySection';
 import TaskStepsSection from './TaskStepsSection';
 

@@ -93,10 +93,15 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, [fetchDatabaseUser]);
 
+  const updateUserData = useCallback((newData) => {
+    setUser((prev) => (prev ? { ...prev, ...newData } : null));
+  }, []);
+
   const value = {
     user,
     isLoading,
     isAuth: !!user,
+    updateUserData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import {type Achievement} from '@/features/team/types';
 import {cn} from '@/lib/utils.ts';
+import {CircleX} from "lucide-react";
 
 interface AchievementBadgeProps {
   achievement: Achievement;
@@ -11,7 +12,6 @@ function isImageSource(value: string): boolean {
   return /^(https?:\/\/|\/|\.\/|\.\.\/|data:image\/)/i.test(value);
 }
 
-/** Resolve image source: prefer backend linked image URL, then fallback to icon when it is a URL/path. */
 function resolveAchievementImage(achievement: Achievement): string | null {
   if (achievement.iconUrl) return achievement.iconUrl;
   if (achievement.icon && isImageSource(achievement.icon)) return achievement.icon;
@@ -90,7 +90,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-8">
           <button
             type="button"
             aria-label="Cerrar detalle del logro"
@@ -103,7 +103,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
 
           <section
             className={cn(
-              'relative w-full max-w-xs rounded-2xl bg-white p-5 shadow-card-lg transition-all duration-200',
+              'relative w-full max-w-sm max-h-sm rounded-2xl bg-white p-5 shadow-card-lg transition-all duration-200',
               modalVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
             )}
           >
@@ -112,16 +112,16 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
               onClick={closeModal}
               className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-grey-100 text-xs text-grey-500 transition-colors hover:bg-grey-200"
             >
-              x
+              <CircleX size={20}/>
             </button>
 
             <div className="flex flex-col items-center gap-3">
-              <div className="h-20 w-20 overflow-hidden rounded-2xl bg-grey-100">
+              <div className="h-24 w-24 overflow-hidden rounded-2xl ">
                 {imageSrc ? (
                   <img
                     src={imageSrc}
                     alt={displayName}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                     style={{
                       filter: isLocked ? 'grayscale(1)' : 'none',
                       opacity: isLocked ? 0.55 : 1,

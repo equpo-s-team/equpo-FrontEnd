@@ -43,7 +43,7 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
     const timer = setTimeout(() => {
       setVisible(false);
       setTimeout(onDismiss, 300);
-    }, 5000);
+    }, 10000);
     return () => clearTimeout(timer);
   }, [onDismiss]);
 
@@ -90,7 +90,7 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
         />
 
         <div
-          className="relative rounded-3xl p-[2px] w-[320px]"
+          className="relative rounded-3xl p-0.5 w-[320px]"
           style={{
             background: cfg.gradient,
             boxShadow: `0 24px 64px ${cfg.glow}, 0 8px 32px rgba(0,0,0,0.15)`,
@@ -110,9 +110,8 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
 
             {/* Icon */}
             <div
-              className="w-20 h-20 rounded-2xl flex items-center justify-center"
+              className="w-20 h-20 rounded-2xl flex items-center justify-center "
               style={{
-                background: cfg.gradient,
                 boxShadow: `0 8px 24px ${cfg.glow}`,
               }}
             >
@@ -120,7 +119,7 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
                 <img
                   src={imageSrc}
                   alt={achievement.name}
-                  className="h-16 w-16 rounded-xl object-cover"
+                  className="h-20 w-20 rounded-xl object-contain"
                 />
               ) : (
                 <span className="text-3xl text-white">{achievement.name.slice(0, 2)}</span>

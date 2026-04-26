@@ -36,7 +36,7 @@ function xpRequiredForLevel(level: number): number {
 }
 
 const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => {
-  const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 1;
+  const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 0;
   const experience =
     typeof authUser?.experiencePoints === 'number' && authUser.experiencePoints >= 0
       ? authUser.experiencePoints

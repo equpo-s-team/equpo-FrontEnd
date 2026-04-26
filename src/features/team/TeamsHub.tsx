@@ -1,6 +1,6 @@
 import log from 'loglevel';
 import { Users } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -16,11 +16,9 @@ import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
 import { toastError, toastSuccess } from '@/lib/toast';
 
-import {
-  type Achievement,
-  AchievementsSection,
-} from './components/Achievements/AchievementsSection.tsx';
+import { AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
 import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
+import { useAchievements } from './hooks/useAchievements';
 
 type AuthContextUser = {
   uid?: string | null;
@@ -29,10 +27,16 @@ type AuthContextUser = {
   photoURL?: string | null;
   level?: number | null;
   experiencePoints?: number | null;
+  virtualCurrency?: number | null;
 };
 
+function xpRequiredForLevel(level: number): number {
+  if (level <= 0) return 0;
+  return Math.floor(100 * Math.pow(1.5, level - 1));
+}
+
 const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => {
-  const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 1;
+  const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 0;
   const experience =
     typeof authUser?.experiencePoints === 'number' && authUser.experiencePoints >= 0
       ? authUser.experiencePoints
@@ -44,69 +48,10 @@ const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => 
     photoURL: authUser?.photoURL ?? null,
     level,
     experience,
-    experienceToNextLevel: Math.max(1000, level * 1000),
+    experienceToNextLevel: xpRequiredForLevel(level + 1),
+    virtualCurrency: authUser?.virtualCurrency || 0,
   };
 };
-
-const MOCK_ACHIEVEMENTS: Achievement[] = [
-  {
-    id: 'ach-1',
-    name: 'Primer paso',
-    icon: 'rocket',
-    description: 'Creaste tu primer equipo en Equpo. ¡El inicio de grandes cosas!',
-    unlockedAt: '2024-09-15T10:00:00Z',
-  },
-  {
-    id: 'ach-2',
-    name: 'Colaborador',
-    icon: 'handshake',
-    description: 'Uniste a 3 equipos distintos y empezaste a construir tu red.',
-    unlockedAt: '2024-10-02T14:30:00Z',
-  },
-  {
-    id: 'ach-3',
-    name: 'Estratega',
-    icon: 'bow-arrow',
-    description: 'Completaste 10 tareas en un solo sprint. La planificación es tu fuerte.',
-    unlockedAt: '2024-11-20T09:15:00Z',
-  },
-  {
-    id: 'ach-4',
-    name: 'Líder nato',
-    icon: 'goal',
-    description: 'Lideraste un equipo de más de 5 personas hasta completar un proyecto.',
-    unlockedAt: '2025-01-08T11:00:00Z',
-  },
-  {
-    id: 'ach-5',
-    name: 'Velocista',
-    icon: 'zap',
-    description: 'Cerraste 5 tareas urgentes en menos de 24 horas.',
-    unlockedAt: null,
-  },
-  {
-    id: 'ach-6',
-    name: 'Maestro XP',
-    icon: 'sparkles',
-    description: 'Alcanzaste el nivel 10. ¡Eres una leyenda de Equpo!',
-    unlockedAt: null,
-  },
-  {
-    id: 'ach-7',
-    name: 'Networker',
-    icon: 'globe',
-    description: 'Invitaste a 10 usuarios únicos a tus equipos.',
-    unlockedAt: null,
-  },
-  {
-    id: 'ach-8',
-    name: 'Constante',
-    icon: 'flame',
-    description: 'Iniciaste sesión 30 días seguidos. La constancia es tu superpoder.',
-    unlockedAt: null,
-  },
-];
-// ---------------------------------------------------------------------------
 
 export const TeamsHub: React.FC = () => {
   const { data: teams = [], isLoading, error } = useTeams();
@@ -121,7 +66,22 @@ export const TeamsHub: React.FC = () => {
     Partial<Pick<UserProfile, 'displayName' | 'photoURL'>>
   >({});
   const [search, setSearch] = useState('');
-  const achievements = MOCK_ACHIEVEMENTS;
+
+  const firstTeamId = teams.length > 0 ? teams[0].id : undefined;
+  const { data: achievements = [] } = useAchievements(firstTeamId);
+
+  const mappedAchievements = useMemo(
+    () =>
+      achievements.map((a) => ({
+        id: a.id,
+        name: a.name,
+        icon: a.icon,
+        iconUrl: a.iconUrl ?? null,
+        description: a.description ?? '',
+        unlockedAt: a.unlockedAt ?? null,
+      })),
+    [achievements],
+  );
   const baseUser = mapAuthUserToProfile(authUser);
   const user: UserProfile = {
     ...baseUser,
@@ -320,8 +280,8 @@ export const TeamsHub: React.FC = () => {
 
           <aside className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full">
             <div className="lg:h-full">
-              <div className="p-4 lg:h-full lg:overflow-y-auto">
-                <AchievementsSection achievements={achievements} />
+              <div className="p-4 lg:h-full">
+                <AchievementsSection achievements={mappedAchievements} />
               </div>
             </div>
           </aside>

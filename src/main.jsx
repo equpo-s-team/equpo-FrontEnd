@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 
 import App from './App.jsx';
 import { Toaster } from './components/ui/sonner';
+import { AchievementProvider } from './context/AchievementContext';
 import { AuthProvider } from './context/AuthContext';
 
 const queryClient = new QueryClient({
@@ -23,8 +24,10 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <App />
-        <Toaster position="bottom-right" richColors closeButton />
+        <AchievementProvider>
+          <App />
+          <Toaster position="bottom-right" richColors closeButton />
+        </AchievementProvider>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,

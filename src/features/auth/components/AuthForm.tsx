@@ -1,5 +1,3 @@
-'use client';
-
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useCallback, useState } from 'react';
 
@@ -18,13 +16,9 @@ import { CompleteForm } from './CompleteForm.tsx';
 import { LoginForm } from './LoginForm.tsx';
 import { ResetForm } from './ResetForm.tsx';
 import { SignupForm } from './SignupForm.tsx';
+import {AuthFormProps} from "@/features/auth/types/auth-types.ts";
 
-interface AuthFormProps {
-  onSuccess?: (userData: { email: string; name?: string }) => void;
-  onClose?: () => void;
-  initialMode?: AuthMode;
-  className?: string;
-}
+
 
 export const AuthForm: React.FC<AuthFormProps> = ({
   onSuccess,

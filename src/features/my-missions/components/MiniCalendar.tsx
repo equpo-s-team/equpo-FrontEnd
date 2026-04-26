@@ -16,11 +16,11 @@ function toDateKey(d: Date) {
 }
 
 function TaskDayButton({
-  className,
-  day,
-  modifiers,
-  ...props
-}: React.ComponentProps<typeof CalendarDayButton>) {
+                         className,
+                         day,
+                         modifiers,
+                         ...props
+                       }: React.ComponentProps<typeof CalendarDayButton>) {
   const hasTask = modifiers.hasTask;
   const hasOverdueTask = modifiers.hasOverdueTask;
 
@@ -47,10 +47,10 @@ function TaskDayButton({
 }
 
 export default function MiniCalendar({
-  selectedDate,
-  onDateSelect,
-  tasksByDate,
-}: MiniCalendarProps) {
+                                       selectedDate,
+                                       onDateSelect,
+                                       tasksByDate,
+                                     }: MiniCalendarProps) {
   return (
     <div className="w-full rounded-xl border border-grey-150 bg-white px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
       <div className="w-full overflow-visible">

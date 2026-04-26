@@ -56,7 +56,7 @@ export default function Navbar() {
 
       {showAuth && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
-          <div className="relative w-full h-full flex items-center justify-center p-4">
+          <div className="relative w-full h-full flex items-center justify-center">
             <button
               onClick={() => setShowAuth(false)}
               className="absolute top-8 right-8 text-white/80 hover:text-white text-sm z-10"

@@ -112,11 +112,7 @@ export default function TaskDetailPanel({
   const priority = PRIORITY_CONFIG[task.priority] ?? PRIORITY_CONFIG.medium;
   const selectedGroup = groups.find((group) => group.id === task.assignedGroupId) ?? null;
   const isOverdue = isTaskOverdue(task);
-  const rawDescription = task.description?.trim() ?? '';
-  const normalizedDescription = rawDescription.includes('<')
-    ? editorHtmlToMarkdown(rawDescription)
-    : rawDescription;
-  const descriptionHtml = normalizedDescription ? markdownToEditorHtml(normalizedDescription) : '';
+
 
   const panelAssignedUids = (task.assignedUsers ?? []).map((u) => u.uid);
   const isPanelSpectator = myRole === 'spectator';

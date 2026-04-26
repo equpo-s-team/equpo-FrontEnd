@@ -1,5 +1,5 @@
 export { AuthForm } from './components/AuthForm.tsx';
-export { Component as AuthSwitch } from './components/AuthSwitch.tsx';
+export { AuthSwitch } from './components/AuthSwitch.tsx';
 export { CompleteForm } from './components/CompleteForm.tsx';
 export { LoginForm } from './components/LoginForm.tsx';
 export { MarketingPanel } from './components/MarketingPanel.tsx';

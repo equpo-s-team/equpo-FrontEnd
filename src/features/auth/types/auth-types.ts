@@ -1,6 +1,13 @@
 export type AuthMode = 'login' | 'signup' | 'reset';
 export type RegistrationStep = 'details' | 'verification' | 'complete';
 
+export interface AuthFormProps {
+  onSuccess?: (userData: { email: string; name?: string }) => void;
+  onClose?: () => void;
+  initialMode?: AuthMode;
+  className?: string;
+}
+
 export interface FormData {
   name: string;
   email: string;

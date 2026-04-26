@@ -397,3 +397,32 @@
 .particle-glow {
   filter: drop-shadow(0 0 3px currentColor);
 }
+
+/* ── CUSTOM SCROLLBAR ── */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #bbaee7 #F5F4F1;
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  background: #F5F4F1;
+  border-radius: 4px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9CEDC1 0%, #60AFFF 100%);
+  border-radius: 4px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #86F0FD 0%, #5961F9 100%);
+}
+
+html::-webkit-scrollbar-button {
+  display: none;
+}

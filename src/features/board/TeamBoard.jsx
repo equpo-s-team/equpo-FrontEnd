@@ -273,6 +273,7 @@ export default function TeamBoard() {
         members={members}
         groups={groups}
         onCreateTask={openCreate}
+        canCreateTask={myRole !== 'spectator'}
       />
 
       {isLoading && (

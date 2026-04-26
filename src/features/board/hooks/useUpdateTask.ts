@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useAchievementPopup } from '@/context/AchievementContext';
 import { useAudio } from '@/context/AudioContext';
+import { useAuth } from '@/context/AuthContext';
 import type { TeamTask, UpdateTaskPayload } from '@/features/board';
 import type { Achievement, XpRewardData } from '@/features/team/types/achievementTypes';
 
@@ -29,6 +30,7 @@ export function useUpdateTask() {
   const queryClient = useQueryClient();
   const { playSoundEffect } = useAudio();
   const { showAchievements } = useAchievementPopup();
+  const { user, updateUserData } = useAuth();
 
   return useMutation<TaskUpdateResponse, Error, UpdateTaskVariables>({
     mutationFn: ({ teamId, taskId, payload }) => tasksApi.update(teamId, taskId, payload),
@@ -56,6 +58,11 @@ export function useUpdateTask() {
       // Invalidate team data to reflect updated virtualCurrency
       if (data.xpReward) {
         await queryClient.invalidateQueries({ queryKey: ['teams'] });
+        updateUserData({
+          experiencePoints: data.xpReward.newXp,
+          level: data.xpReward.newLevel,
+          virtualCurrency: (user?.virtualCurrency || 0) + data.xpReward.coinsGained,
+        });
       }
     },
   });

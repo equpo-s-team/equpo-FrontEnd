@@ -51,11 +51,10 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
       <button
         type="button"
         onClick={openModal}
-        className="group flex flex-col items-center gap-2 p-4 transition-all duration-200"
+        className="group flex h-36 flex-col items-center gap-2 p-2 transition-all duration-200"
+        title={displayName}
       >
-        <div
-          className="h-full w-full overflow-hidden rounded-xl"
-        >
+        <div className="flex-1 w-full overflow-hidden rounded-xl">
           {imageSrc ? (
             <img
               src={imageSrc}
@@ -82,8 +81,8 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
         {/* Name */}
         <p
           className={cn(
-            'w-full h-10 text-center text-sm font-semibold leading-tight font-body line-clamp-2',
-            isLocked ? 'text-grey-400' : 'text-gray-700'
+            'w-full text-center text-xs font-semibold leading-tight font-body line-clamp-2',
+            isLocked ? 'text-grey-400' : 'text-secondary-foreground'
           )}
         >
           {displayName}

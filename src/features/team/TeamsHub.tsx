@@ -27,9 +27,9 @@ type AuthContextUser = {
   photoURL?: string | null;
   level?: number | null;
   experiencePoints?: number | null;
+  virtualCurrency?: number | null;
 };
 
-/** Exponential XP: level N requires 100 * 1.5^(N-1) total XP */
 function xpRequiredForLevel(level: number): number {
   if (level <= 0) return 0;
   return Math.floor(100 * Math.pow(1.5, level - 1));
@@ -49,10 +49,9 @@ const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => 
     level,
     experience,
     experienceToNextLevel: xpRequiredForLevel(level + 1),
+    virtualCurrency: authUser?.virtualCurrency || 0,
   };
 };
-
-// ---------------------------------------------------------------------------
 
 export const TeamsHub: React.FC = () => {
   const { data: teams = [], isLoading, error } = useTeams();

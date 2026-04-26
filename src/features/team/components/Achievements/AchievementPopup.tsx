@@ -72,7 +72,7 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
 
       {/* Card */}
       <div
-        className="relative pointer-events-auto"
+        className="relative pointer-events-auto aspect-square"
         style={{
           transform: visible ? 'scale(1) translateY(0)' : 'scale(0.85) translateY(20px)',
           opacity: visible ? 1 : 0,
@@ -97,7 +97,6 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
           }}
         >
           <div className="rounded-3xl bg-white/95 backdrop-blur-xl px-8 py-10 flex flex-col items-center gap-5">
-            {/* Sparkle label */}
             <span
               className="text-xs font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full"
               style={{
@@ -128,7 +127,6 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
               )}
             </div>
 
-            {/* Name */}
             <h3
               className="text-xl font-bold text-grey-800 text-center leading-tight"
               style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
@@ -136,7 +134,6 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
               {achievement.name}
             </h3>
 
-            {/* Description */}
             {achievement.description && (
               <p
                 className="text-sm text-grey-500 text-center leading-relaxed px-2"
@@ -146,7 +143,6 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
               </p>
             )}
 
-            {/* Dismiss button */}
             <button
               onClick={handleClick}
               className="mt-2 px-6 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
@@ -161,7 +157,6 @@ export const AchievementPopup: React.FC<AchievementPopupProps> = ({ achievement,
         </div>
       </div>
 
-      {/* CSS animations */}
       <style>{`
         @keyframes achievementShimmer {
           0% { opacity: 0.3; }

@@ -19,7 +19,6 @@ export interface UnlockAchievementPayload {
   unlockedAt?: string;
 }
 
-/** XP reward data returned after completing a task. */
 export interface XpRewardData {
   xpGained: number;
   coinsGained: number;
@@ -28,7 +27,6 @@ export interface XpRewardData {
   leveledUp: boolean;
 }
 
-/** Achievement name → icon key mapping for the 10 built-in achievements. */
 export const ACHIEVEMENT_ICON_MAP: Record<string, string> = {
   'primer-paso': 'footprints',
   'nueva-alianza': 'users-round',

@@ -21,9 +21,7 @@ export default function GamePage() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const localUid = useMemo(() => user?.uid ?? null, [user?.uid]);
 
-  // Unified keyboard + touch input (ref-based — no re-renders)
   const inputRef = usePlayerInput();
-
   const { data: teamMembers } = useTeamMembers(teamId || undefined);
 
   const [localPos, setLocalPos] = useState<Vector3State>({ x: 0, y: 0, z: 0 });

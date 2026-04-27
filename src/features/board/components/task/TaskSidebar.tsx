@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { CalendarDays, Layers, Repeat, Settings, Tag, Type, Users, X, Zap } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { AppProgress } from '@/components/ui/AppProgress.tsx';
@@ -12,6 +12,7 @@ import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 import { toastError, toastSuccess } from '@/lib/toast.ts';
+import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 
 import { FieldLabel } from '../../../../components/ui/FieldLabel.tsx';
 import { useCreateTask } from '../../hooks/useCreateTask.ts';
@@ -82,6 +83,7 @@ export default function TaskSidebar({
   const deleteTask = useDeleteTask();
   const { play } = useSoundEffects();
   const { rollover } = useRecurringRollover();
+  const { setActiveItem } = useSidebar() as { setActiveItem: (v: string) => void };
 
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
@@ -830,10 +832,21 @@ export default function TaskSidebar({
                     </FieldLabel>
                     <AppSelect
                       value={assignedGroupId}
-                      onChange={setAssignedGroupId}
+                      onChange={(v) => {
+                        if (v === '__more_groups__') {
+                          setActiveItem('settings');
+                          return;
+                        }
+                        setAssignedGroupId(v);
+                      }}
                       options={[
                         { value: '', label: 'Sin asignar' },
                         ...groups.map((g) => ({ value: g.id, label: g.groupName })),
+                        {
+                          value: '__more_groups__',
+                          label: 'Más grupos...',
+                          icon: <Settings size={12} className="text-grey-400" />,
+                        },
                       ]}
                       triggerClassName="w-full"
                     />

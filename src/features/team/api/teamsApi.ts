@@ -1,6 +1,7 @@
 import type {
   AddTeamMemberPayload,
   CreateAchievementPayload,
+  CreateGroupPayload,
   CreateTeamPayload,
   CreateTeamRewardPayload,
   TeamGroup,
@@ -37,6 +38,12 @@ export const teamsApi = {
     request<{ members: TeamMember[] }>(`/teams/${teamId}/members`, 'GET'),
   listGroups: (teamId: string) =>
     request<{ groups: TeamGroup[] }>(`/teams/${teamId}/groups`, 'GET'),
+  createGroup: (teamId: string, payload: CreateGroupPayload) =>
+    request<{ group: { id: string; groupName: string; photoUrl?: string | null } }>(
+      `/teams/${teamId}/groups`,
+      'POST',
+      payload,
+    ),
   removeMember: (teamId: string, userUid: string) =>
     request<void>(`/teams/${teamId}/members/${userUid}`, 'DELETE'),
   deleteTeam: (teamId: string) => request<void>(`/teams/${teamId}`, 'DELETE'),

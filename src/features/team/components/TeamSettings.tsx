@@ -5,10 +5,12 @@ import {
   Check,
   Crown,
   Loader2,
+  Plus,
   Shield,
   Trash2,
   UserMinus,
   UserPlus,
+  Users,
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -19,9 +21,11 @@ import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
+import GroupFormSheet from '@/features/team/components/GroupFormSheet';
 import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
+import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
@@ -139,12 +143,15 @@ export default function TeamSettings() {
   const { user } = useAuth();
   const { data: teams = [] } = useTeams();
   const { data: members = [], isLoading: membersLoading } = useTeamMembers(teamId);
+  const { data: groups = [], isLoading: groupsLoading } = useTeamGroups(teamId);
 
   const updateTeam = useUpdateTeam();
   const addMember = useAddTeamMember();
   const updateRole = useUpdateMemberRole();
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
+
+  const [showGroupSheet, setShowGroupSheet] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -638,6 +645,101 @@ export default function TeamSettings() {
           </div>
         </section>
 
+        {/* ── GROUPS CARD ───────────────────────────────────────────────── */}
+        <section
+          className="rounded-2xl border border-grey-100 bg-white p-5"
+          style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400">
+              <Users size={12} className="inline mr-1 -mt-0.5" />
+              Grupos de trabajo · {groups.length}
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowGroupSheet(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-all hover:opacity-90 active:scale-95 cursor-pointer"
+              style={{ background: accent }}
+            >
+              <Plus size={12} />
+              Nuevo grupo
+            </button>
+          </div>
+
+          {groupsLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 size={20} className="animate-spin text-grey-300" />
+            </div>
+          ) : groups.length === 0 ? (
+            <p className="text-sm text-grey-400 text-center py-6 font-body">
+              No hay grupos de trabajo aún. Crea uno para organizar a tu equipo.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {groups.map((group) => {
+                const groupMembers = group.members ?? [];
+                const displayMembers = groupMembers.slice(0, 4);
+                const overflow = groupMembers.length - displayMembers.length;
+
+                return (
+                  <div
+                    key={group.id}
+                    className="flex items-center gap-3 px-3 py-3 rounded-xl bg-grey-50 border border-grey-100 hover:bg-grey-100/60 transition-colors"
+                  >
+                    {/* Group avatar */}
+                    <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white text-sm font-bold shrink-0">
+                      <TeamAvatar
+                        src={group.photoUrl}
+                        name={group.groupName}
+                        className="w-full h-full rounded-xl"
+                        fallbackClassName="w-full h-full rounded-xl text-white text-sm"
+                        fallbackStyle={{ background: accent }}
+                        loading="lazy"
+                      />
+                    </div>
+
+                    {/* Group info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-grey-800 truncate">
+                        {group.groupName}
+                      </p>
+                      <p className="text-xs text-grey-400">
+                        {group.memberCount ?? groupMembers.length} miembro{(group.memberCount ?? groupMembers.length) !== 1 ? 's' : ''}
+                      </p>
+                    </div>
+
+                    {/* Member avatars preview */}
+                    <div className="flex items-center -space-x-1.5 shrink-0">
+                      {displayMembers.map((m) => (
+                        <div
+                          key={m.uid}
+                          className="w-6 h-6 rounded-full border-2 border-white overflow-hidden"
+                        >
+                          <UserAvatar
+                            src={m.photoUrl}
+                            alt={m.displayName ?? m.uid}
+                            initials={getInitials(m.displayName, m.uid)}
+                            className="w-full h-full"
+                            fallbackClassName="text-white text-[8px]"
+                            fallbackStyle={{ background: avatarGradient(m.uid) }}
+                          />
+                        </div>
+                      ))}
+                      {overflow > 0 && (
+                        <div
+                          className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-bold text-grey-600 bg-grey-200"
+                        >
+                          +{overflow}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
         {isLeader && (
           <section
             className="rounded-2xl border p-5"
@@ -684,6 +786,8 @@ export default function TeamSettings() {
           isDeleting={deleteTeam.isPending}
         />
       )}
+
+      <GroupFormSheet isOpen={showGroupSheet} onClose={() => setShowGroupSheet(false)} />
     </div>
   );
 }

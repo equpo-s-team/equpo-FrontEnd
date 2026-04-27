@@ -1,4 +1,4 @@
-import { Crown, Medal, Trophy, Rocket, Target, Key, Hammer, BookOpen, Footprints, Swords } from "lucide-react";
+import { BookOpen, Crown, Footprints, Hammer, Key, Medal, Rocket, Swords,Target, Trophy } from "lucide-react";
 
 export type Rank = {
   name: string;

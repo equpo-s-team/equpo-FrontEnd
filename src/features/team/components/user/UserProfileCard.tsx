@@ -4,7 +4,7 @@ import React from 'react';
 import { AppProgress } from '@/components/ui/AppProgress';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import {Rank, ranks} from "@/features/team/types/rankTypes.ts";
+import {type Rank, ranks} from "@/features/team/types/rankTypes.ts";
 
 export interface UserProfile {
   uid: string;
@@ -22,7 +22,7 @@ interface UserProfileCardProps {
 }
 
 export function levelToRank(nivel: number): Rank {
-  const rankProgress = Math.floor((nivel - 1) / 5);
+  const rankProgress = Math.max(0, Math.floor((nivel - 1) / 5));
 
   switch (rankProgress) {
     case 0: return ranks[0];

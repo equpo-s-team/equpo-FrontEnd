@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 
 import HUD from './components/HUD.tsx';
 import NeonLoadingOverlay from './components/NeonLoadingOverlay.tsx';
@@ -18,6 +19,7 @@ export default function GamePage() {
   const [isReady, setIsReady] = useState(false);
   const localUid = useMemo(() => user?.uid ?? null, [user?.uid]);
   const keyboard = useKeyboardControls();
+  const { data: teamMembers } = useTeamMembers(teamId || undefined);
 
   const [localPos, setLocalPos] = useState<Vector3State>({ x: 0, y: 0, z: 0 });
   const [localRot, setLocalRot] = useState<Vector3State>({ x: 0, y: 0, z: 0 });
@@ -66,14 +68,33 @@ export default function GamePage() {
     setIsReady(true);
   }, []);
 
+  const playerNames = useMemo(() => {
+    if (!teamMembers) return {};
+    const map: Record<string, string> = {};
+    for (const member of teamMembers) {
+      if (member.displayName) {
+        // Extract first name
+        map[member.uid] = member.displayName.split(' ')[0] || member.displayName;
+      }
+    }
+    // Also include local user's first name if possible
+    const authUser = user as { uid?: string; displayName?: string } | null;
+    if (authUser?.uid && authUser.displayName) {
+      map[authUser.uid] = authUser.displayName.split(' ')[0] || authUser.displayName;
+    }
+    return map;
+  }, [teamMembers, user]);
+
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-grey-900">
       <div className="absolute inset-0 z-0">
         <ThreeScene
+          localUid={localUid}
           localSlotId={localSlotId}
           remotePlayers={playersState}
           healthPercent={healthPercent}
           keyboard={keyboard}
+          playerNames={playerNames}
           onLoaded={handleLoaded}
           onLocalMove={(pos, rot) => {
             setLocalPos(pos);

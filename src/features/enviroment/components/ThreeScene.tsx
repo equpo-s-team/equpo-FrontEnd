@@ -2,6 +2,7 @@ import type * as CANNON from 'cannon-es';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { type GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { CSS2DObject,CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 import {
   applyDeterioration,
@@ -35,6 +36,7 @@ import {
 import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../types/realtime';
 
 interface ThreeSceneProps {
+  localUid: string | null;
   localSlotId: SlotId | null;
   remotePlayers: Record<
     string,
@@ -43,15 +45,18 @@ interface ThreeSceneProps {
   onLocalMove: (position: Vector3State, rotation: Vector3State) => void;
   keyboard: { forward: boolean; backward: boolean; left: boolean; right: boolean };
   healthPercent: number;
+  playerNames?: Record<string, string>;
   onLoaded?: () => void;
 }
 
 export default function ThreeScene({
+  localUid,
   localSlotId,
   remotePlayers,
   onLocalMove,
   keyboard,
   healthPercent,
+  playerNames = {},
   onLoaded,
 }: ThreeSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -75,6 +80,7 @@ export default function ThreeScene({
   const onLocalMoveRef = useRef(onLocalMove);
   const onLoadedRef = useRef(onLoaded);
   const remotePlayersRef = useRef(remotePlayers);
+  const playerNamesRef = useRef(playerNames);
   const deteriorationRef = useRef(1 - normalizeHealthInput(healthPercent));
   const currentDeteriorationRef = useRef(deteriorationRef.current);
 
@@ -90,6 +96,18 @@ export default function ThreeScene({
   useEffect(() => {
     remotePlayersRef.current = remotePlayers;
   }, [remotePlayers]);
+  useEffect(() => {
+    playerNamesRef.current = playerNames;
+    // Update existing labels
+    if (localMeshRef.current && localUid) {
+      const label = localMeshRef.current.getObjectByName('nameLabel') as CSS2DObject;
+      if (label) label.element.textContent = playerNames[localUid] || 'Me';
+    }
+    remoteGhosts.current.forEach((group, uid) => {
+      const label = group.getObjectByName('nameLabel') as CSS2DObject;
+      if (label) label.element.textContent = playerNames[uid] || '';
+    });
+  }, [playerNames, localSlotId]);
   useEffect(() => {
     deteriorationRef.current = 1 - normalizeHealthInput(healthPercent);
   }, [healthPercent]);
@@ -110,6 +128,13 @@ export default function ThreeScene({
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
+
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.setSize(container.clientWidth, container.clientHeight);
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0px';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    container.appendChild(labelRenderer.domElement);
 
     const scene = new THREE.Scene();
     scene.background = baseSkyColor.clone();
@@ -243,12 +268,14 @@ export default function ThreeScene({
       }
 
       renderer.render(scene, camera);
+      labelRenderer.render(scene, camera);
     };
 
     animate();
 
     const handleResize = () => {
       renderer.setSize(container.clientWidth, container.clientHeight);
+      labelRenderer.setSize(container.clientWidth, container.clientHeight);
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
     };
@@ -266,6 +293,7 @@ export default function ThreeScene({
       tintMaterials.clear();
       renderer.dispose();
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+      if (container.contains(labelRenderer.domElement)) container.removeChild(labelRenderer.domElement);
     };
   }, [localSlotId]);
 
@@ -289,6 +317,15 @@ export default function ThreeScene({
         localProxy.current.position.z,
       );
       mesh.rotation.copy(localProxy.current.rotation);
+      
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'px-2 py-1 text-xs font-bold text-white bg-black/60 rounded backdrop-blur-sm pointer-events-none';
+      nameDiv.textContent = localUid ? (playerNamesRef.current[localUid] || 'Me') : 'Me';
+      const label = new CSS2DObject(nameDiv);
+      label.position.set(0, 3, 0); // 3 units above the model
+      label.name = 'nameLabel';
+      mesh.add(label);
+
       sceneRef.current.add(mesh);
       localMeshRef.current = mesh;
     });
@@ -322,6 +359,15 @@ export default function ThreeScene({
             player.position.z,
           );
           ghost.rotation.set(player.rotation.x, player.rotation.y, player.rotation.z);
+
+          const nameDiv = document.createElement('div');
+          nameDiv.className = 'px-2 py-1 text-xs font-bold text-white bg-black/60 rounded backdrop-blur-sm pointer-events-none transition-all';
+          nameDiv.textContent = playerNamesRef.current[uid] || 'Player';
+          const label = new CSS2DObject(nameDiv);
+          label.position.set(0, 3, 0); // 3 units above
+          label.name = 'nameLabel';
+          ghost.add(label);
+
           sceneRef.current.add(ghost);
           remoteGhosts.current.set(uid, ghost);
         });

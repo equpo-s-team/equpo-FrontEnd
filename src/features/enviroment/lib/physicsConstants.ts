@@ -4,7 +4,7 @@ export const GHOST_SCALE = 0.4;
 export const GHOST_Y_OFFSET = 3;
 export const GHOST_PHYSICS_RADIUS = 1;
 export const GHOST_BODY_CENTER_Y = GHOST_PHYSICS_RADIUS;
-export const MOVEMENT_SPEED = 25;
+export const MOVEMENT_SPEED = 30;
 export const ROTATION_SPEED = 10;
 export const GHOST_SPAWN_Y = 10;
 
@@ -41,4 +41,4 @@ export const MAX_COLLIDER_AXIS_RATIO = 0.35;
 
 // ─── Firebase sync ────────────────────────────────────────────────────────────
 /** Minimum ms between position uploads to Firebase (10 Hz). */
-export const MOVE_SYNC_INTERVAL = 100;
+export const MOVE_SYNC_INTERVAL = 10;

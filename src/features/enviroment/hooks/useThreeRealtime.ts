@@ -82,7 +82,7 @@ export function useThreeRealtime({
           if (uid !== localUid) {
             nextStates[uid] = playerState;
           } else if (playerState.slotId && playerState.slotId !== localSlotId) {
-            setLocalSlotId(playerState.slotId);
+             setLocalSlotId(playerState.slotId);
           }
         }
       });
@@ -98,7 +98,11 @@ export function useThreeRealtime({
     };
   }, [isEnabled, teamId, localUid, clientId, localSlotId]);
 
-  // Interval for sending local movement updates
+  const latestState = useRef({ position: localPosition, rotation: localRotation });
+  useEffect(() => {
+    latestState.current = { position: localPosition, rotation: localRotation };
+  }, [localPosition, localRotation]);
+
   useEffect(() => {
     if (!isEnabled || !teamId || !localUid || !localSlotId) return;
 

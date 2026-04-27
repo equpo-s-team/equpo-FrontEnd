@@ -22,8 +22,10 @@ export interface UnlockAchievementPayload {
 export interface XpRewardData {
   xpGained: number;
   coinsGained: number;
+  userCoinsGained?: number;
   newXp: number;
   newLevel: number;
+  newUserVirtualCurrency?: number;
   leveledUp: boolean;
 }
 

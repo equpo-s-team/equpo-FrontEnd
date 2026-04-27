@@ -37,18 +37,24 @@ function xpRequiredForLevel(level: number): number {
 
 const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => {
   const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 0;
-  const experience =
+  const totalExperience =
     typeof authUser?.experiencePoints === 'number' && authUser.experiencePoints >= 0
       ? authUser.experiencePoints
       : 0;
+
+  const currentLevelXp = xpRequiredForLevel(level);
+  const nextLevelXp = xpRequiredForLevel(level + 1);
+
+  const relativeExperience = Math.max(0, totalExperience - currentLevelXp);
+  const relativeExperienceToNextLevel = nextLevelXp - currentLevelXp;
 
   return {
     uid: authUser?.uid || 'sin-uid',
     displayName: authUser?.displayName || authUser?.email?.split('@')[0] || 'Usuario',
     photoURL: authUser?.photoURL ?? null,
     level,
-    experience,
-    experienceToNextLevel: xpRequiredForLevel(level + 1),
+    experience: relativeExperience,
+    experienceToNextLevel: relativeExperienceToNextLevel,
     virtualCurrency: authUser?.virtualCurrency || 0,
   };
 };

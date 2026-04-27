@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
+import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import type { Team } from '@/features/team/types/teamsTypes';
@@ -36,18 +37,20 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   const [name, setName] = useState(team?.name || '');
   const [description, setDescription] = useState(team?.description || '');
   const [errors, setErrors] = useState<{ name?: string; description?: string }>({});
-  const [isVisible, setIsVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [newMemberUid, setNewMemberUid] = useState('');
   const [memberUids, setMemberUids] = useState<string[]>([]);
   const { data: members = [], isLoading: membersLoading } = useTeamMembers(team?.id);
 
-  useEffect(() => {
-    requestAnimationFrame(() => setIsVisible(true));
-  }, []);
-
   const handleClose = () => {
-    setIsVisible(false);
+    setIsOpen(false);
     setTimeout(onClose, 300);
+  };
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      handleClose();
+    }
   };
 
   const handleAddMember = () => {
@@ -97,35 +100,13 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   const membersForDisplay = membersLoading || members.length === 0 ? currentMembers : members;
 
   return (
-    <div className="fixed inset-0 z-50 flex h-full">
-      {/* Backdrop */}
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label="Cerrar modal"
-        className={`absolute inset-0 bg-grey-900/20 backdrop-blur-sm transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-        onClick={handleClose}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleClose();
-          }
-        }}
-      />
-
-      <div
-        role="button"
-        tabIndex={0}
-        aria-label="Panel del modal"
-        className={`relative h-full w-full sm:w-1/3 min-w-[320px] max-w-[500px] flex flex-col p-[1px] shadow-2xl transition-transform duration-300 ease-in-out ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ background: cfg.gradient }}
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-          }
-        }}
-      >
+    <SidebarSheet
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      side="left"
+      contentClassName="w-full sm:w-1/3 min-w-[320px] max-w-[500px] border-none bg-transparent shadow-2xl"
+    >
+      <div className="flex h-full w-full flex-col p-[1px]" style={{ background: cfg.gradient }}>
         <div className="h-full bg-white/95 backdrop-blur-xl p-6 flex flex-col gap-5 overflow-y-auto">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -331,6 +312,6 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </SidebarSheet>
   );
 };

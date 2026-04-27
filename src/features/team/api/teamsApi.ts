@@ -7,6 +7,7 @@ import type {
   TeamGroup,
   TeamMember,
   UnlockAchievementPayload,
+  UpdateGroupPayload,
   UpdateTeamMemberRolePayload,
   UpdateTeamPayload,
 } from '@/features/team/types/teamSchemas.ts';
@@ -44,6 +45,14 @@ export const teamsApi = {
       'POST',
       payload,
     ),
+  updateGroup: (teamId: string, groupId: string, payload: UpdateGroupPayload) =>
+    request<{ success: boolean }>(
+      `/teams/${teamId}/groups/${groupId}`,
+      'PATCH',
+      payload,
+    ),
+  deleteGroup: (teamId: string, groupId: string) =>
+    request<void>(`/teams/${teamId}/groups/${groupId}`, 'DELETE'),
   removeMember: (teamId: string, userUid: string) =>
     request<void>(`/teams/${teamId}/members/${userUid}`, 'DELETE'),
   deleteTeam: (teamId: string) => request<void>(`/teams/${teamId}`, 'DELETE'),

@@ -1,13 +1,15 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { Camera, Loader2, Plus, Users, X } from 'lucide-react';
+import { Camera, Check, Loader2, Plus, Users, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useCreateGroup } from '@/features/team/hooks/useCreateGroup';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import type { TeamMember } from '@/features/team/types/teamSchemas';
+import { useUpdateGroup } from '@/features/team/hooks/useUpdateGroup';
+import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
 import { toastError, toastSuccess } from '@/lib/toast';
 
@@ -37,13 +39,15 @@ function memberGradient(uid: string): string {
 interface GroupFormSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  initialData?: TeamGroup | null;
 }
 
-export default function GroupFormSheet({ isOpen, onClose }: GroupFormSheetProps) {
+export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFormSheetProps) {
   const { teamId: rawTeamId } = useTeam();
   const teamId = rawTeamId ?? '';
   const { data: members = [] } = useTeamMembers(teamId);
   const createGroup = useCreateGroup();
+  const updateGroup = useUpdateGroup();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState('');
@@ -57,16 +61,30 @@ export default function GroupFormSheet({ isOpen, onClose }: GroupFormSheetProps)
   const assignableMembers = members.filter((m) => m.role !== 'spectator');
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      if (initialData) {
+        setName(initialData.groupName);
+        setPhotoPreview(initialData.photoUrl ?? null);
+        setSelectedUids(new Set(initialData.members?.map((m) => m.uid) ?? []));
+      } else {
+        setName('');
+        setSelectedUids(new Set());
+        setPhotoPreview(null);
+      }
+      setPhotoFile(null);
+      setIsUploading(false);
+      setNameError(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    } else {
+      // Clear when closing
       setName('');
       setSelectedUids(new Set());
       setPhotoPreview(null);
       setPhotoFile(null);
       setIsUploading(false);
       setNameError(null);
-      if (fileInputRef.current) fileInputRef.current.value = '';
     }
-  }, [isOpen]);
+  }, [isOpen, initialData]);
 
   const toggleMember = (uid: string) => {
     setSelectedUids((prev) => {
@@ -107,22 +125,35 @@ export default function GroupFormSheet({ isOpen, onClose }: GroupFormSheetProps)
 
       // Upload photo to Firebase Storage if provided
       if (photoFile && teamId) {
-        const tempId = crypto.randomUUID();
+        const tempId = initialData ? initialData.id : crypto.randomUUID();
         const storageRef = ref(storage, `teams/${teamId}/groups/${tempId}/profile`);
         await uploadBytes(storageRef, photoFile, { contentType: photoFile.type });
         photoUrl = await getDownloadURL(storageRef);
       }
 
-      await createGroup.mutateAsync({
-        teamId,
-        payload: {
-          name: trimmedName,
-          memberUids: Array.from(selectedUids),
-          ...(photoUrl ? { photoUrl } : {}),
-        },
-      });
+      if (initialData) {
+        await updateGroup.mutateAsync({
+          teamId,
+          groupId: initialData.id,
+          payload: {
+            name: trimmedName,
+            memberUids: Array.from(selectedUids),
+            ...(photoUrl !== undefined ? { photoUrl } : {}),
+          },
+        });
+        toastSuccess('Grupo actualizado', `El grupo "${trimmedName}" fue actualizado correctamente.`);
+      } else {
+        await createGroup.mutateAsync({
+          teamId,
+          payload: {
+            name: trimmedName,
+            memberUids: Array.from(selectedUids),
+            ...(photoUrl ? { photoUrl } : {}),
+          },
+        });
+        toastSuccess('Grupo creado', `El grupo "${trimmedName}" fue creado correctamente.`);
+      }
 
-      toastSuccess('Grupo creado', `El grupo "${trimmedName}" fue creado correctamente.`);
       onClose();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Error al crear el grupo';
@@ -134,39 +165,22 @@ export default function GroupFormSheet({ isOpen, onClose }: GroupFormSheetProps)
 
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
   const accentGlow = 'rgba(96,175,255,0.3)';
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) onClose();
+  };
 
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        role="button"
-        aria-label="Cerrar panel"
-        tabIndex={-1}
-        onClick={onClose}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') onClose();
-        }}
-        className={`
-          fixed inset-0 z-[60] bg-grey-900/40 backdrop-blur-[2px]
-          transition-opacity duration-300
-          ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-        `}
-      />
-
-      {/* Panel */}
-      <aside
-        className={`
-          fixed top-0 right-0 z-[60] h-full w-full sm:w-[420px]
-          bg-white border-l border-grey-150
-          shadow-card-lg flex flex-col
-          transition-transform duration-300 ease-out
-          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
-        `}
-      >
+    <SidebarSheet
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      side="right"
+      overlayClassName="z-[60]"
+      contentClassName="z-[60] h-full w-full sm:w-[420px] bg-white border-l border-grey-150 shadow-card-lg flex flex-col"
+    >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-grey-150">
           <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
-            Nuevo Grupo
+            {initialData ? 'Editar Grupo' : 'Nuevo Grupo'}
           </h2>
           <button
             type="button"
@@ -319,19 +333,20 @@ export default function GroupFormSheet({ isOpen, onClose }: GroupFormSheetProps)
           <button
             type="button"
             onClick={() => void handleSubmit()}
-            disabled={!name.trim() || isUploading || createGroup.isPending}
+            disabled={!name.trim() || isUploading || createGroup.isPending || updateGroup.isPending}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             style={{ background: accent, boxShadow: `0 4px 16px ${accentGlow}` }}
           >
-            {isUploading || createGroup.isPending ? (
+            {isUploading || createGroup.isPending || updateGroup.isPending ? (
               <Loader2 size={14} className="animate-spin" />
+            ) : initialData ? (
+              <Check size={14} />
             ) : (
               <Plus size={14} />
             )}
-            Crear grupo
+            {initialData ? 'Guardar cambios' : 'Crear grupo'}
           </button>
         </div>
-      </aside>
-    </>
+    </SidebarSheet>
   );
 }

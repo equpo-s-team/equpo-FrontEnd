@@ -4,6 +4,7 @@ import {
   Camera,
   Check,
   Crown,
+  Edit2,
   Loader2,
   Plus,
   Shield,
@@ -23,6 +24,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import GroupFormSheet from '@/features/team/components/GroupFormSheet';
 import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
+import { useDeleteGroup } from '@/features/team/hooks/useDeleteGroup';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
@@ -138,6 +140,70 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
   );
 }
 
+function GroupDeleteConfirmDialog({
+  groupName,
+  onConfirm,
+  onCancel,
+  isDeleting,
+}: {
+  groupName: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  isDeleting: boolean;
+}) {
+  const [typed, setTyped] = useState('');
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-0">
+      <div className="absolute inset-0 bg-grey-900/40 backdrop-blur-[2px]" onClick={onCancel} />
+      <div
+        className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200"
+      >
+        <div className="w-12 h-12 rounded-2xl bg-red/10 flex items-center justify-center text-red mb-5">
+          <AlertTriangle size={24} />
+        </div>
+
+        <h3 className="font-maxwell font-bold text-xl text-grey-800 mb-2">Eliminar Grupo</h3>
+        <p className="text-sm text-grey-500 mb-5 font-body">
+          Esta acción es permanente. Para confirmar, escribe el nombre del grupo:{' '}
+          <strong className="text-grey-800 select-all">{groupName}</strong>
+        </p>
+
+        <input
+          type="text"
+          value={typed}
+          onChange={(e) => setTyped(e.target.value)}
+          placeholder={groupName}
+          className="w-full px-4 py-2.5 rounded-xl border border-grey-200 text-sm text-grey-800 outline-none mb-4 font-body"
+          onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(246,90,112,0.2)')}
+          onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+        />
+
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-500 hover:bg-grey-50 transition-colors font-body"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={typed !== groupName || isDeleting}
+            className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-body"
+            style={{
+              background: 'linear-gradient(135deg, #F65A70, #FF94AE)',
+              boxShadow: typed === groupName ? '0 4px 16px rgba(246,90,112,0.4)' : 'none',
+            }}
+          >
+            {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function TeamSettings() {
   const { teamId } = useTeam();
   const { user } = useAuth();
@@ -150,8 +216,11 @@ export default function TeamSettings() {
   const updateRole = useUpdateMemberRole();
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
+  const deleteGroupMutation = useDeleteGroup();
 
   const [showGroupSheet, setShowGroupSheet] = useState(false);
+  const [groupToEdit, setGroupToEdit] = useState<TeamGroup | null>(null);
+  const [groupToDelete, setGroupToDelete] = useState<TeamGroup | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -313,16 +382,26 @@ export default function TeamSettings() {
     return isCollaborator;
   };
 
-  const handleDeleteTeam = () => {
-    deleteTeam.mutate(teamId, {
-      onSuccess: () =>
-        toastSuccess('Equipo eliminado', 'El equipo y todos sus datos fueron eliminados.'),
-      onError: (err) =>
-        toastError(
-          'Error al eliminar el equipo',
-          err instanceof Error ? err.message : 'Intenta de nuevo.',
-        ),
-    });
+  const handleDeleteTeam = async () => {
+    if (!teamId) return;
+    try {
+      await deleteTeam.mutateAsync(teamId);
+      toastSuccess('Equipo eliminado', 'El equipo fue eliminado permanentemente.');
+      // After deletion, AppRouter will detect team doesn't exist and fallback to `/dashboard`
+    } catch {
+      toastError('Error', 'No se pudo eliminar el equipo.');
+    }
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!teamId || !groupToDelete) return;
+    try {
+      await deleteGroupMutation.mutateAsync({ teamId, groupId: groupToDelete.id });
+      toastSuccess('Grupo eliminado', `El grupo "${groupToDelete.groupName}" fue eliminado.`);
+      setGroupToDelete(null);
+    } catch {
+      toastError('Error', 'No se pudo eliminar el grupo.');
+    }
   };
 
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
@@ -684,7 +763,7 @@ export default function TeamSettings() {
                 return (
                   <div
                     key={group.id}
-                    className="flex items-center gap-3 px-3 py-3 rounded-xl bg-grey-50 border border-grey-100 hover:bg-grey-100/60 transition-colors"
+                    className="group flex items-center gap-3 px-3 py-3 rounded-xl bg-grey-50 border border-grey-100 hover:bg-grey-100/60 transition-colors"
                   >
                     {/* Group avatar */}
                     <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white text-sm font-bold shrink-0">
@@ -733,6 +812,28 @@ export default function TeamSettings() {
                         </div>
                       )}
                     </div>
+
+                    {/* Actions */}
+                    {canEdit && (
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                        <button
+                          type="button"
+                          onClick={() => setGroupToEdit(group)}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-grey-400 hover:text-blue hover:bg-blue/10 transition-colors"
+                          title="Editar grupo"
+                        >
+                          <Edit2 size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setGroupToDelete(group)}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-grey-400 hover:text-red hover:bg-red/10 transition-colors"
+                          title="Eliminar grupo"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -749,27 +850,22 @@ export default function TeamSettings() {
               boxShadow: '0 4px 20px rgba(246,90,112,0.06)',
             }}
           >
-            <p
-              className="text-xs font-semibold uppercase tracking-widest mb-1"
-              style={{ color: '#F65A70' }}
-            >
-              Zona de peligro
-            </p>
-            <p className="text-xs text-grey-400 mb-4">
-              Eliminar el equipo borrará permanentemente todos los datos, tareas, grupos y archivos.
-            </p>
-
-            <button
-              onClick={() => setShowDeleteDialog(true)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
-              style={{
-                background: 'linear-gradient(135deg, #F65A70, #FFAF93)',
-                boxShadow: '0 4px 16px rgba(246,90,112,0.35)',
-              }}
-            >
-              <Trash2 size={14} />
-              Eliminar equipo
-            </button>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-red mb-1 font-body">Zona de Peligro</p>
+                <p className="text-xs text-red/80 font-body">
+                  Eliminar este equipo borrará permanentemente todas sus misiones, tareas, y
+                  recompensas asociadas.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDeleteDialog(true)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-red border border-red/30 hover:bg-red hover:text-white transition-all whitespace-nowrap"
+              >
+                Eliminar equipo
+              </button>
+            </div>
           </section>
         )}
 
@@ -777,7 +873,7 @@ export default function TeamSettings() {
         <div className="h-4 lg:hidden" />
       </div>
 
-      {/* Delete confirmation dialog */}
+      {/* Delete confirmation dialogs */}
       {showDeleteDialog && (
         <DeleteConfirmDialog
           teamName={team.name}
@@ -787,7 +883,23 @@ export default function TeamSettings() {
         />
       )}
 
-      <GroupFormSheet isOpen={showGroupSheet} onClose={() => setShowGroupSheet(false)} />
+      {groupToDelete && (
+        <GroupDeleteConfirmDialog
+          groupName={groupToDelete.groupName}
+          onConfirm={handleDeleteGroup}
+          onCancel={() => setGroupToDelete(null)}
+          isDeleting={deleteGroupMutation.isPending}
+        />
+      )}
+
+      <GroupFormSheet 
+        isOpen={showGroupSheet || !!groupToEdit} 
+        onClose={() => {
+          setShowGroupSheet(false);
+          setGroupToEdit(null);
+        }}
+        initialData={groupToEdit}
+      />
     </div>
   );
 }

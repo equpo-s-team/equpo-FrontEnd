@@ -62,3 +62,9 @@ export interface CreateGroupPayload {
   photoUrl?: string;
 }
 
+export interface UpdateGroupPayload {
+  name?: string;
+  memberUids?: string[];
+  photoUrl?: string | null;
+}
+

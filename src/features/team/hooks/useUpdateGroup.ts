@@ -1,14 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { teamsApi } from '../api/teamsApi';
-import type { CreateGroupPayload } from '../types/teamSchemas';
+import type { UpdateGroupPayload } from '../types/teamSchemas';
 
-export function useCreateGroup() {
+import { teamsApi } from '../api/teamsApi';
+
+export function useUpdateGroup() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ teamId, payload }: { teamId: string; payload: CreateGroupPayload }) =>
-      teamsApi.createGroup(teamId, payload),
+    mutationFn: ({ teamId, groupId, payload }: { teamId: string; groupId: string; payload: UpdateGroupPayload }) =>
+      teamsApi.updateGroup(teamId, groupId, payload),
     onSuccess: (_data, { teamId }) => {
       void queryClient.invalidateQueries({ queryKey: ['team', teamId, 'groups'] });
       void queryClient.invalidateQueries({ queryKey: ['chatRooms', teamId] });

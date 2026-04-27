@@ -1,14 +1,17 @@
-// ─── Character / Ghost ────────────────────────────────────────────────────────
-export const GHOST_SCALE = 0.5;
+import * as THREE from 'three';
+
+export const GHOST_SCALE = 0.4;
 export const GHOST_Y_OFFSET = 3;
-export const GHOST_PHYSICS_RADIUS = 0.5;
+export const GHOST_PHYSICS_RADIUS = 1;
+export const GHOST_BODY_CENTER_Y = GHOST_PHYSICS_RADIUS;
+export const MOVEMENT_SPEED = 30;
+export const ROTATION_SPEED = 10;
 export const GHOST_SPAWN_Y = 10;
 
 export const MOVEMENT_SPEED = 20;
 export const ROTATION_SPEED = 20;
 export const RESPAWN_Y_THRESHOLD = -20;
 
-// ─── Diorama ──────────────────────────────────────────────────────────────────
 export const DIORAMA_SCALE = 5;
 export const DIORAMA_TINT_COLOR_HEX = 0x6b5f4c;
 export const MAX_DIORAMA_TINT = 0.7;

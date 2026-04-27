@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import log from 'loglevel';
-import { ArrowLeft } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,37 +52,39 @@ export const AuthSwitch = ({ onClose }: AuthSwitchProps) => {
           />
 
           <motion.button
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
             onClick={goBack}
-            className="absolute top-8 left-8 z-30 flex items-center gap-2 text-white/80 hover:text-white transition-colors backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full border border-white/20"
+            className="absolute top-6 md:top-8 right-6 md:right-8 z-30 w-10 h-10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-all backdrop-blur-sm bg-white/10 rounded-lg border border-white/20"
+            aria-label="Cerrar"
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span className="font-medium">Volver</span>
+            <X className="w-5 h-5" />
           </motion.button>
 
-          <div className="relative z-10 h-screen w-screen flex items-center justify-center">
+          <div className="relative z-10 w-full h-full md:h-screen md:flex md:items-center md:justify-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
-              className="w-[85vw] h-[90vh] md:w-[50vw] md:h-[75vh]"
+              className="w-full h-full md:w-[90vw] lg:w-[80vw] md:h-auto md:max-h-[90vh] rounded-none md:rounded-[1.5rem] md:overflow-hidden"
             >
-              <div className="bg-white/10 backdrop-blur-2xl rounded-[1.5rem] border border-white/20 shadow-2xl overflow-hidden h-full">
-                <div className="flex h-full">
+              <div className="bg-white/10 backdrop-blur-2xl border-0 md:border border-white/20 shadow-2xl h-full md:h-auto md:flex overflow-hidden">
+                {/* Marketing Panel - Hidden on mobile, visible on desktop */}
+                <div className="hidden md:flex md:w-2/5">
                   <MarketingPanel />
+                </div>
 
-                  <div className="w-3/5 bg-white/95 backdrop-blur-xl p-16 h-full overflow-y-auto">
-                    <AuthForm
-                      onSuccess={handleSuccess}
-                      onClose={() => {
-                        log.log('Auth form closed');
-                        goBack();
-                      }}
-                    />
-                  </div>
+                {/* Auth Form - Full width on mobile, 3/5 on desktop */}
+                <div className="w-full md:w-3/5 bg-white/95 backdrop-blur-xl p-6 md:p-12 h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
+                  <AuthForm
+                    onSuccess={handleSuccess}
+                    onClose={() => {
+                      log.log('Auth form closed');
+                      goBack();
+                    }}
+                  />
                 </div>
               </div>
             </motion.div>

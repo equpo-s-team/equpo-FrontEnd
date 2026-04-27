@@ -174,72 +174,77 @@ export const TeamsHub: React.FC = () => {
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
   return (
-    <div className="h-[100dvh] bg-white relative overflow-hidden">
-      <div className="relative h-full w-full flex flex-col">
-        <div className="shrink-0 flex w-full items-center justify-between mb-4 shadow-sm p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
-              <span className="text-white text-sm font-bold">U</span>
-            </div>
-            <span className="font-bold text-grey-800 text-lg">Equpo</span>
+    <div className="h-[100dvh] bg-white relative overflow-hidden flex flex-col">
+      {/* Header */}
+      <div className="shrink-0 flex w-full items-center justify-between p-4 lg:p-6 border-b border-grey-150">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
+            <span className="text-white text-sm font-bold">U</span>
           </div>
+          <span className="font-bold text-grey-800 text-lg">Equpo</span>
         </div>
+      </div>
 
-        <div className="grid flex-1 min-h-0 gap-6 px-5 pb-5 lg:px-6 lg:grid-cols-4 lg:grid-rows-[auto_minmax(0,1fr)]">
+      {/* Main content - Responsive grid */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
+          
+          {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
           </section>
-          <section className="min-w-0 lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
-            <div className="flex items-center gap-3 mb-2 flex-row">
-              <div className="flex w-full flex-row items-center gap-3 mb-6 justify-start">
-                <div
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm"
-                  style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}
-                >
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }}
-                  />
-                  <div className="flex flex-row gap-2 items-center">
-                    <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
-                      {teams.length}
-                    </p>
-                    <p className="text-xs text-grey-400">Equipos activos</p>
-                  </div>
+
+          {/* Teams Section - Main content */}
+          <section className="lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
+            
+            {/* Teams Header with Search and Create */}
+            <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }} />
+                <div className="flex flex-row gap-2 items-center">
+                  <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
+                    {teams.length}
+                  </p>
+                  <p className="text-xs text-grey-400">Equipos activos</p>
                 </div>
               </div>
 
-              <div className="relative flex flex-row">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm">
-                  ⌕
-                </span>
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Buscar equipos…"
-                  className="w-[24vw] pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
-                  onFocus={(e) =>
-                    (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
-                  }
-                  onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-                />
-              </div>
+              <div className="flex flex-col gap-3 w-full lg:flex-row lg:w-auto lg:gap-4">
+                {/* Search Input */}
+                <div className="relative flex flex-row flex-1 lg:flex-none lg:w-64">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm pointer-events-none">
+                    ⌕
+                  </span>
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Buscar equipos…"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
+                    onFocus={(e) =>
+                      (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
+                    }
+                    onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+                  />
+                </div>
 
-              <button
-                onClick={openCreate}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
-                style={{
-                  background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-                  boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
-                }}
-              >
-                <span className="text-base leading-none">+</span>
-                Crear equipo
-              </button>
+                {/* Create Team Button */}
+                <button
+                  onClick={openCreate}
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
+                  style={{
+                    background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
+                    boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
+                  }}
+                >
+                  <span className="text-base leading-none">+</span>
+                  <span className="hidden sm:inline">Crear equipo</span>
+                </button>
+              </div>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+            {/* Teams Grid */}
+            <div className="flex-1 min-h-0">
               {isLoading ? (
                 <div className="text-center py-20">
                   <div
@@ -269,7 +274,7 @@ export const TeamsHub: React.FC = () => {
                   size="lg"
                 />
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 overflow-y-auto pr-1">
                   {filtered.map((team) => (
                     <TeamCard key={team.id} team={team} onEnter={handleEnter} />
                   ))}
@@ -278,16 +283,17 @@ export const TeamsHub: React.FC = () => {
             </div>
           </section>
 
-          <aside className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full">
-            <div className="lg:h-full">
-              <div className="p-4 lg:h-full">
-                <AchievementsSection achievements={mappedAchievements} />
-              </div>
+          {/* Achievements Section - Mobile: full width below, Desktop: right sidebar */}
+          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full">
+            <div className="rounded-xl bg-grey-50 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
+              <AchievementsSection achievements={mappedAchievements} />
             </div>
-          </aside>
+          </section>
         </div>
       </div>
 
+
+      {/* Modals */}
       {(modal.mode === 'create' || modal.mode === 'edit') && (
         <TeamFormSidebar
           mode={modal.mode}

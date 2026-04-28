@@ -22,7 +22,7 @@ interface UserProfileCardProps {
 }
 
 export function levelToRank(nivel: number): Rank {
-  const rankProgress = Math.floor((nivel - 1) / 5);
+  const rankProgress = Math.max(0, Math.floor((nivel - 1) / 5));
 
   switch (rankProgress) {
     case 0: return ranks[0];

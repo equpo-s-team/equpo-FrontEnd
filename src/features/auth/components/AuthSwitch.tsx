@@ -33,7 +33,7 @@ export const AuthSwitch = ({ onClose }: AuthSwitchProps) => {
       {!isClosing && (
         <motion.div
           key="auth-modal"
-          className="min-h-screen relative overflow-hidden"
+          className="min-h-screen relative w-full overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -62,7 +62,7 @@ export const AuthSwitch = ({ onClose }: AuthSwitchProps) => {
             <X className="w-5 h-5" />
           </motion.button>
 
-          <div className="relative z-10 w-full h-full md:h-screen md:flex md:items-center md:justify-center">
+          <div className="relative z-10 w-screen h-screen md:h-screen md:flex md:items-center md:justify-center lg:w-[55vw] md:m-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}

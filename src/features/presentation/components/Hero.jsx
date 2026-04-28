@@ -23,7 +23,7 @@ export default function Hero() {
   }, [titleNumber, titles]);
 
   return (
-    <section className="relative overflow-hidden min-h-screen bg-white">
+    <section className="relative overflow-hidden min-h-auto md:min-h-screen bg-white">
       <div className="animated-gradient-bg-new" />
 
       <div
@@ -63,18 +63,18 @@ export default function Hero() {
 
           <h1 className="font-maxwell text-3xl md:text-5xl lg:text-6xl text-grey-900 mb-4 md:mb-6 leading-[1.08]">
             Organiza tareas. <br />
-            <span className="relative inline-block overflow-hidden md:pb-2 md:pt-1">
+            <span className="relative inline-block h-[1.2em] md:pb-2 md:pt-1">
               &nbsp;
               {titles.map((title, index) => (
                 <motion.em
                   key={index}
-                  className="absolute not-italic font-bold left-0 top-3.5 pr-5 bg-gradient-to-r from-[#9CEDC1] via-[#60AFFF] to-[#F65A70] bg-clip-text text-transparent text-2xl md:text-5xl lg:text-6xl"
-                  initial={{ opacity: 0, y: '-100' }}
+                  className="absolute not-italic font-bold left-0 top-0 pr-5 bg-gradient-to-r from-[#9CEDC1] via-[#60AFFF] to-[#F65A70] bg-clip-text text-transparent text-2xl md:text-5xl lg:text-6xl whitespace-nowrap"
+                  initial={{ opacity: 0, y: '-100%' }}
                   transition={{ type: 'spring', stiffness: 50 }}
                   animate={
                     titleNumber === index
                       ? { y: 0, opacity: 1 }
-                      : { y: titleNumber > index ? -150 : 150, opacity: 0 }
+                      : { y: titleNumber > index ? '-100%' : '100%', opacity: 0 }
                   }
                 >
                   {title}

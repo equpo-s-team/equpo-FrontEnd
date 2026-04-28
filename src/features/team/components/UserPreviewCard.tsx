@@ -1,5 +1,5 @@
+import { CheckCircle, User, XCircle } from 'lucide-react';
 import React from 'react';
-import { AlertTriangle, CheckCircle, User, XCircle } from 'lucide-react';
 
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 

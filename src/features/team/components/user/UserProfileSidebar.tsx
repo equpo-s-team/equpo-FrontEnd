@@ -45,7 +45,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     setTimeout(onClose, 300);
   };
 
-  const handleCopyUid = async () => {
+  const handleCopyUid = async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(user.uid);
       setIsCopied(true);
@@ -269,7 +269,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 {user.uid}
               </div>
               <button
-                onClick={handleCopyUid}
+                onClick={() => void handleCopyUid()}
                 className={`px-3 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center ${
                   isCopied
                     ? 'bg-green-500 text-white border-green-500'

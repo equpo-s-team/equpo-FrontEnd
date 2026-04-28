@@ -1,9 +1,10 @@
 import log from 'loglevel';
-import React, { useState } from 'react';
+import { Users } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { EmptyState } from '@/components/ui/EmptyState';
 import { useAuth } from '@/context/AuthContext';
-import { NewTeamCard } from '@/features/team/components/NewTeamCard';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
@@ -13,12 +14,11 @@ import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
+import { toastError, toastSuccess } from '@/lib/toast';
 
-import {
-  type Achievement,
-  AchievementsSection,
-} from './components/Achievements/AchievementsSection.tsx';
+import { AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
 import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
+import { useAchievements } from './hooks/useAchievements';
 
 type AuthContextUser = {
   uid?: string | null;
@@ -27,84 +27,37 @@ type AuthContextUser = {
   photoURL?: string | null;
   level?: number | null;
   experiencePoints?: number | null;
+  virtualCurrency?: number | null;
 };
 
+function xpRequiredForLevel(level: number): number {
+  if (level <= 0) return 0;
+  return Math.floor(100 * Math.pow(1.5, level - 1));
+}
+
 const mapAuthUserToProfile = (authUser: AuthContextUser | null): UserProfile => {
-  const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 1;
-  const experience =
+  const level = typeof authUser?.level === 'number' && authUser.level > 0 ? authUser.level : 0;
+  const totalExperience =
     typeof authUser?.experiencePoints === 'number' && authUser.experiencePoints >= 0
       ? authUser.experiencePoints
       : 0;
+
+  const currentLevelXp = xpRequiredForLevel(level);
+  const nextLevelXp = xpRequiredForLevel(level + 1);
+
+  const relativeExperience = Math.max(0, totalExperience - currentLevelXp);
+  const relativeExperienceToNextLevel = nextLevelXp - currentLevelXp;
 
   return {
     uid: authUser?.uid || 'sin-uid',
     displayName: authUser?.displayName || authUser?.email?.split('@')[0] || 'Usuario',
     photoURL: authUser?.photoURL ?? null,
     level,
-    experience,
-    experienceToNextLevel: Math.max(1000, level * 1000),
+    experience: relativeExperience,
+    experienceToNextLevel: relativeExperienceToNextLevel,
+    virtualCurrency: authUser?.virtualCurrency || 0,
   };
 };
-
-const MOCK_ACHIEVEMENTS: Achievement[] = [
-  {
-    id: 'ach-1',
-    name: 'Primer paso',
-    icon: 'rocket',
-    description: 'Creaste tu primer equipo en Equpo. ¡El inicio de grandes cosas!',
-    unlockedAt: '2024-09-15T10:00:00Z',
-  },
-  {
-    id: 'ach-2',
-    name: 'Colaborador',
-    icon: 'handshake',
-    description: 'Uniste a 3 equipos distintos y empezaste a construir tu red.',
-    unlockedAt: '2024-10-02T14:30:00Z',
-  },
-  {
-    id: 'ach-3',
-    name: 'Estratega',
-    icon: 'bow-arrow',
-    description: 'Completaste 10 tareas en un solo sprint. La planificación es tu fuerte.',
-    unlockedAt: '2024-11-20T09:15:00Z',
-  },
-  {
-    id: 'ach-4',
-    name: 'Líder nato',
-    icon: 'goal',
-    description: 'Lideraste un equipo de más de 5 personas hasta completar un proyecto.',
-    unlockedAt: '2025-01-08T11:00:00Z',
-  },
-  {
-    id: 'ach-5',
-    name: 'Velocista',
-    icon: 'zap',
-    description: 'Cerraste 5 tareas urgentes en menos de 24 horas.',
-    unlockedAt: null,
-  },
-  {
-    id: 'ach-6',
-    name: 'Maestro XP',
-    icon: 'sparkles',
-    description: 'Alcanzaste el nivel 10. ¡Eres una leyenda de Equpo!',
-    unlockedAt: null,
-  },
-  {
-    id: 'ach-7',
-    name: 'Networker',
-    icon: 'globe',
-    description: 'Invitaste a 10 usuarios únicos a tus equipos.',
-    unlockedAt: null,
-  },
-  {
-    id: 'ach-8',
-    name: 'Constante',
-    icon: 'flame',
-    description: 'Iniciaste sesión 30 días seguidos. La constancia es tu superpoder.',
-    unlockedAt: null,
-  },
-];
-// ---------------------------------------------------------------------------
 
 export const TeamsHub: React.FC = () => {
   const { data: teams = [], isLoading, error } = useTeams();
@@ -119,7 +72,22 @@ export const TeamsHub: React.FC = () => {
     Partial<Pick<UserProfile, 'displayName' | 'photoURL'>>
   >({});
   const [search, setSearch] = useState('');
-  const achievements = MOCK_ACHIEVEMENTS;
+
+  const firstTeamId = teams.length > 0 ? teams[0].id : undefined;
+  const { data: achievements = [] } = useAchievements(firstTeamId);
+
+  const mappedAchievements = useMemo(
+    () =>
+      achievements.map((a) => ({
+        id: a.id,
+        name: a.name,
+        icon: a.icon,
+        iconUrl: a.iconUrl ?? null,
+        description: a.description ?? '',
+        unlockedAt: a.unlockedAt ?? null,
+      })),
+    [achievements],
+  );
   const baseUser = mapAuthUserToProfile(authUser);
   const user: UserProfile = {
     ...baseUser,
@@ -136,7 +104,17 @@ export const TeamsHub: React.FC = () => {
         description: payload.description || null,
         memberUids: payload.memberUids,
       },
-      { onSuccess: () => closeModal() },
+      {
+        onSuccess: () => {
+          closeModal();
+          toastSuccess('Equipo creado', `"${payload.name}" fue creado correctamente.`);
+        },
+        onError: (err) =>
+          toastError(
+            'Error al crear equipo',
+            err instanceof Error ? err.message : 'Intenta de nuevo.',
+          ),
+      },
     );
   };
 
@@ -150,7 +128,17 @@ export const TeamsHub: React.FC = () => {
       updatePayload.description = payload.description || null;
     updateTeam.mutate(
       { teamId, payload: updatePayload, memberUids: payload.memberUids },
-      { onSuccess: () => closeModal() },
+      {
+        onSuccess: () => {
+          closeModal();
+          toastSuccess('Equipo actualizado', 'Los cambios se guardaron correctamente.');
+        },
+        onError: (err) =>
+          toastError(
+            'Error al actualizar equipo',
+            err instanceof Error ? err.message : 'Intenta de nuevo.',
+          ),
+      },
     );
   };
 
@@ -192,72 +180,77 @@ export const TeamsHub: React.FC = () => {
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
   return (
-    <div className="h-[100dvh] bg-white relative overflow-hidden">
-      <div className="relative h-full w-full flex flex-col">
-        <div className="shrink-0 flex w-full items-center justify-between mb-4 shadow-sm p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
-              <span className="text-white text-sm font-bold">U</span>
-            </div>
-            <span className="font-bold text-grey-800 text-lg">Equpo</span>
+    <div className="h-[100dvh] bg-white relative overflow-hidden flex flex-col">
+      {/* Header */}
+      <div className="shrink-0 flex w-full items-center justify-between p-4 lg:p-6 border-b border-grey-150">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
+            <span className="text-white text-sm font-bold">U</span>
           </div>
+          <span className="font-bold text-grey-800 text-lg">Equpo</span>
         </div>
+      </div>
 
-        <div className="grid flex-1 min-h-0 gap-6 px-5 pb-5 lg:px-6 lg:grid-cols-4 lg:grid-rows-[auto_minmax(0,1fr)]">
+      {/* Main content - Responsive grid */}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
+          
+          {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
           </section>
-          <section className="min-w-0 lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
-            <div className="flex items-center gap-3 mb-2 flex-row">
-              <div className="flex w-full flex-row items-center gap-3 mb-6 justify-start">
-                <div
-                  className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm"
-                  style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}
-                >
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }}
-                  />
-                  <div className="flex flex-row gap-2 items-center">
-                    <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
-                      {teams.length}
-                    </p>
-                    <p className="text-xs text-grey-400">Equipos activos</p>
-                  </div>
+
+          {/* Teams Section - Main content */}
+          <section className="lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
+            
+            {/* Teams Header with Search and Create */}
+            <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }} />
+                <div className="flex flex-row gap-2 items-center">
+                  <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
+                    {teams.length}
+                  </p>
+                  <p className="text-xs text-grey-400">Equipos activos</p>
                 </div>
               </div>
 
-              <div className="relative flex flex-row">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm">
-                  ⌕
-                </span>
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Buscar equipos…"
-                  className="w-[24vw] pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
-                  onFocus={(e) =>
-                    (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
-                  }
-                  onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-                />
-              </div>
+              <div className="flex flex-col gap-3 w-full lg:flex-row lg:w-auto lg:gap-4">
+                {/* Search Input */}
+                <div className="relative flex flex-row flex-1 lg:flex-none lg:w-64">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm pointer-events-none">
+                    ⌕
+                  </span>
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Buscar equipos…"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
+                    onFocus={(e) =>
+                      (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
+                    }
+                    onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+                  />
+                </div>
 
-              <button
-                onClick={openCreate}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
-                style={{
-                  background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-                  boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
-                }}
-              >
-                <span className="text-base leading-none">+</span>
-                Crear equipo
-              </button>
+                {/* Create Team Button */}
+                <button
+                  onClick={openCreate}
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
+                  style={{
+                    background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
+                    boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
+                  }}
+                >
+                  <span className="text-base leading-none">+</span>
+                  <span className="hidden sm:inline">Crear equipo</span>
+                </button>
+              </div>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+            {/* Teams Grid */}
+            <div className="flex-1 min-h-0">
               {isLoading ? (
                 <div className="text-center py-20">
                   <div
@@ -279,11 +272,15 @@ export const TeamsHub: React.FC = () => {
                   </p>
                 </div>
               ) : filtered.length === 0 && !search ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-                  <NewTeamCard onClick={openCreate} />
-                </div>
+                <EmptyState
+                  icon={Users}
+                  title="Aún no tienes equipos"
+                  description="Crea tu primer equipo e invita a tus compañeros para empezar a colaborar."
+                  action={{ label: '+ Crear equipo', onClick: openCreate }}
+                  size="lg"
+                />
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 overflow-y-auto pr-1">
                   {filtered.map((team) => (
                     <TeamCard key={team.id} team={team} onEnter={handleEnter} />
                   ))}
@@ -292,16 +289,17 @@ export const TeamsHub: React.FC = () => {
             </div>
           </section>
 
-          <aside className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full">
-            <div className="lg:h-full">
-              <div className="p-4 lg:h-full lg:overflow-y-auto">
-                <AchievementsSection achievements={achievements} />
-              </div>
+          {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
+          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
+            <div className="rounded-xl bg-grey-50 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
+              <AchievementsSection achievements={mappedAchievements} />
             </div>
-          </aside>
+          </section>
         </div>
       </div>
 
+
+      {/* Modals */}
       {(modal.mode === 'create' || modal.mode === 'edit') && (
         <TeamFormSidebar
           mode={modal.mode}

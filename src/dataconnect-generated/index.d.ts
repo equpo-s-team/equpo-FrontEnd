@@ -60,6 +60,18 @@ export interface TaskCategory_Key {
   __typename?: 'TaskCategory_Key';
 }
 
+export interface TaskCommentary_Key {
+  taskId: UUIDString;
+  commentary: string;
+  __typename?: 'TaskCommentary_Key';
+}
+
+export interface TaskStep_Key {
+  taskId: UUIDString;
+  step: string;
+  __typename?: 'TaskStep_Key';
+}
+
 export interface Task_Key {
   id: UUIDString;
   __typename?: 'Task_Key';

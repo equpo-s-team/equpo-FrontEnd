@@ -1,4 +1,4 @@
-import { AlertTriangle, Eye, EyeOff, Loader2, Lock, Mail, Phone, Shield, User } from 'lucide-react';
+import { AlertTriangle, Eye, EyeOff, Loader2, Lock, Mail, Shield, User } from 'lucide-react';
 import React from 'react';
 
 import { type FormData, type FormErrors } from '@/features/auth';
@@ -91,14 +91,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             className={cn(
               'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.name ? 'border-red-500' : 'border-gray-200',
+              errors.name ? 'border-red' : 'border-gray-200',
             )}
             aria-label="Nombre completo"
             aria-describedby={errors.name ? 'name-error' : undefined}
           />
         </div>
         {errors.name && (
-          <p id="name-error" className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <p id="name-error" className="text-red text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.name}
           </p>
@@ -118,14 +118,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             className={cn(
               'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.email ? 'border-red-500' : 'border-gray-200',
+              errors.email ? 'border-red' : 'border-gray-200',
             )}
             aria-label="Correo electrónico"
             aria-describedby={errors.email ? 'email-error' : undefined}
           />
         </div>
         {errors.email && (
-          <p id="email-error" className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <p id="email-error" className="text-red text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.email}
           </p>
@@ -145,7 +145,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             className={cn(
               'w-full pl-10 pr-12 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.password ? 'border-red-500' : 'border-gray-200',
+              errors.password ? 'border-red' : 'border-gray-200',
             )}
             aria-label="Contraseña"
             aria-describedby={errors.password ? 'password-error' : undefined}
@@ -160,7 +160,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           </button>
         </div>
         {errors.password && (
-          <p id="password-error" className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <p id="password-error" className="text-red text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.password}
           </p>
@@ -181,7 +181,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             className={cn(
               'w-full pl-10 pr-12 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.confirmPassword ? 'border-red-500' : 'border-gray-200',
+              errors.confirmPassword ? 'border-red' : 'border-gray-200',
             )}
             aria-label="Confirmar contraseña"
             aria-describedby={errors.confirmPassword ? 'confirm-password-error' : undefined}
@@ -198,37 +198,10 @@ export const SignupForm: React.FC<SignupFormProps> = ({
         {errors.confirmPassword && (
           <p
             id="confirm-password-error"
-            className="text-red-500 text-xs mt-1 flex items-center gap-1"
+            className="text-red text-xs mt-1 flex items-center gap-1"
           >
             <AlertTriangle className="h-3 w-3" />
             {errors.confirmPassword}
-          </p>
-        )}
-      </div>
-
-      {/* ── Phone (optional) ── */}
-      <div>
-        <div className="relative">
-          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <input
-            type="tel"
-            placeholder="Teléfono (Opcional)"
-            value={formData.phone}
-            onChange={(e) => onInputChange('phone', e.target.value)}
-            onBlur={() => onFieldBlur('phone')}
-            className={cn(
-              'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.phone ? 'border-red-500' : 'border-gray-200',
-            )}
-            aria-label="Teléfono"
-            aria-describedby={errors.phone ? 'phone-error' : undefined}
-          />
-        </div>
-        {errors.phone && (
-          <p id="phone-error" className="text-red-500 text-xs mt-1 flex items-center gap-1">
-            <AlertTriangle className="h-3 w-3" />
-            {errors.phone}
           </p>
         )}
       </div>
@@ -255,7 +228,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           </span>
         </label>
         {errors.agreeToTerms && (
-          <p id="terms-error" className="text-red-500 text-xs mt-1 flex items-center gap-1">
+          <p id="terms-error" className="text-red text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.agreeToTerms}
           </p>

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { KpiStrip, MemberList, OverdueTable, StatusDonut } from '@/features/reports/components';
 import AppHeader from '@/features/reports/components/AppHeader.tsx';
@@ -8,7 +9,6 @@ import { useReportsKpi, useReportsOverview, useReportsTaskSync } from '@/feature
 import type { ReportsMember, ReportsOverdueTask } from '@/features/reports/types';
 import type { KpiData, OverdueTaskRow, ReportMemberRow } from '@/features/reports/types';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 const EMPTY_KPI: KpiData = {
   todo: 0,
@@ -103,7 +103,11 @@ export default function Reports() {
 
   const kpi = kpiQuery.data?.kpi ?? EMPTY_KPI;
   const members = useMemo(
-    () => mapMembersToRows(overviewQuery.data?.members ?? [], memberPhotoByUid),
+    () =>
+      mapMembersToRows(
+        (overviewQuery.data?.members ?? []).filter((m) => m.role !== 'spectator'),
+        memberPhotoByUid,
+      ),
     [memberPhotoByUid, overviewQuery.data?.members],
   );
   const overdueTasks = useMemo(

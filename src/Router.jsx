@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import AppLayout from '@/components/AppLayout.jsx';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
 import TeamBoard from '@/features/board/TeamBoard.jsx';
@@ -8,17 +9,17 @@ import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.t
 import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import MyMissions from '@/features/my-missions/MyMissions.tsx';
+import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import LandingPage from '@/features/presentation/page.jsx';
 import Reports from '@/features/reports/Reports.tsx';
 import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
-import AppLayout from '@/lib/layout/components/AppLayout.jsx';
-import { SidebarProvider, useSidebar } from '@/lib/layout/components/navbar/SidebarContext.jsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
   const { teamId } = useTeam();
+  const { user } = useAuth();
   const { data: teams = [], isLoading } = useTeams();
 
   if (isLoading) {
@@ -37,6 +38,12 @@ function Dashboard() {
     return <Navigate to="/teams" replace />;
   }
 
+  const myRole = (() => {
+    if (!activeTeam || !user?.uid) return null;
+    if (activeTeam.leaderUid === user.uid) return 'leader';
+    return activeTeam.members.find((m) => m.userUid === user.uid)?.role ?? null;
+  })();
+
   const renderContent = () => {
     switch (activeItem) {
       case 'my-space':
@@ -44,7 +51,7 @@ function Dashboard() {
       case 'missiones':
         return <TeamBoard />;
       case 'my-missions':
-        return <MyMissions />;
+        return myRole === 'spectator' ? <TeamBoard /> : <MyMissions />;
       case 'chat':
         return <ChatPage />;
       case 'video-call':
@@ -54,7 +61,7 @@ function Dashboard() {
       case 'settings':
         return <TeamSettings />;
       default:
-        return <div>Mi Espacio</div>;
+        return <TeamBoard/>;
     }
   };
 

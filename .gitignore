@@ -128,7 +128,10 @@ firestore.indexes.json
 *.rules
 *.rules.*
 
+.mcp.json
 AGENTS.md
 .claude
 .agent
+.claudeignore
+CLAUDE.md
 /skills-lock.json

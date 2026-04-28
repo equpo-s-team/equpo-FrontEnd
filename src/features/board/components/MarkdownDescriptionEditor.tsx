@@ -79,7 +79,6 @@ export function MarkdownDescriptionEditor({
     const before = editorRef.current.innerHTML;
     const inserted = document.execCommand('insertUnorderedList', false);
 
-    // Fallback for browsers/editors where list command may fail silently.
     if (!inserted || editorRef.current.innerHTML === before) {
       document.execCommand('insertHTML', false, '<ul><li><br></li></ul>');
     }

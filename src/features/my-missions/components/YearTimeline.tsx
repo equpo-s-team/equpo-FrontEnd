@@ -160,11 +160,11 @@ export default function YearTimeline({
                 </div>
 
                 {data.total === 0 ? (
-                  <div className="h-24 flex items-center justify-center">
-                    <p className="text-xs text-grey-400 font-medium font-body flex gap-1">Vacío</p>
+                  <div className="h-20 flex items-center justify-center">
+                    <p className="text-xs text-grey-400 font-medium font-body">Vacío</p>
                   </div>
                 ) : (
-                  <div className="space-y-2.5">
+                  <div className="space-y-2">
                     {/* Tiny bars summary */}
                     <div className="h-1.5 w-full bg-grey-100 rounded-full overflow-hidden flex">
                       {data.todo.length > 0 && (
@@ -193,38 +193,38 @@ export default function YearTimeline({
                       )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 mt-4">
-                      <div className="flex items-center gap-1.5">
+                    <div className="space-y-1 text-xs">
+                      <div className="flex items-center gap-1">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('todo')}`} />
-                        <span className="text-xs text-grey-600 font-body">
+                        <span className="text-grey-600 font-body truncate">
                           {data.todo.length} Por Hacer
                         </span>
                       </div>
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1">
                         <div
                           className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-progress')}`}
                         />
-                        <span className="text-xs text-grey-600 font-body">
+                        <span className="text-grey-600 font-body truncate">
                           {data.inProgress.length} Proceso
                         </span>
                       </div>
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-qa')}`} />
-                        <span className="text-xs text-grey-600 font-body">
+                        <span className="text-grey-600 font-body truncate">
                           {data.inQa.length} En QA
                         </span>
                       </div>
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('done')}`} />
-                        <span className="text-xs text-grey-600 font-body">
+                        <span className="text-grey-600 font-body truncate">
                           {data.done.length} Completadas
                         </span>
                       </div>
                       {data.overdue.length > 0 && (
-                        <div className="flex items-center gap-1.5 col-span-2 pt-1">
-                          <div className={`w-2 h-2 rounded-full bg-red`} />
-                          <span className="text-xs font-bold text-red font-body">
-                            {data.overdue.length} Tarea(s) Vencida(s)
+                        <div className="flex items-center gap-1 pt-0.5">
+                          <div className={`w-1.5 h-1.5 rounded-full bg-red`} />
+                          <span className="font-bold text-red font-body truncate">
+                            {data.overdue.length} Vencida(s)
                           </span>
                         </div>
                       )}

@@ -1,6 +1,10 @@
+  import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import {
   CalendarDays,
   ChevronDown,
+  ChevronDownIcon,
+  Plus,
   Repeat,
   RotateCcw,
   SlidersHorizontal,
@@ -10,11 +14,17 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { TAG_COLOR_CONFIG } from './columnConfig.js';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Tiny reusable primitives                                                */
-/* ────────────────────────────────────────────────────────────────────────── */
+import { TAG_COLOR_CONFIG } from './columnConfig.js';
 
 function Pill({ active, children, onClick, className = '' }) {
   return (
@@ -100,10 +110,6 @@ function CheckRow({ label, icon, checked, onClick }) {
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Category Tag Pill                                                       */
-/* ────────────────────────────────────────────────────────────────────────── */
-
 const CATEGORY_PALETTE = [
   TAG_COLOR_CONFIG.blue,
   TAG_COLOR_CONFIG.green,
@@ -137,10 +143,6 @@ function CategoryPill({ label, selected, onClick }) {
     </button>
   );
 }
-
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Individual Filter Sections                                              */
-/* ────────────────────────────────────────────────────────────────────────── */
 
 function CategoriesFilter({ categories, selected, onChange }) {
   const [open, setOpen] = useState(false);
@@ -255,12 +257,31 @@ function DueDateFilter({ value, onChange }) {
           <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-2">
             Mostrar tareas antes de:
           </p>
-          <input
-            type="date"
-            value={value ?? ''}
-            onChange={(e) => onChange(e.target.value || null)}
-            className="w-full px-3 py-2.5 rounded-[10px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150"
-          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-between text-left font-normal border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150"
+              >
+                {value ? format(new Date(value), 'PPP', { locale: es }) : 'Seleccionar fecha'}
+                <ChevronDownIcon className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={value ? new Date(value) : undefined}
+                onSelect={(date) => {
+                  if (date) {
+                    onChange(date.toISOString().split('T')[0]);
+                  } else {
+                    onChange(null);
+                  }
+                }}
+                locale={es}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         <PanelFooter onClear={() => onChange(null)} onApply={() => setOpen(false)} />
       </DropPanel>
@@ -317,7 +338,6 @@ function RecurringFilter({
               checked={isRecurring === item.value}
               onClick={() => {
                 onIsRecurringChange(item.value);
-                // Clear sub-filters when switching away from recurring
                 if (item.value !== true) {
                   onIntervalChange(null);
                   onCountChange(null);
@@ -327,25 +347,31 @@ function RecurringFilter({
           ))}
         </div>
 
-        {/* Sub-filters: interval + count — only when "recurring" is selected */}
         {isRecurring === true && (
           <div className="px-3 pb-3 space-y-3 border-t border-grey-100 pt-3">
             <div>
               <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-1.5">
                 Intervalo
               </p>
-              <select
-                value={interval ?? ''}
-                onChange={(e) => onIntervalChange(e.target.value || null)}
-                className="w-full px-3 py-2 rounded-[8px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 cursor-pointer"
-              >
-                <option value="">Todos</option>
-                {Object.entries(INTERVAL_LABELS).map(([val, lbl]) => (
-                  <option key={val} value={val}>
-                    {lbl}
-                  </option>
-                ))}
-              </select>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full px-3 py-2 rounded-[8px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
+                  >
+                    {interval ? INTERVAL_LABELS[interval] : 'Todos'}
+                    <ChevronDownIcon className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48" align="start">
+                  <DropdownMenuItem onClick={() => onIntervalChange(null)}>Todos</DropdownMenuItem>
+                  {Object.entries(INTERVAL_LABELS).map(([val, lbl]) => (
+                    <DropdownMenuItem key={val} onClick={() => onIntervalChange(val)}>
+                      {lbl}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <div>
               <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-1.5">
@@ -409,7 +435,6 @@ function AssignedUserFilter({ members, selected, onChange }) {
         />
       </Pill>
       <DropPanel open={open} onClose={() => setOpen(false)} className="min-w-[240px]">
-        {/* Search */}
         <div className="px-3 pt-3 pb-2 border-b border-grey-100">
           <input
             value={query}
@@ -483,9 +508,6 @@ function AssignedGroupFilter({ groups, selected, onChange }) {
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  FilterBar (main export)                                                 */
-/* ────────────────────────────────────────────────────────────────────────── */
 
 export default function FilterBar({
   filters,
@@ -495,6 +517,8 @@ export default function FilterBar({
   allCategories,
   members,
   groups,
+  onCreateTask,
+  canCreateTask = true,
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -572,12 +596,27 @@ export default function FilterBar({
         bg-primary border-b border-grey-200
         shadow-[0_2px_8px_rgba(0,0,0,0.04)]
         px-8 py-2.5 items-center gap-2.5 flex-wrap
+        justify-between
       "
       >
-        <span className="text-[11px] font-bold uppercase tracking-[0.9px] text-grey-400 mr-1 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <span className="text-[11px] font-bold uppercase tracking-[0.9px] text-grey-400 mr-1 shrink-0">
           Filtros
         </span>
-        {filterControls}
+          {filterControls}
+        </div>
+        {canCreateTask && (
+          <button
+            onClick={onCreateTask}
+            id="crear-mision-btn"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold text-white
+              bg-gradient-blue-bg
+              shadow-neonBlue hover:shadow transition-all duration-200 cursor-pointer shrink-0 mr-2 font-body"
+          >
+            <Plus size={13} strokeWidth={2.5} />
+            Crear Misión
+          </button>
+        )}
       </div>
 
       {/* Mobile toggle */}
@@ -586,10 +625,21 @@ export default function FilterBar({
         flex md:hidden
         sticky top-14 z-40
         bg-primary border-b border-grey-200
-        px-4 py-2 items-center justify-between
+        px-4 py-2 items-center justify-between gap-2
       "
       >
-        <span className="text-[12px] font-semibold text-grey-600">Tablero de tareas</span>
+        {canCreateTask && (
+          <button
+            onClick={onCreateTask}
+            id="crear-mision-btn-mobile"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white
+              bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-400 hover:to-blue-400
+              transition-all duration-200 cursor-pointer font-body shrink-0"
+          >
+            <Plus size={12} strokeWidth={2.5} />
+            Crear Misión
+          </button>
+        )}
         <button
           onClick={() => setMobileOpen((o) => !o)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] border-[1.5px] font-body transition-all duration-200 cursor-pointer

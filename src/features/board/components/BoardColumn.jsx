@@ -1,7 +1,7 @@
-import { Plus } from 'lucide-react';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 import BoardCard from './BoardCard.tsx';
-import { COLUMN_CONFIG } from './columnConfig.js';
+import {COLUMN_CONFIG, COLUMN_EMPTY} from './columnConfig.js';
 
 function ColIndicator({ accent }) {
   const cfg = COLUMN_CONFIG[accent];
@@ -39,9 +39,10 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, onCardClick }) {
+export default function BoardColumn({ column, cards, onMoveCard, onCardClick, canMoveCard = true }) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
+  const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
 
   const handleExternalDrop = (cardId, fromColumnId, position) => {
     onMoveCard(cardId, fromColumnId, id, position);
@@ -82,12 +83,6 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
             {cards.length}
           </span>
         </div>
-        <button
-          onClick={() => onCreateTask?.(id)}
-          className="w-6 h-6 rounded-full border-[1.5px] border-grey-200 bg-transparent cursor-pointer text-grey-400 flex items-center justify-center hover:border-blue hover:text-blue transition-all duration-150"
-        >
-          <Plus size={14} />
-        </button>
       </div>
 
       <div
@@ -95,6 +90,7 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
         className="flex flex-col gap-3 px-3 pb-3 flex-1"
         onDrop={(e) => {
           e.preventDefault();
+          if (!canMoveCard) return;
           const cardId = e.dataTransfer.getData('text/card-id');
           const fromColumnId = e.dataTransfer.getData('text/from-column');
 
@@ -114,28 +110,30 @@ export default function BoardColumn({ column, cards, onMoveCard, onCreateTask, o
           e.currentTarget.classList.remove('bg-blue/5');
         }}
       >
-        {cards.map((card, index) => (
-          <div key={card.id}>
-            <BoardCard
-              card={card}
-              accent={accent}
-              columnId={id}
-              onMoveCard={onMoveCard}
-              onCardClick={onCardClick}
-              position={index}
-            />
-            <DropZone onDrop={handleExternalDrop} position={index + 1} />
-          </div>
-        ))}
-      </div>
-
-      <div className="mx-3 mb-3">
-        <button
-          onClick={() => onCreateTask?.(id)}
-          className="w-full py-2.5 border-[1.5px] border-dashed border-grey-200 rounded-[10px] text-[12px] text-grey-400 hover:border-blue hover:text-blue hover:bg-blue/3 transition-all duration-150 font-body cursor-pointer"
-        >
-          + Agregar tarea
-        </button>
+        {cards.length === 0 ? (
+          <EmptyState
+            icon={emptyConfig.icon}
+            title={emptyConfig.title}
+            description={emptyConfig.description}
+            size="sm"
+            className="flex-1"
+          />
+        ) : (
+          cards.map((card, index) => (
+            <div key={card.id}>
+              <BoardCard
+                card={card}
+                accent={accent}
+                columnId={id}
+                onMoveCard={onMoveCard}
+                onCardClick={onCardClick}
+                position={index}
+                canMoveCard={canMoveCard}
+              />
+              {canMoveCard && <DropZone onDrop={handleExternalDrop} position={index + 1} />}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -5,14 +5,11 @@ import type {
 } from 'react';
 import { useRef } from 'react';
 
-import { UserAvatar as AppUserAvatar } from '@/components/ui/UserAvatar.tsx';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
+import { TagChip } from '@/components/ui/TagChip.tsx';
 
-import type { TaskPriority, TaskStatus } from '../types';
+import type { TaskPriority } from '../types';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
-import { STATUS_TO_PROGRESS } from '../utils/taskUtils';
-import { COLUMN_CONFIG, PRIORITY_CONFIG, USER_GRADIENT } from './columnConfig';
-import { TagChip } from './TagChip';
+import { COLUMN_CONFIG, PRIORITY_CONFIG } from './columnConfig';
 
 type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
 
@@ -23,6 +20,8 @@ type BoardCardData = {
   priority?: TaskPriority;
   categories?: string[];
   assignees?: string[];
+  stepsTotal?: number;
+  stepsDone?: number;
 };
 
 type BoardCardProps = {
@@ -37,6 +36,7 @@ type BoardCardProps = {
   ) => void;
   onCardClick?: (card: BoardCardData) => void;
   position: number;
+  canMoveCard?: boolean;
 };
 
 type PointerTracking = {
@@ -46,26 +46,6 @@ type PointerTracking = {
   dragged: boolean;
 };
 
-const COLUMN_TO_STATUS: Record<BoardColumnId, TaskStatus> = {
-  todo: 'todo',
-  progress: 'in-progress',
-  qa: 'in-qa',
-  done: 'done',
-};
-
-function BoardAssigneeAvatar({ userId, size = 'sm' }: { userId: string; size?: 'sm' | 'md' }) {
-  const dim = size === 'sm' ? 'w-5.5 h-5.5 text-[7.5px]' : 'w-7 h-7 text-[10px]';
-  return (
-    <AppUserAvatar
-      alt={userId}
-      initials={getInitials(userId, userId)}
-      className={`${dim} rounded-full object-cover border-2 border-primary`}
-      fallbackClassName="font-bold text-white flex items-center justify-center"
-      fallbackStyle={{ background: USER_GRADIENT[userId] }}
-    />
-  );
-}
-
 export default function BoardCard({
   card,
   accent,
@@ -73,10 +53,15 @@ export default function BoardCard({
   onMoveCard,
   onCardClick,
   position,
+  canMoveCard = true,
 }: BoardCardProps) {
   const cfg = COLUMN_CONFIG[accent];
   const prio = PRIORITY_CONFIG[card.priority ?? 'medium'];
-  const progress = STATUS_TO_PROGRESS[COLUMN_TO_STATUS[columnId]];
+
+  // Step-based progress: use stepsTotal/stepsDone when available
+  const stepsTotal = card.stepsTotal ?? 0;
+  const stepsDone = card.stepsDone ?? 0;
+  const progress = stepsTotal > 0 ? Math.round((stepsDone / stepsTotal) * 100) : 0;
 
   const pointerRef = useRef<PointerTracking>({ x: 0, y: 0, t: 0, dragged: false });
 
@@ -141,16 +126,17 @@ export default function BoardCard({
     <div
       role="button"
       tabIndex={0}
-      draggable
+      draggable={canMoveCard}
       onMouseDown={handlePointerDown}
       onMouseUp={handlePointerUp}
-      onDragStart={handleDragStart}
+      onDragStart={canMoveCard ? handleDragStart : undefined}
       onDragEnd={handleDragEnd}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       className={`
-        bg-primary rounded-[10px] p-3.5 cursor-grab active:cursor-grabbing
+        bg-primary rounded-[10px] p-3.5
+        ${canMoveCard ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}
         border-[1.5px] transition-all duration-200
         ${cfg.cardBorder} ${cfg.cardShadow}
         ${cfg.cardBorderHover} ${cfg.cardShadowHover}
@@ -208,16 +194,6 @@ export default function BoardCard({
               />
             )}
           </div>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex">
-          {card.assignees?.map((uid: string, i: number) => (
-            <div key={uid} style={{ marginLeft: i > 0 ? '-5px' : 0 }}>
-              <BoardAssigneeAvatar userId={uid} />
-            </div>
-          ))}
         </div>
       </div>
     </div>

@@ -1,7 +1,10 @@
-import { Bolt } from 'lucide-react';
+import {Bolt, Coins} from 'lucide-react';
 import React from 'react';
 
+import { AppProgress } from '@/components/ui/AppProgress';
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
+import {type Rank, ranks} from "@/features/team/types/rankTypes.ts";
 
 export interface UserProfile {
   uid: string;
@@ -10,6 +13,7 @@ export interface UserProfile {
   level: number;
   experience: number;
   experienceToNextLevel: number;
+  virtualCurrency: number;
 }
 
 interface UserProfileCardProps {
@@ -17,8 +21,32 @@ interface UserProfileCardProps {
   onOpenSettings: () => void;
 }
 
+export function levelToRank(nivel: number): Rank {
+  const rankProgress = Math.max(0, Math.floor((nivel - 1) / 5));
+
+  switch (rankProgress) {
+    case 0: return ranks[0];
+    case 1: return ranks[1];
+    case 2: return ranks[2];
+    case 3: return ranks[3];
+    case 4: return ranks[4];
+    case 5: return ranks[5];
+    case 6: return ranks[6];
+    case 7: return ranks[7];
+    case 8: return ranks[8];
+    default: return ranks[9];
+  }
+}
+
+
 export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSettings }) => {
   const xpPercent = Math.min(100, Math.round((user.experience / user.experienceToNextLevel) * 100));
+
+  const rankName:string = levelToRank(user.level).name;
+  const rankColor:string = levelToRank(user.level).color;
+  const rankBgColor:string = levelToRank(user.level).bgColor;
+  const rankIcon:React.ElementType = levelToRank(user.level).icon;
+
 
   const initials = user.displayName
     .split(' ')
@@ -58,18 +86,35 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-0.5">
             <h3
-              className="font-bold text-grey-800 text-md leading-tight truncate"
+              className="font-bold text-grey-800 text-lg leading-tight truncate"
               style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
             >
               {user.displayName}
             </h3>
-            <button
-              onClick={onOpenSettings}
-              className="w-7 h-7 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-grey-100 transition-all shrink-0"
-              title="Configuración de perfil"
-            >
-              <Bolt />
-            </button>
+
+            <AppTooltip content="Configuración de perfil">
+              <button
+                onClick={onOpenSettings}
+                className="w-7 h-7 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-grey-100 transition-all shrink-0"
+              >
+                <Bolt />
+              </button>
+            </AppTooltip>
+          </div>
+
+          <div className="flex flex-row items-center mb-1">
+            {/* Coins */}
+            <div className="flex px-2 py-1 rounded-lg text-orange-400 border border-orange-200 bg-yellow-100 w-14 max-w-16 items-center justify-between mb-1 justify-between">
+              <Coins size={14}/>
+              <span className="text-xs font-semibold">{user.virtualCurrency}</span>
+            </div>
+
+            {/* Rank */}
+            <div className={`px-2 py-1 rounded-lg  ${rankBgColor} ${rankColor} flex max-w-24 items-center justify-center gap-1 text-xs font-bold m-2`}>
+              {React.createElement(rankIcon, { size: 14 })}
+              {rankName}
+            </div>
+
           </div>
 
           <p className="text-xs text-grey-400 font-mono mb-2 truncate" title={user.uid}>
@@ -78,7 +123,7 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
 
           {/* XP bar */}
           <div>
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-left justify-between mb-1">
               <span className="text-xs font-semibold text-grey-500">
                 Nivel {user.level} → {user.level + 1}
               </span>
@@ -87,16 +132,12 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
                 XP
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-grey-150 overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-700"
-                style={{
-                  width: `${xpPercent}%`,
-                  background: 'linear-gradient(90deg, #60AFFF 0%, #9b7fe1 100%)',
-                  boxShadow: '0 0 8px rgba(155,127,225,0.5)',
-                }}
-              />
-            </div>
+            <AppProgress
+              value={xpPercent}
+              gradientStyle="linear-gradient(90deg, #60AFFF 0%, #9b7fe1 100%)"
+              glow="0 0 8px rgba(155,127,225,0.5)"
+              height="h-1.5"
+            />
           </div>
         </div>
       </div>

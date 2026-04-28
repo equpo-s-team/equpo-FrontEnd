@@ -10,7 +10,9 @@ export function escapeHtml(text: string): string {
 export function renderInlineMarkdown(text: string): string {
   if (!text) return '';
   let html = escapeHtml(text);
+  html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/_(.+?)_/g, '<em>$1</em>');
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
   return html;
 }
@@ -18,35 +20,53 @@ export function renderInlineMarkdown(text: string): string {
 export function markdownToEditorHtml(markdown: string | null | undefined): string {
   if (!markdown?.trim()) return '<p><br></p>';
 
-  const lines = markdown.split('\n');
+  const normalizedMarkdown = markdown.replace(/\r\n?/g, '\n').replace(/\\n/g, '\n');
+  const lines = normalizedMarkdown.split('\n');
   const chunks: string[] = [];
-  let inList = false;
+  let listMode: 'ul' | 'ol' | null = null;
 
-  const openList = () => {
-    if (!inList) {
-      chunks.push('<ul>');
-      inList = true;
+  const openList = (type: 'ul' | 'ol') => {
+    if (listMode !== type) {
+      if (listMode) chunks.push(`</${listMode}>`);
+      chunks.push(`<${type}>`);
+      listMode = type;
     }
   };
 
   const closeList = () => {
-    if (inList) {
-      chunks.push('</ul>');
-      inList = false;
+    if (listMode) {
+      chunks.push(`</${listMode}>`);
+      listMode = null;
     }
   };
 
   for (const line of lines) {
-    const bulletMatch = line.match(/^\s*-\s*(.*)$/);
+    const bulletMatch = line.match(/^\s*[-*]\s+(.*)$/);
+    const orderedMatch = line.match(/^\s*\d+\.\s+(.*)$/);
+    const headingMatch = line.match(/^\s*(#{1,6})\s+(.*)$/);
 
     if (bulletMatch) {
-      openList();
+      openList('ul');
       const content = renderInlineMarkdown(bulletMatch[1]);
       chunks.push(`<li class=" text-grey-700">${content || '<br>'}</li>`);
       continue;
     }
 
+    if (orderedMatch) {
+      openList('ol');
+      const content = renderInlineMarkdown(orderedMatch[1]);
+      chunks.push(`<li class=" text-grey-700">${content || '<br>'}</li>`);
+      continue;
+    }
+
     closeList();
+
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      const content = renderInlineMarkdown(headingMatch[2]);
+      chunks.push(`<h${level}>${content || '<br>'}</h${level}>`);
+      continue;
+    }
 
     if (!line.trim()) {
       chunks.push('<p><br></p>');

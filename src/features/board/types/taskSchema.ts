@@ -18,7 +18,9 @@ export const TaskPayloadSchema = z.object({
   assignedGroupId: z.string().nullable(),
 });
 
-export const CreateTaskPayloadSchema = TaskPayloadSchema;
+export const CreateTaskPayloadSchema = TaskPayloadSchema.extend({
+  steps: z.array(z.string().min(1).max(200)).min(1).max(14).optional(),
+});
 
 export const UpdateTaskPayloadSchema = TaskPayloadSchema.partial().extend({
   name: z.string().min(1).max(100),
@@ -28,6 +30,23 @@ export const UpdateTaskPayloadSchema = TaskPayloadSchema.partial().extend({
 export const AssignedUserSchema = z.object({
   uid: z.string(),
   displayName: z.string().nullable(),
+});
+
+export const TaskStepSchema = z.object({
+  taskId: z.string(),
+  step: z.string(),
+  isDone: z.boolean(),
+  position: z.number(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+});
+
+export const TaskCommentarySchema = z.object({
+  taskId: z.string(),
+  userUid: z.string(),
+  commentary: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 });
 
 export const TeamTaskSchema = z.object({
@@ -45,6 +64,8 @@ export const TeamTaskSchema = z.object({
   updatedAt: z.string(),
   categories: z.array(z.string()),
   assignedUsers: z.array(AssignedUserSchema),
+  stepsTotal: z.number().default(0),
+  stepsDone: z.number().default(0),
 });
 
 export const TaskListMetaSchema = z.object({
@@ -72,3 +93,24 @@ export type UpdateTaskPayload = z.infer<typeof UpdateTaskPayloadSchema>;
 export type TeamTask = z.infer<typeof TeamTaskSchema>;
 export type TaskListMeta = z.infer<typeof TaskListMetaSchema>;
 export type GetTeamTasksOptions = z.infer<typeof GetTeamTasksOptionsSchema>;
+export type TaskStep = z.infer<typeof TaskStepSchema>;
+export type TaskCommentary = z.infer<typeof TaskCommentarySchema>;
+
+type FirestoreTimestamp = { toDate: () => Date } | string | null;
+
+export type FirestoreTaskStep = {
+  step: string;
+  isDone: boolean;
+  position: number;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
+};
+export type FirestoreStepsMap = Record<string, FirestoreTaskStep>;
+
+export type FirestoreTaskCommentary = {
+  userUid: string;
+  commentary: string;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
+};
+export type FirestoreCommentariesMap = Record<string, FirestoreTaskCommentary>;

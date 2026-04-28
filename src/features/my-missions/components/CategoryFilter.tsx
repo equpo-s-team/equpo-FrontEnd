@@ -42,7 +42,7 @@ export default function CategoryFilter({
   const allSelected = activeCategories.size === 0; // empty means "show all"
 
   return (
-    <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-4">
+    <div className="h-full rounded-2xl bg-white border border-grey-150 shadow-card p-4 overflow-hidden">
       <h3 className="text-sm font-bold text-grey-800 font-body mb-3">Categorías</h3>
 
       {/* Search */}
@@ -86,7 +86,7 @@ export default function CategoryFilter({
       </button>
 
       {/* Category chips */}
-      <div className="flex flex-col gap-0.5 max-h-48 overflow-y-auto scrollbar-hide">
+      <div className="flex flex-col gap-0.5 max-h-28 overflow-y-auto scrollbar-hide">
         {filteredCategories.map((cat) => {
           const color = getCategoryColor(cat);
           const isActive = activeCategories.has(cat);

@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
-import { isTaskOverdue } from '@/features/board/utils/taskUtils';
+import { isTaskOverdue, type ProjectedTeamTask } from '@/features/board/utils/taskUtils';
 
 interface MissionStatsProps {
   tasks: TeamTask[];
@@ -11,9 +11,12 @@ interface MissionStatsProps {
 export default function MissionStats({ tasks }: MissionStatsProps) {
   const [isOverdueExpanded, setIsOverdueExpanded] = useState(false);
 
+  // Projections are visual-only future occurrences — exclude them from counts
+  const realTasks = tasks.filter((t) => !(t as ProjectedTeamTask).isProjected);
+
   // Split tasks
-  const overdueTasks = tasks.filter(isTaskOverdue);
-  const onTimeTasks = tasks.filter((t) => !isTaskOverdue(t));
+  const overdueTasks = realTasks.filter(isTaskOverdue);
+  const onTimeTasks = realTasks.filter((t) => !isTaskOverdue(t));
 
   // Regular stats (only on-time)
   const todo = onTimeTasks.filter((t) => t.status === 'todo').length;

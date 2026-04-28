@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { AchievementBadge } from '@/features/team/components/Achievements/AchievementBadge.tsx';
@@ -9,20 +10,17 @@ interface AchievementsSectionProps {
 }
 
 export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements }) => {
-  const [showAll, setShowAll] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const unlocked = achievements.filter((a) => !!a.unlockedAt);
   const locked = achievements.filter((a) => !a.unlockedAt);
   const sorted = [...unlocked, ...locked];
 
-  const visible = showAll ? sorted : sorted.slice(0, 8);
-  const hasMore = sorted.length > 8;
-
   if (achievements.length === 0) return null;
 
   return (
-    <div>
-      {/* Section header */}
+    <div className="flex flex-col h-full">
+      {/* Section header with toggle button for mobile */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 w-full justify-between">
           <h2
@@ -31,33 +29,44 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achiev
           >
             Logros
           </h2>
-          <span
-            className="text-sm font-semibold px-2 py-0.5 rounded-full"
-            style={{
-              background: 'rgba(96,175,255,0.1)',
-              color: '#60AFFF',
-              border: '1px solid rgba(96,175,255,0.2)',
-            }}
-          >
-            {unlocked.length}/{achievements.length}
-          </span>
+          <div className="flex items-center gap-2">
+            <span
+              className="text-sm font-semibold px-2 py-0.5 rounded-full"
+              style={{
+                background: 'rgba(96,175,255,0.1)',
+                color: '#60AFFF',
+                border: '1px solid rgba(96,175,255,0.2)',
+              }}
+            >
+              {unlocked.length}/{achievements.length}
+            </span>
+            {/* Toggle button only visible on mobile */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="lg:hidden flex items-center justify-center p-1.5 hover:bg-grey-100 rounded-lg transition-colors"
+              aria-label={isOpen ? 'Collapse achievements' : 'Expand achievements'}
+            >
+              {isOpen ? (
+                <ChevronUp className="w-4 h-4 text-grey-400" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-grey-400" />
+              )}
+            </button>
+          </div>
         </div>
-
-        {hasMore && (
-          <button
-            onClick={() => setShowAll((v) => !v)}
-            className="text-xs font-semibold text-grey-400 hover:text-grey-700 transition-colors"
-          >
-            {showAll ? 'Ver menos' : `Ver todos (${sorted.length})`}
-          </button>
-        )}
       </div>
 
-      {/* Badges grid */}
-      <div className="grid grid-cols-3 gap-2">
-        {visible.map((achievement) => (
-          <AchievementBadge key={achievement.id} achievement={achievement} />
-        ))}
+      {/* Badges grid - collapses on mobile, always visible on desktop */}
+      <div
+        className={`transition-all duration-300 overflow-hidden lg:overflow-visible ${
+          isOpen ? 'max-h-[60vh] opacity-100 lg:max-h-none' : 'max-h-0 opacity-0 lg:max-h-none lg:opacity-100'
+        }`}
+      >
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 gap-2 overflow-y-auto max-h-[55vh] lg:max-h-none">
+          {sorted.map((achievement) => (
+            <AchievementBadge key={achievement.id} achievement={achievement} />
+          ))}
+        </div>
       </div>
     </div>
   );

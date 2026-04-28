@@ -4,12 +4,16 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Paperclip, Send, Smile, X } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
 import { storage } from '@/firebase';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 export default function MessageInput() {
-  const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId } = useChatContext();
+  const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId, myRole } = useChatContext();
+  const isSpectator = myRole === 'spectator';
+  const { play } = useSoundEffects();
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -40,6 +44,7 @@ export default function MessageInput() {
   const handleSend = useCallback(() => {
     if (!value.trim()) return;
     sendMessage(value);
+    play('messageSent'); // Play sound when sending message
     setValue('');
     setShowEmojiPicker(false);
     inputRef.current?.focus();
@@ -47,7 +52,7 @@ export default function MessageInput() {
     // Clear typing state
     if (typingTimeout) clearTimeout(typingTimeout);
     void setTyping(false);
-  }, [value, sendMessage, setTyping, typingTimeout]);
+  }, [value, sendMessage, setTyping, typingTimeout, play]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -100,6 +105,7 @@ export default function MessageInput() {
 
       const isImage = file.type.startsWith('image/');
       sendMessage(file.name, isImage ? 'image' : 'file', url, file.name);
+      play('messageSent'); // Play sound when sending file
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {
@@ -112,7 +118,7 @@ export default function MessageInput() {
     setValue((prev) => prev + emoji.native);
   };
 
-  const canSend = Boolean(value.trim() && activeRoom) && !isUploading;
+  const canSend = Boolean(value.trim() && activeRoom) && !isUploading && !isSpectator;
 
   return (
     <div className="px-4 py-3 border-t border-grey-150 bg-primary flex-shrink-0 relative">
@@ -146,14 +152,15 @@ export default function MessageInput() {
           className="hidden"
           onChange={(e) => void handleFileUpload(e)}
         />
-        <button
-          disabled={!activeRoom || isUploading}
-          onClick={() => fileInputRef.current?.click()}
-          className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
-          title="Adjuntar archivo"
-        >
-          <Paperclip size={16} />
-        </button>
+        <AppTooltip content="Adjuntar archivo">
+          <button
+            disabled={!activeRoom || isUploading || isSpectator}
+            onClick={() => fileInputRef.current?.click()}
+            className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+          >
+            <Paperclip size={16} />
+          </button>
+        </AppTooltip>
 
         {/* Input */}
         <input
@@ -162,8 +169,14 @@ export default function MessageInput() {
           value={value}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          disabled={!activeRoom}
-          placeholder={activeRoom ? 'Escribe un mensaje...' : 'Selecciona una sala'}
+          disabled={!activeRoom || isSpectator}
+          placeholder={
+            isSpectator
+              ? 'Solo lectura — los espectadores no pueden enviar mensajes'
+              : activeRoom
+                ? 'Escribe un mensaje...'
+                : 'Selecciona una sala'
+          }
           className="
             flex-1 bg-transparent outline-none
             font-body text-sm text-grey-800 placeholder:text-grey-400
@@ -173,33 +186,35 @@ export default function MessageInput() {
         />
 
         {/* Emoji */}
-        <button
-          ref={emojiButtonRef}
-          disabled={!activeRoom || isUploading}
-          onClick={() => setShowEmojiPicker((prev) => !prev)}
-          className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
-          title="Emojis"
-        >
-          <Smile size={16} />
-        </button>
+        <AppTooltip content="Emojis">
+          <button
+            ref={emojiButtonRef}
+            disabled={!activeRoom || isUploading || isSpectator}
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+          >
+            <Smile size={16} />
+          </button>
+        </AppTooltip>
 
         {/* Send */}
-        <button
-          onClick={handleSend}
-          disabled={!canSend}
-          title="Enviar"
-          className={`
-            w-8 h-8 rounded-xl flex items-center justify-center
-            transition-all duration-200
-            ${
-              canSend
-                ? 'bg-gradient-purple-bg text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
-                : 'bg-grey-200 text-grey-400 cursor-not-allowed'
-            }
-          `}
-        >
-          <Send size={14} />
-        </button>
+        <AppTooltip content="Enviar">
+          <button
+            onClick={handleSend}
+            disabled={!canSend}
+            className={`
+              w-8 h-8 rounded-xl flex items-center justify-center
+              transition-all duration-200
+              ${
+                canSend
+                  ? 'bg-gradient-purple-bg text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
+                  : 'bg-grey-200 text-grey-400 cursor-not-allowed'
+              }
+            `}
+          >
+            <Send size={14} />
+          </button>
+        </AppTooltip>
       </div>
     </div>
   );

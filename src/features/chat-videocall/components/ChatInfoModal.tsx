@@ -2,12 +2,12 @@ import { collection, getDocs } from 'firebase/firestore';
 import { Phone, Users, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { teamsApi } from '@/features/team/api/teamsApi';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { db } from '@/firebase';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 import { useActiveCalls } from '../hooks/useActiveCalls';
 import { useChatContext } from './ChatContext';

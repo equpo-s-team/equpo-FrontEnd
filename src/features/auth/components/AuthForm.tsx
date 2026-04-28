@@ -1,7 +1,4 @@
-'use client';
-
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertTriangle } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
 
 import {
@@ -10,8 +7,10 @@ import {
   type FormErrors,
   type RegistrationStep,
 } from '@/features/auth';
-import { useAuthValidation, VerificationForm } from '@/features/auth';
+import { useAuthValidation } from '@/features/auth';
+import {type AuthFormProps} from "@/features/auth/types/auth-types.ts";
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth.ts';
+import { toastError, toastSuccess } from '@/lib/toast';
 import { cn } from '@/lib/utils.ts';
 
 import { CompleteForm } from './CompleteForm.tsx';
@@ -19,12 +18,7 @@ import { LoginForm } from './LoginForm.tsx';
 import { ResetForm } from './ResetForm.tsx';
 import { SignupForm } from './SignupForm.tsx';
 
-interface AuthFormProps {
-  onSuccess?: (userData: { email: string; name?: string }) => void;
-  onClose?: () => void;
-  initialMode?: AuthMode;
-  className?: string;
-}
+
 
 export const AuthForm: React.FC<AuthFormProps> = ({
   onSuccess,
@@ -36,16 +30,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   const [registrationStep, setRegistrationStep] = useState<RegistrationStep>('details');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
     agreeToTerms: false,
     rememberMe: false,
-    verificationCode: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [fieldTouched, setFieldTouched] = useState<Record<string, boolean>>({});
@@ -86,16 +77,15 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   // ── Google Sign-In ──────────────────────────────────────────────────────────
   const handleGoogleSignIn = async () => {
     setErrors({});
-    setSuccessMessage('');
     const result = await loginWithGoogle();
     if (result.success && result.user) {
-      setSuccessMessage('¡Bienvenido!');
+      toastSuccess('¡Bienvenido!');
       onSuccess?.({
         email: result.user.email ?? '',
         name: result.user.displayName ?? undefined,
       });
     } else if (result.error) {
-      setErrors({ general: result.error });
+      toastError(result.error);
     }
   };
 
@@ -109,7 +99,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     }
 
     setErrors({});
-    setSuccessMessage('');
 
     // ── LOGIN ──
     if (authMode === 'login') {
@@ -122,49 +111,35 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           localStorage.removeItem('userEmail');
           localStorage.removeItem('rememberMe');
         }
-        setSuccessMessage('¡Inicio de sesión exitoso!');
+        toastSuccess('¡Inicio de sesión exitoso!');
         onSuccess?.({ email: formData.email });
       } else if (result.error) {
-        setErrors({ general: result.error });
+        toastError(result.error);
       }
       return;
     }
 
     // ── SIGNUP ──
     if (authMode === 'signup') {
-      if (registrationStep === 'details') {
-        const result = await signupWithEmail(formData.email, formData.password, formData.name);
-        if (result.success) {
-          setRegistrationStep('verification');
-          setSuccessMessage('¡Cuenta creada! Revisa tu correo para verificarla.');
-        } else if (result.error) {
-          setErrors({ general: result.error });
-        }
-        return;
-      }
-
-      // Verification step — Firebase sends the real email; here we just advance
-      // (deep OTP verification requires Cloud Functions or a custom backend)
-      if (registrationStep === 'verification') {
-        if (formData.verificationCode.length !== 6) {
-          setErrors({ verificationCode: 'Ingresa el código de 6 dígitos.' });
-          return;
-        }
+      const result = await signupWithEmail(formData.email, formData.password, formData.name);
+      if (result.success) {
         setRegistrationStep('complete');
-        setSuccessMessage('¡Correo verificado exitosamente!');
+        toastSuccess('¡Cuenta creada con éxito!');
         onSuccess?.({ email: formData.email, name: formData.name });
-        return;
+      } else if (result.error) {
+        toastError(result.error);
       }
+      return;
     }
 
     // ── RESET ──
     if (authMode === 'reset') {
       const result = await sendPasswordReset(formData.email);
       if (result.success) {
-        setSuccessMessage('¡Correo de recuperación enviado! Revisa tu bandeja de entrada.');
+        toastSuccess('¡Correo de recuperación enviado! Revisa tu bandeja de entrada.');
         setTimeout(() => setAuthMode('login'), 3000);
       } else if (result.error) {
-        setErrors({ general: result.error });
+        toastError(result.error);
       }
     }
   };
@@ -180,19 +155,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           onInputChange={handleInputChange}
           onFieldBlur={handleFieldBlur}
           onBackToLogin={() => setAuthMode('login')}
-        />
-      );
-    }
-
-    if (authMode === 'signup' && registrationStep === 'verification') {
-      return (
-        <VerificationForm
-          formData={formData}
-          errors={errors}
-          isLoading={isLoading}
-          onInputChange={handleInputChange}
-          onFieldBlur={handleFieldBlur}
-          onBackToDetails={() => setRegistrationStep('details')}
         />
       );
     }
@@ -242,29 +204,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       aria-modal="true"
       aria-labelledby="auth-title"
     >
-      {/* ── Success banner ── */}
-      {successMessage && (
-        <div className="mb-4 p-3 bg-emerald-500/20 border border-emerald-400/30 rounded-xl flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-5">
-          <svg
-            className="h-4 w-4 text-emerald-500 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <span className="text-emerald-700 text-sm">{successMessage}</span>
-        </div>
-      )}
-
-      {/* ── Error banner ── */}
-      {errors.general && (
-        <div className="mb-4 p-3 bg-red-500/20 border border-red-400/30 rounded-xl flex items-center gap-2 animate-in fade-in-0 slide-in-from-top-5">
-          <AlertTriangle className="h-4 w-4 text-red-500 shrink-0" />
-          <span className="text-red-600 text-sm">{errors.general}</span>
-        </div>
-      )}
-
       {/* ── Heading ── */}
       <div className="text-center mb-6">
         <AnimatePresence mode="wait">

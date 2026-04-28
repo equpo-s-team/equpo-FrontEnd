@@ -1,11 +1,12 @@
 import { Check, CheckCheck, FileText, Pencil, Reply, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 
+import { AppTooltip } from '@/components/ui/AppTooltip';
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { auth } from '@/firebase';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
 
 import type { ChatMessage } from '../types/chat';
 
@@ -178,32 +179,35 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           {/* Actions on Hover */}
           {!isEditing && (
             <div className="hidden group-hover:flex items-center gap-0.5 ml-1">
-              <button
-                onClick={handleReply}
-                className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors"
-                title="Responder"
-              >
-                <Reply size={14} />
-              </button>
+              <AppTooltip content="Responder">
+                <button
+                  onClick={handleReply}
+                  className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors"
+                >
+                  <Reply size={14} />
+                </button>
+              </AppTooltip>
               {isSent && (
                 <>
-                  <button
-                    onClick={() => {
-                      setEditText(message.text);
-                      setIsEditing(true);
-                    }}
-                    className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors"
-                    title="Editar"
-                  >
-                    <Pencil size={14} />
-                  </button>
-                  <button
-                    onClick={handleDelete}
-                    className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-red transition-colors"
-                    title="Eliminar"
-                  >
-                    <Trash2 size={14} />
-                  </button>
+                  <AppTooltip content="Editar">
+                    <button
+                      onClick={() => {
+                        setEditText(message.text);
+                        setIsEditing(true);
+                      }}
+                      className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                  </AppTooltip>
+                  <AppTooltip content="Eliminar">
+                    <button
+                      onClick={handleDelete}
+                      className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-red transition-colors"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </AppTooltip>
                 </>
               )}
             </div>

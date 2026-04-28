@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 
+import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { useReportsKpi } from '@/features/reports/hooks';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
-import { getInitials } from '@/lib/avatar/avatarInitials.ts';
+import { computeEnvironmentHealth } from '@/lib/healthUtils.ts';
 
 import type { ConnectedUser, PlayerStats, SessionInfo } from '../types/hud.ts';
 
@@ -75,7 +76,7 @@ export function useHudData({
     const completedPercent = totalTasks > 0 ? clampPercentage((doneTasks / totalTasks) * 100) : 0;
     const overduePercent = totalTasks > 0 ? clampPercentage((overdueTasks / totalTasks) * 100) : 0;
 
-    const hp = clampPercentage(60 + completedPercent - overduePercent * 2);
+    const hp = computeEnvironmentHealth(totalTasks, doneTasks, overdueTasks);
     const maxUsers = membersQuery.data?.length ?? 0;
     const energy = maxUsers > 0 ? clampPercentage((connectedUsers / maxUsers) * 100) : 0;
     const connectedMembers = toConnectedUsers(membersQuery.data, connectedUserUids);

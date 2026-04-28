@@ -1,24 +1,9 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useMemo } from 'react';
+import { es } from 'date-fns/locale';
+import * as React from 'react';
 
+import { Calendar, CalendarDayButton } from '@/components/ui/calendar';
 import type { TeamTask } from '@/features/board/types';
-import { isTaskOverdue } from '@/features/board/utils/taskUtils';
-
-const DAYS_OF_WEEK = ['DO', 'LU', 'MA', 'MI', 'JU', 'VI', 'SA'];
-const MONTH_NAMES = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
+import { cn } from '@/lib/utils';
 
 interface MiniCalendarProps {
   selectedDate: Date;
@@ -30,130 +15,74 @@ function toDateKey(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
-export default function MiniCalendar({
-  selectedDate,
-  onDateSelect,
-  tasksByDate,
-}: MiniCalendarProps) {
-  const year = selectedDate.getFullYear();
-  const month = selectedDate.getMonth();
-
-  const calendarDays = useMemo(() => {
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const startOffset = firstDay.getDay();
-    const totalDays = lastDay.getDate();
-
-    const days: Array<{ date: Date | null; key: string }> = [];
-
-    // Previous month trailing days
-    const prevMonthLast = new Date(year, month, 0).getDate();
-    for (let i = startOffset - 1; i >= 0; i--) {
-      const d = new Date(year, month - 1, prevMonthLast - i);
-      days.push({ date: d, key: `prev-${prevMonthLast - i}` });
-    }
-
-    // Current month days
-    for (let d = 1; d <= totalDays; d++) {
-      const date = new Date(year, month, d);
-      days.push({ date, key: `cur-${d}` });
-    }
-
-    // Next month leading days
-    const remaining = 42 - days.length;
-    for (let d = 1; d <= remaining; d++) {
-      const date = new Date(year, month + 1, d);
-      days.push({ date, key: `next-${d}` });
-    }
-
-    return days;
-  }, [year, month]);
-
-  const today = toDateKey(new Date());
-  const selectedKey = toDateKey(selectedDate);
-
-  const goPrev = () => onDateSelect(new Date(year, month - 1, 1));
-  const goNext = () => onDateSelect(new Date(year, month + 1, 1));
+function TaskDayButton({
+                         className,
+                         day,
+                         modifiers,
+                         ...props
+                       }: React.ComponentProps<typeof CalendarDayButton>) {
+  const hasTask = modifiers.hasTask;
+  const hasOverdueTask = modifiers.hasOverdueTask;
 
   return (
-    <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-bold text-grey-800 font-body">
-          {MONTH_NAMES[month]}, {year}
-        </h3>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={goPrev}
-            className="p-1 rounded-lg hover:bg-grey-100 transition-colors text-grey-500 hover:text-grey-800"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <button
-            onClick={goNext}
-            className="p-1 rounded-lg hover:bg-grey-100 transition-colors text-grey-500 hover:text-grey-800"
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
-      </div>
-
-      {/* Day headers */}
-      <div className="grid grid-cols-7 gap-0 mb-1">
-        {DAYS_OF_WEEK.map((day) => (
+    <CalendarDayButton
+      className={cn(className, 'relative')}
+      day={day}
+      modifiers={modifiers}
+      {...props}
+    >
+      {day.date.getDate()}
+      {hasTask && (
+        <div className="absolute bottom-0.5 left-1/2 flex -translate-x-1/2 gap-0.5 sm:bottom-1 sm:gap-1">
           <div
-            key={day}
-            className="text-xs font-bold text-grey-400 text-center uppercase tracking-wider py-1"
-          >
-            {day}
-          </div>
-        ))}
-      </div>
+            className={cn(
+              'h-1 w-1 rounded-full sm:h-1.5 sm:w-1.5',
+              hasOverdueTask ? 'bg-red' : 'bg-blue-500',
+            )}
+          />
+        </div>
+      )}
+    </CalendarDayButton>
+  );
+}
 
-      {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-0">
-        {calendarDays.map(({ date, key }) => {
-          if (!date) return <div key={key} />;
-
-          const dateKey = toDateKey(date);
-          const isCurrentMonth = date.getMonth() === month;
-          const isToday = dateKey === today;
-          const isSelected = dateKey === selectedKey;
-          const tasksOnDay = tasksByDate.get(dateKey) || [];
-          const hasTask = tasksOnDay.length > 0;
-          const hasOverdueTask = tasksOnDay.some(isTaskOverdue);
-
-          return (
-            <button
-              key={key}
-              onClick={() => onDateSelect(date)}
-              className={`
-                relative flex flex-col items-center justify-center
-                h-8 rounded-lg text-xs font-medium
-                transition-all duration-200 cursor-pointer
-                ${
-                  isSelected
-                    ? 'bg-blue text-white shadow-[0_0_12px_rgba(96,175,255,0.5)]'
-                    : isToday
-                      ? 'bg-purple/15 text-purple font-bold'
-                      : isCurrentMonth
-                        ? 'text-grey-700 hover:bg-grey-100'
-                        : 'text-grey-300'
-                }
-              `}
-            >
-              {date.getDate()}
-              {hasTask && (
-                <span
-                  className={`
-                    absolute bottom-0.5 w-1 h-1 rounded-full
-                    ${hasOverdueTask ? 'bg-red shadow-[0_0_8px_rgba(246,90,112,0.6)]' : isSelected ? 'bg-white' : 'bg-blue'}
-                  `}
-                />
-              )}
-            </button>
-          );
-        })}
+export default function MiniCalendar({
+                                       selectedDate,
+                                       onDateSelect,
+                                       tasksByDate,
+                                     }: MiniCalendarProps) {
+  return (
+    <div className="w-full rounded-xl border border-grey-150 bg-white px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
+      <div className="w-full overflow-visible">
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={(date) => {
+            if (date) onDateSelect(date);
+          }}
+          defaultMonth={selectedDate}
+          locale={es}
+          className="w-full p-0"
+          modifiers={{
+            hasTask: (date) => {
+              return !!tasksByDate.get(toDateKey(date))?.length;
+            },
+            hasOverdueTask: (date) => {
+              const tasks = tasksByDate.get(toDateKey(date));
+              if (!tasks || tasks.length === 0) return false;
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return tasks.some((task) => {
+                const dueDate = new Date(task.dueDate);
+                dueDate.setHours(0, 0, 0, 0);
+                return dueDate < today && task.status !== 'done';
+              });
+            },
+          }}
+          components={{
+            DayButton: TaskDayButton,
+          }}
+        />
       </div>
     </div>
   );

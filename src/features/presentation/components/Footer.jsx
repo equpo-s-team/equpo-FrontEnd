@@ -129,7 +129,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <p className="font-body text-sm text-grey-400">
-            <strong className="text-grey-600 font-semibold">equpo</strong> — Trabajo real. Impacto
+            <strong className="text-grey-600 font-semibold">equpo</strong> - Trabajo real. Impacto
             compartido.
           </p>
           <p className="font-body text-xs text-grey-300">

@@ -53,4 +53,11 @@ export interface CreateTeamRewardPayload {
 export interface TeamGroup {
   id: string;
   groupName: string;
+  photoUrl?: string | null;
+  memberCount?: number;
+  members?: Array<{
+    uid: string;
+    displayName: string | null;
+    photoUrl?: string | null;
+  }>;
 }

@@ -42,9 +42,29 @@ export interface TeamMember {
   role: string;
 }
 
+export interface TeamGroupMember {
+  uid: string;
+  displayName: string | null;
+  photoUrl?: string | null;
+}
+
 export interface TeamGroup {
   id: string;
   groupName: string;
   photoUrl?: string | null;
   memberCount?: number;
+  members?: TeamGroupMember[];
 }
+
+export interface CreateGroupPayload {
+  name: string;
+  memberUids?: string[];
+  photoUrl?: string;
+}
+
+export interface UpdateGroupPayload {
+  name?: string;
+  memberUids?: string[];
+  photoUrl?: string | null;
+}
+

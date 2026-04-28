@@ -1,19 +1,21 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { CalendarDays, Layers, Repeat, Tag, Type, Users, X, Zap } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { CalendarDays, Layers, Repeat, Settings, Tag, Type, Users, X, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { AppProgress } from '@/components/ui/AppProgress.tsx';
 import { AppSelect } from '@/components/ui/AppSelect.tsx';
 import { DateTimePicker } from '@/components/ui/date-time-picker.tsx';
+import { FieldLabel } from '@/components/ui/FieldLabel.tsx';
 import { Input } from '@/components/ui/input.tsx';
-import { TagChip} from "@/components/ui/TagChip.tsx";
+import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
+import { TagChip } from '@/components/ui/TagChip.tsx';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
+import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 import { toastError, toastSuccess } from '@/lib/toast.ts';
 
-import { FieldLabel } from '../../../../components/ui/FieldLabel.tsx';
 import { useCreateTask } from '../../hooks/useCreateTask.ts';
 import { useCreateTaskStep } from '../../hooks/useCreateTaskStep.ts';
 import { useDeleteTask } from '../../hooks/useDeleteTask.ts';
@@ -75,13 +77,13 @@ export default function TaskSidebar({
   myRole = 'member',
   currentUserUid = null,
 }: TaskSidebarProps) {
-  const backdropRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
   const { play } = useSoundEffects();
   const { rollover } = useRecurringRollover();
+  const { setActiveItem } = useSidebar() as { setActiveItem: (v: string) => void };
 
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
@@ -359,16 +361,19 @@ export default function TaskSidebar({
     onClose();
   }
 
-  function handleBackdropClick(e: React.MouseEvent) {
-    // Check if click is on backdrop and not on dropdown content
-    const target = e.target as HTMLElement;
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) onClose();
+  };
+
+  const handleInteractOutside = (event: Event) => {
+    const target = event.target as HTMLElement;
     const isDropdownContent = target.closest('[data-radix-dropdown-menu-content]');
     const isDropdownTrigger = target.closest('[data-radix-dropdown-menu-trigger]');
 
-    if (e.target === backdropRef.current && !isDropdownContent && !isDropdownTrigger) {
-      onClose();
+    if (isDropdownContent || isDropdownTrigger) {
+      event.preventDefault();
     }
-  }
+  };
 
   async function handleIADescriptionGeneration(inputDescription: string) {
     if (!inputDescription.trim()) return;
@@ -496,30 +501,15 @@ export default function TaskSidebar({
 
   return (
     <>
-      <div
-        ref={backdropRef}
-        role="button"
-        aria-label="Cerrar panel"
-        tabIndex={-1}
-        onClick={handleBackdropClick}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') onClose();
+      <SidebarSheet
+        open={isOpen}
+        onOpenChange={handleOpenChange}
+        side="right"
+        contentClassName="h-full w-full sm:w-[760px] xl:w-[920px] bg-primary border-l-[1.5px] border-grey-200 shadow-card-lg flex flex-col"
+        contentProps={{
+          onInteractOutside: handleInteractOutside,
+          onPointerDownOutside: handleInteractOutside,
         }}
-        className={`
-          fixed inset-0 z-50 bg-grey-900/40 backdrop-blur-[2px]
-          transition-opacity duration-300
-          ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-        `}
-      />
-
-      <aside
-        className={`
-          fixed top-0 right-0 z-50 h-full w-full sm:w-[760px] xl:w-[920px]
-          bg-primary border-l-[1.5px] border-grey-200
-          shadow-card-lg flex flex-col
-          transition-transform duration-300 ease-out
-          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
-        `}
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-grey-200">
@@ -830,10 +820,25 @@ export default function TaskSidebar({
                     </FieldLabel>
                     <AppSelect
                       value={assignedGroupId}
-                      onChange={setAssignedGroupId}
+                      onChange={(v) => {
+                        if (v === '__more_groups__') {
+                          setActiveItem('settings');
+                          return;
+                        }
+                        setAssignedGroupId(v);
+                      }}
                       options={[
                         { value: '', label: 'Sin asignar' },
                         ...groups.map((g) => ({ value: g.id, label: g.groupName })),
+                        ...(isSidebarLeaderOrCollab
+                          ? [
+                              {
+                                value: '__more_groups__',
+                                label: 'Crear grupo',
+                                icon: <Settings size={12} className="text-grey-400" />,
+                              },
+                            ]
+                          : []),
                       ]}
                       triggerClassName="w-full"
                     />
@@ -967,7 +972,7 @@ export default function TaskSidebar({
             </div>
           </>
         )}
-      </aside>
+      </SidebarSheet>
     </>
   );
 }

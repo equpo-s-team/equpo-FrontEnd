@@ -1,4 +1,4 @@
-import { AlertTriangle, Eye, EyeOff, Loader2, Lock, Mail, Phone, Shield, User } from 'lucide-react';
+import { AlertTriangle, Eye, EyeOff, Loader2, Lock, Mail, Shield, User } from 'lucide-react';
 import React from 'react';
 
 import { type FormData, type FormErrors } from '@/features/auth';
@@ -202,33 +202,6 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           >
             <AlertTriangle className="h-3 w-3" />
             {errors.confirmPassword}
-          </p>
-        )}
-      </div>
-
-      {/* ── Phone (optional) ── */}
-      <div>
-        <div className="relative">
-          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-          <input
-            type="tel"
-            placeholder="Teléfono (Opcional)"
-            value={formData.phone}
-            onChange={(e) => onInputChange('phone', e.target.value)}
-            onBlur={() => onFieldBlur('phone')}
-            className={cn(
-              'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.phone ? 'border-red' : 'border-gray-200',
-            )}
-            aria-label="Teléfono"
-            aria-describedby={errors.phone ? 'phone-error' : undefined}
-          />
-        </div>
-        {errors.phone && (
-          <p id="phone-error" className="text-red text-xs mt-1 flex items-center gap-1">
-            <AlertTriangle className="h-3 w-3" />
-            {errors.phone}
           </p>
         )}
       </div>

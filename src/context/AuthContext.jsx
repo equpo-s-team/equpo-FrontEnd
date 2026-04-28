@@ -5,6 +5,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { resolveCanonicalAvatarUrl } from '@/components/ui/avatar/avatarStorage';
 import { createUser, getUser } from '@/dataconnect-generated';
 import { auth } from '@/firebase.ts';
+import { queryClient } from '@/lib/queryClient.ts';
 
 const AuthContext = createContext(null);
 
@@ -14,7 +15,7 @@ export function AuthProvider({ children }) {
 
   const fetchDatabaseUser = useCallback(async () => {
     try {
-      const result = await getUser();
+      const result = await getUser({ fetchPolicy: 'SERVER_ONLY' });
       return result.data?.users?.[0] ?? null;
     } catch (error) {
       log.error('Error fetching database user:', error);
@@ -85,6 +86,7 @@ export function AuthProvider({ children }) {
           });
         }
       } else {
+        queryClient.clear();
         setUser(null);
       }
       setIsLoading(false);
@@ -114,5 +116,8 @@ export function useAuth() {
 }
 
 export function logOut() {
+  queryClient.clear();
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('rememberMe');
   return signOut(auth);
 }

@@ -7,7 +7,7 @@ import {
   type FormErrors,
   type RegistrationStep,
 } from '@/features/auth';
-import { useAuthValidation, VerificationForm } from '@/features/auth';
+import { useAuthValidation } from '@/features/auth';
 import {type AuthFormProps} from "@/features/auth/types/auth-types.ts";
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth.ts';
 import { toastError, toastSuccess } from '@/lib/toast';
@@ -35,10 +35,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
     agreeToTerms: false,
     rememberMe: false,
-    verificationCode: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [fieldTouched, setFieldTouched] = useState<Record<string, boolean>>({});
@@ -123,29 +121,15 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     // ── SIGNUP ──
     if (authMode === 'signup') {
-      if (registrationStep === 'details') {
-        const result = await signupWithEmail(formData.email, formData.password, formData.name);
-        if (result.success) {
-          setRegistrationStep('verification');
-          toastSuccess('¡Cuenta creada! Revisa tu correo para verificarla.');
-        } else if (result.error) {
-          toastError(result.error);
-        }
-        return;
-      }
-
-      // Verification step — Firebase sends the real email; here we just advance
-      // (deep OTP verification requires Cloud Functions or a custom backend)
-      if (registrationStep === 'verification') {
-        if (formData.verificationCode.length !== 6) {
-          setErrors({ verificationCode: 'Ingresa el código de 6 dígitos.' });
-          return;
-        }
+      const result = await signupWithEmail(formData.email, formData.password, formData.name);
+      if (result.success) {
         setRegistrationStep('complete');
-        toastSuccess('¡Correo verificado exitosamente!');
+        toastSuccess('¡Cuenta creada con éxito!');
         onSuccess?.({ email: formData.email, name: formData.name });
-        return;
+      } else if (result.error) {
+        toastError(result.error);
       }
+      return;
     }
 
     // ── RESET ──
@@ -171,19 +155,6 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           onInputChange={handleInputChange}
           onFieldBlur={handleFieldBlur}
           onBackToLogin={() => setAuthMode('login')}
-        />
-      );
-    }
-
-    if (authMode === 'signup' && registrationStep === 'verification') {
-      return (
-        <VerificationForm
-          formData={formData}
-          errors={errors}
-          isLoading={isLoading}
-          onInputChange={handleInputChange}
-          onFieldBlur={handleFieldBlur}
-          onBackToDetails={() => setRegistrationStep('details')}
         />
       );
     }

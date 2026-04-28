@@ -38,8 +38,8 @@ export const useDatabaseUser = () => {
 
         await createUserFn(userVars);
 
-        // Fetch current auth user after upsert
-        const userResult = await getUserFn();
+        // Fetch current auth user after upsert (bypass cache to avoid cross-account leaks)
+        const userResult = await getUserFn({ fetchPolicy: 'SERVER_ONLY' });
         const user = userResult.data?.users?.[0] as DatabaseUser | undefined;
 
         return {
@@ -64,7 +64,7 @@ export const useDatabaseUser = () => {
   }> => {
     setIsLoading(true);
     try {
-      const result = await getUserFn();
+      const result = await getUserFn({ fetchPolicy: 'SERVER_ONLY' });
       const user = result.data?.users?.[0] as DatabaseUser | undefined;
 
       if (user) {

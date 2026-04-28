@@ -69,23 +69,6 @@ export const useAuthValidation = (
           }
           break;
 
-        case 'phone':
-          if (typeof value === 'string' && value && !/^\+?[\d\s\-()]+$/.test(value)) {
-            error = 'Please enter a valid phone number';
-          }
-          break;
-
-        case 'verificationCode':
-          if (
-            typeof value === 'string' &&
-            authMode === 'signup' &&
-            registrationStep === 'verification' &&
-            !/^\d{6}$/.test(value)
-          ) {
-            error = 'Verification code must be 6 digits';
-          }
-          break;
-
         case 'agreeToTerms':
           if (authMode === 'signup' && !value) {
             error = 'You must agree to the terms and conditions';
@@ -100,14 +83,10 @@ export const useAuthValidation = (
 
   const validateForm = useCallback(() => {
     const newErrors: FormErrors = {};
-    const fieldsToValidate: (keyof FormData)[] = ['email', 'password'];
+    const fieldsToValidate: (keyof FormData)[] = authMode === 'reset' ? ['email'] : ['email', 'password'];
 
     if (authMode === 'signup') {
       fieldsToValidate.push('name', 'confirmPassword', 'agreeToTerms');
-    }
-
-    if (registrationStep === 'verification') {
-      fieldsToValidate.push('verificationCode');
     }
 
     fieldsToValidate.forEach((field) => {

@@ -10,6 +10,12 @@ const isStorageAvatarUrl = (url: string): boolean => {
   return url.includes('firebasestorage.googleapis.com') || url.includes('/o/users%2F');
 };
 
+const isStorageAvatarUrlOwnedBy = (url: string, uid: string): boolean => {
+  if (!isStorageAvatarUrl(url)) return false;
+  const path = `users/${uid}/profile`;
+  return url.includes(encodeURIComponent(path)) || url.includes(path);
+};
+
 const isExternalAvatarUrl = (url: string): boolean => {
   if (!url) {
     return false;
@@ -81,6 +87,14 @@ export const resolveCanonicalAvatarUrl = async (
   const photoUrl = rawPhotoUrl?.trim();
 
   if (!photoUrl) {
+    return null;
+  }
+
+  if (isStorageAvatarUrl(photoUrl)) {
+    if (isStorageAvatarUrlOwnedBy(photoUrl, uid)) {
+      return photoUrl;
+    }
+    log.warn('Avatar de Storage no pertenece al uid actual; se descarta para evitar fugas entre cuentas.');
     return null;
   }
 

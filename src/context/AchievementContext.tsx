@@ -1,8 +1,7 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 
-import type { Achievement } from '@/features/team/types/achievementTypes';
-
 import { AchievementPopup } from '@/features/team/components/Achievements/AchievementPopup';
+import type { Achievement } from '@/features/team/types/achievementTypes';
 
 interface AchievementContextValue {
   showAchievement: (achievement: Achievement) => void;

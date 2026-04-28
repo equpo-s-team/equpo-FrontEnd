@@ -830,11 +830,15 @@ export default function TaskSidebar({
                       options={[
                         { value: '', label: 'Sin asignar' },
                         ...groups.map((g) => ({ value: g.id, label: g.groupName })),
-                        {
-                          value: '__more_groups__',
-                          label: 'Más grupos...',
-                          icon: <Settings size={12} className="text-grey-400" />,
-                        },
+                        ...(isSidebarLeaderOrCollab
+                          ? [
+                              {
+                                value: '__more_groups__',
+                                label: 'Crear grupo',
+                                icon: <Settings size={12} className="text-grey-400" />,
+                              },
+                            ]
+                          : []),
                       ]}
                       triggerClassName="w-full"
                     />

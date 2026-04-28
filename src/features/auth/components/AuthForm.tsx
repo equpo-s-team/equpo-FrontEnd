@@ -8,6 +8,7 @@ import {
   type RegistrationStep,
 } from '@/features/auth';
 import { useAuthValidation, VerificationForm } from '@/features/auth';
+import {type AuthFormProps} from "@/features/auth/types/auth-types.ts";
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth.ts';
 import { toastError, toastSuccess } from '@/lib/toast';
 import { cn } from '@/lib/utils.ts';
@@ -16,7 +17,6 @@ import { CompleteForm } from './CompleteForm.tsx';
 import { LoginForm } from './LoginForm.tsx';
 import { ResetForm } from './ResetForm.tsx';
 import { SignupForm } from './SignupForm.tsx';
-import {AuthFormProps} from "@/features/auth/types/auth-types.ts";
 
 
 

@@ -32,7 +32,7 @@ import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
-import type { TeamMember } from '@/features/team/types/teamSchemas';
+import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
 import { toastError, toastSuccess } from '@/lib/toast';
 
@@ -84,7 +84,14 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
       <div
         className="absolute inset-0 bg-grey-900/50 backdrop-blur-sm"
         onClick={onCancel}
-        role="presentation"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onCancel();
+          }
+        }}
       />
       <div className="relative z-10 w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-grey-150">
         <div className="flex items-center gap-3 mb-4">
@@ -155,7 +162,18 @@ function GroupDeleteConfirmDialog({
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-0">
-      <div className="absolute inset-0 bg-grey-900/40 backdrop-blur-[2px]" onClick={onCancel} />
+      <div
+        className="absolute inset-0 bg-grey-900/40 backdrop-blur-[2px]"
+        onClick={onCancel}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onCancel();
+          }
+        }}
+      />
       <div
         className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200"
       >
@@ -877,7 +895,7 @@ export default function TeamSettings() {
       {showDeleteDialog && (
         <DeleteConfirmDialog
           teamName={team.name}
-          onConfirm={handleDeleteTeam}
+          onConfirm={() => void handleDeleteTeam()}
           onCancel={() => setShowDeleteDialog(false)}
           isDeleting={deleteTeam.isPending}
         />
@@ -886,14 +904,14 @@ export default function TeamSettings() {
       {groupToDelete && (
         <GroupDeleteConfirmDialog
           groupName={groupToDelete.groupName}
-          onConfirm={handleDeleteGroup}
+          onConfirm={() => void handleDeleteGroup()}
           onCancel={() => setGroupToDelete(null)}
           isDeleting={deleteGroupMutation.isPending}
         />
       )}
 
-      <GroupFormSheet 
-        isOpen={showGroupSheet || !!groupToEdit} 
+      <GroupFormSheet
+        isOpen={showGroupSheet || !!groupToEdit}
         onClose={() => {
           setShowGroupSheet(false);
           setGroupToEdit(null);

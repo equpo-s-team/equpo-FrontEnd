@@ -65,6 +65,27 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
     }
   };
 
+  const handleCopyUid = async () => {
+    try {
+      await navigator.clipboard.writeText(user.uid);
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (error) {
+      const textArea = document.createElement('textarea');
+      textArea.value = user.uid;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+      setTimeout(() => setIsCopied(false), 2000);
+    }
+  };
+
   const rankName:string = levelToRank(user.level).name;
   const rankColor:string = levelToRank(user.level).color;
   const rankBgColor:string = levelToRank(user.level).bgColor;

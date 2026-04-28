@@ -346,6 +346,7 @@ export const TeamsHub: React.FC = () => {
         }
       `}</style>
     </div>
+    </div>
   );
 };
 

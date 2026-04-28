@@ -55,14 +55,15 @@ export default function Navbar() {
       </nav>
 
       {showAuth && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
-          <div className="relative w-full h-full flex items-center justify-center">
-            <button
-              onClick={() => setShowAuth(false)}
-              className="absolute top-8 right-8 text-white/80 hover:text-white text-sm z-10"
-            ></button>
-            <AuthSwitch onClose={() => setShowAuth(false)} />
-          </div>
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center md:p-0 overflow-y-auto">
+          <button
+            onClick={() => setShowAuth(false)}
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/80 hover:text-white text-sm z-10 bg-white/10 backdrop-blur-sm p-2 rounded-lg border border-white/20"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+          <AuthSwitch onClose={() => setShowAuth(false)} />
         </div>
       )}
     </>

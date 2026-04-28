@@ -23,7 +23,7 @@ export default function Hero() {
   }, [titleNumber, titles]);
 
   return (
-    <section className="relative overflow-hidden min-h-screen bg-white">
+    <section className="relative overflow-hidden min-h-auto md:min-h-screen bg-white">
       <div className="animated-gradient-bg-new" />
 
       <div
@@ -41,16 +41,16 @@ export default function Hero() {
         style={{ background: 'radial-gradient(circle, rgba(246,90,112,0.10) 0%, transparent 70%)' }}
       />
 
-      <div className="max-w-full mx-auto px-16 grid md:grid-cols-2 gap-0 items-center pt-8 pb-0 min-h-[90vh] relative z-10">
+      <div className="max-w-full mx-auto px-4 md:px-8 lg:px-16 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0 items-center pt-4 md:pt-8 pb-0 min-h-auto md:min-h-[90vh] relative z-10">
         {/* ── LEFT COPY ── */}
-        <div className="hero-copy-enter py-16 pr-8">
-          <div className="flex items-center gap-3 mb-8">
+        <div className="hero-copy-enter py-8 md:py-16 md:pr-8">
+          <div className="flex items-center gap-3 mb-6 md:mb-8">
             <span
               className="block w-8 h-1 rounded"
               style={{ background: 'linear-gradient(90deg, #9CEDC1, #60AFFF)' }}
             />
             <span
-              className="font-body text-sm font-bold tracking-[0.2em] uppercase"
+              className="font-body text-xs md:text-sm font-bold tracking-[0.2em] uppercase"
               style={{
                 background: 'linear-gradient(90deg, #38b97a, #2e8fd4)',
                 WebkitBackgroundClip: 'text',
@@ -61,22 +61,20 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1 className="font-maxwell text-5xl md:text-6xl text-grey-900 mb-6 leading-[1.08]">
+          <h1 className="font-maxwell text-3xl md:text-5xl lg:text-6xl text-grey-900 mb-4 md:mb-6 leading-[1.08]">
             Organiza tareas. <br />
-            <span className="relative inline-block overflow-hidden md:pb-2 md:pt-1 min-w-[900px]">
+            <span className="relative inline-block h-[1.2em] md:pb-2 md:pt-1">
               &nbsp;
               {titles.map((title, index) => (
                 <motion.em
                   key={index}
-                  className=" absolute not-italic font-bold left-0 top-3.5 pr-5
-                                        bg-gradient-to-r from-[#9CEDC1] via-[#60AFFF] to-[#F65A70]
-                                        bg-clip-text text-transparent"
-                  initial={{ opacity: 0, y: '-100' }}
+                  className="absolute not-italic font-bold left-0 top-0 pr-5 bg-gradient-to-r from-[#9CEDC1] via-[#60AFFF] to-[#F65A70] bg-clip-text text-transparent text-2xl md:text-5xl lg:text-6xl whitespace-nowrap"
+                  initial={{ opacity: 0, y: '-100%' }}
                   transition={{ type: 'spring', stiffness: 50 }}
                   animate={
                     titleNumber === index
                       ? { y: 0, opacity: 1 }
-                      : { y: titleNumber > index ? -150 : 150, opacity: 0 }
+                      : { y: titleNumber > index ? '-100%' : '100%', opacity: 0 }
                   }
                 >
                   {title}
@@ -87,15 +85,15 @@ export default function Hero() {
             Haz que el equipo prospere.
           </h1>
 
-          <p className="font-body text-lg leading-[1.65] text-grey-600 max-w-[480px] mb-8">
+          <p className="font-body text-base md:text-lg leading-[1.65] text-grey-600 max-w-[480px] mb-6 md:mb-8">
             Con equpo, cada tarea completada no solo avanza proyectos: mejora el bienestar del
             espacio virtual del equipo. Trabajo real, impacto visible, motivación compartida.
           </p>
 
-          <div className="flex flex-wrap gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 mb-6 md:mb-8">
             <a
               href="#"
-              className="font-maxwell text-white px-[2.2rem] py-[1.1rem] rounded-[14px] text-base no-underline hover:-translate-y-1 transition-all"
+              className="font-maxwell text-white px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-[14px] text-sm md:text-base no-underline hover:-translate-y-1 transition-all text-center"
               style={{
                 background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 100%)',
                 boxShadow: '0 8px 28px rgba(56,185,122,0.35)',
@@ -105,22 +103,22 @@ export default function Hero() {
             </a>
             <a
               href="#what"
-              className="font-maxwell text-grey-700 border border-grey-200 bg-white/70 backdrop-blur px-[2.2rem] py-[1.1rem] rounded-[14px] text-base no-underline hover:-translate-y-1 hover:border-grey-300 transition-all"
+              className="font-maxwell text-grey-700 border border-grey-200 bg-white/70 backdrop-blur px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-[14px] text-sm md:text-base no-underline hover:-translate-y-1 hover:border-grey-300 transition-all text-center"
             >
               Ver cómo funciona
             </a>
           </div>
 
-          <div className="flex flex-col gap-2.5 mb-8">
+          <div className="flex flex-col gap-2.5 mb-6 md:mb-8">
             {['Empieza en minutos.', 'Diseñado para equipos colaborativos.'].map((txt) => (
-              <p key={txt} className="font-body text-sm text-grey-500 flex items-center gap-2">
+              <p key={txt} className="font-body text-xs md:text-sm text-grey-500 flex items-center gap-2">
                 <Activity size={15} className="text-green-DEFAULT flex-shrink-0" />
                 {txt}
               </p>
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap gap-2 mb-6 md:mb-8">
             {[
               {
                 label: 'Tablero colaborativo',
@@ -149,27 +147,28 @@ export default function Hero() {
             ].map((badge) => (
               <span
                 key={badge.label}
-                className={`font-body bg-gradient-to-r ${badge.grad} border ${badge.border} ${badge.text} text-xs font-semibold px-[1rem] py-[0.45rem] rounded-full hover:-translate-y-px transition-all cursor-default`}
+                className={`font-body bg-gradient-to-r ${badge.grad} border ${badge.border} ${badge.text} text-xs font-semibold px-3 md:px-[1rem] py-2 md:py-[0.45rem] rounded-full hover:-translate-y-px transition-all cursor-default`}
               >
                 {badge.label}
               </span>
             ))}
           </div>
 
-          <p className="font-body text-sm text-grey-400 italic border-t border-grey-150 pt-5">
+          <p className="font-body text-xs md:text-sm text-grey-400 italic border-t border-grey-150 pt-4 md:pt-5">
             "Cuando todos aportan, el equipo lo siente."
           </p>
         </div>
 
+        {/* Hero Visual - Hidden on small mobile, visible on larger screens */}
         <div
-          className="hero-visual-enter relative h-full min-h-screen -mr-[5vw] overflow-visible"
+          className="hidden md:flex hero-visual-enter relative h-[300px] md:h-[400px] lg:min-h-screen md:-mr-[5vw] overflow-visible"
           style={{ marginRight: 'calc(-5vw)' }}
         >
           <HeroVisual />
 
-          {/* Floating cards */}
+          {/* Floating cards - repositioned for smaller screens */}
           <FloatCard
-            className="absolute top-[10%] -left-[6%] z-20"
+            className="absolute top-[10%] -left-[6%] z-20 hidden lg:flex"
             icon={<TrendingUp size={18} />}
             title="Mundo activo"
             label="+12% esta semana"
@@ -177,18 +176,18 @@ export default function Hero() {
             iconBg="linear-gradient(135deg, #9CEDC1, #60AFFF)"
           />
           <FloatCard
-            className="absolute top-[22%] right-[6%] z-20"
+            className="absolute top-[22%] right-[6%] z-20 hidden lg:flex"
             icon={<CheckCircle size={18} />}
             title="3 tareas completadas"
             label="Hoy"
             accentColor="rgba(96,175,255,1)"
             iconBg="linear-gradient(135deg, #60AFFF, #86F0FD)"
           />
-          <div className="absolute bottom-[32%] -left-[8%] z-20">
+          <div className="absolute bottom-[32%] -left-[8%] z-20 hidden lg:block">
             <FloatCardRing title="Nivel 7" label="75% al siguiente" />
           </div>
           <FloatCard
-            className="absolute bottom-[22%] right-[5%] z-20"
+            className="absolute bottom-[22%] right-[5%] z-20 hidden lg:flex"
             icon={<MessageCircle size={18} />}
             title="Chat activo"
             label="4 miembros en línea"

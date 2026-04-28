@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { Clipboard } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import { toastSuccess } from '@/lib/toast';
 import { type UserProfileSaveInput } from '@/features/team/types';
+import { toastSuccess } from '@/lib/toast';
 
 import { type UserProfile } from './UserProfileCard.tsx';
 
@@ -36,7 +36,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     setTimeout(onClose, 300);
   };
 
-  const handleCopyUid = async () => {
+  const handleCopyUid = async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(user.uid);
       setIsCopied(true);
@@ -44,7 +44,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
       // Resetear el estado después de 2 segundos
       setTimeout(() => setIsCopied(false), 2000);
-    } catch (error) {
+    } catch {
       // Fallback para navegadores que no soportan clipboard API
       const textArea = document.createElement('textarea');
       textArea.value = user.uid;
@@ -278,7 +278,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 {user.uid}
               </div>
               <button
-                onClick={handleCopyUid}
+                onClick={() => void handleCopyUid()}
                 className={`px-3 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center ${
                   isCopied
                     ? 'bg-green-500 text-white border-green-500'

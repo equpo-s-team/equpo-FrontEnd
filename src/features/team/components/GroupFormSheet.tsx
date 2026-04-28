@@ -57,8 +57,6 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
   const [isUploading, setIsUploading] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
 
-  // Filter out spectators — they cannot be added to work groups
-  const assignableMembers = members.filter((m) => m.role !== 'spectator');
 
   useEffect(() => {
     if (isOpen) {
@@ -261,7 +259,7 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
               Miembros · {selectedUids.size} seleccionados
             </label>
             <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
-              {assignableMembers.map((member: TeamMember) => {
+              {members.map((member: TeamMember) => {
                 const isSelected = selectedUids.has(member.uid);
                 const grad = memberGradient(member.uid);
 

@@ -1,8 +1,8 @@
+import {CircleX} from "lucide-react";
 import React, {useState} from 'react';
 
 import {type Achievement} from '@/features/team/types';
 import {cn} from '@/lib/utils.ts';
-import {CircleX} from "lucide-react";
 
 interface AchievementBadgeProps {
   achievement: Achievement;

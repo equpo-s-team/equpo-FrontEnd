@@ -283,8 +283,8 @@ export const TeamsHub: React.FC = () => {
             </div>
           </section>
 
-          {/* Achievements Section - Mobile: full width below, Desktop: right sidebar */}
-          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full">
+          {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
+          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
             <div className="rounded-xl bg-grey-50 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
               <AchievementsSection achievements={mappedAchievements} />
             </div>

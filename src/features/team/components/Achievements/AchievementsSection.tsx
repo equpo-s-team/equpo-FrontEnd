@@ -58,11 +58,11 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achiev
 
       {/* Badges grid - collapses on mobile, always visible on desktop */}
       <div
-        className={`transition-all duration-300 overflow-hidden ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 lg:max-h-none lg:opacity-100'
+        className={`transition-all duration-300 overflow-hidden lg:overflow-visible ${
+          isOpen ? 'max-h-[60vh] opacity-100 lg:max-h-none' : 'max-h-0 opacity-0 lg:max-h-none lg:opacity-100'
         }`}
       >
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-1.5 overflow-y-auto">
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 gap-2 overflow-y-auto max-h-[55vh] lg:max-h-none">
           {sorted.map((achievement) => (
             <AchievementBadge key={achievement.id} achievement={achievement} />
           ))}

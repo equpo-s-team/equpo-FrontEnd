@@ -119,6 +119,21 @@ export default function TeamBoard() {
     setLocalCards(null);
   }
 
+  // ── Collapse state for columns ──
+  const [collapsedColumns, setCollapsedColumns] = useState({
+    todo: false,
+    progress: false,
+    qa: false,
+    done: false,
+  });
+
+  const toggleColumnCollapse = (columnId) => {
+    setCollapsedColumns((prev) => ({
+      ...prev,
+      [columnId]: !prev[columnId],
+    }));
+  };
+
   const updateTask = useUpdateTask();
 
   const moveCard = async (cardId, fromColumnId, toColumnId, position) => {
@@ -293,12 +308,12 @@ export default function TeamBoard() {
 
       <div
         className="
-             px-4 md:px-8  pt-3 pb-10 flex gap-4 md:gap-5 overflow-x-auto md:overflow-x-visible md:grid md:grid-cols-4
-             snap-x snap-mandatory md:snap-none scroll-px-4
+             px-4 md:px-8 pt-3 pb-10 flex flex-col md:grid md:grid-cols-4 gap-4 md:gap-5
+             md:overflow-x-visible
              "
       >
         {COLUMNS.map((col, index) => (
-          <div key={col.id} className="snap-start">
+          <div key={col.id} className="w-full">
             <BoardColumn
               column={col}
               cards={displayCards[col.id] ?? []}
@@ -307,6 +322,8 @@ export default function TeamBoard() {
               columnIndex={index}
               isLeaderOrCollaborator={isLeaderOrCollaborator}
               canMoveCard={canMoveCard}
+              isCollapsed={collapsedColumns[col.id] ?? false}
+              onToggleCollapse={() => toggleColumnCollapse(col.id)}
             />
           </div>
         ))}

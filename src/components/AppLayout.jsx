@@ -1,9 +1,11 @@
 import BottomNav from '../features/navbar/BottomNav.jsx';
 import Sidebar from '../features/navbar/Sidebar.jsx';
 import { useSidebar } from '../features/navbar/SidebarContext.jsx';
+import { useTaskSidebar } from '../context/TaskSidebarContext';
 
 export default function AppLayout({ children }) {
   const { collapsed } = useSidebar();
+  const { isOpen: isTaskSidebarOpen } = useTaskSidebar();
 
   return (
     <div className="min-h-screen bg-secondary font-body">
@@ -18,7 +20,7 @@ export default function AppLayout({ children }) {
         {children}
       </main>
 
-      <BottomNav />
+      {!isTaskSidebarOpen && <BottomNav />}
     </div>
   );
 }

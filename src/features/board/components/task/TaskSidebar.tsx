@@ -7,8 +7,8 @@ import { AppSelect } from '@/components/ui/AppSelect.tsx';
 import { DateTimePicker } from '@/components/ui/date-time-picker.tsx';
 import { FieldLabel } from '@/components/ui/FieldLabel.tsx';
 import { Input } from '@/components/ui/input.tsx';
-import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
-import { TagChip } from '@/components/ui/TagChip.tsx';
+import { TagChip} from "@/components/ui/TagChip.tsx";
+import { useTaskSidebar } from '@/context/TaskSidebarContext';
 import type { TaskStatus, TeamTask } from '@/features/board/types';
 import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
@@ -77,6 +77,8 @@ export default function TaskSidebar({
   myRole = 'member',
   currentUserUid = null,
 }: TaskSidebarProps) {
+  const { setIsOpen: setTaskSidebarOpen } = useTaskSidebar();
+  const backdropRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
@@ -124,6 +126,10 @@ export default function TaskSidebar({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, task?.id, task?.dueDate]);
+
+  useEffect(() => {
+    setTaskSidebarOpen(isOpen);
+  }, [isOpen, setTaskSidebarOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -937,8 +943,8 @@ export default function TaskSidebar({
               </div>
             </form>
 
-            {/* ── Footer ── */}
-            <div className="px-6 py-4 border-t border-grey-200 flex items-center gap-3">
+            {/* ── Footer - Sticky ── */}
+            <div className="sticky bottom-0 left-0 right-0 px-6 py-4 border-t border-grey-200 flex items-center gap-3 bg-primary shadow-lg">
               {(mode === 'edit' || mode === 'view') && (
                 <button
                   type="button"

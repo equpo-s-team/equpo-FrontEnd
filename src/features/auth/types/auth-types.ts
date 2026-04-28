@@ -1,5 +1,5 @@
 export type AuthMode = 'login' | 'signup' | 'reset';
-export type RegistrationStep = 'details' | 'verification' | 'complete';
+export type RegistrationStep = 'details' | 'complete';
 
 export interface AuthFormProps {
   onSuccess?: (userData: { email: string; name?: string }) => void;
@@ -13,10 +13,8 @@ export interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  phone: string;
   agreeToTerms: boolean;
   rememberMe: boolean;
-  verificationCode: string;
 }
 
 export interface FormErrors {
@@ -24,11 +22,9 @@ export interface FormErrors {
   email?: string;
   password?: string;
   confirmPassword?: string;
-  phone?: string;
   agreeToTerms?: string;
   rememberMe?: string;
   general?: string;
-  verificationCode?: string;
 }
 
 export interface PasswordStrength {

@@ -1,3 +1,4 @@
+import { signOut } from 'firebase/auth';
 import log from 'loglevel';
 import { LogOut, Users } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
@@ -5,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useAuth } from '@/context/AuthContext';
-import { logOut } from '@/context/AuthContext';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
@@ -15,10 +15,11 @@ import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
+import { auth } from '@/firebase';
 import { toastError, toastSuccess } from '@/lib/toast';
 
-import { AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
-import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
+import { AchievementsSection } from './components/Achievements/AchievementsSection';
+import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard';
 import { useAchievements } from './hooks/useAchievements';
 
 type AuthContextUser = {
@@ -180,11 +181,11 @@ export const TeamsHub: React.FC = () => {
 
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
-  const handleLogout = async () => {
+  const handleLogout = async (): Promise<void> => {
     try {
-      await logOut();
-      navigate('/');
-    } catch (error) {
+      await signOut(auth);
+      void navigate('/');
+    } catch {
       toastError('Error al cerrar sesión', 'No se pudo cerrar la sesión. Intenta de nuevo.');
     }
   };
@@ -201,7 +202,7 @@ export const TeamsHub: React.FC = () => {
           </div>
 
           <button
-            onClick={handleLogout}
+            onClick={() => void handleLogout()}
             className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-sm font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
           >
             <LogOut size={16} />

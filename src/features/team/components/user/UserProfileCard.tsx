@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { AppProgress } from '@/components/ui/AppProgress';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import { toastSuccess } from '@/lib/toast';
 import {type Rank, ranks} from "@/features/team/types/rankTypes.ts";
+import { toastSuccess } from '@/lib/toast';
 
 export interface UserProfile {
   uid: string;
@@ -44,14 +44,14 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
   const [isCopied, setIsCopied] = useState(false);
   const xpPercent = Math.min(100, Math.round((user.experience / user.experienceToNextLevel) * 100));
 
-  const handleCopyUid = async () => {
+  const handleCopyUid = async (): Promise<void> => {
     try {
       await navigator.clipboard.writeText(user.uid);
       setIsCopied(true);
       toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
 
       setTimeout(() => setIsCopied(false), 2000);
-    } catch (error) {
+    } catch {
       const textArea = document.createElement('textarea');
       textArea.value = user.uid;
       document.body.appendChild(textArea);
@@ -127,7 +127,7 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
                 </p>
                 <AppTooltip content={isCopied ? '¡Copiado!' : 'Copiar UID'}>
                   <button
-                    onClick={handleCopyUid}
+                    onClick={() => void handleCopyUid()}
                     className={`p-2 rounded-lg transition-all duration-200 transform hover:scale-105 ${
                       isCopied
                         ? 'bg-green-100 text-green-600'
@@ -164,10 +164,6 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
             </div>
 
           </div>
-
-          <p className="text-xs text-grey-400 font-mono mb-2 truncate" title={user.uid}>
-            {user.uid.length > 20 ? `${user.uid.substring(0, 20)}…` : user.uid}
-          </p>
 
           {/* XP bar */}
           <div>

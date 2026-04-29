@@ -29,9 +29,11 @@ import { useDeleteGroup } from '@/features/team/hooks/useDeleteGroup';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
+import { useGenerateInviteCode } from '@/features/team/hooks/useGenerateInviteCode';
 import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 // import { useUserSearch } from '@/features/team/hooks/useUserSearch';
 import { storage } from '@/firebase';
@@ -236,6 +238,7 @@ export default function TeamSettings() {
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
   const deleteGroupMutation = useDeleteGroup();
+  const generateInviteCode = useGenerateInviteCode();
 
   const [showGroupSheet, setShowGroupSheet] = useState(false);
   const [groupToEdit, setGroupToEdit] = useState<TeamGroup | null>(null);
@@ -264,6 +267,10 @@ export default function TeamSettings() {
 
   const [inviteUid, setInviteUid] = useState('');
   const [inviteRole, setInviteRole] = useState<'collaborator' | 'member' | 'spectator'>('member');
+
+  const [inviteCodeRole, setInviteCodeRole] = useState<'collaborator' | 'member' | 'spectator'>('member');
+  const [inviteCodeExpires, setInviteCodeExpires] = useState(24); // hours
+  const [inviteCodeMaxUses, setInviteCodeMaxUses] = useState(10);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -456,6 +463,28 @@ export default function TeamSettings() {
     } catch {
       toastError('Error', 'No se pudo eliminar el grupo.');
     }
+  };
+
+  const handleGenerateCode = () => {
+    generateInviteCode.mutate(
+      {
+        teamId,
+        role: inviteCodeRole,
+        expiresInHours: inviteCodeExpires,
+        maxUses: inviteCodeMaxUses,
+      },
+      {
+        onSuccess: (data) => {
+          toastSuccess('Código generado', `Código: ${data.code}. Expira en ${inviteCodeExpires} horas.`);
+          // Reset form
+          setInviteCodeRole('member');
+          setInviteCodeExpires(24);
+          setInviteCodeMaxUses(10);
+        },
+        onError: (err) =>
+          toastError('Error al generar código', err instanceof Error ? err.message : 'Intenta de nuevo.'),
+      },
+    );
   };
 
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
@@ -794,6 +823,83 @@ export default function TeamSettings() {
               </div>
             )}
             */}
+
+            {/* Invite Code section */}
+            <div className="border-t border-grey-100 pt-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2">
+                Generar código de invitación
+              </p>
+              <div className="space-y-3">
+                <div className="flex gap-2 flex-wrap sm:flex-nowrap">
+                  <div className="flex-1 min-w-0">
+                    <label className="text-xs text-grey-500 mb-1 block">Rol</label>
+                    <RoleSelect
+                      value={inviteCodeRole}
+                      onChange={(v) => setInviteCodeRole(v as 'collaborator' | 'member' | 'spectator')}
+                      roles={[
+                        {
+                          value: 'collaborator',
+                          label: 'Colaborador',
+                          color: ROLE_CONFIG.collaborator.color,
+                          bg: ROLE_CONFIG.collaborator.bg,
+                        },
+                        {
+                          value: 'member',
+                          label: 'Miembro',
+                          color: ROLE_CONFIG.member.color,
+                          bg: ROLE_CONFIG.member.bg,
+                        },
+                        {
+                          value: 'spectator',
+                          label: 'Espectador',
+                          color: ROLE_CONFIG.spectator.color,
+                          bg: ROLE_CONFIG.spectator.bg,
+                        },
+                      ]}
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <label className="text-xs text-grey-500 mb-1 block">Expira en (horas)</label>
+                    <input
+                      type="number"
+                      value={inviteCodeExpires}
+                      onChange={(e) => setInviteCodeExpires(Number(e.target.value))}
+                      min={1}
+                      max={168}
+                      className="w-full px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all"
+                      onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
+                      onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <label className="text-xs text-grey-500 mb-1 block">Usos máximos</label>
+                    <input
+                      type="number"
+                      value={inviteCodeMaxUses}
+                      onChange={(e) => setInviteCodeMaxUses(Number(e.target.value))}
+                      min={1}
+                      max={100}
+                      className="w-full px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all"
+                      onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
+                      onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={handleGenerateCode}
+                  disabled={true}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50"
+                  style={{ background: accent }}
+                >
+                  {generateInviteCode.isPending ? (
+                    <Loader2 size={13} className="animate-spin" />
+                  ) : (
+                    <Plus size={13} />
+                  )}
+                  Generar código
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 

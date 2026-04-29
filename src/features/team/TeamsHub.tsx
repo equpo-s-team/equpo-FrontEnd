@@ -271,6 +271,16 @@ export const TeamsHub: React.FC = () => {
                   <span className="text-base leading-none">+</span>
                   <span className="hidden sm:inline">Crear equipo</span>
                 </button>
+
+                {/* Redeem Code Button */}
+                <button
+                  onClick={() => navigate('/invite')}
+                  disabled={true}
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 bg-white border border-grey-200 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
+                >
+                  <span className="text-base leading-none"></span>
+                  <span className="hidden sm:inline">Canjear código</span>
+                </button>
               </div>
             </div>
 

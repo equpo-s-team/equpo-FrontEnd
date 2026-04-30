@@ -21,14 +21,5 @@ const queryClient = new QueryClient({
 });
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AchievementProvider>
-          <App />
-          <Toaster position="bottom-right" richColors closeButton />
-        </AchievementProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </StrictMode>,
+
 );

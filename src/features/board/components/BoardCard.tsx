@@ -6,6 +6,7 @@ import type {
 import { useRef } from 'react';
 
 import { TagChip } from '@/components/ui/TagChip.tsx';
+import {type BoardCardProps, type BoardColumnId, type PointerTracking} from "@/features/board/types";
 import {
   type BoardCardProps,
   type BoardColumnId,
@@ -14,6 +15,7 @@ import {
 
 import { COLUMN_CONFIG, PRIORITY_CONFIG } from '../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
+
 
 export default function BoardCard({
   card,

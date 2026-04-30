@@ -44,7 +44,8 @@ export default function Experience({
   const cameraTargetRef = useRef(new THREE.Vector3(0, 0, 0));
   const deterioration = 1 - normalizeHealthInput(healthPercent);
 
-  const localPlayerName = localUid && playerNames[localUid] ? playerNames[localUid] : 'Me';
+  const localPlayerName =
+    localUid && playerNames[localUid] ? playerNames[localUid] : 'Me';
 
   return (
     <Canvas

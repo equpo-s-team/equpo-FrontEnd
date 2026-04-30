@@ -7,7 +7,7 @@ import {
   CLEAN_SKY_COLOR,
   DETERIORATED_FOG_COLOR,
   DETERIORATED_SKY_COLOR,
-  DIORAMA_TINT_COLOR,
+  DIORAMA_TINT_COLOR_HEX,
   FOG_FAR_CLEAN,
   FOG_FAR_DIRTY,
   FOG_NEAR_CLEAN,
@@ -16,6 +16,9 @@ import {
   SUN_LIGHT_CLEAN,
   SUN_LIGHT_DIRTY,
 } from './physicsConstants';
+
+// ─── Constants (as Three.Color) ───────────────────────────────────────────────
+const DIORAMA_TINT_COLOR = new THREE.Color(DIORAMA_TINT_COLOR_HEX);
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -55,8 +58,8 @@ export function normalizeHealthInput(value: number): number {
  */
 export function collectTintMaterials(root: THREE.Object3D, tintMap: Map<string, TintEntry>): void {
   root.traverse((node) => {
-    if (!(node as THREE.Mesh).isMesh) return;
-    const mesh = node as THREE.Mesh;
+    if (!isMesh(node)) return;
+    const mesh = node;
     const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     materials.forEach((mat) => {
       if (!materialHasColor(mat)) return;
@@ -90,8 +93,8 @@ export function applyDeterioration({
   deterioration,
   baseline,
 }: DeteriorationParams): void {
-  const baseSkyColor = baseline?.skyColor ?? CLEAN_SKY_COLOR;
-  const baseFogColor = baseline?.fogColor ?? CLEAN_FOG_COLOR;
+  const baseSkyColor = baseline?.skyColor ?? new THREE.Color(CLEAN_SKY_COLOR);
+  const baseFogColor = baseline?.fogColor ?? new THREE.Color(CLEAN_FOG_COLOR);
   const baseAmbientIntensity = baseline?.ambientIntensity ?? AMBIENT_LIGHT_CLEAN;
   const baseSunIntensity = baseline?.sunIntensity ?? SUN_LIGHT_CLEAN;
 
@@ -105,12 +108,14 @@ export function applyDeterioration({
   // Sky color
   const bg = scene.background;
   if (bg instanceof THREE.Color) {
-    bg.copy(baseSkyColor).lerp(DETERIORATED_SKY_COLOR, deterioration);
+    bg.copy(baseSkyColor).lerp(new THREE.Color(DETERIORATED_SKY_COLOR), deterioration);
   }
 
   // Fog
   if (scene.fog instanceof THREE.Fog) {
-    scene.fog.color.copy(baseFogColor).lerp(DETERIORATED_FOG_COLOR, deterioration);
+    scene.fog.color
+      .copy(baseFogColor)
+      .lerp(new THREE.Color(DETERIORATED_FOG_COLOR), deterioration);
     scene.fog.near = THREE.MathUtils.lerp(FOG_NEAR_CLEAN, FOG_NEAR_DIRTY, deterioration);
     scene.fog.far = THREE.MathUtils.lerp(FOG_FAR_CLEAN, FOG_FAR_DIRTY, deterioration);
   }

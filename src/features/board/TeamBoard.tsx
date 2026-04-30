@@ -1,46 +1,26 @@
 import { useMemo, useState } from 'react';
 
-import { useAuth } from '@/context/AuthContext.jsx';
-import { useTeam } from '@/context/TeamContext.tsx';
+import { useAuth } from '@/context/AuthContext';
+import { useTeam } from '@/context/TeamContext';
+import type {BoardColumnId, Card, TaskSidebarMode} from "@/features/board/types/columnTypes";
+import { type TeamTask } from '@/features/board/types/taskSchema';
+import {COLUMN_TO_STATUS, COLUMNS, STATUS_TO_COLUMN} from "@/features/board/utils/columnConfig";
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { toastError } from '@/lib/toast';
 
-import AppHeader from './components/AppHeader.tsx';
-import BoardColumn from './components/BoardColumn.jsx';
-import FilterBar from './components/FilterBar.jsx';
-import TaskSidebar from './components/task/TaskSidebar.tsx';
+import AppHeader from './components/AppHeader';
+import BoardColumn from './components/BoardColumn';
+import FilterBar from './components/filterBar/FilterBar';
+import TaskSidebar from './components/task/TaskSidebar';
 import { useTaskFilters } from './hooks/useTaskFilters';
 import { useTasks } from './hooks/useTasks';
 import { useUpdateTask } from './hooks/useUpdateTask';
 
-export const COLUMNS = [
-  { id: 'todo', label: 'To Do', accent: 'todo' },
-  { id: 'progress', label: 'In Progress', accent: 'progress' },
-  { id: 'qa', label: 'In QA', accent: 'qa' },
-  { id: 'done', label: 'Done', accent: 'done' },
-];
 
-const STATUS_TO_COLUMN = {
-  todo: 'todo',
-  'in-progress': 'progress',
-  'in-qa': 'qa',
-  done: 'done',
-};
-
-const COLUMN_TO_STATUS = {
-  todo: 'todo',
-  progress: 'in-progress',
-  qa: 'in-qa',
-  done: 'done',
-};
-
-/**
- * Transform flat API task list into column-grouped cards.
- */
-function groupTasksByColumn(tasks) {
-  const grouped = { todo: [], progress: [], qa: [], done: [] };
+function groupTasksByColumn(tasks: TeamTask[]) {
+  const grouped: Record<string, Card[]> = { todo: [], progress: [], qa: [], done: [] };
 
   for (const task of tasks) {
     const col = STATUS_TO_COLUMN[task.status] ?? 'todo';
@@ -56,7 +36,6 @@ function groupTasksByColumn(tasks) {
       status: task.status,
       stepsTotal: task.stepsTotal ?? 0,
       stepsDone: task.stepsDone ?? 0,
-      // preserve full task for edit sidebar
       _raw: task,
     });
   }
@@ -67,7 +46,7 @@ function groupTasksByColumn(tasks) {
 export default function TeamBoard() {
   const { teamId } = useTeam();
   const { user } = useAuth();
-  const { data, isLoading } = useTasks(teamId);
+  const { data, isLoading } = useTasks(teamId || '');
   const { data: members = [] } = useTeamMembers(teamId);
   const { data: groups = [] } = useTeamGroups(teamId);
   const { play } = useSoundEffects();
@@ -91,7 +70,7 @@ export default function TeamBoard() {
     return members.find((m) => m.uid === user.uid)?.role ?? 'member';
   }, [user, members]);
 
-  const isLeaderOrCollaborator = myRole === 'leader' || myRole === 'collaborator';
+
   const canMoveCard = myRole !== 'spectator';
 
   const assignableMembers = useMemo(
@@ -105,7 +84,7 @@ export default function TeamBoard() {
 
   const allCategories = useMemo(() => {
     if (!apiTasks?.length) return [];
-    const set = new Set();
+    const set = new Set<string>();
     for (const task of apiTasks) {
       for (const cat of task.categories ?? []) set.add(cat);
     }
@@ -120,11 +99,11 @@ export default function TeamBoard() {
     () =>
       filteredTasks.length
         ? groupTasksByColumn(filteredTasks)
-        : { todo: [], progress: [], qa: [], done: [] },
+        : { todo: [], progress: [], qa: [], done: [] } as Record<string, Card[]>,
     [filteredTasks],
   );
 
-  const [localCards, setLocalCards] = useState(null);
+  const [localCards, setLocalCards] = useState<Record<string, Card[]> | null>(null);
   const displayCards = localCards ?? cards;
 
   const [prevFilteredTasks, setPrevFilteredTasks] = useState(filteredTasks);
@@ -135,9 +114,14 @@ export default function TeamBoard() {
 
   const updateTask = useUpdateTask();
 
-  const moveCard = async (cardId, fromColumnId, toColumnId, position) => {
+  const moveCard = async (cardId: string, fromColumnId: string, toColumnId: string, position: number) => {
     if (myRole === 'spectator') {
       toastError('Acceso denegado', 'Los espectadores no pueden mover tareas.');
+      return;
+    }
+
+    if (!teamId) {
+      console.error('Team ID is required to move cards');
       return;
     }
 
@@ -147,12 +131,9 @@ export default function TeamBoard() {
     const card = fromCards[cardIndex];
     if (!card) return;
 
-    // ── Drag restrictions ──
-    // Only todo ↔ progress is allowed via drag; all other columns are auto-transition only.
-    // progress → todo requires all steps to be unchecked.
     if (fromColumnId !== toColumnId) {
       if (fromColumnId === 'todo' && toColumnId === 'progress') {
-        const raw = card._raw ?? {};
+        const raw = (card._raw ?? {}) as Partial<TeamTask>;
         const hasAssignment =
           (raw.assignedUsers?.length ?? 0) > 0 || Boolean(raw.assignedGroupId);
         if (!hasAssignment) {
@@ -193,14 +174,14 @@ export default function TeamBoard() {
       }
     }
 
-    const nextStatus = COLUMN_TO_STATUS[toColumnId] ?? 'todo';
+    const nextStatus = (COLUMN_TO_STATUS[toColumnId as BoardColumnId] ?? 'todo') as TeamTask['status'];
     const nextCard = {
       ...card,
       status: nextStatus,
-      _raw: {
-        ...(card._raw ?? {}),
+      _raw: card._raw ? {
+        ...card._raw,
         status: nextStatus,
-      },
+      } : null,
     };
 
     // Remove the card from its current position
@@ -228,13 +209,12 @@ export default function TeamBoard() {
       }
     }
 
-    // If the column changed, sync the new status to the backend
     if (fromColumnId !== toColumnId) {
       try {
         await updateTask.mutateAsync({
           teamId,
           taskId: cardId,
-          payload: { status: nextStatus },
+          payload: { status: nextStatus, name: card.name, description: card.description ?? '' },
         });
       } catch (err) {
         console.error('Failed to update task status:', err);
@@ -243,7 +223,12 @@ export default function TeamBoard() {
   };
 
   // ── Sidebar state ──
-  const [sidebar, setSidebar] = useState({
+  const [sidebar, setSidebar] = useState<{
+    isOpen: boolean;
+    mode: TaskSidebarMode;
+    task: TeamTask | null;
+    defaultStatus: string;
+  }>({
     isOpen: false,
     mode: 'create',
     task: null,
@@ -260,8 +245,10 @@ export default function TeamBoard() {
     });
   };
 
-  const openEdit = (card) => {
-    const taskData = card._raw ?? card;
+  const openEdit = (card: Card) => {
+    const taskData = card._raw;
+    if (!taskData) return;
+
     setSidebar({
       isOpen: true,
       mode: myRole === 'spectator' ? 'readonly' : 'view',
@@ -275,15 +262,15 @@ export default function TeamBoard() {
   };
 
   const handleTaskCreated = () => {
-    play('/sounds/task-created.mp3');
+    play('taskCreated');
   };
 
   const handleTaskUpdated = () => {
-    play('/sounds/task-updated.mp3');
+    play('taskUpdated');
   };
 
   const handleTaskDeleted = () => {
-    play('/sounds/task-deleted.mp3');
+    play('taskDeleted');
   };
 
   return (
@@ -295,7 +282,7 @@ export default function TeamBoard() {
         resetFilters={resetFilters}
         activeFilterCount={activeFilterCount}
         allCategories={allCategories}
-        members={assignableMembers}
+        members={assignableMembers.map(m => ({ uid: m.uid, displayName: m.displayName ?? undefined }))}
         groups={groups}
         onCreateTask={openCreate}
         canCreateTask={myRole !== 'spectator'}
@@ -307,7 +294,7 @@ export default function TeamBoard() {
 
       <div
         className="
-             px-4 md:px-8  pt-3 pb-10 flex flex-col md:grid md:grid-cols-4 gap-4 md:gap-5 
+             px-4 md:px-8  pt-3 pb-10 flex flex-col md:grid md:grid-cols-4 gap-4 md:gap-5
              overflow-y-auto md:overflow-y-visible
              "
       >
@@ -318,8 +305,6 @@ export default function TeamBoard() {
               cards={displayCards[col.id] ?? []}
               onMoveCard={moveCard}
               onCardClick={openEdit}
-              columnIndex={index}
-              isLeaderOrCollaborator={isLeaderOrCollaborator}
               canMoveCard={canMoveCard}
               isCollapsed={collapsedColumns[col.id]}
               onToggleCollapse={() => toggleColumnCollapse(col.id)}
@@ -333,7 +318,7 @@ export default function TeamBoard() {
         onClose={closeSidebar}
         mode={sidebar.mode}
         task={sidebar.task}
-        teamId={teamId}
+        teamId={teamId || ''}
         defaultStatus={sidebar.defaultStatus}
         onTaskCreated={handleTaskCreated}
         onTaskUpdated={handleTaskUpdated}

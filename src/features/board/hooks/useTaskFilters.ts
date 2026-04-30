@@ -1,28 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import type { RecurringInterval, TaskPriority, TeamTask } from '../types';
+import {INITIAL_FILTERS, type TaskFilters, type TeamTask} from '../types';
 
-export interface TaskFilters {
-  categories: string[];
-  priorities: TaskPriority[];
-  dueDateBefore: string | null;
-  isRecurring: boolean | null;
-  recurringInterval: RecurringInterval | null;
-  recurringCount: number | null;
-  assignedUserUids: string[];
-  assignedGroupIds: string[];
-}
-
-const INITIAL_FILTERS: TaskFilters = {
-  categories: [],
-  priorities: [],
-  dueDateBefore: null,
-  isRecurring: null,
-  recurringInterval: null,
-  recurringCount: null,
-  assignedUserUids: [],
-  assignedGroupIds: [],
-};
 
 export function useTaskFilters() {
   const [filters, setFilters] = useState<TaskFilters>(INITIAL_FILTERS);

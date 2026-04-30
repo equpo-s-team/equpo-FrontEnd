@@ -6,45 +6,11 @@ import type {
 import { useRef } from 'react';
 
 import { TagChip } from '@/components/ui/TagChip.tsx';
+import {type BoardCardProps, type BoardColumnId, type PointerTracking} from "@/features/board/types";
 
-import type { TaskPriority } from '../types';
+import { COLUMN_CONFIG, PRIORITY_CONFIG } from '../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
-import { COLUMN_CONFIG, PRIORITY_CONFIG } from './columnConfig';
 
-type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
-
-type BoardCardData = {
-  id: string;
-  name: string;
-  description?: string;
-  priority?: TaskPriority;
-  categories?: string[];
-  assignees?: string[];
-  stepsTotal?: number;
-  stepsDone?: number;
-};
-
-type BoardCardProps = {
-  card: BoardCardData;
-  accent: BoardColumnId;
-  columnId: BoardColumnId;
-  onMoveCard?: (
-    draggedCardId: string,
-    fromColumnId: BoardColumnId,
-    toColumnId: BoardColumnId,
-    position: number,
-  ) => void;
-  onCardClick?: (card: BoardCardData) => void;
-  position: number;
-  canMoveCard?: boolean;
-};
-
-type PointerTracking = {
-  x: number;
-  y: number;
-  t: number;
-  dragged: boolean;
-};
 
 export default function BoardCard({
   card,

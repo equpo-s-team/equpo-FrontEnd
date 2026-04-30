@@ -1,5 +1,5 @@
 import CTAFinal from '@/features/presentation/components/CTAFinal.jsx';
-import Features from '@/features/presentation/components/Features.jsx';
+import Features from '@/features/presentation/components/Features.tsx';
 import Footer from '@/features/presentation/components/Footer.jsx';
 import Hero from '@/features/presentation/components/Hero.jsx';
 import Navbar from '@/features/presentation/components/Navbar.jsx';

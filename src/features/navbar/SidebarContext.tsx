@@ -1,6 +1,10 @@
 import { createContext, useContext, useState } from 'react';
 
-const SidebarContext = createContext(null);
+import {type SidebarContextType} from "@/features/navbar/types";
+
+
+
+const SidebarContext = createContext<SidebarContextType | null>(null);
 
 function getInitialActiveItem() {
   if (typeof window === 'undefined') return 'missiones';
@@ -8,7 +12,7 @@ function getInitialActiveItem() {
   return roomID ? 'video-call' : 'missiones';
 }
 
-export function SidebarProvider({ children }) {
+export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [activeItem, setActiveItem] = useState(getInitialActiveItem);
 
@@ -21,7 +25,7 @@ export function SidebarProvider({ children }) {
   );
 }
 
-export function useSidebar() {
+export function useSidebar(): SidebarContextType {
   const ctx = useContext(SidebarContext);
   if (!ctx) throw new Error('useSidebar must be used inside SidebarProvider');
   return ctx;

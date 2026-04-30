@@ -71,6 +71,9 @@ export interface UpdateGroupPayload {
 export interface InvitationCode {
   code: string;
   teamId: string;
+  teamName?: string;
+  teamPhotoUrl?: string | null;
+  teamDescription?: string | null;
   createdBy: string;
   createdAt: Date;
   expiresAt: Date;

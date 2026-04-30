@@ -29,6 +29,9 @@ export const useGenerateInviteCode = () => {
 
       const inviteData: Omit<InvitationCode, 'code'> = {
         teamId: payload.teamId,
+        teamName: team.name,
+        teamPhotoUrl: team.photoUrl,
+        teamDescription: team.description,
         createdBy: user.uid,
         createdAt: now,
         expiresAt,

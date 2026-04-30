@@ -1,6 +1,6 @@
 import { signOut } from 'firebase/auth';
 import log from 'loglevel';
-import { LogOut, Users } from 'lucide-react';
+import { LogOut, Users, X, Loader2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +13,8 @@ import { useCreateTeam } from '@/features/team/hooks/useCreateTeam';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
+import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
+import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
 import { auth } from '@/firebase';
@@ -67,9 +69,15 @@ export const TeamsHub: React.FC = () => {
   const createTeam = useCreateTeam();
   const updateTeam = useUpdateTeam();
   const { saveProfile } = useUpdateUserProfile();
+  const redeemInviteCode = useRedeemInviteCode();
+  const addMember = useAddTeamMember();
 
   const [modal, setModal] = useState<ModalState>({ mode: null });
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false);
+  const [redeemCode, setRedeemCode] = useState('');
+  const [isRedeeming, setIsRedeeming] = useState(false);
+
   const [profileOverrides, setProfileOverrides] = useState<
     Partial<Pick<UserProfile, 'displayName' | 'photoURL'>>
   >({});
@@ -268,11 +276,10 @@ export const TeamsHub: React.FC = () => {
 
                 {/* Redeem Code Button */}
                 <button
-                  onClick={() => navigate('/invite')}
-                  disabled={true}
+                  onClick={() => setIsRedeemModalOpen(true)}
                   className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 bg-white border border-grey-200 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
                 >
-                  <span className="text-base leading-none"></span>
+                  <span className="text-base leading-none">🔑</span>
                   <span className="hidden sm:inline">Canjear código</span>
                 </button>
               </div>
@@ -347,6 +354,101 @@ export const TeamsHub: React.FC = () => {
           onClose={() => setIsProfileOpen(false)}
           onSave={handleProfileSave}
         />
+      )}
+
+      {/* Redeem Code Modal */}
+      {isRedeemModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-grey-800">Canjear Código de Invitación</h2>
+              <button
+                onClick={() => {
+                  setIsRedeemModalOpen(false);
+                  setRedeemCode('');
+                }}
+                className="text-grey-400 hover:text-grey-600 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p className="text-sm text-grey-600 mb-4">
+              Ingresa el código que recibiste para unirte a un equipo.
+            </p>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (!redeemCode.trim() || !authUser?.uid) return;
+
+                setIsRedeeming(true);
+                try {
+                  // Use the redeemCode hook directly via mutation
+                  const result = await redeemInviteCode.mutateAsync({
+                    code: redeemCode.trim().toUpperCase(),
+                    userUid: authUser.uid,
+                  });
+
+                  // Add user to team
+                  await addMember.mutateAsync({
+                    teamId: result.teamId,
+                    payload: { userUid: authUser.uid, role: result.role },
+                  });
+
+                  toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
+                  setIsRedeemModalOpen(false);
+                  setRedeemCode('');
+                } catch (error) {
+                  toastError(
+                    'Error',
+                    error instanceof Error ? error.message : 'No se pudo canjear el código.',
+                  );
+                } finally {
+                  setIsRedeeming(false);
+                }
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="block text-sm font-medium text-grey-700 mb-2">
+                  Código
+                </label>
+                <input
+                  type="text"
+                  value={redeemCode}
+                  onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
+                  placeholder="Ej: ABC123XY"
+                  disabled={isRedeeming}
+                  className="w-full px-4 py-3 border border-grey-200 rounded-xl text-sm text-grey-800 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
+                  required
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRedeemModalOpen(false);
+                    setRedeemCode('');
+                  }}
+                  disabled={isRedeeming}
+                  className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-600 hover:bg-grey-50 disabled:opacity-50 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={!redeemCode.trim() || isRedeeming}
+                  className="flex-1 py-2.5 rounded-xl bg-blue text-white text-sm font-semibold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+                >
+                  {isRedeeming && <Loader2 size={14} className="animate-spin" />}
+                  {isRedeeming ? 'Canjeando...' : 'Canjear'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {/* CSS for orb animation */}

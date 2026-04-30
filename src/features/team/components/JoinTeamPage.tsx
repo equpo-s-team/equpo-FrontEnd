@@ -1,4 +1,4 @@
-import { collection, collectionGroup, getDocs, query, where } from 'firebase/firestore';
+import { collectionGroup, getDocs, query, where } from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -6,9 +6,8 @@ import { db } from '@/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
-import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { toastError, toastSuccess } from '@/lib/toast';
-import { Loader2, Users, CheckCircle, LogIn } from 'lucide-react';
+import { Loader2, CheckCircle, LogIn } from 'lucide-react';
 
 export default function JoinTeamPage() {
   const { code } = useParams<{ code: string }>();
@@ -49,17 +48,17 @@ export default function JoinTeamPage() {
         console.log('Invitation data retrieved:', data);
         setInviteData(data);
 
-        // Fetch team data
-        console.log('Fetching team data for teamId:', data.teamId);
-        const teamDoc = await getDocs(query(collection(db, 'teams'), where('__name__', '==', data.teamId)));
-        console.log('Team query result:', teamDoc.size, 'docs found');
-        if (!teamDoc.empty) {
-          const teamInfo = teamDoc.docs[0].data();
-          console.log('Team data retrieved:', teamInfo);
-          setTeamData(teamInfo);
-        } else {
-          console.log('Team not found for teamId:', data.teamId);
-        }
+        // Use team data from invite code (no need to fetch team separately)
+        console.log('Using team data from invite code:', {
+          teamId: data.teamId,
+          teamName: data.teamName,
+        });
+        setTeamData({
+          id: data.teamId,
+          name: data.teamName || 'Equipo',
+          photoUrl: data.teamPhotoUrl,
+          description: data.teamDescription,
+        });
       } catch (err) {
         console.error('Error fetching invite:', err);
         console.error('Error details:', err instanceof Error ? err.message : JSON.stringify(err));
@@ -73,16 +72,20 @@ export default function JoinTeamPage() {
   }, [code]);
 
   const handleJoin = () => {
+    console.log('handleJoin called', { inviteData, userUid: user?.uid });
     if (!inviteData || !user?.uid) return;
 
+    console.log('Calling mutate...');
     redeemInviteCode.mutate(
       { code: inviteData.code, userUid: user.uid },
       {
         onSuccess: () => {
+          console.log('Mutation successful');
           toastSuccess('¡Te has unido al equipo!', 'Bienvenido a ' + (teamData?.name || 'el equipo'));
           void navigate('/teams');
         },
         onError: (err) => {
+          console.error('Mutation error:', err);
           toastError('Error al unirse', err instanceof Error ? err.message : 'Intenta de nuevo.');
         },
       },
@@ -150,24 +153,6 @@ export default function JoinTeamPage() {
           <p className="text-grey-600">{teamData.description || 'Un equipo colaborativo para trabajar juntos.'}</p>
         </div>
 
-        <div className="mb-6">
-          <div className="flex items-center justify-center gap-2 text-sm text-grey-500 mb-4">
-            <Users size={16} />
-            <span>{teamData.members?.length || 0} miembros</span>
-          </div>
-          <div className="flex -space-x-2 justify-center">
-            {teamData.members?.slice(0, 5).map((member: any) => (
-              <UserAvatar
-                key={member.userUid}
-                src={member.photoUrl}
-                alt={member.displayName}
-                initials={member.displayName?.slice(0, 2).toUpperCase() || member.userUid.slice(0, 2)}
-                className="w-8 h-8 border-2 border-white"
-                fallbackClassName="text-white text-xs"
-              />
-            ))}
-          </div>
-        </div>
 
         <div className="text-center">
           {isAuth ? (

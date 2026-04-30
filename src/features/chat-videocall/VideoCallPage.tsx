@@ -1,43 +1,43 @@
 import { ref, remove, set } from 'firebase/database';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import { rtdb } from '@/firebase';
+import type { ZegoUIKitPrebuiltInstance } from '@/types/zego';
 
 import { chatApi } from './api/chatApi';
 
-function getUrlParams(url) {
+function getUrlParams(url: string) {
   const urlStr = url.split('?')[1];
   if (!urlStr) return {};
   const urlSearchParams = new URLSearchParams(urlStr);
   return Object.fromEntries(urlSearchParams.entries());
 }
 
-export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
+export default function VideoCallPage({ roomID: roomIDProp, onLeave }: { roomID: string; onLeave?: () => void }) {
   const containerRef = useRef(null);
-  const zpRef = useRef(null);
+  const zpRef = useRef<ZegoUIKitPrebuiltInstance | null>(null);
 
   const { user } = useAuth();
   const { teamId } = useTeam();
   const { activeVideoCall, endVideoCallSession, rtcStatus, rooms } = useChatContext();
   const { setActiveItem } = useSidebar();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const usersInRoomRef = useRef(new Set());
-  const inactivityTimerRef = useRef(null);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const roomIdFromQuery = useMemo(() => getUrlParams(window.location.href).roomID, []);
   const roomID = roomIDProp || activeVideoCall?.roomId || roomIdFromQuery;
   const userID = user?.uid || '';
 
-  const handleLeave = useCallback(async () => {
+  const handleLeave = useCallback(() => {
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
     }
 
-    // Si somos el último usuario, borramos la llamada de la RTDB
     if (usersInRoomRef.current.size <= 1 && teamId && roomID) {
       remove(ref(rtdb, `teams/${teamId}/activeCalls/${roomID}`)).catch(() => {});
     }
@@ -58,12 +58,11 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
 
     const initializeZegoCall = async () => {
       try {
-        // Fetch token from backend (validates group membership)
+
         const tokenResponse = await chatApi.getZegoToken(teamId, roomID);
 
         if (cancelled) return;
 
-        // Load ZEGO script if not already loaded
         if (!window.ZegoUIKitPrebuilt) {
           await new Promise((resolve, reject) => {
             const script = document.createElement('script');
@@ -103,7 +102,6 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
               startedAt: Date.now(),
             }).catch(() => {});
 
-            // Arrancar timer si el usuario entra solo
             if (usersInRoomRef.current.size <= 1) {
               inactivityTimerRef.current = setTimeout(() => {
                 alert('Por inactividad la videollamada se ha cerrado.');
@@ -144,7 +142,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }) {
       } catch (err) {
         console.error('Error al inicializar Zego:', err);
         if (!cancelled) {
-          const message = err?.message || '';
+          const message: string = err instanceof Error ? err.message : String(err);
           if (message.includes('403') || message.includes('Forbidden')) {
             setError('forbidden');
           } else {

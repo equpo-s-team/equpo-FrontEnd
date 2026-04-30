@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext.jsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
-import { useSidebar } from './SidebarContext.jsx';
+import { useSidebar } from './SidebarContext';
 
 const BASE_NAV_ITEMS = [
   { id: 'my-space', label: 'Mi Espacio', icon: Home },
@@ -21,7 +21,6 @@ export default function BottomNav() {
   const { teamId } = useTeam();
   const { data: teams = [] } = useTeams();
 
-  // Determine if current user can access settings
   const currentTeam = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
   const myRole = (() => {

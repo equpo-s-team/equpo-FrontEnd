@@ -1,15 +1,35 @@
 import { onIdTokenChanged, signOut, updateProfile } from 'firebase/auth';
 import log from 'loglevel';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, type ReactNode,useCallback, useContext, useEffect, useState } from 'react';
 
 import { resolveCanonicalAvatarUrl } from '@/components/ui/avatar/avatarStorage';
 import { createUser, getUser } from '@/dataconnect-generated';
 import { auth } from '@/firebase.ts';
 
-const AuthContext = createContext(null);
+interface AuthUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  level?: number;
+  experiencePoints?: number;
+  virtualCurrency?: number;
+  lastActive?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+interface AuthContextType {
+  user: AuthUser | null;
+  isLoading: boolean;
+  isAuth: boolean;
+  updateUserData: (newData: Partial<AuthUser>) => void;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchDatabaseUser = useCallback(async () => {
@@ -25,7 +45,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async (user) => {
       if (user) {
-        // First set basic Firebase user data
         const userData = {
           uid: user.uid,
           email: user.email,
@@ -33,7 +52,6 @@ export function AuthProvider({ children }) {
           photoURL: user.photoURL,
         };
 
-        // Fetch database user data for current auth user
         const databaseUser = await fetchDatabaseUser();
         const baseDisplayName = userData.displayName ?? userData.email?.split('@')[0] ?? 'Usuario';
         const sourcePhotoURL = databaseUser?.photoURL ?? userData.photoURL ?? null;
@@ -65,7 +83,6 @@ export function AuthProvider({ children }) {
         }
 
         if (databaseUser) {
-          // Merge Firebase user data with database user data
           setUser({
             ...userData,
             photoURL: canonicalPhotoURL,
@@ -77,7 +94,6 @@ export function AuthProvider({ children }) {
             updatedAt: databaseUser.updatedAt,
           });
         } else {
-          // No database user found, return Firebase data only
           setUser({
             ...userData,
             displayName: baseDisplayName,
@@ -93,7 +109,7 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, [fetchDatabaseUser]);
 
-  const updateUserData = useCallback((newData) => {
+  const updateUserData = useCallback((newData: Partial<AuthUser>) => {
     setUser((prev) => (prev ? { ...prev, ...newData } : null));
   }, []);
 
@@ -107,7 +123,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export function useAuth() {
+export function useAuth(): AuthContextType {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used inside AuthProvider');
   return ctx;

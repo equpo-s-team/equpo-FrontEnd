@@ -1,9 +1,10 @@
-// src/utils/columnConfig.js
-// Maps accent keys → Tailwind class strings
-// All classes must be complete (no dynamic construction) so Tailwind can scan them.
 import { CheckSquare, LayoutGrid, Loader, ShieldCheck } from 'lucide-react';
 
-export const COLUMN_CONFIG = {
+import {type ColumnEmptyConfig, type ColumnStyleConfig, type PriorityStyleConfig, type TagColorConfig} from "@/features/board/types";
+
+
+
+export const COLUMN_CONFIG: Record<string, ColumnStyleConfig> = {
   todo: {
     border: 'border-kanban-todo/40',
     shadow: 'shadow-col-todo',
@@ -64,7 +65,7 @@ export const COLUMN_CONFIG = {
   },
 };
 
-export const PRIORITY_CONFIG = {
+export const PRIORITY_CONFIG: Record<string, PriorityStyleConfig> = {
   high: {
     label: 'Alta',
     bg: 'bg-red/10',
@@ -88,7 +89,7 @@ export const PRIORITY_CONFIG = {
   },
 };
 
-export const TAG_COLOR_CONFIG = {
+export const TAG_COLOR_CONFIG: Record<string, TagColorConfig> = {
   blue: { bg: 'bg-blue/10', text: 'text-blue', border: 'border-blue/30' },
   green: { bg: 'bg-green/10', text: 'text-green', border: 'border-green/30' },
   cyan: { bg: 'bg-[#86F0FD]/10', text: 'text-[#0891b2]', border: 'border-[#86F0FD]/30' },
@@ -97,7 +98,7 @@ export const TAG_COLOR_CONFIG = {
   purple: { bg: 'bg-purple/10', text: 'text-purple', border: 'border-purple/30' },
 };
 
-export const TAG_LABEL_TO_COLOR = {
+export const TAG_LABEL_TO_COLOR: Record<string, string> = {
   Frontend: 'blue',
   Backend: 'green',
   API: 'cyan',
@@ -110,7 +111,7 @@ export const TAG_LABEL_TO_COLOR = {
   Research: 'orange',
 };
 
-export const USER_GRADIENT = {
+export const USER_GRADIENT: Record<string, string> = {
   AT: 'bg-avatar-at',
   JR: 'bg-avatar-jr',
   ML: 'bg-avatar-ml',
@@ -120,7 +121,7 @@ export const USER_GRADIENT = {
   SR: 'bg-avatar-sr',
 };
 
-export const COLUMN_EMPTY = {
+export const COLUMN_EMPTY: Record<string, ColumnEmptyConfig> = {
   todo: {
     icon: LayoutGrid,
     title: 'Sin tareas pendientes',
@@ -142,3 +143,27 @@ export const COLUMN_EMPTY = {
     description: 'Las tareas completadas se verán en esta columna.',
   },
 };
+
+// Maps task status to column ID
+export const STATUS_TO_COLUMN: Record<string, 'todo' | 'progress' | 'qa' | 'done'> = {
+  'todo': 'todo',
+  'in-progress': 'progress',
+  'in-qa': 'qa',
+  'done': 'done',
+};
+
+// Maps column ID to task status
+export const COLUMN_TO_STATUS: Record<'todo' | 'progress' | 'qa' | 'done', string> = {
+  'todo': 'todo',
+  'progress': 'in-progress',
+  'qa': 'in-qa',
+  'done': 'done',
+};
+
+// Column definitions for the board
+export const COLUMNS = [
+  { id: 'todo', label: 'Por Hacer', accent: 'todo' },
+  { id: 'progress', label: 'En Progreso', accent: 'progress' },
+  { id: 'qa', label: 'Revisión', accent: 'qa' },
+  { id: 'done', label: 'Terminado', accent: 'done' },
+] as const;

@@ -95,13 +95,13 @@ export default function Footer() {
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background =
                           'linear-gradient(90deg, #38b97a, #2e8fd4)';
-                        e.currentTarget.style.WebkitBackgroundClip = 'text';
-                        e.currentTarget.style.WebkitTextFillColor = 'transparent';
+                        e.currentTarget.style.webkitBackgroundClip = 'text';
+                        e.currentTarget.style.webkitTextFillColor = 'transparent';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.background = 'none';
-                        e.currentTarget.style.WebkitBackgroundClip = 'unset';
-                        e.currentTarget.style.WebkitTextFillColor = 'unset';
+                        e.currentTarget.style.webkitBackgroundClip = 'unset';
+                        e.currentTarget.style.webkitTextFillColor = 'unset';
                       }}
                     >
                       {link}

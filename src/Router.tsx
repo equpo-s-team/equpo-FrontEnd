@@ -68,7 +68,7 @@ function Dashboard() {
   return <AppLayout>{renderContent()}</AppLayout>;
 }
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children }:{ children: React.ReactNode }) {
   const { isAuth, isLoading } = useAuth();
 
   if (isLoading) {
@@ -90,7 +90,7 @@ function ProtectedRoute({ children }) {
   );
 }
 
-function TeamsRoute({ children }) {
+function TeamsRoute({ children }:{ children: React.ReactNode }) {
   const { isAuth, isLoading } = useAuth();
 
   if (isLoading) {

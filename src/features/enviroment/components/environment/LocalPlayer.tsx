@@ -1,6 +1,6 @@
 import { Html, useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { BallCollider, RigidBody, type RapierRigidBody, useRapier } from '@react-three/rapier';
+import { BallCollider, type RapierRigidBody, RigidBody, useRapier } from '@react-three/rapier';
 import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 

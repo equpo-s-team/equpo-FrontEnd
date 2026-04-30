@@ -36,11 +36,11 @@ const BLENDER = {
 
 const DEG = Math.PI / 180;
 
-function blenderPos([x, y, z]) {
+function blenderPos([x, y, z]: number[]): [number, number, number] {
   return [x, z, -y];
 }
 
-function blenderRot([x, y, z]) {
+function blenderRot([x, y, z]: number[]) {
   return new THREE.Euler(x * DEG, z * DEG, -y * DEG, 'YXZ');
 }
 
@@ -49,7 +49,7 @@ function getScaled() {
   const originBL = BLENDER.diorama.pos;
   const origin3 = blenderPos(originBL);
 
-  function s(blPos) {
+  function s(blPos: number[]): [number, number, number] {
     const [tx, ty, tz] = blenderPos(blPos);
     return [(tx - origin3[0]) * scale, (ty - origin3[1]) * scale, (tz - origin3[2]) * scale];
   }
@@ -69,7 +69,7 @@ export default function HeroVisual() {
   const mountRef = useRef(null);
 
   useEffect(() => {
-    const container = mountRef.current;
+    const container = mountRef.current as HTMLElement | null;
     if (!container) return;
 
     const renderer = new THREE.WebGLRenderer({
@@ -123,7 +123,7 @@ export default function HeroVisual() {
     const dioramaGroup = new THREE.Group();
     scene.add(dioramaGroup);
 
-    const ghosts = {};
+    const ghosts: Record<string, THREE.Object3D> = {};
 
     let loadedCount = 0;
     const TOTAL = 6;
@@ -133,7 +133,13 @@ export default function HeroVisual() {
       if (loadedCount === TOTAL) fitCamera();
     }
 
-    function loadModel(file, group, pos, rot, key) {
+    function loadModel(
+      file: string,
+      group: THREE.Group,
+      pos: [number, number, number],
+      rot: number[],
+      key: string | null,
+    ) {
       loader.load(
         BASE + file,
         (glb) => {
@@ -142,9 +148,10 @@ export default function HeroVisual() {
           model.setRotationFromEuler(blenderRot(rot));
           model.scale.setScalar(N.scale);
           model.traverse((node) => {
-            if (node.isMesh) {
-              node.castShadow = true;
-              node.receiveShadow = false;
+            if ((node as THREE.Mesh).isMesh) {
+              const mesh = node as THREE.Mesh;
+              mesh.castShadow = true;
+              mesh.receiveShadow = false;
             }
           });
           group.add(model);
@@ -153,7 +160,7 @@ export default function HeroVisual() {
         },
         undefined,
         (err) => {
-          log.warn(`Could not load ${file}:`, err);
+          console.warn(`Could not load ${file}:`, err);
           onLoaded();
         },
       );
@@ -186,19 +193,15 @@ export default function HeroVisual() {
       camera.position.set(center.x, center.y + size.y * 0.05, center.z + dist);
       camera.lookAt(center.x, center.y - size.y * 0.05, center.z);
       camera.updateProjectionMatrix();
-
-      restCameraPos.copy(camera.position);
-      restLookAt.set(center.x, center.y - size.y * 0.05, center.z);
     }
 
     const mouse = { x: 0, y: 0 };
-    const restCameraPos = new THREE.Vector3(0, 0.18, 1.4);
-    const restLookAt = new THREE.Vector3(0, 0.08, 0);
     const targetGhostOffset = new THREE.Vector2(0, 0);
     const currentGhostOffset = new THREE.Vector2(0, 0);
     const PARALLAX_STRENGTH = 0.04;
 
-    function onMouseMove(e) {
+    function onMouseMove(e: MouseEvent) {
+      if (!container) return;
       const rect = container.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -209,8 +212,8 @@ export default function HeroVisual() {
       targetGhostOffset.set(0, 0);
     }
 
-    container.addEventListener('mousemove', onMouseMove);
-    container.addEventListener('mouseleave', onMouseLeave);
+    container.addEventListener('mousemove', onMouseMove as EventListener);
+    container.addEventListener('mouseleave', onMouseLeave as EventListener);
 
     /* ── Scroll animation for blueGhost ──────────────────────────────── */
     const blueRestY = N.blue[1];
@@ -218,6 +221,7 @@ export default function HeroVisual() {
     let blueScrollT = 0;
 
     function onScroll() {
+      if (!container) return;
       const heroSection = container.closest('section');
       if (!heroSection) return;
       const heroH = heroSection.offsetHeight;
@@ -228,7 +232,7 @@ export default function HeroVisual() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     /* ── Animation loop ───────────────────────────────────────────────── */
-    let animId;
+    let animId: number | undefined;
     const clock = new THREE.Clock();
 
     function animate() {
@@ -251,9 +255,11 @@ export default function HeroVisual() {
         const targetY = THREE.MathUtils.lerp(blueRestY, blueTargetY, blueScrollT);
         ghosts.blue.position.y = targetY + Math.sin(t * 1.1 + 3.0) * 0.007;
         ghosts.blue.traverse((node) => {
-          if (node.isMesh && node.material) {
-            node.material.transparent = true;
-            node.material.opacity = THREE.MathUtils.lerp(1, 0.15, blueScrollT);
+          const mesh = node as THREE.Mesh;
+          if (mesh.isMesh && mesh.material && 'opacity' in mesh.material) {
+            const material = mesh.material as THREE.Material & { opacity: number; transparent: boolean };
+            material.transparent = true;
+            material.opacity = THREE.MathUtils.lerp(1, 0.15, blueScrollT);
           }
         });
       }
@@ -274,14 +280,14 @@ export default function HeroVisual() {
     ro.observe(container);
 
     return () => {
-      cancelAnimationFrame(animId);
-      container.removeEventListener('mousemove', onMouseMove);
-      container.removeEventListener('mouseleave', onMouseLeave);
-      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(animId as number);
+      container.removeEventListener('mousemove', onMouseMove as EventListener);
+      container.removeEventListener('mouseleave', onMouseLeave as EventListener);
+      window.removeEventListener('scroll', onScroll as EventListener);
       ro.disconnect();
       renderer.dispose();
       if (renderer.domElement.parentNode === container) {
-        container.removeChild(renderer.domElement);
+        renderer.domElement.parentNode.removeChild(renderer.domElement);
       }
     };
   }, []);

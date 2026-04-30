@@ -1,8 +1,8 @@
-import BottomNav from '../features/navbar/BottomNav.jsx';
-import Sidebar from '../features/navbar/Sidebar.jsx';
-import { useSidebar } from '../features/navbar/SidebarContext.jsx';
+import BottomNav from '../features/navbar/BottomNav';
+import Sidebar from '../features/navbar/Sidebar';
+import { useSidebar } from '../features/navbar/SidebarContext';
 
-export default function AppLayout({ children }) {
+export default function AppLayout({ children }:{ children: React.ReactNode }) {
   const { collapsed } = useSidebar();
 
   return (

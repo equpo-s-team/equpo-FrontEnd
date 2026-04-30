@@ -46,7 +46,6 @@ export function LocalPlayer({
   const lastMoveSync = useRef(0);
   const { rapier, world } = useRapier();
 
-  // Clone scene so multiple players don't share the same object
   useEffect(() => {
     clonedScene.current = scene.clone(true);
   }, [scene]);
@@ -70,10 +69,7 @@ export function LocalPlayer({
     const pos = body.translation();
 
     if (jump) {
-      const ray = new rapier.Ray(
-        { x: pos.x, y: pos.y, z: pos.z },
-        { x: 0, y: -1, z: 0 },
-      );
+      const ray = new rapier.Ray({ x: pos.x, y: pos.y, z: pos.z }, { x: 0, y: -1, z: 0 });
       const maxToi = GHOST_PHYSICS_RADIUS + GROUND_RAY_EXTRA;
       const hit = world.castRay(ray, maxToi, true);
       if (hit && hit.timeOfImpact <= maxToi) {
@@ -86,10 +82,7 @@ export function LocalPlayer({
     if (isMoving) {
       dir.normalize();
       const vel = body.linvel();
-      body.setLinvel(
-        { x: dir.x * MOVEMENT_SPEED, y: vel.y, z: dir.z * MOVEMENT_SPEED },
-        true,
-      );
+      body.setLinvel({ x: dir.x * MOVEMENT_SPEED, y: vel.y, z: dir.z * MOVEMENT_SPEED }, true);
 
       const targetRotation = Math.atan2(dir.x, dir.z);
       rotationY.current = THREE.MathUtils.lerp(
@@ -102,35 +95,27 @@ export function LocalPlayer({
       body.setLinvel({ x: 0, y: vel.y, z: 0 }, true);
     }
 
-    // Respawn if fallen
     if (pos.y < RESPAWN_Y_THRESHOLD) {
       body.setTranslation({ x: 0, y: GHOST_SPAWN_Y, z: 0 }, true);
       body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     }
 
-    // Sync mesh to body
     if (meshRef.current) {
       meshRef.current.position.set(pos.x, pos.y + GHOST_Y_OFFSET, pos.z);
       meshRef.current.rotation.y = rotationY.current;
     }
 
-    // Update camera target
     cameraTargetRef.current.set(pos.x, pos.y, pos.z);
 
-    // Broadcast move
     const now = performance.now();
     if (isMoving && now - lastMoveSync.current > MOVE_SYNC_INTERVAL) {
       lastMoveSync.current = now;
-      onLocalMove(
-        { x: pos.x, y: pos.y, z: pos.z },
-        { x: 0, y: rotationY.current, z: 0 },
-      );
+      onLocalMove({ x: pos.x, y: pos.y, z: pos.z }, { x: 0, y: rotationY.current, z: 0 });
     }
   });
 
   return (
     <>
-      {/* Physics body — invisible capsule */}
       <RigidBody
         ref={rigidBodyRef}
         colliders={false}
@@ -143,11 +128,8 @@ export function LocalPlayer({
         <BallCollider args={[GHOST_PHYSICS_RADIUS]} />
       </RigidBody>
 
-      {/* Visible mesh */}
       <group ref={meshRef}>
-        {clonedScene.current && (
-          <primitive object={clonedScene.current} scale={GHOST_SCALE} />
-        )}
+        {clonedScene.current && <primitive object={clonedScene.current} scale={GHOST_SCALE} />}
         <Html position={LABEL_POSITION} center distanceFactor={25} zIndexRange={[0, 5]}>
           <div className="px-2 py-1 text-md font-maxwell font-bold text-white bg-black/30 rounded backdrop-blur-sm pointer-events-none whitespace-nowrap">
             {playerName}

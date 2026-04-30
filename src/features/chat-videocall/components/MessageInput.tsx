@@ -21,7 +21,7 @@ export default function MessageInput() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const emojiButtonRef = useRef<HTMLButtonElement>(null);
-  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [typingTimeout, setTypingTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -95,17 +95,15 @@ export default function MessageInput() {
 
       let url: string;
       try {
-        // 2. If it already exists, just get the URL
         url = await getDownloadURL(storageRef);
       } catch {
-        // 3. Otherwise, upload it
         await uploadBytes(storageRef, file);
         url = await getDownloadURL(storageRef);
       }
 
       const isImage = file.type.startsWith('image/');
       sendMessage(file.name, isImage ? 'image' : 'file', url, file.name);
-      play('messageSent'); // Play sound when sending file
+      play('messageSent');
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {

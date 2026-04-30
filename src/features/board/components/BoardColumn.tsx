@@ -2,11 +2,11 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import {type BoardColumnProps, type DropZoneProps} from "@/features/board/types";
 import { ChevronUp } from 'lucide-react';
 
-import {COLUMN_CONFIG, COLUMN_EMPTY} from '../utils/columnConfig.ts';
+import { COLUMN_CONFIG, COLUMN_EMPTY } from '../utils/columnConfig.ts';
 import BoardCard from './BoardCard.tsx';
 
-function ColIndicator({ accent } : { accent: string }) {
-  const cfg : Record<string, any> = COLUMN_CONFIG[accent];
+function ColIndicator({ accent }: { accent: string }) {
+  const cfg: Record<string, any> = COLUMN_CONFIG[accent];
   return <div className={`w-2 h-2 rounded-full ${cfg.indicator} ${cfg.indicatorAnim}`} />;
 }
 
@@ -23,7 +23,7 @@ function DropZone({ onDrop, position }: DropZoneProps) {
     }
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLButtonElement> ) => {
+  const handleDragOver = (e: React.DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!e.dataTransfer) return;
     e.currentTarget.classList.add('bg-blue/10');
@@ -57,7 +57,7 @@ export default function BoardColumn({
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
 
   const handleExternalDrop = (cardId: string, fromColumnId: string, position: number) => {
-    onMoveCard(cardId, fromColumnId, id, position);
+    void onMoveCard(cardId, fromColumnId, id, position);
   };
 
   return (

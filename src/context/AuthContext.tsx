@@ -1,6 +1,6 @@
 import { onIdTokenChanged, signOut, updateProfile } from 'firebase/auth';
 import log from 'loglevel';
-import { createContext, type ReactNode,useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 
 import { resolveCanonicalAvatarUrl } from '@/components/ui/avatar/avatarStorage';
 import { createUser, getUser } from '@/dataconnect-generated';
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onIdTokenChanged(auth, async (user) => {
+    return onIdTokenChanged(auth, (user) => {
       if (user) {
         const userData = {
           uid: user.uid,
@@ -53,62 +53,70 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           photoURL: user.photoURL,
         };
 
-        const databaseUser = await fetchDatabaseUser();
-        const baseDisplayName = userData.displayName ?? userData.email?.split('@')[0] ?? 'Usuario';
-        const sourcePhotoURL = databaseUser?.photoURL ?? userData.photoURL ?? null;
-
-        const canonicalPhotoURL = await resolveCanonicalAvatarUrl(user.uid, sourcePhotoURL);
-
-        if (canonicalPhotoURL && canonicalPhotoURL !== userData.photoURL) {
+        // Wrap async operations in an IIFE to avoid returning a Promise
+        void (async () => {
           try {
-            await updateProfile(user, { photoURL: canonicalPhotoURL });
+            const databaseUser = await fetchDatabaseUser();
+            const baseDisplayName =
+              userData.displayName ?? userData.email?.split('@')[0] ?? 'Usuario';
+            const sourcePhotoURL = databaseUser?.photoURL ?? userData.photoURL ?? null;
+
+            const canonicalPhotoURL = await resolveCanonicalAvatarUrl(user.uid, sourcePhotoURL);
+
+            if (canonicalPhotoURL && canonicalPhotoURL !== userData.photoURL) {
+              try {
+                await updateProfile(user, { photoURL: canonicalPhotoURL });
+              } catch (error) {
+                log.warn('No se pudo actualizar photoURL en Firebase Auth:', error);
+              }
+            }
+
+            const shouldUpsertDatabaseUser =
+              !databaseUser ||
+              databaseUser.displayName !== baseDisplayName ||
+              (databaseUser.photoURL ?? null) !== canonicalPhotoURL;
+
+            if (shouldUpsertDatabaseUser) {
+              try {
+                await createUser({
+                  displayName: baseDisplayName,
+                  photoURL: canonicalPhotoURL,
+                });
+              } catch (error) {
+                log.warn('No se pudo sincronizar el perfil del usuario en Data Connect:', error);
+              }
+            }
+
+            if (databaseUser) {
+              setUser({
+                ...userData,
+                photoURL: canonicalPhotoURL,
+                level: databaseUser.level,
+                experiencePoints: databaseUser.experiencePoints,
+                virtualCurrency: databaseUser.virtualCurrency,
+                lastActive: databaseUser.lastActive,
+                createdAt: databaseUser.createdAt,
+                updatedAt: databaseUser.updatedAt,
+              });
+            } else {
+              setUser({
+                ...userData,
+                displayName: baseDisplayName,
+                photoURL: canonicalPhotoURL,
+              });
+            }
           } catch (error) {
-            log.warn('No se pudo actualizar photoURL en Firebase Auth:', error);
+            log.error('Error in auth token change handler:', error);
+          } finally {
+            setIsLoading(false);
           }
-        }
-
-        const shouldUpsertDatabaseUser =
-          !databaseUser ||
-          databaseUser.displayName !== baseDisplayName ||
-          (databaseUser.photoURL ?? null) !== canonicalPhotoURL;
-
-        if (shouldUpsertDatabaseUser) {
-          try {
-            await createUser({
-              displayName: baseDisplayName,
-              photoURL: canonicalPhotoURL,
-            });
-          } catch (error) {
-            log.warn('No se pudo sincronizar el perfil del usuario en Data Connect:', error);
-          }
-        }
-
-        if (databaseUser) {
-          setUser({
-            ...userData,
-            photoURL: canonicalPhotoURL,
-            level: databaseUser.level,
-            experiencePoints: databaseUser.experiencePoints,
-            virtualCurrency: databaseUser.virtualCurrency,
-            lastActive: databaseUser.lastActive,
-            createdAt: databaseUser.createdAt,
-            updatedAt: databaseUser.updatedAt,
-          });
-        } else {
-          setUser({
-            ...userData,
-            displayName: baseDisplayName,
-            photoURL: canonicalPhotoURL,
-          });
-        }
+        })();
       } else {
         queryClient.clear();
         setUser(null);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     });
-
-    return unsubscribe;
   }, [fetchDatabaseUser]);
 
   const updateUserData = useCallback((newData: Partial<AuthUser>) => {

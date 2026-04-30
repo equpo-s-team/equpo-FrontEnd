@@ -1,17 +1,15 @@
-import {
-  Plus,
-  RotateCcw,
-  SlidersHorizontal,
-} from 'lucide-react';
+import { Plus, RotateCcw, SlidersHorizontal } from 'lucide-react';
 import { useState } from 'react';
 
-import {AssignedGroupFilter, AssignedUserFilter} from "@/features/board/components/filterBar/AssignedEntityFilter.tsx";
-import {CategoriesFilter} from "@/features/board/components/filterBar/CategoriesFilter.tsx";
-import {DueDateFilter} from "@/features/board/components/filterBar/DueDateFilter.tsx";
-import {PriorityFilter} from "@/features/board/components/filterBar/PriorityFilter.tsx";
-import {RecurringFilter} from "@/features/board/components/filterBar/RecurringFilter.tsx";
-import {type filterBarProp} from "@/features/board/types";
-
+import {
+  AssignedGroupFilter,
+  AssignedUserFilter,
+} from '@/features/board/components/filterBar/AssignedEntityFilter.tsx';
+import { CategoriesFilter } from '@/features/board/components/filterBar/CategoriesFilter.tsx';
+import { DueDateFilter } from '@/features/board/components/filterBar/DueDateFilter.tsx';
+import { PriorityFilter } from '@/features/board/components/filterBar/PriorityFilter.tsx';
+import { RecurringFilter } from '@/features/board/components/filterBar/RecurringFilter.tsx';
+import { type filterBarProp } from '@/features/board/types';
 
 export default function FilterBar({
   filters,
@@ -105,8 +103,8 @@ export default function FilterBar({
       >
         <div className="flex items-center gap-2.5">
           <span className="text-[11px] font-bold uppercase tracking-[0.9px] text-grey-400 mr-1 shrink-0">
-          Filtros
-        </span>
+            Filtros
+          </span>
           {filterControls}
         </div>
         {canCreateTask && (

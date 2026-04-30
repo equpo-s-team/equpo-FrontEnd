@@ -257,7 +257,10 @@ export default function HeroVisual() {
         ghosts.blue.traverse((node) => {
           const mesh = node as THREE.Mesh;
           if (mesh.isMesh && mesh.material && 'opacity' in mesh.material) {
-            const material = mesh.material as THREE.Material & { opacity: number; transparent: boolean };
+            const material = mesh.material as THREE.Material & {
+              opacity: number;
+              transparent: boolean;
+            };
             material.transparent = true;
             material.opacity = THREE.MathUtils.lerp(1, 0.15, blueScrollT);
           }

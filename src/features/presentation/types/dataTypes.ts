@@ -1,24 +1,23 @@
-
 export interface task {
-  tag: string,
-  tagBg: string,
-  tagColor: string,
-  text: string
+  tag: string;
+  tagBg: string;
+  tagColor: string;
+  text: string;
 }
 
 export interface KanbanColProps {
-  title: string,
-  dotGrad: string,
-  tasks: task[]
+  title: string;
+  dotGrad: string;
+  tasks: task[];
 }
 
 export interface SectionLabelProps {
-  children: React.ReactNode,
-  gradient?: string,
-  textGrad?: string,
-  barColor?: string,
-  color?: string,
-  className?: string
+  children: React.ReactNode;
+  gradient?: string;
+  textGrad?: string;
+  barColor?: string;
+  color?: string;
+  className?: string;
 }
 
 export interface NucleusDotsProps {

@@ -1,8 +1,6 @@
-import {type SidebarItemProps} from "@/features/navbar/types";
+import { type SidebarItemProps } from '@/features/navbar/types';
 
 import { useSidebar } from './SidebarContext.jsx';
-
-
 
 export default function SidebarItem({ id, icon: Icon, label }: SidebarItemProps) {
   const { collapsed, activeItem, setActiveItem } = useSidebar();

@@ -1,14 +1,14 @@
-import {ChevronDown, Users} from "lucide-react";
-import {useState} from "react";
+import { ChevronDown, Users } from 'lucide-react';
+import { useState } from 'react';
 
-import {CheckRow} from "@/features/board/components/filterBar/CheckRow.tsx";
+import { CheckRow } from '@/features/board/components/filterBar/CheckRow.tsx';
 
-import { FilterPanelFooter } from "../../../../components/ui/FilterPanelFooter.tsx";
-import { Pill } from "../../../../components/ui/Pill.tsx";
-import {type assignedGroupFilterProp, type assignedUserFilterProp} from "../../types";
-import { DropPanel } from "./DropPanel";
+import { FilterPanelFooter } from '../../../../components/ui/FilterPanelFooter.tsx';
+import { Pill } from '../../../../components/ui/Pill.tsx';
+import { type assignedGroupFilterProp, type assignedUserFilterProp } from '../../types';
+import { DropPanel } from './DropPanel';
 
-export function AssignedUserFilter({ members, selected, onChange } :assignedUserFilterProp) {
+export function AssignedUserFilter({ members, selected, onChange }: assignedUserFilterProp) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -66,13 +66,13 @@ export function AssignedUserFilter({ members, selected, onChange } :assignedUser
   );
 }
 
-export function AssignedGroupFilter({ groups, selected, onChange } : assignedGroupFilterProp) {
+export function AssignedGroupFilter({ groups, selected, onChange }: assignedGroupFilterProp) {
   const [open, setOpen] = useState(false);
 
   const toggle = (id: string) =>
     onChange(selected.includes(id) ? selected.filter((g) => g !== id) : [...selected, id]);
 
-  const label : string =
+  const label: string =
     selected.length === 0
       ? 'Grupo'
       : selected.length === 1

@@ -1,4 +1,4 @@
-import {type pillProp} from "@/features/board/types";
+import { type pillProp } from '@/features/board/types';
 
 export function Pill({ active, children, onClick, className = '' }: pillProp) {
   return (

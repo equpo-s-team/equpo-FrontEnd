@@ -46,11 +46,7 @@ export const teamsApi = {
       payload,
     ),
   updateGroup: (teamId: string, groupId: string, payload: UpdateGroupPayload) =>
-    request<{ success: boolean }>(
-      `/teams/${teamId}/groups/${groupId}`,
-      'PATCH',
-      payload,
-    ),
+    request<{ success: boolean }>(`/teams/${teamId}/groups/${groupId}`, 'PATCH', payload),
   deleteGroup: (teamId: string, groupId: string) =>
     request<void>(`/teams/${teamId}/groups/${groupId}`, 'DELETE'),
   removeMember: (teamId: string, userUid: string) =>

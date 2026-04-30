@@ -1,6 +1,6 @@
-import type {LucideIcon} from "lucide-react";
+import type { LucideIcon } from 'lucide-react';
 
-import {type TaskPriority, type TaskStatus, type TeamTask} from "@/features/board";
+import { type TaskPriority, type TaskStatus, type TeamTask } from '@/features/board';
 
 export const STATUS_TO_COLUMN: Record<TaskStatus, BoardColumnId> = {
   todo: 'todo',
@@ -85,7 +85,12 @@ export type Card = {
 export interface BoardColumnProps {
   column: Column;
   cards: Card[];
-  onMoveCard: (cardId: string, fromColumnId: string, toColumnId: string, position: number) => void | Promise<void>;
+  onMoveCard: (
+    cardId: string,
+    fromColumnId: string,
+    toColumnId: string,
+    position: number,
+  ) => void | Promise<void>;
   onCardClick: (card: Card) => void;
   canMoveCard?: boolean;
 }

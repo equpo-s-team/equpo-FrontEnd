@@ -1,4 +1,4 @@
-import {type checkRowProp} from "@/features/board/types";
+import { type checkRowProp } from '@/features/board/types';
 
 export function CheckRow({ label, icon, checked, onClick }: checkRowProp) {
   return (

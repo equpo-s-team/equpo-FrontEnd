@@ -1,24 +1,29 @@
-import {DropdownMenu, DropdownMenuTrigger} from "@radix-ui/react-dropdown-menu";
-import {ChevronDown, ChevronDownIcon, Repeat} from "lucide-react";
-import {useState} from "react";
+import { DropdownMenu, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
+import { ChevronDown, ChevronDownIcon, Repeat } from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import {DropdownMenuContent, DropdownMenuItem} from "@/components/ui/dropdown-menu";
-import {FilterPanelFooter} from "@/components/ui/FilterPanelFooter.tsx";
-import {CheckRow} from "@/features/board/components/filterBar/CheckRow.tsx";
-import {INTERVAL_LABELS, RECURRING_STATES, type recurringFilterProp, type RecurringInterval} from "@/features/board/types";
+import { Button } from '@/components/ui/button';
+import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { FilterPanelFooter } from '@/components/ui/FilterPanelFooter.tsx';
+import { CheckRow } from '@/features/board/components/filterBar/CheckRow.tsx';
+import {
+  INTERVAL_LABELS,
+  RECURRING_STATES,
+  type recurringFilterProp,
+  type RecurringInterval,
+} from '@/features/board/types';
 
-import { Pill } from "../../../../components/ui/Pill.tsx";
-import { DropPanel } from "./DropPanel";
+import { Pill } from '../../../../components/ui/Pill.tsx';
+import { DropPanel } from './DropPanel';
 
 export function RecurringFilter({
-                           isRecurring,
-                           onIsRecurringChange,
-                           interval,
-                           onIntervalChange,
-                           count,
-                           onCountChange,
-                         }: recurringFilterProp) {
+  isRecurring,
+  onIsRecurringChange,
+  interval,
+  onIntervalChange,
+  count,
+  onCountChange,
+}: recurringFilterProp) {
   const [open, setOpen] = useState(false);
 
   const parts = [];
@@ -75,7 +80,10 @@ export function RecurringFilter({
                 <DropdownMenuContent className="w-48" align="start">
                   <DropdownMenuItem onClick={() => onIntervalChange(null)}>Todos</DropdownMenuItem>
                   {Object.entries(INTERVAL_LABELS).map(([val, lbl]) => (
-                    <DropdownMenuItem key={val} onClick={() => onIntervalChange(val as RecurringInterval)}>
+                    <DropdownMenuItem
+                      key={val}
+                      onClick={() => onIntervalChange(val as RecurringInterval)}
+                    >
                       {lbl}
                     </DropdownMenuItem>
                   ))}

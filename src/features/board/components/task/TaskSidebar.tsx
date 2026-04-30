@@ -9,7 +9,7 @@ import { FieldLabel } from '@/components/ui/FieldLabel.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { TagChip } from '@/components/ui/TagChip.tsx';
-import {STATUS_TO_COLUMN, type TaskSidebarProps} from '@/features/board/types';
+import { STATUS_TO_COLUMN, type TaskSidebarProps } from '@/features/board/types';
 import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
@@ -781,7 +781,10 @@ export default function TaskSidebar({
                       onChange={setAssignedUserUid}
                       options={[
                         { value: '', label: 'Sin asignar' },
-                        ...assignableMembers.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                        ...assignableMembers.map((m) => ({
+                          value: m.uid,
+                          label: m.displayName || m.uid,
+                        })),
                       ]}
                       triggerClassName="w-full"
                     />

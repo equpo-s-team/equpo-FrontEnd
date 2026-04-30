@@ -82,7 +82,7 @@ export function useThreeRealtime({
           if (uid !== localUid) {
             nextStates[uid] = playerState;
           } else if (playerState.slotId && playerState.slotId !== localSlotId) {
-             setLocalSlotId(playerState.slotId);
+            setLocalSlotId(playerState.slotId);
           }
         }
       });

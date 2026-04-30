@@ -8,7 +8,7 @@ export function computeEnvironmentHealth(
   overdueTasks: number,
 ): number {
   if (totalTasks <= 0) return 60;
-  const base:number = totalTasks < 20 ? 20 : totalTasks;
+  const base: number = totalTasks < 20 ? 20 : totalTasks;
 
   const completedPercent = (doneTasks / base) * 100;
   const overduePercent = (overdueTasks / base) * 100;

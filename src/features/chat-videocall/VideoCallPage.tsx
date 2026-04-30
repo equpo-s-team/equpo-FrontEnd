@@ -17,7 +17,13 @@ function getUrlParams(url: string) {
   return Object.fromEntries(urlSearchParams.entries());
 }
 
-export default function VideoCallPage({ roomID: roomIDProp, onLeave }: { roomID: string; onLeave?: () => void }) {
+export default function VideoCallPage({
+  roomID: roomIDProp,
+  onLeave,
+}: {
+  roomID?: string;
+  onLeave?: () => void;
+}) {
   const containerRef = useRef(null);
   const zpRef = useRef<ZegoUIKitPrebuiltInstance | null>(null);
 
@@ -27,7 +33,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }: { roomID:
   const { setActiveItem } = useSidebar();
   const [error, setError] = useState<string | null>(null);
   const usersInRoomRef = useRef(new Set());
-  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const roomIdFromQuery = useMemo(() => getUrlParams(window.location.href).roomID, []);
   const roomID = roomIDProp || activeVideoCall?.roomId || roomIdFromQuery;
@@ -58,7 +64,6 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }: { roomID:
 
     const initializeZegoCall = async () => {
       try {
-
         const tokenResponse = await chatApi.getZegoToken(teamId, roomID);
 
         if (cancelled) return;
@@ -152,7 +157,7 @@ export default function VideoCallPage({ roomID: roomIDProp, onLeave }: { roomID:
       }
     };
 
-    initializeZegoCall();
+    void initializeZegoCall();
 
     return () => {
       cancelled = true;

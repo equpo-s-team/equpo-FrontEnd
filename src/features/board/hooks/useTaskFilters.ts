@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import {INITIAL_FILTERS, type TaskFilters, type TeamTask} from '../types';
-
+import { INITIAL_FILTERS, type TaskFilters, type TeamTask } from '../types';
 
 export function useTaskFilters() {
   const [filters, setFilters] = useState<TaskFilters>(INITIAL_FILTERS);

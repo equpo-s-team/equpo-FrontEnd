@@ -84,7 +84,7 @@ export default function SidebarUser() {
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  navigate('/teams');
+                  void navigate('/teams');
                 }}
                 className="w-full text-left px-3 py-2.5 text-sm text-grey-700 hover:bg-grey-50 transition-colors flex items-center gap-2 font-medium"
               >
@@ -97,7 +97,7 @@ export default function SidebarUser() {
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  logOut();
+                  void logOut();
                 }}
                 className="w-full text-left px-3 py-2.5 text-sm text-[#F65A70] hover:bg-red-50 transition-colors flex items-center gap-2 font-medium"
               >

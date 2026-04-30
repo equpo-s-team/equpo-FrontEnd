@@ -1,8 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 
-import {type SidebarContextType} from "@/features/navbar/types";
-
-
+import { type SidebarContextType } from '@/features/navbar/types';
 
 const SidebarContext = createContext<SidebarContextType | null>(null);
 

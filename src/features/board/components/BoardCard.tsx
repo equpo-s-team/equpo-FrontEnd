@@ -6,11 +6,14 @@ import type {
 import { useRef } from 'react';
 
 import { TagChip } from '@/components/ui/TagChip.tsx';
-import {type BoardCardProps, type BoardColumnId, type PointerTracking} from "@/features/board/types";
+import {
+  type BoardCardProps,
+  type BoardColumnId,
+  type PointerTracking,
+} from '@/features/board/types';
 
 import { COLUMN_CONFIG, PRIORITY_CONFIG } from '../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
-
 
 export default function BoardCard({
   card,
@@ -72,7 +75,7 @@ export default function BoardCard({
     const fromColumnId = e.dataTransfer.getData('text/from-column') as BoardColumnId;
 
     if (fromColumnId === columnId && onMoveCard) {
-      onMoveCard(draggedCardId, columnId, columnId, position);
+      void onMoveCard(draggedCardId, columnId, columnId, position);
     }
   };
 

@@ -82,7 +82,10 @@ export function LocalPlayer({
     if (isMoving) {
       dir.normalize();
       const vel = body.linvel();
-      body.setLinvel({ x: dir.x * MOVEMENT_SPEED, y: vel.y, z: dir.z * MOVEMENT_SPEED }, true);
+      body.setLinvel(
+        { x: dir.x * MOVEMENT_SPEED, y: vel.y, z: dir.z * MOVEMENT_SPEED },
+        true,
+      );
 
       const targetRotation = Math.atan2(dir.x, dir.z);
       rotationY.current = THREE.MathUtils.lerp(
@@ -110,7 +113,10 @@ export function LocalPlayer({
     const now = performance.now();
     if (isMoving && now - lastMoveSync.current > MOVE_SYNC_INTERVAL) {
       lastMoveSync.current = now;
-      onLocalMove({ x: pos.x, y: pos.y, z: pos.z }, { x: 0, y: rotationY.current, z: 0 });
+      onLocalMove(
+        { x: pos.x, y: pos.y, z: pos.z },
+        { x: 0, y: rotationY.current, z: 0 },
+      );
     }
   });
 
@@ -129,7 +135,9 @@ export function LocalPlayer({
       </RigidBody>
 
       <group ref={meshRef}>
-        {clonedScene.current && <primitive object={clonedScene.current} scale={GHOST_SCALE} />}
+        {clonedScene.current && (
+          <primitive object={clonedScene.current} scale={GHOST_SCALE} />
+        )}
         <Html position={LABEL_POSITION} center distanceFactor={25} zIndexRange={[0, 5]}>
           <div className="px-2 py-1 text-md font-maxwell font-bold text-white bg-black/30 rounded backdrop-blur-sm pointer-events-none whitespace-nowrap">
             {playerName}

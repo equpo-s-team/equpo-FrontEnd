@@ -1,6 +1,7 @@
 declare module '@/context/AuthContext' {
   export interface AuthContextUser {
     uid: string;
+    displayName: string;
     virtualCurrency?: number;
     experiencePoints?: number;
     level?: number;

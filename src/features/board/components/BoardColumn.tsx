@@ -1,18 +1,20 @@
 import { EmptyState } from '@/components/ui/EmptyState';
+import {type BoardColumnProps, type DropZoneProps} from "@/features/board/types";
 import { ChevronUp } from 'lucide-react';
 
+import {COLUMN_CONFIG, COLUMN_EMPTY} from '../utils/columnConfig.ts';
 import BoardCard from './BoardCard.tsx';
-import {COLUMN_CONFIG, COLUMN_EMPTY} from './columnConfig.js';
 
-function ColIndicator({ accent }) {
-  const cfg = COLUMN_CONFIG[accent];
+function ColIndicator({ accent } : { accent: string }) {
+  const cfg : Record<string, any> = COLUMN_CONFIG[accent];
   return <div className={`w-2 h-2 rounded-full ${cfg.indicator} ${cfg.indicatorAnim}`} />;
 }
 
-function DropZone({ onDrop, position }) {
-  const handleDrop = (e) => {
+function DropZone({ onDrop, position }: DropZoneProps) {
+  const handleDrop = (e: React.DragEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!e.dataTransfer) return;
     const cardId = e.dataTransfer.getData('text/card-id');
     const fromColumnId = e.dataTransfer.getData('text/from-column');
 
@@ -21,12 +23,13 @@ function DropZone({ onDrop, position }) {
     }
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent<HTMLButtonElement> ) => {
     e.preventDefault();
+    if (!e.dataTransfer) return;
     e.currentTarget.classList.add('bg-blue/10');
   };
 
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLButtonElement>) => {
     e.currentTarget.classList.remove('bg-blue/10');
   };
 
@@ -40,20 +43,20 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ 
-  column, 
-  cards, 
-  onMoveCard, 
-  onCardClick, 
+export default function BoardColumn({
+  column,
+  cards,
+  onMoveCard,
+  onCardClick,
   canMoveCard = true,
   isCollapsed = false,
   onToggleCollapse = () => {}
-}) {
+} : BoardColumnProps) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
 
-  const handleExternalDrop = (cardId, fromColumnId, position) => {
+  const handleExternalDrop = (cardId: string, fromColumnId: string, position: number) => {
     onMoveCard(cardId, fromColumnId, id, position);
   };
 
@@ -84,11 +87,11 @@ export default function BoardColumn({
         <div className="flex items-center gap-2.5">
           <ColIndicator accent={accent} />
           <span
-            className={`font-maxwell text-[12px] font-bold tracking-[0.6px] uppercase ${cfg.title}`}
+            className={`font-maxwell text-sm font-bold tracking-[0.6px] uppercase ${cfg.title}`}
           >
             {label}
           </span>
-          <span className="text-[10px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-[9px]">
+          <span className="text-xs font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-[9px]">
             {cards.length}
           </span>
         </div>
@@ -105,14 +108,14 @@ export default function BoardColumn({
       </div>
 
       {!isCollapsed && (
-        <div
-          role="button"
-          className="flex flex-col gap-3 px-3 pb-3 flex-1"
-          onDrop={(e) => {
-            e.preventDefault();
-            if (!canMoveCard) return;
-            const cardId = e.dataTransfer.getData('text/card-id');
-            const fromColumnId = e.dataTransfer.getData('text/from-column');
+      <div
+        role="button"
+        className="flex flex-col gap-3 px-3 pb-3 flex-1"
+        onDrop={(e) => {
+          e.preventDefault();
+          if (!canMoveCard || !e.dataTransfer) return;
+          const cardId = e.dataTransfer.getData('text/card-id');
+          const fromColumnId = e.dataTransfer.getData('text/from-column');
 
             if (cardId && fromColumnId && fromColumnId !== id) {
               const rect = e.currentTarget.getBoundingClientRect();
@@ -130,7 +133,7 @@ export default function BoardColumn({
             e.currentTarget.classList.remove('bg-blue/5');
           }}
       >
-        {cards.length === 0 ? (
+        {cards?.length === 0 ? (
           <EmptyState
             icon={emptyConfig.icon}
             title={emptyConfig.title}

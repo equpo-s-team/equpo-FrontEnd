@@ -1,5 +1,7 @@
 import { TrendingUp } from 'lucide-react';
 
+import {type KanbanColProps, type SectionLabelProps} from "@/features/presentation/types";
+
 export default function WhatIsEqupo() {
   return (
     <section
@@ -196,7 +198,7 @@ export default function WhatIsEqupo() {
   );
 }
 
-function KanbanCol({ title, dotGrad, tasks }) {
+function KanbanCol({ title, dotGrad, tasks } : KanbanColProps) {
   return (
     <div>
       <div className="flex items-center gap-1.5 mb-2">
@@ -224,7 +226,9 @@ function KanbanCol({ title, dotGrad, tasks }) {
   );
 }
 
-export function SectionLabel({ children, gradient, textGrad, barColor, color, className = '' }) {
+
+
+export function SectionLabel({ children, gradient, textGrad, barColor, color, className = '' }: SectionLabelProps) {
   const barStyle = gradient ? { background: gradient } : {};
   const textStyle = textGrad
     ? {

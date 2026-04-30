@@ -1,12 +1,16 @@
-import {ChevronDown, Tag} from "lucide-react";
-import {useState} from "react";
+import { ChevronDown, Tag } from 'lucide-react';
+import { useState } from 'react';
 
-import {FilterPanelFooter} from "@/components/ui/FilterPanelFooter.tsx";
-import {Pill} from "@/components/ui/Pill.tsx";
-import {DropPanel} from "@/features/board/components/filterBar/DropPanel.tsx";
-import {type categoriesFilterProp, CATEGORY_PALETTE, type categoryPillProp} from "@/features/board/types";
+import { FilterPanelFooter } from '@/components/ui/FilterPanelFooter.tsx';
+import { Pill } from '@/components/ui/Pill.tsx';
+import { DropPanel } from '@/features/board/components/filterBar/DropPanel.tsx';
+import {
+  type categoriesFilterProp,
+  CATEGORY_PALETTE,
+  type categoryPillProp,
+} from '@/features/board/types';
 
-function getCategoryStyle(label:string) {
+function getCategoryStyle(label: string) {
   let hash = 0;
   for (let i = 0; i < label.length; i++) {
     hash = label.charCodeAt(i) + ((hash << 5) - hash);
@@ -14,7 +18,7 @@ function getCategoryStyle(label:string) {
   return CATEGORY_PALETTE[Math.abs(hash) % CATEGORY_PALETTE.length];
 }
 
-export function CategoryPill({ label, selected, onClick } :  categoryPillProp) {
+export function CategoryPill({ label, selected, onClick }: categoryPillProp) {
   const cfg = getCategoryStyle(label);
   return (
     <button
@@ -33,7 +37,7 @@ export function CategoryPill({ label, selected, onClick } :  categoryPillProp) {
 
 export function CategoriesFilter({ categories, selected, onChange }: categoriesFilterProp) {
   const [open, setOpen] = useState(false);
-  const toggle = (cat:string) =>
+  const toggle = (cat: string) =>
     onChange(selected.includes(cat) ? selected.filter((c) => c !== cat) : [...selected, cat]);
 
   const label =

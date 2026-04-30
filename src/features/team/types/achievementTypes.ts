@@ -34,7 +34,7 @@ export const ACHIEVEMENT_ICON_MAP: Record<string, string> = {
   'nueva-alianza': 'users-round',
   'vida-nueva': 'heart-pulse',
   'la-voz-de-todos': 'mic',
-  'sinergia': 'handshake',
+  sinergia: 'handshake',
   'subida-de-nivel': 'trending-up',
   'tiempo-de-resurgir': 'skull',
   'red-de-trabajo': 'network',

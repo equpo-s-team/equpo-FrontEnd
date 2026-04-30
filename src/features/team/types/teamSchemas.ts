@@ -67,4 +67,3 @@ export interface UpdateGroupPayload {
   memberUids?: string[];
   photoUrl?: string | null;
 }
-

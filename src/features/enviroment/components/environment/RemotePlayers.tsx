@@ -4,11 +4,7 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 import { GHOST_SCALE, GHOST_Y_OFFSET } from '../../lib/physicsConstants';
-import {
-  type SlotId,
-  THREE_SLOT_MODELS,
-  type Vector3State,
-} from '../../types/realtime';
+import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../../types/realtime';
 
 interface RemotePlayerState {
   position: Vector3State;
@@ -46,11 +42,7 @@ function RemoteGhost({ playerName, state }: RemoteGhostProps) {
       return;
     }
     lastUpdatedAt.current = state.updatedAt;
-    targetPos.current.set(
-      state.position.x,
-      state.position.y + GHOST_Y_OFFSET,
-      state.position.z,
-    );
+    targetPos.current.set(state.position.x, state.position.y + GHOST_Y_OFFSET, state.position.z);
     targetRotY.current = state.rotation.y;
     if (!hasInitialized.current && groupRef.current) {
       groupRef.current.position.copy(targetPos.current);
@@ -72,9 +64,7 @@ function RemoteGhost({ playerName, state }: RemoteGhostProps) {
 
   return (
     <group ref={groupRef}>
-      {clonedScene.current && (
-        <primitive object={clonedScene.current} scale={GHOST_SCALE} />
-      )}
+      {clonedScene.current && <primitive object={clonedScene.current} scale={GHOST_SCALE} />}
       <Html position={LABEL_POSITION} center distanceFactor={15} zIndexRange={[0, 10]}>
         <div className="px-2 py-1 text-xs font-bold text-white bg-black/60 rounded backdrop-blur-sm pointer-events-none whitespace-nowrap transition-all">
           {playerName}
@@ -94,13 +84,7 @@ export function RemotePlayers({ remotePlayers, playerNames }: RemotePlayersProps
     <>
       {Object.entries(remotePlayers).map(([uid, state]) => {
         if (!state.slotId) return null;
-        return (
-          <RemoteGhost
-            key={uid}
-            playerName={playerNames[uid] || 'Player'}
-            state={state}
-          />
-        );
+        return <RemoteGhost key={uid} playerName={playerNames[uid] || 'Player'} state={state} />;
       })}
     </>
   );

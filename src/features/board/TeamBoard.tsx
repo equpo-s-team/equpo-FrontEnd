@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext';
-import type {BoardColumnId, Card, TaskSidebarMode} from "@/features/board/types/columnTypes";
+import type { BoardColumnId, Card, TaskSidebarMode } from '@/features/board/types/columnTypes';
 import { type TeamTask } from '@/features/board/types/taskSchema';
-import {COLUMN_TO_STATUS, COLUMNS, STATUS_TO_COLUMN} from "@/features/board/utils/columnConfig";
+import { COLUMN_TO_STATUS, COLUMNS, STATUS_TO_COLUMN } from '@/features/board/utils/columnConfig';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
@@ -17,7 +17,6 @@ import TaskSidebar from './components/task/TaskSidebar';
 import { useTaskFilters } from './hooks/useTaskFilters';
 import { useTasks } from './hooks/useTasks';
 import { useUpdateTask } from './hooks/useUpdateTask';
-
 
 function groupTasksByColumn(tasks: TeamTask[]) {
   const grouped: Record<string, Card[]> = { todo: [], progress: [], qa: [], done: [] };
@@ -70,13 +69,9 @@ export default function TeamBoard() {
     return members.find((m) => m.uid === user.uid)?.role ?? 'member';
   }, [user, members]);
 
-
   const canMoveCard = myRole !== 'spectator';
 
-  const assignableMembers = useMemo(
-    () => members.filter((m) => m.role !== 'spectator'),
-    [members]
-  );
+  const assignableMembers = useMemo(() => members.filter((m) => m.role !== 'spectator'), [members]);
 
   const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
 
@@ -99,7 +94,7 @@ export default function TeamBoard() {
     () =>
       filteredTasks.length
         ? groupTasksByColumn(filteredTasks)
-        : { todo: [], progress: [], qa: [], done: [] } as Record<string, Card[]>,
+        : ({ todo: [], progress: [], qa: [], done: [] } as Record<string, Card[]>),
     [filteredTasks],
   );
 
@@ -114,7 +109,12 @@ export default function TeamBoard() {
 
   const updateTask = useUpdateTask();
 
-  const moveCard = async (cardId: string, fromColumnId: string, toColumnId: string, position: number) => {
+  const moveCard = async (
+    cardId: string,
+    fromColumnId: string,
+    toColumnId: string,
+    position: number,
+  ) => {
     if (myRole === 'spectator') {
       toastError('Acceso denegado', 'Los espectadores no pueden mover tareas.');
       return;
@@ -134,8 +134,7 @@ export default function TeamBoard() {
     if (fromColumnId !== toColumnId) {
       if (fromColumnId === 'todo' && toColumnId === 'progress') {
         const raw = (card._raw ?? {}) as Partial<TeamTask>;
-        const hasAssignment =
-          (raw.assignedUsers?.length ?? 0) > 0 || Boolean(raw.assignedGroupId);
+        const hasAssignment = (raw.assignedUsers?.length ?? 0) > 0 || Boolean(raw.assignedGroupId);
         if (!hasAssignment) {
           toastError(
             'No se puede iniciar',
@@ -174,14 +173,17 @@ export default function TeamBoard() {
       }
     }
 
-    const nextStatus = (COLUMN_TO_STATUS[toColumnId as BoardColumnId] ?? 'todo') as TeamTask['status'];
+    const nextStatus = (COLUMN_TO_STATUS[toColumnId as BoardColumnId] ??
+      'todo') as TeamTask['status'];
     const nextCard = {
       ...card,
       status: nextStatus,
-      _raw: card._raw ? {
-        ...card._raw,
-        status: nextStatus,
-      } : null,
+      _raw: card._raw
+        ? {
+            ...card._raw,
+            status: nextStatus,
+          }
+        : null,
     };
 
     // Remove the card from its current position
@@ -282,7 +284,10 @@ export default function TeamBoard() {
         resetFilters={resetFilters}
         activeFilterCount={activeFilterCount}
         allCategories={allCategories}
-        members={assignableMembers.map(m => ({ uid: m.uid, displayName: m.displayName ?? undefined }))}
+        members={assignableMembers.map((m) => ({
+          uid: m.uid,
+          displayName: m.displayName ?? undefined,
+        }))}
         groups={groups}
         onCreateTask={openCreate}
         canCreateTask={myRole !== 'spectator'}

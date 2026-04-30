@@ -61,7 +61,9 @@ export function useUpdateTask() {
         updateUserData({
           experiencePoints: data.xpReward.newXp,
           level: data.xpReward.newLevel,
-          virtualCurrency: data.xpReward.newUserVirtualCurrency ?? (user?.virtualCurrency || 0) + (data.xpReward.userCoinsGained ?? 0),
+          virtualCurrency:
+            data.xpReward.newUserVirtualCurrency ??
+            (user?.virtualCurrency || 0) + (data.xpReward.userCoinsGained ?? 0),
         });
       }
     },

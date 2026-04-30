@@ -39,7 +39,7 @@ export interface ZegoUIKitPrebuilt {
     token: string,
     roomID: string,
     userID: string,
-    userName: string
+    userName: string,
   ): string;
   create(kitToken: string): ZegoUIKitPrebuiltInstance;
   VideoConference: ZegoVideoConferenceMode;

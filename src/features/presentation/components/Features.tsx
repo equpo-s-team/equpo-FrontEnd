@@ -106,7 +106,7 @@ export default function Features() {
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {FEATURES.map((feat) => (
-            <FeatureCard key={feat.title} feat={feat}/>
+            <FeatureCard key={feat.title} feat={feat} />
           ))}
         </div>
       </div>

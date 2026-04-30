@@ -57,7 +57,6 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
   const [isUploading, setIsUploading] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
 
-
   useEffect(() => {
     if (isOpen) {
       if (initialData) {
@@ -139,7 +138,10 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
             ...(photoUrl !== undefined ? { photoUrl } : {}),
           },
         });
-        toastSuccess('Grupo actualizado', `El grupo "${trimmedName}" fue actualizado correctamente.`);
+        toastSuccess(
+          'Grupo actualizado',
+          `El grupo "${trimmedName}" fue actualizado correctamente.`,
+        );
       } else {
         await createGroup.mutateAsync({
           teamId,
@@ -175,176 +177,172 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
       overlayClassName="z-[60]"
       contentClassName="z-[60] h-full w-full sm:w-[420px] bg-white border-l border-grey-150 shadow-card-lg flex flex-col"
     >
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-grey-150">
-          <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
-            {initialData ? 'Editar Grupo' : 'Nuevo Grupo'}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-secondary transition-all duration-150 cursor-pointer"
-          >
-            <X size={18} />
-          </button>
-        </div>
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-grey-150">
+        <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
+          {initialData ? 'Editar Grupo' : 'Nuevo Grupo'}
+        </h2>
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-8 h-8 rounded-full flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-secondary transition-all duration-150 cursor-pointer"
+        >
+          <X size={18} />
+        </button>
+      </div>
 
-        {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
-          {/* Group Avatar */}
-          <div className="flex flex-col items-center gap-3">
-            <div className="relative">
-              <div
-                className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center text-white text-2xl font-bold shadow-md"
-                style={{ background: photoPreview ? undefined : accent }}
-              >
-                <TeamAvatar
-                  src={photoPreview}
-                  name={name || 'G'}
-                  className="w-full h-full rounded-2xl"
-                  fallbackClassName="w-full h-full rounded-2xl text-white text-2xl"
-                  fallbackStyle={{ background: accent }}
-                  loading="eager"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-                className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 disabled:opacity-60 cursor-pointer"
-                style={{ background: accent, boxShadow: `0 3px 10px ${accentGlow}` }}
-              >
-                <Camera size={13} />
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handlePhotoChange}
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6">
+        {/* Group Avatar */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="relative">
+            <div
+              className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center text-white text-2xl font-bold shadow-md"
+              style={{ background: photoPreview ? undefined : accent }}
+            >
+              <TeamAvatar
+                src={photoPreview}
+                name={name || 'G'}
+                className="w-full h-full rounded-2xl"
+                fallbackClassName="w-full h-full rounded-2xl text-white text-2xl"
+                fallbackStyle={{ background: accent }}
+                loading="eager"
               />
             </div>
-            <p className="text-xs text-grey-400">JPG, PNG, GIF — máx. 5 MB</p>
-          </div>
-
-          {/* Group Name */}
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
-              Nombre del grupo *
-            </label>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 disabled:opacity-60 cursor-pointer"
+              style={{ background: accent, boxShadow: `0 3px 10px ${accentGlow}` }}
+            >
+              <Camera size={13} />
+            </button>
             <input
-              type="text"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                if (nameError) setNameError(null);
-              }}
-              maxLength={100}
-              placeholder="Ej: Backend, Diseño, Marketing..."
-              className={`w-full px-4 py-2.5 rounded-xl border text-sm text-grey-800 outline-none transition-all font-body ${
-                nameError
-                  ? 'border-red'
-                  : 'border-grey-150 focus:border-blue'
-              }`}
-              onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
-              onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handlePhotoChange}
             />
-            {nameError && <p className="mt-1 text-xs text-red">{nameError}</p>}
           </div>
+          <p className="text-xs text-grey-400">JPG, PNG, GIF — máx. 5 MB</p>
+        </div>
 
-          {/* Members Selection */}
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2 block">
-              <Users size={12} className="inline mr-1 -mt-0.5" />
-              Miembros · {selectedUids.size} seleccionados
-            </label>
-            <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
-              {members.map((member: TeamMember) => {
-                const isSelected = selectedUids.has(member.uid);
-                const grad = memberGradient(member.uid);
+        {/* Group Name */}
+        <div>
+          <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
+            Nombre del grupo *
+          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              if (nameError) setNameError(null);
+            }}
+            maxLength={100}
+            placeholder="Ej: Backend, Diseño, Marketing..."
+            className={`w-full px-4 py-2.5 rounded-xl border text-sm text-grey-800 outline-none transition-all font-body ${
+              nameError ? 'border-red' : 'border-grey-150 focus:border-blue'
+            }`}
+            onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
+            onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+          />
+          {nameError && <p className="mt-1 text-xs text-red">{nameError}</p>}
+        </div>
 
-                return (
-                  <button
-                    key={member.uid}
-                    type="button"
-                    onClick={() => toggleMember(member.uid)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all cursor-pointer ${
-                      isSelected
-                        ? 'border-blue/40 bg-blue/5'
-                        : 'border-grey-100 bg-grey-50 hover:bg-grey-100/60'
+        {/* Members Selection */}
+        <div>
+          <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2 block">
+            <Users size={12} className="inline mr-1 -mt-0.5" />
+            Miembros · {selectedUids.size} seleccionados
+          </label>
+          <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
+            {members.map((member: TeamMember) => {
+              const isSelected = selectedUids.has(member.uid);
+              const grad = memberGradient(member.uid);
+
+              return (
+                <button
+                  key={member.uid}
+                  type="button"
+                  onClick={() => toggleMember(member.uid)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all cursor-pointer ${
+                    isSelected
+                      ? 'border-blue/40 bg-blue/5'
+                      : 'border-grey-100 bg-grey-50 hover:bg-grey-100/60'
+                  }`}
+                >
+                  {/* Checkbox */}
+                  <div
+                    className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${
+                      isSelected ? 'border-blue bg-blue' : 'border-grey-300 bg-white'
                     }`}
                   >
-                    {/* Checkbox */}
-                    <div
-                      className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${
-                        isSelected
-                          ? 'border-blue bg-blue'
-                          : 'border-grey-300 bg-white'
-                      }`}
-                    >
-                      {isSelected && (
-                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                          <path
-                            d="M1 3.5L3.5 6L9 1"
-                            stroke="white"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </div>
+                    {isSelected && (
+                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                        <path
+                          d="M1 3.5L3.5 6L9 1"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </div>
 
-                    {/* Avatar */}
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
-                      <UserAvatar
-                        src={member.photoUrl}
-                        alt={member.displayName ?? member.uid}
-                        initials={getInitials(member.displayName ?? member.uid)}
-                        className="w-full h-full"
-                        fallbackClassName="text-white text-xs"
-                        fallbackStyle={{ background: grad }}
-                      />
-                    </div>
+                  {/* Avatar */}
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
+                    <UserAvatar
+                      src={member.photoUrl}
+                      alt={member.displayName ?? member.uid}
+                      initials={getInitials(member.displayName ?? member.uid)}
+                      className="w-full h-full"
+                      fallbackClassName="text-white text-xs"
+                      fallbackStyle={{ background: grad }}
+                    />
+                  </div>
 
-                    {/* Name */}
-                    <span className="text-sm font-semibold text-grey-800 truncate">
-                      {member.displayName ?? member.uid}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+                  {/* Name */}
+                  <span className="text-sm font-semibold text-grey-800 truncate">
+                    {member.displayName ?? member.uid}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
+      </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-grey-150 flex items-center gap-3">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2.5 rounded-xl text-sm font-semibold text-grey-500 border border-grey-200 hover:border-grey-300 transition-all cursor-pointer"
-          >
-            Cancelar
-          </button>
-          <div className="flex-1" />
-          <button
-            type="button"
-            onClick={() => void handleSubmit()}
-            disabled={!name.trim() || isUploading || createGroup.isPending || updateGroup.isPending}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            style={{ background: accent, boxShadow: `0 4px 16px ${accentGlow}` }}
-          >
-            {isUploading || createGroup.isPending || updateGroup.isPending ? (
-              <Loader2 size={14} className="animate-spin" />
-            ) : initialData ? (
-              <Check size={14} />
-            ) : (
-              <Plus size={14} />
-            )}
-            {initialData ? 'Guardar cambios' : 'Crear grupo'}
-          </button>
-        </div>
+      {/* Footer */}
+      <div className="px-6 py-4 border-t border-grey-150 flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2.5 rounded-xl text-sm font-semibold text-grey-500 border border-grey-200 hover:border-grey-300 transition-all cursor-pointer"
+        >
+          Cancelar
+        </button>
+        <div className="flex-1" />
+        <button
+          type="button"
+          onClick={() => void handleSubmit()}
+          disabled={!name.trim() || isUploading || createGroup.isPending || updateGroup.isPending}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          style={{ background: accent, boxShadow: `0 4px 16px ${accentGlow}` }}
+        >
+          {isUploading || createGroup.isPending || updateGroup.isPending ? (
+            <Loader2 size={14} className="animate-spin" />
+          ) : initialData ? (
+            <Check size={14} />
+          ) : (
+            <Plus size={14} />
+          )}
+          {initialData ? 'Guardar cambios' : 'Crear grupo'}
+        </button>
+      </div>
     </SidebarSheet>
   );
 }

@@ -9,7 +9,7 @@ import { FieldLabel } from '@/components/ui/FieldLabel.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { TagChip } from '@/components/ui/TagChip.tsx';
-import type { TaskStatus, TeamTask } from '@/features/board/types';
+import {STATUS_TO_COLUMN, type TaskSidebarProps} from '@/features/board/types';
 import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
@@ -25,6 +25,7 @@ import { useRecurringRollover } from '../../hooks/useRecurringRollover.ts';
 import { useUpdateTask } from '../../hooks/useUpdateTask.ts';
 import { useUpdateTaskStep } from '../../hooks/useUpdateTaskStep.ts';
 import type { TaskStep } from '../../types/taskSchema.ts';
+import { COLUMN_CONFIG } from '../../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../../utils/markdownUtils.ts';
 import { needsRollover } from '../../utils/recurringRollover.ts';
 import {
@@ -35,37 +36,11 @@ import {
   STATUS_TO_PROGRESS,
   toInputDatetime,
 } from '../../utils/taskUtils.ts';
-import { COLUMN_CONFIG } from '../columnConfig';
 import { MarkdownDescriptionEditor } from '../MarkdownDescriptionEditor.tsx';
 import { TaskAssigneesPreview } from './TaskAssigneesPreview';
 import TaskCommentarySection from './TaskCommentarySection';
 import type { LocalStepDraft } from './TaskStepsSection';
 import TaskStepsSection from './TaskStepsSection';
-
-type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
-
-const STATUS_TO_COLUMN: Record<TaskStatus, BoardColumnId> = {
-  todo: 'todo',
-  'in-progress': 'progress',
-  'in-qa': 'qa',
-  done: 'done',
-};
-
-interface TaskSidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-  mode: 'create' | 'edit' | 'view' | 'readonly';
-  task?: TeamTask | null;
-  teamId: string;
-  defaultStatus?: string;
-  onTaskCreated?: () => void;
-  onTaskUpdated?: () => void;
-  onTaskDeleted?: () => void;
-  /** Current user's role in the team */
-  myRole?: string;
-  /** Current user's Firebase UID */
-  currentUserUid?: string | null;
-}
 
 export default function TaskSidebar({
   isOpen,

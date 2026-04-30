@@ -1,6 +1,10 @@
+import {type SidebarItemProps} from "@/features/navbar/types";
+
 import { useSidebar } from './SidebarContext.jsx';
 
-export default function SidebarItem({ id, icon: Icon, label, badge }) {
+
+
+export default function SidebarItem({ id, icon: Icon, label }: SidebarItemProps) {
   const { collapsed, activeItem, setActiveItem } = useSidebar();
   const isActive = activeItem === id;
 
@@ -37,12 +41,6 @@ export default function SidebarItem({ id, icon: Icon, label, badge }) {
         </span>
       )}
 
-      {badge && !collapsed && (
-        <span className="ml-auto flex-shrink-0 px-1.5 py-0.5 rounded-full bg-purple-foreground/20 text-purple text-xs font-semibold font-body">
-          {badge}
-        </span>
-      )}
-
       {collapsed && (
         <div
           className="
@@ -54,7 +52,6 @@ export default function SidebarItem({ id, icon: Icon, label, badge }) {
                 "
         >
           {label}
-          {badge && <span className="ml-1.5 text-cyan">({badge})</span>}
         </div>
       )}
     </button>

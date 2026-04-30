@@ -18,7 +18,6 @@ export default function AudioNavbar() {
 
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  // Ensure navbar stays visible across all routes
   useEffect(() => {
     const navbar = document.querySelector('[data-audio-navbar]');
     if (navbar) {
@@ -26,7 +25,7 @@ export default function AudioNavbar() {
     }
   }, []);
 
-  const handleVolumeChange = (e) => {
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
   };
@@ -44,7 +43,7 @@ export default function AudioNavbar() {
   return (
     <div
       data-audio-navbar="true"
-      className={`fixed z-[9999] top-6 right-4 transition-all duration-700 ease-cubic-bezier(0.4, 0.0, 0.2, 1) transform-gpu ${
+      className={`fixed z-[50] top-6 right-4 transition-all duration-700 ease-cubic-bezier(0.4, 0.0, 0.2, 1) transform-gpu ${
         isCollapsed
           ? 'w-12 h-12 rounded-full flex items-center justify-center border-[1.5px] bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl hover:bg-white/85'
           : 'w-auto h-10 rounded-2xl flex items-center gap-2 px-3 bg-white/75 backdrop-blur-md shadow-xl hover:shadow-2xl hover:bg-white/80 border-[1.5px] border-grey-100/50'

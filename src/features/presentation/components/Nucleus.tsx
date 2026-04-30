@@ -3,6 +3,7 @@ import { Globe, Heart, Rocket, TrendingUp, Zap } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from '@/components/ui/carousel';
+import {type NucleusDotsProps} from "@/features/presentation/types";
 
 import { SectionLabel } from './WhatIsEqupo.jsx';
 
@@ -59,7 +60,9 @@ const SLIDES = [
   },
 ];
 
-function NucleusDots({ count, activeIdx, onDotClick }) {
+
+
+function NucleusDots({ count, activeIdx, onDotClick }: NucleusDotsProps) {
   return (
     <div className="flex justify-center gap-2.5 mt-7">
       {Array.from({ length: count }).map((_, i) => (
@@ -97,7 +100,7 @@ function NucleusCarouselInner() {
   }, [api, onSelect]);
 
   const goTo = useCallback(
-    (idx) => {
+    (idx: number) => {
       if (!api) return;
       api.scrollTo(idx);
     },

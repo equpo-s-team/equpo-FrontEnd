@@ -1,6 +1,6 @@
 import { useSidebar } from './SidebarContext.jsx';
 
-export default function SidebarSection({ label, children }) {
+export default function SidebarSection({ label, children }: { label: string; children: React.ReactNode }) {
   const { collapsed } = useSidebar();
 
   return (

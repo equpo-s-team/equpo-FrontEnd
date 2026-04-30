@@ -3,6 +3,7 @@ import { Activity, CheckCircle, MessageCircle, TrendingUp } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import HeroVisual from '@/features/presentation/components/HeroVisual.jsx';
+import {type FloatCardProps, type FloatCardRingProps} from "@/features/presentation/types";
 
 export default function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
@@ -172,7 +173,6 @@ export default function Hero() {
             icon={<TrendingUp size={18} />}
             title="Mundo activo"
             label="+12% esta semana"
-            accentColor="rgba(156,237,193,1)"
             iconBg="linear-gradient(135deg, #9CEDC1, #60AFFF)"
           />
           <FloatCard
@@ -180,7 +180,6 @@ export default function Hero() {
             icon={<CheckCircle size={18} />}
             title="3 tareas completadas"
             label="Hoy"
-            accentColor="rgba(96,175,255,1)"
             iconBg="linear-gradient(135deg, #60AFFF, #86F0FD)"
           />
           <div className="absolute bottom-[32%] -left-[8%] z-20 hidden lg:block">
@@ -191,7 +190,6 @@ export default function Hero() {
             icon={<MessageCircle size={18} />}
             title="Chat activo"
             label="4 miembros en línea"
-            accentColor="rgba(246,90,112,1)"
             iconBg="linear-gradient(135deg, #FF94AE, #F65A70)"
           />
         </div>
@@ -222,7 +220,8 @@ export default function Hero() {
   );
 }
 
-function FloatCard({ className = '', icon, title, label, iconBg }) {
+
+function FloatCard({ className = '', icon, title, label, iconBg }: FloatCardProps) {
   return (
     <motion.div
       className={`backdrop-blur-xl border rounded-2xl px-5 py-3.5 flex items-center gap-3.5 shadow-xl font-body text-sm font-medium text-grey-800 whitespace-nowrap transition-all duration-500 ${className}`}
@@ -248,7 +247,9 @@ function FloatCard({ className = '', icon, title, label, iconBg }) {
   );
 }
 
-function FloatCardRing({ title, label }) {
+
+
+function FloatCardRing({ title, label }: FloatCardRingProps) {
   return (
     <motion.div
       className="backdrop-blur-xl rounded-2xl px-5 py-3.5 flex items-center gap-3.5 shadow-xl font-body text-sm font-medium text-grey-800 whitespace-nowrap"

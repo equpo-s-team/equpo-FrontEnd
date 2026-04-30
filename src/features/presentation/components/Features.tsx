@@ -2,7 +2,18 @@ import { Globe, Layout, MessageCircle, Phone, Star, Users } from 'lucide-react';
 
 import { SectionLabel } from './WhatIsEqupo.jsx';
 
-const FEATURES = [
+export interface feature {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+  micro: string;
+  grad: string;
+  lightGrad: string;
+  border: string;
+  microColor: string;
+}
+
+const FEATURES: feature[] = [
   {
     icon: <Layout size={22} />,
     title: 'Tablero colaborativo',
@@ -94,8 +105,8 @@ export default function Features() {
 
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {FEATURES.map((feat, i) => (
-            <FeatureCard key={feat.title} feat={feat} delay={i % 3} />
+          {FEATURES.map((feat) => (
+            <FeatureCard key={feat.title} feat={feat}/>
           ))}
         </div>
       </div>
@@ -103,7 +114,7 @@ export default function Features() {
   );
 }
 
-function FeatureCard({ feat }) {
+function FeatureCard({ feat }: { feat: feature }) {
   return (
     <button
       className={`group relative rounded-[20px] p-7 cursor-default transition-all duration-300 hover:-translate-y-1`}

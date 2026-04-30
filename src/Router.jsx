@@ -16,6 +16,7 @@ import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
 import RedeemInvitePage from '@/features/team/components/RedeemInvitePage.tsx';
+import JoinTeamPage from '@/features/team/components/JoinTeamPage.tsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
@@ -111,6 +112,7 @@ export default function Router() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/invite/:code?" element={<RedeemInvitePage />} />
+        <Route path="/join/:code" element={<JoinTeamPage />} />
 
         <Route
           path="/teams"

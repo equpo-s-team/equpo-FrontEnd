@@ -247,6 +247,7 @@ export default function TeamSettings() {
   const [inviteCodeMaxUses, setInviteCodeMaxUses] = useState(10);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [generatedLink, setGeneratedLink] = useState<string | null>(null);
 
   useEffect(() => {
     setName(team?.name ?? '');
@@ -449,7 +450,9 @@ export default function TeamSettings() {
       },
       {
         onSuccess: (data) => {
-          toastSuccess('Código generado', `Código: ${data.code}. Expira en ${inviteCodeExpires} horas.`);
+          const link = `${window.location.origin}/join/${data.code}`;
+          setGeneratedLink(link);
+          toastSuccess('Código generado', `Link: ${link}`);
           // Reset form
           setInviteCodeRole('member');
           setInviteCodeExpires(24);
@@ -794,10 +797,10 @@ export default function TeamSettings() {
             )}
             */}
 
-            {/* Invite Code section */}
+            {/* Invite Link section */}
             <div className="border-t border-grey-100 pt-4">
               <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2">
-                Generar código de invitación
+                Generar link de invitación
               </p>
               <div className="space-y-3">
                 <div className="flex gap-2 flex-wrap sm:flex-nowrap">
@@ -857,7 +860,7 @@ export default function TeamSettings() {
                 </div>
                 <button
                   onClick={handleGenerateCode}
-                  disabled={true}
+                  disabled={generateInviteCode.isPending}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50"
                   style={{ background: accent }}
                 >
@@ -866,8 +869,20 @@ export default function TeamSettings() {
                   ) : (
                     <Plus size={13} />
                   )}
-                  Generar código
+                  Generar link
                 </button>
+                {generatedLink && (
+                  <div className="mt-3">
+                    <label className="text-xs text-grey-500 mb-1 block">Link de invitación</label>
+                    <input
+                      type="text"
+                      value={generatedLink}
+                      readOnly
+                      className="w-full px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 bg-grey-50"
+                      onClick={(e) => (e.target as HTMLInputElement).select()}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

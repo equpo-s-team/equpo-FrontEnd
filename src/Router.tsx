@@ -61,14 +61,14 @@ function Dashboard() {
       case 'settings':
         return <TeamSettings />;
       default:
-        return <TeamBoard/>;
+        return <TeamBoard />;
     }
   };
 
   return <AppLayout>{renderContent()}</AppLayout>;
 }
 
-function ProtectedRoute({ children }:{ children: React.ReactNode }) {
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuth, isLoading } = useAuth();
 
   if (isLoading) {
@@ -90,7 +90,7 @@ function ProtectedRoute({ children }:{ children: React.ReactNode }) {
   );
 }
 
-function TeamsRoute({ children }:{ children: React.ReactNode }) {
+function TeamsRoute({ children }: { children: React.ReactNode }) {
   const { isAuth, isLoading } = useAuth();
 
   if (isLoading) {

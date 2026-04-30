@@ -12,8 +12,19 @@ interface DioramaProps {
 }
 
 const DECORATIVE_KEYWORDS = [
-  'cloud', 'leaf', 'particle', 'smoke', 'light', 'glow', 'flare',
-  'shadow', 'decal', 'foliage', 'emitter', 'cielo', 'sky',
+  'cloud',
+  'leaf',
+  'particle',
+  'smoke',
+  'light',
+  'glow',
+  'flare',
+  'shadow',
+  'decal',
+  'foliage',
+  'emitter',
+  'cielo',
+  'sky',
 ];
 
 const SKIP_MESH_NAMES = ['diograma.001', 'diograma.002'];
@@ -36,13 +47,13 @@ export function Diorama({ tintMapRef, onLoaded }: DioramaProps) {
   const collisionScene = useMemo(() => {
     const clone = scene.clone(true);
     const toRemove: THREE.Object3D[] = [];
-    
+
     clone.traverse((node) => {
       if ((node as THREE.Mesh).isMesh && isDecorative(node)) {
         toRemove.push(node);
       }
     });
-    
+
     toRemove.forEach((node) => node.removeFromParent());
     clone.visible = false; // Hide the collision clone so it doesn't render visually
     return clone;
@@ -68,7 +79,7 @@ export function Diorama({ tintMapRef, onLoaded }: DioramaProps) {
     <>
       {/* Visual Scene */}
       <primitive object={scene} scale={DIORAMA_SCALE} />
-      
+
       {/* Collision Scene (invisible, filtered) */}
       <RigidBody type="fixed" colliders="trimesh" includeInvisible>
         <primitive object={collisionScene} scale={DIORAMA_SCALE} />

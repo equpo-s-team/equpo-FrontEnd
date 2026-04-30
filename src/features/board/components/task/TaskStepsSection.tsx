@@ -1,7 +1,7 @@
 import { Check, ChevronLeft, ChevronRight, Lock, Plus, Shield, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import {useSoundEffects} from "@/hooks/useSoundEffects.ts";
+import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 import { toastError } from '@/lib/toast.ts';
 
 import { useTaskStepsRealtime } from '../../hooks/useTaskStepsRealtime.ts';

@@ -10,7 +10,15 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'build', 'coverage', '.next', 'node_modules', 'src/dataconnect-generated'],
+    ignores: [
+      'dist',
+      'build',
+      'coverage',
+      '.next',
+      'node_modules',
+      'src/dataconnect-generated',
+      '**/*.d.ts',
+    ],
   },
 
   js.configs.recommended,

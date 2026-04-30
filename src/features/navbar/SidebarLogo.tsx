@@ -86,7 +86,7 @@ export default function SidebarLogo() {
                         key={t.id}
                         onClick={() => {
                           setIsOpen(false);
-                          navigate(`/dashboard/${t.id}`);
+                          void navigate(`/dashboard/${t.id}`);
                         }}
                         className={`w-full text-left px-3 py-2.5 text-sm transition-colors flex items-center gap-2 ${
                           t.id === teamId

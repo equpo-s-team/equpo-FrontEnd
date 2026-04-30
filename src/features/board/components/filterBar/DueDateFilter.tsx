@@ -1,16 +1,16 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import {CalendarDays, ChevronDown, ChevronDownIcon} from "lucide-react";
-import {useState} from "react";
+import { CalendarDays, ChevronDown, ChevronDownIcon } from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar.tsx';
-import { FilterPanelFooter } from "@/components/ui/FilterPanelFooter.tsx";
-import { Pill } from "@/components/ui/Pill.tsx";
+import { FilterPanelFooter } from '@/components/ui/FilterPanelFooter.tsx';
+import { Pill } from '@/components/ui/Pill.tsx';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 
-import { type dueDateFilterProp } from "../../types";
-import { DropPanel } from "./DropPanel";
+import { type dueDateFilterProp } from '../../types';
+import { DropPanel } from './DropPanel';
 
 export function DueDateFilter({ value, onChange }: dueDateFilterProp) {
   const [open, setOpen] = useState(false);

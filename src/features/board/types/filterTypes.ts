@@ -1,5 +1,5 @@
-import {type RecurringInterval, type TaskPriority} from "@/features/board";
-import {TAG_COLOR_CONFIG} from "@/features/board/utils/columnConfig.ts";
+import { type RecurringInterval, type TaskPriority } from '@/features/board';
+import { TAG_COLOR_CONFIG } from '@/features/board/utils/columnConfig.ts';
 
 export const CATEGORY_PALETTE = [
   TAG_COLOR_CONFIG.blue,
@@ -40,12 +40,12 @@ export const INITIAL_FILTERS: TaskFilters = {
   assignedGroupIds: [],
 };
 
-export interface User{
+export interface User {
   uid: string;
   displayName?: string;
 }
 
-export interface Group{
+export interface Group {
   id: string;
   groupName: string;
 }
@@ -61,60 +61,60 @@ export interface TaskFilters {
   assignedGroupIds: string[];
 }
 
-export interface pillProp{
+export interface pillProp {
   active: boolean;
   children: React.ReactNode;
   onClick: () => void;
   className?: string;
 }
 
-export interface dropPanelProp{
+export interface dropPanelProp {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
 }
 
-export interface panelFooterProp{
+export interface panelFooterProp {
   onClear: () => void;
   onApply: () => void;
 }
 
-export interface checkRowProp{
+export interface checkRowProp {
   label: string;
   icon?: React.ReactNode;
   checked: boolean;
   onClick: () => void;
 }
 
-export interface categoryPillProp{
+export interface categoryPillProp {
   label: string;
   selected: boolean;
   onClick: () => void;
 }
 
-export interface categoryPillProp{
+export interface categoryPillProp {
   label: string;
   selected: boolean;
   onClick: () => void;
 }
-export interface categoriesFilterProp{
+export interface categoriesFilterProp {
   categories: string[];
   selected: string[];
   onChange: (selected: string[]) => void;
 }
 
-export interface priorityFilterProp{
+export interface priorityFilterProp {
   selected: TaskPriority[];
   onChange: (selected: TaskPriority[]) => void;
 }
 
-export interface dueDateFilterProp{
+export interface dueDateFilterProp {
   value: string | null;
   onChange: (selected: string | null) => void;
 }
 
-export interface recurringFilterProp{
+export interface recurringFilterProp {
   isRecurring: boolean | null;
   onIsRecurringChange: (isRecurring: boolean | null) => void;
   interval: RecurringInterval | null;
@@ -123,13 +123,13 @@ export interface recurringFilterProp{
   onCountChange: (count: number | null) => void;
 }
 
-export interface assignedUserFilterProp{
+export interface assignedUserFilterProp {
   members: User[];
   selected: string[];
   onChange: (selected: string[]) => void;
 }
 
-export interface assignedGroupFilterProp{
+export interface assignedGroupFilterProp {
   groups: Group[];
   selected: string[];
   onChange: (selected: string[]) => void;
@@ -137,7 +137,7 @@ export interface assignedGroupFilterProp{
 
 export type SetFilterFn = <K extends keyof TaskFilters>(key: K, value: TaskFilters[K]) => void;
 
-export interface filterBarProp{
+export interface filterBarProp {
   filters: TaskFilters;
   setFilter: SetFilterFn;
   resetFilters: () => void;

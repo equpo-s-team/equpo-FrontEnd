@@ -7,7 +7,6 @@ interface AchievementsSectionProps {
 }
 
 export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achievements }) => {
-
   const unlocked = achievements.filter((a) => !!a.unlockedAt);
   const locked = achievements.filter((a) => !a.unlockedAt);
   const sorted = [...unlocked, ...locked];

@@ -1,6 +1,6 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from 'react';
 
-import {type dropPanelProp} from "@/features/board/types";
+import { type dropPanelProp } from '@/features/board/types';
 
 export function DropPanel({ open, onClose, children, className = '' }: dropPanelProp) {
   const ref = useRef<HTMLDivElement>(null);

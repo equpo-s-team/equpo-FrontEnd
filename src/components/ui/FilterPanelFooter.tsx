@@ -1,4 +1,4 @@
-import {type panelFooterProp} from "@/features/board/types";
+import { type panelFooterProp } from '@/features/board/types';
 
 export function FilterPanelFooter({ onClear, onApply }: panelFooterProp) {
   return (

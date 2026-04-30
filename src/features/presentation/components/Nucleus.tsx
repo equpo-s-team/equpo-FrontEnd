@@ -3,7 +3,7 @@ import { Globe, Heart, Rocket, TrendingUp, Zap } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from '@/components/ui/carousel';
-import {type NucleusDotsProps} from "@/features/presentation/types";
+import { type NucleusDotsProps } from '@/features/presentation/types';
 
 import { SectionLabel } from './WhatIsEqupo.jsx';
 
@@ -59,8 +59,6 @@ const SLIDES = [
     numColor: 'rgba(246,90,112,0.15)',
   },
 ];
-
-
 
 function NucleusDots({ count, activeIdx, onDotClick }: NucleusDotsProps) {
   return (

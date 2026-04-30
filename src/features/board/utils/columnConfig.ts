@@ -1,8 +1,11 @@
 import { CheckSquare, LayoutGrid, Loader, ShieldCheck } from 'lucide-react';
 
-import {type ColumnEmptyConfig, type ColumnStyleConfig, type PriorityStyleConfig, type TagColorConfig} from "@/features/board/types";
-
-
+import {
+  type ColumnEmptyConfig,
+  type ColumnStyleConfig,
+  type PriorityStyleConfig,
+  type TagColorConfig,
+} from '@/features/board/types';
 
 export const COLUMN_CONFIG: Record<string, ColumnStyleConfig> = {
   todo: {
@@ -146,18 +149,18 @@ export const COLUMN_EMPTY: Record<string, ColumnEmptyConfig> = {
 
 // Maps task status to column ID
 export const STATUS_TO_COLUMN: Record<string, 'todo' | 'progress' | 'qa' | 'done'> = {
-  'todo': 'todo',
+  todo: 'todo',
   'in-progress': 'progress',
   'in-qa': 'qa',
-  'done': 'done',
+  done: 'done',
 };
 
 // Maps column ID to task status
 export const COLUMN_TO_STATUS: Record<'todo' | 'progress' | 'qa' | 'done', string> = {
-  'todo': 'todo',
-  'progress': 'in-progress',
-  'qa': 'in-qa',
-  'done': 'done',
+  todo: 'todo',
+  progress: 'in-progress',
+  qa: 'in-qa',
+  done: 'done',
 };
 
 // Column definitions for the board

@@ -113,7 +113,6 @@ export default function TaskDetailPanel({
   const selectedGroup = groups.find((group) => group.id === task.assignedGroupId) ?? null;
   const isOverdue = isTaskOverdue(task);
 
-
   const panelAssignedUids = (task.assignedUsers ?? []).map((u) => u.uid);
   const isPanelSpectator = myRole === 'spectator';
   const isPanelLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';

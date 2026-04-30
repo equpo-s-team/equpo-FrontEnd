@@ -3,7 +3,7 @@ import { Activity, CheckCircle, MessageCircle, TrendingUp } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import HeroVisual from '@/features/presentation/components/HeroVisual.jsx';
-import {type FloatCardProps, type FloatCardRingProps} from "@/features/presentation/types";
+import { type FloatCardProps, type FloatCardRingProps } from '@/features/presentation/types';
 
 export default function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
@@ -221,7 +221,6 @@ export default function Hero() {
   );
 }
 
-
 function FloatCard({ className = '', icon, title, label, iconBg }: FloatCardProps) {
   return (
     <motion.div
@@ -247,8 +246,6 @@ function FloatCard({ className = '', icon, title, label, iconBg }: FloatCardProp
     </motion.div>
   );
 }
-
-
 
 function FloatCardRing({ title, label }: FloatCardRingProps) {
   return (

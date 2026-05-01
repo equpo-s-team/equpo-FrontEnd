@@ -2,7 +2,7 @@ import { ChevronsLeft } from 'lucide-react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 
-import { useSidebar } from './SidebarContext.jsx';
+import { useSidebar } from './SidebarContext.tsx';
 
 export default function SidebarToggle() {
   const { collapsed, toggle } = useSidebar();

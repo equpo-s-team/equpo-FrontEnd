@@ -1,10 +1,10 @@
-import CTAFinal from '@/features/presentation/components/CTAFinal.jsx';
+import CTAFinal from '@/features/presentation/components/CTAFinal.tsx';
 import Features from '@/features/presentation/components/Features.tsx';
-import Footer from '@/features/presentation/components/Footer.jsx';
-import Hero from '@/features/presentation/components/Hero.jsx';
-import Navbar from '@/features/presentation/components/Navbar.jsx';
-import Nucleus from '@/features/presentation/components/Nucleus.jsx';
-import WhatIsEqupo from '@/features/presentation/components/WhatIsEqupo.jsx';
+import Footer from '@/features/presentation/components/Footer.tsx';
+import Hero from '@/features/presentation/components/Hero.tsx';
+import Navbar from '@/features/presentation/components/Navbar.tsx';
+import Nucleus from '@/features/presentation/components/Nucleus.tsx';
+import WhatIsEqupo from '@/features/presentation/components/WhatIsEqupo.tsx';
 
 export default function LandingPage() {
   return (

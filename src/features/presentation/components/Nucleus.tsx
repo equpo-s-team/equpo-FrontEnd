@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from '@/components/ui/carousel';
 import { type NucleusDotsProps } from '@/features/presentation/types';
 
-import { SectionLabel } from './WhatIsEqupo.jsx';
+import { SectionLabel } from './WhatIsEqupo.tsx';
 
 const SLIDES = [
   {

@@ -125,10 +125,10 @@ export default function Reports() {
         : 'No se pudieron cargar los reportes.';
 
   return (
-    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-white text-grey-800 font-body">
+    <div className="relative flex flex-col min-h-screen bg-white text-grey-800 font-body">
       <AppHeader />
       <FilterBar setActiveDays={setActiveDays} />
-      <main className="relative z-10 mx-1 flex flex-1 min-h-0 max-w-full flex-col overflow-hidden px-4 py-4 sm:px-6 lg:px-9">
+      <main className="relative z-10 mx-1 flex flex-1 flex-col overflow-y-auto px-4 py-4 sm:px-6 lg:px-9 pb-20 lg:pb-4">
         <p className="mb-3.5 shrink-0 text-xs font-semibold uppercase tracking-[0.1em] text-grey-400">
           Resumen de estados
         </p>
@@ -140,18 +140,20 @@ export default function Reports() {
         )}
 
         <div
-          className={`relative flex min-h-0 flex-1 flex-row gap-2 ${isLoading ? 'opacity-70' : ''}`}
+          className={`relative flex flex-col lg:flex-row gap-2 lg:gap-4 ${isLoading ? 'opacity-70' : ''}`}
         >
-          <div className="flex h-full min-h-0 w-3/5 flex-col gap-2">
+          <div className="flex w-full lg:w-3/5 flex-col gap-2 min-w-0">
             <KpiStrip data={kpi} />
-            <div className="min-h-0 flex-1">
+            <div className="flex-1 min-h-[300px] lg:min-h-0">
               <MemberList members={members} />
             </div>
           </div>
 
-          <div className="flex h-full min-h-0 w-2/5 flex-col gap-5">
-            <StatusDonut data={kpi} />
-            <div className="min-h-0 flex-1">
+          <div className="flex w-full lg:w-2/5 flex-col gap-5 min-w-0">
+            <div className="flex-shrink-0">
+              <StatusDonut data={kpi} />
+            </div>
+            <div className="flex-1 min-h-[300px] lg:min-h-0">
               <OverdueTable tasks={overdueTasks} />
             </div>
           </div>

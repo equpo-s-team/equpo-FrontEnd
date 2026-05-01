@@ -75,7 +75,7 @@ export function StatusDonut({ data }: StatusDonutProps) {
 
   return (
     <div
-      className="relative bg-white border border-grey-150 rounded-[14px] p-6 overflow-hidden"
+      className="relative flex-shrink-0 bg-white border border-grey-150 rounded-[14px] p-3 sm:p-4 lg:p-6 overflow-hidden"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.03)' }}
     >
       {/* Corner neon glow */}
@@ -86,18 +86,18 @@ export function StatusDonut({ data }: StatusDonutProps) {
         }}
       />
 
-      <div className="flex items-center justify-between mb-5 relative z-10">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-5 relative z-10 gap-2">
         <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">Estado general</h2>
-        <span className="text-xs text-grey-400">{total} tareas</span>
+        <span className="text-xs text-grey-400 shrink-0">{total} tareas</span>
       </div>
 
-      <div className="flex flex-row items-center gap-5 relative z-10">
+      <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 relative z-10">
         {/* SVG Donut */}
-        <div className="relative w-[156px] h-[156px] flex-shrink-0">
+        <div className="relative w-28 h-28 sm:w-[156px] sm:h-[156px] flex-shrink-0">
           <svg
             viewBox="0 0 156 156"
-            width="156"
-            height="156"
+            width="100%"
+            height="100%"
             style={{ transform: 'rotate(-90deg)' }}
           >
             <circle cx="78" cy="78" r="52" fill="none" stroke="#EEECEA" strokeWidth="20" />
@@ -138,28 +138,28 @@ export function StatusDonut({ data }: StatusDonutProps) {
               </linearGradient>
             </defs>
           </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-semibold text-grey-900 tracking-[-0.04em]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span className="text-base sm:text-xl lg:text-2xl font-semibold text-grey-900 tracking-[-0.04em] leading-none">
               {donePct}%
             </span>
-            <span className="text-xs text-grey-400 mt-0.5">completado</span>
+            <span className="text-[10px] sm:text-xs text-grey-400 mt-0.5 sm:mt-1 whitespace-nowrap">completado</span>
           </div>
         </div>
 
         {/* Status grid */}
-        <div className="w-full grid grid-cols-2 gap-1.5">
+        <div className="w-full grid grid-cols-2 gap-1.5 sm:gap-2">
           {STATUS_ITEMS.map((item) => (
             <div
               key={item.key}
-              className="flex items-center gap-2 px-3 py-2.5 bg-grey-50 border border-grey-100 rounded-xl"
+              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 bg-grey-50 border border-grey-100 rounded-lg sm:rounded-xl text-xs sm:text-sm"
             >
               <div
-                className="w-[7px] h-[7px] rounded-full flex-shrink-0"
+                className="w-[6px] h-[6px] sm:w-[7px] sm:h-[7px] rounded-full flex-shrink-0"
                 style={{ background: item.color, boxShadow: item.glow }}
               />
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs text-grey-500">{item.label}</p>
-                <p className="text-sm font-semibold text-grey-800">
+                <p className="text-xs sm:text-sm font-semibold text-grey-800">
                   {totals[item.key as keyof typeof totals]}{' '}
                   <span className="text-xs font-normal text-grey-400">
                     {total > 0
@@ -173,21 +173,21 @@ export function StatusDonut({ data }: StatusDonutProps) {
           ))}
 
           {/* Overdue - full width */}
-          <div className="col-span-2 flex items-center gap-2 px-3 py-2.5 bg-[rgba(246,90,112,0.04)] border border-[rgba(246,90,112,0.2)] rounded-xl">
+          <div className="col-span-2 flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 bg-[rgba(246,90,112,0.04)] border border-[rgba(246,90,112,0.2)] rounded-lg sm:rounded-xl">
             <div
-              className="w-[7px] h-[7px] rounded-full flex-shrink-0"
+              className="w-[6px] h-[6px] sm:w-[7px] sm:h-[7px] rounded-full flex-shrink-0"
               style={{ background: '#F65A70', boxShadow: '0 0 12px rgba(246,90,112,0.9)' }}
             />
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <p className="text-xs text-grey-500">Vencidas</p>
-              <p className="text-sm font-semibold text-[#c94155]">
+              <p className="text-xs sm:text-sm font-semibold text-[#c94155]">
                 {totals.overdue}{' '}
                 <span className="text-xs font-normal text-grey-400">
                   {total > 0 ? Math.round((totals.overdue / total) * 100) : 0}%
                 </span>
               </p>
             </div>
-            <span className="text-xs text-[#c94155] font-medium">⚠ atención</span>
+            <span className="text-xs text-[#c94155] font-medium shrink-0">⚠</span>
           </div>
         </div>
       </div>

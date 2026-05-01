@@ -135,3 +135,5 @@ AGENTS.md
 .claudeignore
 CLAUDE.md
 /skills-lock.json
+
+debug-model-simple.js

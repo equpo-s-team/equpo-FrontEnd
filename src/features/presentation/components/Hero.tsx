@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Activity, CheckCircle, MessageCircle, TrendingUp } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
-import HeroVisual from '@/features/presentation/components/HeroVisual.jsx';
+import HeroVisual from '@/features/presentation/components/HeroVisual.tsx';
 import { type FloatCardProps, type FloatCardRingProps } from '@/features/presentation/types';
 
 export default function Hero() {

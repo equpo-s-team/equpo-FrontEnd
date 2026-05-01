@@ -1,16 +1,16 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import AppLayout from '@/components/AppLayout.jsx';
+import AppLayout from '@/components/AppLayout.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
-import TeamBoard from '@/features/board/TeamBoard.jsx';
+import TeamBoard from '@/features/board/TeamBoard.tsx';
 import ChatPage from '@/features/chat-videocall/ChatPage.tsx';
 import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
-import VideoCallPage from '@/features/chat-videocall/VideoCallPage.jsx';
+import VideoCallPage from '@/features/chat-videocall/VideoCallPage.tsx';
 import GamePage from '@/features/enviroment/GamePage.tsx';
 import MyMissions from '@/features/my-missions/MyMissions.tsx';
-import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.jsx';
-import LandingPage from '@/features/presentation/page.jsx';
+import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.tsx';
+import LandingPage from '@/features/presentation/page.tsx';
 import Reports from '@/features/reports/Reports.tsx';
 import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';

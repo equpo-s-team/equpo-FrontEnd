@@ -12,16 +12,16 @@ import {
 } from 'lucide-react';
 
 import { useAudio } from '@/context/AudioContext.tsx';
-import { useAuth } from '@/context/AuthContext.jsx';
+import { useAuth } from '@/context/AuthContext.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
-import { useSidebar } from './SidebarContext.jsx';
-import SidebarItem from './SidebarItem.jsx';
-import SidebarLogo from './SidebarLogo.jsx';
-import SidebarSection from './SidebarSection.jsx';
-import SidebarToggle from './SidebarToggle.jsx';
-import SidebarUser from './SidebarUser.jsx';
+import { useSidebar } from './SidebarContext.tsx';
+import SidebarItem from './SidebarItem.tsx';
+import SidebarLogo from './SidebarLogo.tsx';
+import SidebarSection from './SidebarSection.tsx';
+import SidebarToggle from './SidebarToggle.tsx';
+import SidebarUser from './SidebarUser.tsx';
 
 export default function Sidebar() {
   const { collapsed } = useSidebar();

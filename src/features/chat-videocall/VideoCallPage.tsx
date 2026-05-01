@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
-import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
+import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import { rtdb } from '@/firebase';
 import type { ZegoUIKitPrebuiltInstance } from '@/types/zego';
 

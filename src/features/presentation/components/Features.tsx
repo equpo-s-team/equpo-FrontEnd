@@ -1,6 +1,6 @@
 import { Globe, Layout, MessageCircle, Phone, Star, Users } from 'lucide-react';
 
-import { SectionLabel } from './WhatIsEqupo.jsx';
+import { SectionLabel } from './WhatIsEqupo.tsx';
 
 export interface feature {
   icon: React.ReactNode;

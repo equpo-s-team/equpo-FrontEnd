@@ -27,8 +27,8 @@ interface TaskStepsSectionProps {
   currentUserUid: string | null;
   /** Role of the current user in the team */
   myRole: string;
-  /** UIDs of users assigned to the task */
-  assignedUserUids: string[];
+  /** Whether the current user is assigned to the task (directly or via group) */
+  isAssigned: boolean;
   /** Whether to show the add-step input (create/edit mode) */
   canEdit: boolean;
   /** In create mode we receive the steps locally (not from API) */
@@ -161,9 +161,8 @@ export default function TaskStepsSection({
   teamId,
   taskId,
   taskStatus,
-  currentUserUid,
   myRole,
-  assignedUserUids,
+  isAssigned,
   canEdit,
   createMode = false,
   localSteps = [],
@@ -184,7 +183,6 @@ export default function TaskStepsSection({
 
   const isSpectator = myRole === 'spectator';
   const isLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
 
   // Edit task (add/delete/edit steps): reviewers + leadership can edit, assigned workers cannot.
   const canEditTask = !isSpectator && (isLeaderOrCollab || !isAssigned);

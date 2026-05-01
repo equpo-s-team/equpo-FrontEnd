@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
 
-import { SectionLabel } from './WhatIsEqupo.jsx';
+import { SectionLabel } from './WhatIsEqupo.tsx';
 
 export default function CTAFinal() {
   return (

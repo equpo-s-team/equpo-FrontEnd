@@ -1,4 +1,4 @@
-import { useSidebar } from './SidebarContext.jsx';
+import { useSidebar } from './SidebarContext.tsx';
 
 export default function SidebarSection({
   label,

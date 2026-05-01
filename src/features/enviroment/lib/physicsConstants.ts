@@ -1,6 +1,6 @@
 // ─── Character / Ghost ────────────────────────────────────────────────────────
 export const GHOST_SCALE = 0.5;
-export const GHOST_Y_OFFSET = 5;
+export const GHOST_Y_OFFSET = 3;
 export const GHOST_PHYSICS_RADIUS = 0.5;
 export const GHOST_SPAWN_Y = 10;
 

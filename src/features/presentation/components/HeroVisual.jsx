@@ -229,11 +229,11 @@ export default function HeroVisual() {
 
     /* ── Animation loop ───────────────────────────────────────────────── */
     let animId;
-    const clock = new THREE.Clock();
+    const timer = new THREE.Timer();
 
     function animate() {
       animId = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
+      const t = timer.getElapsedTime();
 
       // Smooth parallax
       currentGhostOffset.lerp(targetGhostOffset, 0.06);
@@ -258,7 +258,7 @@ export default function HeroVisual() {
         });
       }
 
-      renderer.render(scene, camera);
+      renderer.render(camera);
     }
 
     animate();

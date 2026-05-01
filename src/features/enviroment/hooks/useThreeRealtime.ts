@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
 
 import {
@@ -39,7 +39,14 @@ export function useThreeRealtime({
   const [localSlotId, setLocalSlotId] = useState<SlotId | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
+  const localSlotIdRef = useRef<SlotId | null>(null);
   const latestState = useRef({ position: localPosition, rotation: localRotation });
+
+  // Keep the ref in sync with state
+  const updateLocalSlotId = useCallback((slotId: SlotId | null) => {
+    localSlotIdRef.current = slotId;
+    setLocalSlotId(slotId);
+  }, []);
 
   useEffect(() => {
     latestState.current = { position: localPosition, rotation: localRotation };
@@ -50,7 +57,7 @@ export function useThreeRealtime({
       setPlayersState({});
       setConnectedUsers(0);
       setConnectedUserUids([]);
-      setLocalSlotId(null);
+      updateLocalSlotId(null);
       return;
     }
 
@@ -66,7 +73,7 @@ export function useThreeRealtime({
     socket.on('connect', () => {
       // Claim a slot when connected
       socket.emit('claim_slot', { clientId }, (slotId: SlotId | null) => {
-        setLocalSlotId(slotId);
+        updateLocalSlotId(slotId);
       });
     });
 
@@ -81,8 +88,8 @@ export function useThreeRealtime({
           nextUids.push(uid);
           if (uid !== localUid) {
             nextStates[uid] = playerState;
-          } else if (playerState.slotId && playerState.slotId !== localSlotId) {
-             setLocalSlotId(playerState.slotId);
+          } else if (playerState.slotId && playerState.slotId !== localSlotIdRef.current) {
+            updateLocalSlotId(playerState.slotId);
           }
         }
       });
@@ -96,7 +103,7 @@ export function useThreeRealtime({
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [isEnabled, teamId, localUid, clientId, localSlotId]);
+  }, [isEnabled, teamId, localUid, clientId, updateLocalSlotId]);
 
   // Interval for sending local movement updates
   useEffect(() => {

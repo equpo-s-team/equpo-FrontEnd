@@ -49,9 +49,11 @@ export default function Experience({
 
   return (
     <Canvas
+
       shadows
       camera={{ fov: 50, near: 0.1, far: 1000, position: [-30, 10, 30] }}
       gl={{
+        preserveDrawingBuffer: false,
         outputColorSpace: THREE.SRGBColorSpace,
         antialias: true,
       }}

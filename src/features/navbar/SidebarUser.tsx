@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import { logOut, useAuth } from '@/context/AuthContext.jsx';
+import { logOut, useAuth } from '@/context/AuthContext.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
-import { useSidebar } from './SidebarContext.jsx';
+import { useSidebar } from './SidebarContext.tsx';
 
 export default function SidebarUser() {
   const { collapsed } = useSidebar();

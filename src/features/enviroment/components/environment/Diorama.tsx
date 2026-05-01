@@ -15,7 +15,7 @@ const DECORATIVE_KEYWORDS = [
   'flowers',
   'particle',
   'grass',
-  'light',
+  'grow',
   'water',
   'flare',
   'shadow',
@@ -40,22 +40,22 @@ function isDecorative(node: THREE.Object3D): boolean {
 
 export function Diorama({ tintMapRef, onLoaded }: DioramaProps) {
   const { scene } = useGLTF('/models/BigDiorama.glb');
-  const loadedRef = useRef(false);
+  const debugLogRef = useRef(false);
 
-  // Debug: Log all model elements
-  const logModelElements = (obj: THREE.Object3D, depth = 0) => {
-    const indent = '  '.repeat(depth);
-    console.log(`${indent}${obj.name || 'unnamed'} (${obj.type})`);
-    obj.children.forEach(child => logModelElements(child, depth + 1));
-  };
-
+  // Debug: Log all model elements (once)
   useEffect(() => {
-    if (!loadedRef.current) {
-      console.log('=== MODEL ELEMENTS ===');
-      logModelElements(scene);
-      console.log('=== END MODEL ELEMENTS ===');
-      loadedRef.current = true;
-    }
+    if (debugLogRef.current) return;
+    debugLogRef.current = true;
+
+    const logModelElements = (obj: THREE.Object3D, depth = 0) => {
+      const indent = '  '.repeat(depth);
+      console.log(`${indent}${obj.name || 'unnamed'} (${obj.type})`);
+      obj.children.forEach((child) => logModelElements(child, depth + 1));
+    };
+
+    console.log('=== MODEL ELEMENTS ===');
+    logModelElements(scene);
+    console.log('=== END MODEL ELEMENTS ===');
   }, [scene]);
 
   const collisionScene = useMemo(() => {
@@ -74,9 +74,6 @@ export function Diorama({ tintMapRef, onLoaded }: DioramaProps) {
   }, [scene]);
 
   useEffect(() => {
-    if (loadedRef.current) return;
-    loadedRef.current = true;
-
     collectTintMaterials(scene, tintMapRef.current);
 
     scene.traverse((node) => {

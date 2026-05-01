@@ -91,5 +91,16 @@ export interface CreateInvitationCodePayload {
 
 export interface RedeemInvitationCodePayload {
   code: string;
-  userUid: string;
+}
+
+export interface RedeemInvitationCodeResponse {
+  membership: {
+    userUid: string;
+    role: string;
+    joinedAt: string;
+  };
+  team: {
+    id: string;
+    name: string;
+  };
 }

@@ -431,10 +431,15 @@ export default function TaskSidebar({
   const assignedUserUids = (task?.assignedUsers ?? []).map((u) => u.uid);
   const isSidebarSpectator = myRole === 'spectator';
   const isSidebarLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isSidebarAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
+  const hasAssignees = (task?.assignedUsers?.length ?? 0) > 0 || Boolean(task?.assignedGroupId);
+  
+  const assignedGroupInfo = groups.find((g) => g.id === task?.assignedGroupId);
+  const isAssignedViaGroup = currentUserUid && assignedGroupInfo?.members?.some((m) => m.uid === currentUserUid);
+  const isSidebarAssigned = currentUserUid ? (assignedUserUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)) : false;
+  
   const isTaskDone = task?.status === 'done';
   const canEditTask =
-    !isSidebarSpectator && (isSidebarLeaderOrCollab || !isSidebarAssigned) && !isTaskDone;
+    !isSidebarSpectator && !isTaskDone && (isSidebarLeaderOrCollab || !hasAssignees || isSidebarAssigned);
 
   const selectedPriority =
     PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? priority;
@@ -631,7 +636,7 @@ export default function TaskSidebar({
                 taskStatus={task.status}
                 currentUserUid={currentUserUid}
                 myRole={myRole}
-                assignedUserUids={(task.assignedUsers ?? []).map((u) => u.uid)}
+                isAssigned={isSidebarAssigned}
                 canEdit={isEditView}
                 taskHasAssignment={
                   (task.assignedUsers?.length ?? 0) > 0 || Boolean(task.assignedGroupId)
@@ -707,7 +712,7 @@ export default function TaskSidebar({
                     taskStatus={task?.status ?? 'todo'}
                     currentUserUid={currentUserUid}
                     myRole={myRole}
-                    assignedUserUids={(task?.assignedUsers ?? []).map((u) => u.uid)}
+                    isAssigned={isSidebarAssigned}
                     canEdit={true}
                     createMode={mode === 'create'}
                     localSteps={localSteps}

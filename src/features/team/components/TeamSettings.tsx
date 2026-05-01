@@ -21,12 +21,12 @@ import { RoleSelect } from '@/components/ui/RoleSelect';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-// import { UserPreviewCard } from './UserPreviewCard.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import GroupFormSheet from '@/features/team/components/GroupFormSheet';
 import { useDeleteGroup } from '@/features/team/hooks/useDeleteGroup';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
+import { useDirectInvitation } from '@/features/team/hooks/useDirectInvitation';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -34,10 +34,12 @@ import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
-// import { useUserSearch } from '@/features/team/hooks/useUserSearch';
 import { storage } from '@/firebase';
 
+import { InstantLinkModal } from './InstantLinkModal';
+import { InvitationChoiceModal } from './InvitationChoiceModal';
 import InviteMembersModal from './InviteMembersModal';
+import { UidInvitationModal } from './UidInvitationModal';
 
 const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   leader: { label: 'Líder', color: '#60AFFF', bg: 'rgba(96,175,255,0.12)' },
@@ -211,20 +213,28 @@ export default function TeamSettings() {
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
   const deleteGroupMutation = useDeleteGroup();
+  const directInvitation = useDirectInvitation();
 
   const [showGroupSheet, setShowGroupSheet] = useState(false);
   const [groupToEdit, setGroupToEdit] = useState<TeamGroup | null>(null);
   const [groupToDelete, setGroupToDelete] = useState<TeamGroup | null>(null);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
+  const [isUidModalOpen, setIsUidModalOpen] = useState(false);
+  const [isInstantLinkModalOpen, setIsInstantLinkModalOpen] = useState(false);
+  const [instantLinkData, setInstantLinkData] = useState<{ code: string; link: string } | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const team = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
 
+  
+
   const myRole: string | null = (() => {
     if (!team || !currentUid) return null;
     if (team.leaderUid === currentUid) return 'leader';
-    return team.members.find((m) => m.userUid === currentUid)?.role ?? null;
+    return team.members.find((m) => m.uid === currentUid)?.role ?? null;
   })();
 
   const isLeader = myRole === 'leader';
@@ -238,7 +248,6 @@ export default function TeamSettings() {
   const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   useEffect(() => {
     setName(team?.name ?? '');
@@ -707,12 +716,12 @@ export default function TeamSettings() {
           {/* Invite Members Button */}
           <div className="border-t border-grey-100 pt-4">
             <button
-              onClick={() => setIsInviteModalOpen(true)}
+              onClick={() => setIsChoiceModalOpen(true)}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
               style={{ background: accent }}
             >
               <UserPlus size={16} />
-              Invitar miembros
+              Invitar personas
             </button>
           </div>
         </section>
@@ -891,6 +900,41 @@ export default function TeamSettings() {
         teamId={teamId}
         teamName={team?.name ?? ''}
         accent={accent}
+        onGenerated={(code, link) => {
+          // Open InstantLinkModal with the newly generated link
+          setInstantLinkData({ code, link });
+          setIsInstantLinkModalOpen(true);
+        }}
+      />
+
+      <InvitationChoiceModal
+        isOpen={isChoiceModalOpen}
+        onClose={() => setIsChoiceModalOpen(false)}
+        onSelectLink={() => setIsInstantLinkModalOpen(true)}
+        onSelectUid={() => setIsUidModalOpen(true)}
+        accent={accent}
+      />
+
+      <UidInvitationModal
+        isOpen={isUidModalOpen}
+        onClose={() => setIsUidModalOpen(false)}
+        accent={accent}
+      />
+
+      <InstantLinkModal
+        isOpen={isInstantLinkModalOpen}
+        onClose={() => {
+          setIsInstantLinkModalOpen(false);
+          setInstantLinkData(null);
+        }}
+        teamId={teamId}
+        teamName={team?.name ?? ''}
+        accent={accent}
+        onOpenConfiguration={() => {
+          setIsInstantLinkModalOpen(false);
+          setIsInviteModalOpen(true);
+        }}
+        initialData={instantLinkData}
       />
     </div>
   );

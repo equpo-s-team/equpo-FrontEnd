@@ -283,8 +283,7 @@ export const TeamsHub: React.FC = () => {
                   onClick={() => setIsRedeemModalOpen(true)}
                   className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 bg-white border border-grey-200 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
                 >
-                  <span className="text-base leading-none">🔑</span>
-                  <span className="hidden sm:inline">Canjear código</span>
+                  <span className="hidden sm:inline">Unirte a equipo</span>
                 </button>
               </div>
             </div>
@@ -364,7 +363,7 @@ export const TeamsHub: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-grey-800">Canjear Código de Invitación</h2>
+              <h2 className="text-lg font-bold text-grey-800">Unirte a equipo</h2>
               <button
                 onClick={() => {
                   setIsRedeemModalOpen(false);

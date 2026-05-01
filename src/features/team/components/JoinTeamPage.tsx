@@ -77,7 +77,7 @@ export default function JoinTeamPage() {
 
     console.log('Calling mutate...');
     redeemInviteCode.mutate(
-      { code: inviteData.code, userUid: user.uid },
+      { code: inviteData.code },
       {
         onSuccess: () => {
           console.log('Mutation successful');

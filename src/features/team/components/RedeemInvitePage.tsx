@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
 import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
-import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import { toastError, toastSuccess } from '@/lib/toast';
 
 export default function RedeemInvitePage() {
@@ -11,7 +10,6 @@ export default function RedeemInvitePage() {
   const { user, isAuth } = useAuth();
   const navigate = useNavigate();
   const redeemCode = useRedeemInviteCode();
-  const addMember = useAddTeamMember();
 
   const [code, setCode] = useState(urlCode || '');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -27,12 +25,8 @@ export default function RedeemInvitePage() {
 
     setIsProcessing(true);
     try {
-      const result = await redeemCode.mutateAsync({ code: redeemCodeValue.trim(), userUid: user.uid });
-      // Now add to team
-      await addMember.mutateAsync({
-        teamId: result.teamId,
-        payload: { userUid: user.uid, role: result.role },
-      });
+      // Backend handles adding user to team
+      await redeemCode.mutateAsync({ code: redeemCodeValue.trim() });
 
       toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
       navigate('/teams');

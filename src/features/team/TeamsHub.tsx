@@ -14,7 +14,6 @@ import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
-import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
 import { auth } from '@/firebase';
@@ -70,7 +69,6 @@ export const TeamsHub: React.FC = () => {
   const updateTeam = useUpdateTeam();
   const { saveProfile } = useUpdateUserProfile();
   const redeemInviteCode = useRedeemInviteCode();
-  const addMember = useAddTeamMember();
 
   const [modal, setModal] = useState<ModalState>({ mode: null });
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -384,16 +382,9 @@ export const TeamsHub: React.FC = () => {
 
                 setIsRedeeming(true);
                 try {
-                  // Use the redeemCode hook directly via mutation
-                  const result = await redeemInviteCode.mutateAsync({
+                  // Use the redeemCode hook - backend handles adding user to team
+                  await redeemInviteCode.mutateAsync({
                     code: redeemCode.trim().toUpperCase(),
-                    userUid: authUser.uid,
-                  });
-
-                  // Add user to team
-                  await addMember.mutateAsync({
-                    teamId: result.teamId,
-                    payload: { userUid: authUser.uid, role: result.role },
                   });
 
                   toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');

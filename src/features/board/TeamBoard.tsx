@@ -116,7 +116,7 @@ export default function TeamBoard() {
     position: number,
   ) => {
     if (myRole === 'spectator') {
-      toastError('Acceso denegado', 'Los espectadores no pueden mover tareas.');
+      toastError('Acceso denegado', 'Los espectadores no pueden mover misiones.');
       return;
     }
 
@@ -138,7 +138,7 @@ export default function TeamBoard() {
         if (!hasAssignment) {
           toastError(
             'No se puede iniciar',
-            'Asigna un usuario o grupo a la tarea antes de moverla a En Progreso.',
+            'Asigna un usuario o grupo a la misión antes de moverla a En Progreso.',
           );
           return;
         }
@@ -146,26 +146,26 @@ export default function TeamBoard() {
         if ((card.stepsDone ?? 0) > 0) {
           toastError(
             'No se puede regresar',
-            'Desmarca todos los pasos completados antes de mover la tarea a Por Hacer.',
+            'Desmarca todos los pasos completados antes de mover la misión a Por Hacer.',
           );
           return;
         }
       } else if (fromColumnId === 'todo' && (toColumnId === 'qa' || toColumnId === 'done')) {
         toastError(
           'Transición no permitida',
-          'Las tareas deben pasar por En Progreso antes de ir a QA o Done.',
+          'Las misiones deben pasar por En Progreso antes de ir a QA o Done.',
         );
         return;
       } else if (fromColumnId === 'progress' && (toColumnId === 'qa' || toColumnId === 'done')) {
         toastError(
           'Transición automática',
-          'La tarea no puede pasar a revisión sin haber sido terminados todos sus pasos.',
+          'La misión no puede pasar a revisión sin haber sido terminados todos sus pasos.',
         );
         return;
       } else if (fromColumnId === 'qa' || fromColumnId === 'done') {
         toastError(
           'Transición no permitida',
-          'Las tareas en Revisión o Terminadas no se pueden mover manualmente.',
+          'Las misiones en Revisión o Terminadas no se pueden mover manualmente.',
         );
         return;
       } else {
@@ -294,7 +294,7 @@ export default function TeamBoard() {
       />
 
       {isLoading && (
-        <div className="px-8 py-6 text-center text-grey-400 text-sm">Cargando tareas...</div>
+        <div className="px-8 py-6 text-center text-grey-400 text-sm">Cargando misiones...</div>
       )}
 
       <div

@@ -88,7 +88,7 @@ export function StatusDonut({ data }: StatusDonutProps) {
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-5 relative z-10 gap-2">
         <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">Estado general</h2>
-        <span className="text-xs text-grey-400 shrink-0">{total} tareas</span>
+        <span className="text-xs text-grey-400 shrink-0">{total} misiones</span>
       </div>
 
       <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5 relative z-10">

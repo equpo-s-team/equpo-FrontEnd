@@ -127,23 +127,23 @@ export const USER_GRADIENT: Record<string, string> = {
 export const COLUMN_EMPTY: Record<string, ColumnEmptyConfig> = {
   todo: {
     icon: LayoutGrid,
-    title: 'Sin tareas pendientes',
-    description: 'Crea una tarea para comenzar el sprint.',
+    title: 'Sin misiones pendientes',
+    description: 'Crea una misión para comenzar el sprint.',
   },
   progress: {
     icon: Loader,
     title: 'Nada en progreso',
-    description: 'Mueve una tarea aquí cuando empiece el trabajo.',
+    description: 'Mueve una misión aquí cuando empiece el trabajo.',
   },
   qa: {
     icon: ShieldCheck,
-    title: 'Sin tareas en revisión',
-    description: 'Las tareas listas para QA aparecerán aquí.',
+    title: 'Sin misiones en revisión',
+    description: 'Las misiones listas para QA aparecerán aquí.',
   },
   done: {
     icon: CheckSquare,
     title: 'Nada completado aún',
-    description: 'Las tareas completadas se verán en esta columna.',
+    description: 'Las misiones completadas se verán en esta columna.',
   },
 };
 

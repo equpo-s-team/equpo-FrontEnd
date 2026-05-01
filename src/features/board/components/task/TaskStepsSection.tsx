@@ -230,7 +230,7 @@ export default function TaskStepsSection({
       <div className="flex flex-col mt-4 gap-2">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400">
-            Pasos de la tarea
+            Pasos de la misión
           </span>
           <span className="text-[11px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-full">
             0%
@@ -355,7 +355,7 @@ export default function TaskStepsSection({
     if (!isSuperoStep && taskStatus === 'todo' && isDone && !taskHasAssignment) {
       toastError(
         'No se puede iniciar',
-        'Asigna un usuario o grupo a la tarea antes de marcar pasos.',
+        'Asigna un usuario o grupo a la misión antes de marcar pasos.',
       );
       return;
     }
@@ -386,7 +386,7 @@ export default function TaskStepsSection({
     <div className="mt-4">
       <div className="flex items-center justify-between mb-2">
         <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400">
-          Pasos de la tarea
+          Pasos de la misión
         </span>
         {isLoading && !isDraftEditing ? (
           <span className="text-[11px] text-grey-300">Cargando…</span>

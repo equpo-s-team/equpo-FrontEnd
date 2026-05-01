@@ -1,6 +1,6 @@
 import { useGLTF } from '@react-three/drei';
 import { RigidBody } from '@react-three/rapier';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import type * as THREE from 'three';
 
 import { collectTintMaterials, type TintEntry } from '../../lib/environmentEffects';
@@ -40,23 +40,6 @@ function isDecorative(node: THREE.Object3D): boolean {
 
 export function Diorama({ tintMapRef, onLoaded }: DioramaProps) {
   const { scene } = useGLTF('/models/BigDiorama.glb');
-  const debugLogRef = useRef(false);
-
-  // Debug: Log all model elements (once)
-  useEffect(() => {
-    if (debugLogRef.current) return;
-    debugLogRef.current = true;
-
-    const logModelElements = (obj: THREE.Object3D, depth = 0) => {
-      const indent = '  '.repeat(depth);
-      console.log(`${indent}${obj.name || 'unnamed'} (${obj.type})`);
-      obj.children.forEach((child) => logModelElements(child, depth + 1));
-    };
-
-    console.log('=== MODEL ELEMENTS ===');
-    logModelElements(scene);
-    console.log('=== END MODEL ELEMENTS ===');
-  }, [scene]);
 
   const collisionScene = useMemo(() => {
     const clone = scene.clone(true);

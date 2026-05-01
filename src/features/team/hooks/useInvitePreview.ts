@@ -18,12 +18,10 @@ interface InvitePreviewResponse {
 }
 
 async function fetchInvitePreview(code: string): Promise<InvitePreviewResponse> {
-  const response = await request<InvitePreviewResponse>(
+  return request<InvitePreviewResponse>(
     `/teams/invite-preview?code=${encodeURIComponent(code.toUpperCase())}`,
     'GET'
   );
-  console.log('Invite preview response:', JSON.stringify(response, null, 2));
-  return response;
 }
 
 export function useInvitePreview(code: string | null | undefined) {

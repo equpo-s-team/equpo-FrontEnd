@@ -41,7 +41,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   const [errors, setErrors] = useState<FormErrors>({});
   const [fieldTouched, setFieldTouched] = useState<Record<string, boolean>>({});
 
-  const { validateField, validateForm } = useAuthValidation(formData, authMode, registrationStep);
+  const { validateField, validateForm } = useAuthValidation(formData, authMode);
   const { isLoading, loginWithEmail, signupWithEmail, loginWithGoogle, sendPasswordReset } =
     useFirebaseAuth();
 

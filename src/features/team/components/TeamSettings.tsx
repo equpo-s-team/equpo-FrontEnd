@@ -24,20 +24,20 @@ import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import GroupFormSheet from '@/features/team/components/GroupFormSheet';
-import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import { useDeleteGroup } from '@/features/team/hooks/useDeleteGroup';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
-import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
-import { useGenerateInviteCode } from '@/features/team/hooks/useGenerateInviteCode';
 import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 // import { useUserSearch } from '@/features/team/hooks/useUserSearch';
 import { storage } from '@/firebase';
 import { toastError, toastSuccess } from '@/lib/toast';
+
+import InviteMembersModal from './InviteMembersModal';
 
 const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   leader: { label: 'Líder', color: '#60AFFF', bg: 'rgba(96,175,255,0.12)' },
@@ -233,12 +233,10 @@ export default function TeamSettings() {
   const { data: groups = [], isLoading: groupsLoading } = useTeamGroups(teamId);
 
   const updateTeam = useUpdateTeam();
-  const addMember = useAddTeamMember();
   const updateRole = useUpdateMemberRole();
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
   const deleteGroupMutation = useDeleteGroup();
-  const generateInviteCode = useGenerateInviteCode();
 
   const [showGroupSheet, setShowGroupSheet] = useState(false);
   const [groupToEdit, setGroupToEdit] = useState<TeamGroup | null>(null);
@@ -265,23 +263,14 @@ export default function TeamSettings() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const [inviteUid, setInviteUid] = useState('');
-  const [inviteRole, setInviteRole] = useState<'collaborator' | 'member' | 'spectator'>('member');
-
-  const [inviteCodeRole, setInviteCodeRole] = useState<'collaborator' | 'member' | 'spectator'>('member');
-  const [inviteCodeExpires, setInviteCodeExpires] = useState(24); // hours
-  const [inviteCodeMaxUses, setInviteCodeMaxUses] = useState(10);
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [generatedLink, setGeneratedLink] = useState<string | null>(null);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   useEffect(() => {
     setName(team?.name ?? '');
     setDescription(team?.description ?? '');
     setPhotoPreview(team?.photoUrl ?? null);
     setUploadError(null);
-    setInviteUid('');
-    setInviteRole('member');
     setShowDeleteDialog(false);
 
     if (fileInputRef.current) {
@@ -362,65 +351,6 @@ export default function TeamSettings() {
       },
     );
   };
-  {/*
-  // Hook para buscar usuario por UID
-  const { data: searchedUser, isLoading: isSearchingUser } = useUserSearch(inviteUid.trim());
-  */}
-
-  // Validación de formato UID
-  const isValidUidFormat = (uid: string) => {
-    const trimmedUid = uid.trim();
-    return trimmedUid.length >= 10 && /^[a-zA-Z0-9_-]+$/.test(trimmedUid);
-  };
-
-  // Verificar si el usuario ya está en el equipo
-  const isUserAlreadyInTeam = (uid: string) => {
-    return members.some(member => member.uid === uid);
-  };
-
-  {/*
-  // Verificar si el usuario existe
-  const doesUserExist = (uid: string) => {
-    return !!searchedUser && searchedUser.uid === uid;
-  };
- */}
-
-  const handleInvite = () => {
-    const uid = inviteUid.trim();
-    if (!uid) return;
-
-    // Verificar si el usuario ya está en el equipo
-    if (isUserAlreadyInTeam(uid)) {
-      toastError('Usuario ya en el equipo', 'Este usuario ya es miembro del equipo.');
-      return;
-    }
-    {/*
-    // Verificar si el usuario existe
-    if (!doesUserExist(uid)) {
-      toastError('Usuario no encontrado', 'No se encontró un usuario con ese UID.');
-      return;
-    }
-
-  */}
-    addMember.mutate(
-      { teamId, payload: { userUid: uid, role: inviteRole } },
-      {
-        onSuccess: () => {
-          setInviteUid('');
-          toastSuccess(
-            'Usuario invitado',
-            `El usuario fue añadido al equipo como ${ROLE_CONFIG[inviteRole]?.label ?? inviteRole}.`,
-          );
-        },
-        onError: (err) =>
-          toastError(
-            'Error al invitar',
-            err instanceof Error ? err.message : 'Verifica el UID e intenta de nuevo.',
-          ),
-      },
-    );
-  };
-
   const handleKick = (member: TeamMember) => {
     removeMember.mutate(
       { teamId, userUid: member.uid },
@@ -466,29 +396,6 @@ export default function TeamSettings() {
     }
   };
 
-  const handleGenerateCode = () => {
-    generateInviteCode.mutate(
-      {
-        teamId,
-        role: inviteCodeRole,
-        expiresInHours: inviteCodeExpires,
-        maxUses: inviteCodeMaxUses,
-      },
-      {
-        onSuccess: (data) => {
-          const link = `${window.location.origin}/join/${data.code}`;
-          setGeneratedLink(link);
-          toastSuccess('Código generado', `Link: ${link}`);
-          // Reset form
-          setInviteCodeRole('member');
-          setInviteCodeExpires(24);
-          setInviteCodeMaxUses(10);
-        },
-        onError: (err) =>
-          toastError('Error al generar código', err instanceof Error ? err.message : 'Intenta de nuevo.'),
-      },
-    );
-  };
 
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
   const accentGlow = 'rgba(96,175,255,0.3)';
@@ -746,175 +653,16 @@ export default function TeamSettings() {
             </div>
           )}
 
-          {/* Invite section */}
+          {/* Invite Members Button */}
           <div className="border-t border-grey-100 pt-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2">
-              Invitar usuario
-            </p>
-            <div className="flex gap-2 flex-wrap sm:flex-nowrap">
-              <input
-                type="text"
-                value={inviteUid}
-                onChange={(e) => setInviteUid(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleInvite();
-                  }
-                }}
-                placeholder="UID del usuario"
-                className="flex-1 min-w-0 px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all"
-                onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
-                onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-              />
-              <div className="flex w-[24vw] lg:w-[8vw]">
-                <RoleSelect
-                  value={inviteRole}
-                  onChange={(v) => setInviteRole(v as 'collaborator' | 'member' | 'spectator')}
-                  roles={[
-                    {
-                      value: 'collaborator',
-                      label: 'Colaborador',
-                      color: ROLE_CONFIG.collaborator.color,
-                      bg: ROLE_CONFIG.collaborator.bg,
-                    },
-                    {
-                      value: 'member',
-                      label: 'Miembro',
-                      color: ROLE_CONFIG.member.color,
-                      bg: ROLE_CONFIG.member.bg,
-                    },
-                    {
-                      value: 'spectator',
-                      label: 'Espectador',
-                      color: ROLE_CONFIG.spectator.color,
-                      bg: ROLE_CONFIG.spectator.bg,
-                    },
-                  ]}
-                />
-              </div>
-              <button
-                onClick={handleInvite}
-                disabled={
-                  !inviteUid.trim() ||
-                  addMember.isPending ||
-                  !isValidUidFormat(inviteUid) ||
-                  isUserAlreadyInTeam(inviteUid.trim())
-                  // !doesUserExist(inviteUid.trim())
-                }
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 shrink-0"
-                style={{ background: accent }}
-              >
-                {addMember.isPending ? (
-                  <Loader2 size={13} className="animate-spin" />
-                ) : (
-                  <UserPlus size={13} />
-                )}
-                Invitar
-              </button>
-            </div>
-
-            {/* User Preview
-            {inviteUid.trim() && (
-              <div className="mt-3">
-                <UserPreviewCard
-                  user={searchedUser}
-                  isLoading={isSearchingUser}
-                  isValidFormat={isValidUidFormat(inviteUid)}
-                  isAlreadyInTeam={isUserAlreadyInTeam(inviteUid.trim())}
-                />
-              </div>
-            )}
-            */}
-
-            {/* Invite Link section */}
-            <div className="border-t border-grey-100 pt-4">
-              <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2">
-                Generar link de invitación
-              </p>
-              <div className="space-y-3">
-                <div className="flex gap-2 flex-wrap sm:flex-nowrap">
-                  <div className="flex-1 min-w-0">
-                    <label className="text-xs text-grey-500 mb-1 block">Rol</label>
-                    <RoleSelect
-                      value={inviteCodeRole}
-                      onChange={(v) => setInviteCodeRole(v as 'collaborator' | 'member' | 'spectator')}
-                      roles={[
-                        {
-                          value: 'collaborator',
-                          label: 'Colaborador',
-                          color: ROLE_CONFIG.collaborator.color,
-                          bg: ROLE_CONFIG.collaborator.bg,
-                        },
-                        {
-                          value: 'member',
-                          label: 'Miembro',
-                          color: ROLE_CONFIG.member.color,
-                          bg: ROLE_CONFIG.member.bg,
-                        },
-                        {
-                          value: 'spectator',
-                          label: 'Espectador',
-                          color: ROLE_CONFIG.spectator.color,
-                          bg: ROLE_CONFIG.spectator.bg,
-                        },
-                      ]}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <label className="text-xs text-grey-500 mb-1 block">Expira en (horas)</label>
-                    <input
-                      type="number"
-                      value={inviteCodeExpires}
-                      onChange={(e) => setInviteCodeExpires(Number(e.target.value))}
-                      min={1}
-                      max={168}
-                      className="w-full px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all"
-                      onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
-                      onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <label className="text-xs text-grey-500 mb-1 block">Usos máximos</label>
-                    <input
-                      type="number"
-                      value={inviteCodeMaxUses}
-                      onChange={(e) => setInviteCodeMaxUses(Number(e.target.value))}
-                      min={1}
-                      max={100}
-                      className="w-full px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all"
-                      onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
-                      onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={handleGenerateCode}
-                  disabled={generateInviteCode.isPending}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50"
-                  style={{ background: accent }}
-                >
-                  {generateInviteCode.isPending ? (
-                    <Loader2 size={13} className="animate-spin" />
-                  ) : (
-                    <Plus size={13} />
-                  )}
-                  Generar link
-                </button>
-                {generatedLink && (
-                  <div className="mt-3">
-                    <label className="text-xs text-grey-500 mb-1 block">Link de invitación</label>
-                    <input
-                      type="text"
-                      value={generatedLink}
-                      readOnly
-                      className="w-full px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 bg-grey-50"
-                      onClick={(e) => (e.target as HTMLInputElement).select()}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
+            <button
+              onClick={() => setIsInviteModalOpen(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+              style={{ background: accent }}
+            >
+              <UserPlus size={16} />
+              Invitar miembros
+            </button>
           </div>
         </section>
 
@@ -1093,6 +841,14 @@ export default function TeamSettings() {
           setGroupToEdit(null);
         }}
         initialData={groupToEdit}
+      />
+
+      <InviteMembersModal
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        teamId={teamId}
+        teamName={team?.name ?? ''}
+        accent={accent}
       />
     </div>
   );

@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { CheckCircle, Loader2, LogIn } from 'lucide-react';
+import { useNavigate,useParams } from 'react-router-dom';
 
-import { useAuth } from '@/context/AuthContext';
-import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
-import { useInvitePreview } from '@/features/team/hooks/useInvitePreview';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { useAuth } from '@/context/AuthContext';
+import { useInvitePreview } from '@/features/team/hooks/useInvitePreview';
+import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
 import { toastError, toastSuccess } from '@/lib/toast';
-import { Loader2, CheckCircle, LogIn } from 'lucide-react';
 
 export default function JoinTeamPage() {
   const { code } = useParams<{ code: string }>();
@@ -66,7 +66,7 @@ export default function JoinTeamPage() {
     );
   }
 
-  const { team, role, usesLeft, expiresAt } = preview;
+  const { team, role } = preview;
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
 
   return (

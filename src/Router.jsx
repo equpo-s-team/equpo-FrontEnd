@@ -12,11 +12,11 @@ import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.jsx';
 import LandingPage from '@/features/presentation/page.jsx';
 import Reports from '@/features/reports/Reports.tsx';
+import JoinTeamPage from '@/features/team/components/JoinTeamPage.tsx';
+import RedeemInvitePage from '@/features/team/components/RedeemInvitePage.tsx';
 import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
-import RedeemInvitePage from '@/features/team/components/RedeemInvitePage.tsx';
-import JoinTeamPage from '@/features/team/components/JoinTeamPage.tsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();

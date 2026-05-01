@@ -1,6 +1,6 @@
 import { signOut } from 'firebase/auth';
 import log from 'loglevel';
-import { LogOut, Users, X, Loader2 } from 'lucide-react';
+import { Loader2,LogOut, Users, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,10 +10,10 @@ import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
 import { useCreateTeam } from '@/features/team/hooks/useCreateTeam';
+import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
-import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
 import { auth } from '@/firebase';
@@ -376,7 +376,7 @@ export const TeamsHub: React.FC = () => {
             </p>
 
             <form
-              onSubmit={async (e) => {
+              onSubmit={(e) => void (async (e) => {
                 e.preventDefault();
                 if (!redeemCode.trim() || !authUser?.uid) return;
 
@@ -398,7 +398,7 @@ export const TeamsHub: React.FC = () => {
                 } finally {
                   setIsRedeeming(false);
                 }
-              }}
+              })(e)}
               className="space-y-4"
             >
               <div>

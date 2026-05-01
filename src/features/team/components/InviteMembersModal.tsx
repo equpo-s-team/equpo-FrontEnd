@@ -21,6 +21,7 @@ interface InviteMembersModalProps {
   teamId: string;
   teamName: string;
   accent: string;
+  onGenerated?: (code: string, link: string) => void;
 }
 
 type RoleOption = 'member' | 'collaborator' | 'spectator';
@@ -66,12 +67,12 @@ const USES_OPTIONS = [
   { label: 'Sin límite', value: 1000 },
 ];
 
-export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, accent }: InviteMembersModalProps) {
+export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, accent, onGenerated }: InviteMembersModalProps) {
   const generateInviteCode = useGenerateInviteCode();
 
   const [role, setRole] = useState<RoleOption>('member');
-  const [expiresHours, setExpiresHours] = useState(24);
-  const [maxUses, setMaxUses] = useState(10);
+  const [expiresHours, setExpiresHours] = useState(168); // Default to 7 days
+  const [maxUses, setMaxUses] = useState(50);
   const [generated, setGenerated] = useState<{ code: string; link: string } | null>(null);
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -86,6 +87,12 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
           const link = `${window.location.origin}/join/${data.code}`;
           setGenerated({ code: data.code, link });
           toastSuccess('¡Invitación creada!', 'Comparte el código o el link con tu equipo');
+
+          // If onGenerated callback exists, call it and close modal
+          if (onGenerated) {
+            onGenerated(data.code, link);
+            onClose();
+          }
         },
         onError: (err) => toastError('Error', err instanceof Error ? err.message : 'No se pudo generar la invitación'),
       }
@@ -117,16 +124,16 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
   const reset = () => {
     setGenerated(null);
     setRole('member');
-    setExpiresHours(24);
-    setMaxUses(10);
+    setExpiresHours(168); // Reset to 7 days
+    setMaxUses(50);
     setCopiedCode(false);
     setCopiedLink(false);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm font-body">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm font-body animate-fade-in">
       <div
-        className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100 animate-slide-up"
         style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}
       >
         {/* Header */}

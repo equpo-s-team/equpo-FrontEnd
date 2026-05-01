@@ -71,7 +71,7 @@ export default function RedeemInvitePage() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue/10 flex items-center justify-center">
             <div className="w-6 h-6 bg-blue rounded-full" />
           </div>
-          <h1 className="text-2xl font-bold text-grey-800 mb-2">Canjear Código de Invitación</h1>
+          <h1 className="text-2xl font-bold text-grey-800 mb-2">Unirte a equipo</h1>
           <p className="text-grey-600">
             Ingresa el código que te compartieron para unirte a un equipo.
           </p>

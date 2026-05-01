@@ -4,7 +4,6 @@ import {
   type AuthMode,
   type FormData,
   type FormErrors,
-  type RegistrationStep,
 } from '@/features/auth';
 
 const calculatePasswordStrength = (password: string) => {
@@ -23,7 +22,6 @@ const calculatePasswordStrength = (password: string) => {
 export const useAuthValidation = (
   formData: FormData,
   authMode: AuthMode,
-  registrationStep: RegistrationStep,
 ) => {
   const validateField = useCallback(
     (field: keyof FormData, value: string | boolean) => {
@@ -78,7 +76,7 @@ export const useAuthValidation = (
 
       return error;
     },
-    [formData.password, authMode, registrationStep],
+    [formData.password, authMode],
   );
 
   const validateForm = useCallback(() => {
@@ -95,7 +93,7 @@ export const useAuthValidation = (
     });
 
     return newErrors;
-  }, [authMode, registrationStep, formData, validateField]);
+  }, [authMode, formData, validateField]);
 
   return { validateField, validateForm };
 };

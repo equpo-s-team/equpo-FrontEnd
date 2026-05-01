@@ -52,7 +52,7 @@ interface TaskDetailPanelProps {
   onClose: () => void;
   onEdit: (task: TeamTask) => void;
   members?: { uid: string; displayName: string | null; photoUrl?: string | null; role?: string }[];
-  groups?: { id: string; groupName: string; photoUrl?: string | null }[];
+  groups?: { id: string; groupName: string; photoUrl?: string | null; members?: { uid: string }[] }[];
   currentUserUid?: string | null;
   myRole?: string;
 }
@@ -116,7 +116,8 @@ export default function TaskDetailPanel({
   const panelAssignedUids = (task.assignedUsers ?? []).map((u) => u.uid);
   const isPanelSpectator = myRole === 'spectator';
   const isPanelLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isPanelAssigned = currentUserUid ? panelAssignedUids.includes(currentUserUid) : false;
+  const isAssignedViaGroup = currentUserUid && selectedGroup?.members?.some((m) => m.uid === currentUserUid);
+  const isPanelAssigned = currentUserUid ? (panelAssignedUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)) : false;
   const canEditTask = !isPanelSpectator && (isPanelLeaderOrCollab || !isPanelAssigned);
 
   const assignableMembers = members.filter((m) => m.role !== 'spectator');
@@ -306,7 +307,7 @@ export default function TaskDetailPanel({
               canEdit={false}
               currentUserUid={currentUserUid}
               myRole={myRole}
-              assignedUserUids={panelAssignedUids}
+              isAssigned={isPanelAssigned}
             />
           )}
         </div>

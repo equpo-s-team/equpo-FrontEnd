@@ -198,11 +198,11 @@ export default function TaskSidebar({
 
     // Require at least one step in create mode
     if (mode === 'create' && localSteps.length === 0) {
-      e.steps = 'Agrega al menos un paso antes de crear la tarea';
+      e.steps = 'Agrega al menos un paso antes de crear la misión';
     }
     // Require at least one step in edit mode when drafts are loaded
     if (mode !== 'create' && editStepDrafts !== null && editStepDrafts.length === 0) {
-      e.steps = 'La tarea debe tener al menos un paso';
+      e.steps = 'La misión debe tener al menos un paso';
     }
 
     const catArray = categories
@@ -292,7 +292,7 @@ export default function TaskSidebar({
       }
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al guardar la tarea';
+      const msg = err instanceof Error ? err.message : 'Error al guardar la misión';
       toastError('Error al guardar', msg);
     } finally {
       setIsSubmitting(false);
@@ -305,10 +305,10 @@ export default function TaskSidebar({
     try {
       await deleteTask.mutateAsync({ teamId, taskId: task.id });
       play('taskDeleted');
-      toastSuccess('Tarea eliminada', 'La tarea fue eliminada permanentemente.');
+      toastSuccess('Tarea eliminada', 'La misión fue eliminada permanentemente.');
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al eliminar la tarea';
+      const msg = err instanceof Error ? err.message : 'Error al eliminar la misión';
       toastError('Error al eliminar', msg);
     } finally {
       setIsSubmitting(false);
@@ -667,7 +667,7 @@ export default function TaskSidebar({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   maxLength={100}
-                  placeholder="Nombre de la tarea"
+                  placeholder="Nombre de la misión"
                   className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
                 />
                 {errors.name && <p className="mt-1 text-xs text-red">{errors.name}</p>}

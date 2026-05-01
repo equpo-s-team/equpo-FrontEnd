@@ -32,7 +32,7 @@ export function DueDateFilter({ value, onChange }: dueDateFilterProp) {
       <DropPanel open={open} onClose={() => setOpen(false)}>
         <div className="p-3">
           <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-2">
-            Mostrar tareas antes de:
+            Mostrar misiones antes de:
           </p>
           <Popover>
             <PopoverTrigger asChild>

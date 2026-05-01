@@ -24,14 +24,14 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
       />
 
       <div className="relative z-10 mb-5 flex shrink-0 items-center justify-between">
-        <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">Tareas vencidas</h2>
+        <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">misiones vencidas</h2>
         <button className="text-xs text-[#c94155] font-medium hover:opacity-70 transition-opacity">
           Ver todas →
         </button>
       </div>
 
       <div className="relative z-10 grid shrink-0 grid-cols-[1fr_auto_auto] gap-3 border-b border-grey-150 pb-2">
-        <span className="text-xs text-grey-400">Tarea</span>
+        <span className="text-xs text-grey-400">misión</span>
         <span className="text-xs text-grey-400">Dias</span>
         <span className="text-xs text-grey-400">Prio.</span>
       </div>

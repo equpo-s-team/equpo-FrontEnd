@@ -108,7 +108,7 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
         </div>
 
         <p className="text-sm text-grey-600 mb-4 font-body">
-          Se eliminarán todas las tareas, grupos, archivos y miembros del equipo. Escribe{' '}
+          Se eliminarán todas las misiones, grupos, archivos y miembros del equipo. Escribe{' '}
           <span className="font-bold text-grey-800">{teamName}</span> para confirmar.
         </p>
 
@@ -869,7 +869,7 @@ export default function TeamSettings() {
               <div>
                 <p className="text-sm font-semibold text-red mb-1 font-body">Zona de Peligro</p>
                 <p className="text-xs text-red/80 font-body">
-                  Eliminar este equipo borrará permanentemente todas sus misiones, tareas, y
+                  Eliminar este equipo borrará permanentemente todas sus misiones, misiones, y
                   recompensas asociadas.
                 </p>
               </div>

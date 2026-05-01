@@ -101,7 +101,7 @@ export default function TaskDetailPanel({
           <div className="w-12 h-12 rounded-2xl bg-grey-100 flex items-center justify-center mx-auto mb-3">
             <Zap size={20} className="text-grey-300" />
           </div>
-          <p className="text-sm font-medium text-grey-400 font-body">Selecciona una tarea</p>
+          <p className="text-sm font-medium text-grey-400 font-body">Selecciona una misión</p>
         </div>
       </div>
     );
@@ -293,7 +293,7 @@ export default function TaskDetailPanel({
               "
             >
               <Edit3 size={13} />
-              Editar tarea
+              Editar misión
             </button>
           )}
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAuth } from '@/context/AuthContext';
@@ -14,13 +14,7 @@ export default function RedeemInvitePage() {
   const [code, setCode] = useState(urlCode || '');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  useEffect(() => {
-    if (urlCode && isAuth && user?.uid) {
-      handleRedeem(urlCode);
-    }
-  }, [urlCode, isAuth, user]);
-
-  const handleRedeem = async (redeemCodeValue: string) => {
+  const handleRedeem = useCallback(async (redeemCodeValue: string) => {
     if (!redeemCodeValue.trim() || !user?.uid) return;
 
     setIsProcessing(true);
@@ -29,17 +23,23 @@ export default function RedeemInvitePage() {
       await redeemCode.mutateAsync({ code: redeemCodeValue.trim() });
 
       toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
-      navigate('/teams');
+      void navigate('/teams');
     } catch (error) {
       toastError('Error', error instanceof Error ? error.message : 'No se pudo canjear el código.');
     } finally {
       setIsProcessing(false);
     }
-  };
+  }, [user, redeemCode, navigate]);
+
+  useEffect(() => {
+    if (urlCode && isAuth && user?.uid) {
+      void handleRedeem(urlCode);
+    }
+  }, [urlCode, isAuth, user, handleRedeem]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleRedeem(code);
+    void handleRedeem(code);
   };
 
   if (!isAuth) {
@@ -54,7 +54,7 @@ export default function RedeemInvitePage() {
             Debes iniciar sesión en Equpo para canjear un código de invitación.
           </p>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => void navigate('/')}
             className="px-6 py-2 bg-blue text-white rounded-lg hover:bg-blue/90"
           >
             Ir al inicio
@@ -111,7 +111,7 @@ export default function RedeemInvitePage() {
 
         <div className="mt-6 text-center">
           <button
-            onClick={() => navigate('/teams')}
+            onClick={() => void navigate('/teams')}
             className="text-sm text-grey-500 hover:text-grey-700"
           >
             Volver a mis equipos

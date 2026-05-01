@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '@/context/AuthContext';
 import { request } from '@/lib/api/core';
+
 import type { RedeemInvitationCodePayload, RedeemInvitationCodeResponse } from '../types/teamSchemas';
 
 export function useRedeemInviteCode() {
@@ -19,8 +20,8 @@ export function useRedeemInviteCode() {
   return useMutation({
     mutationFn,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['teams'] });
-      queryClient.invalidateQueries({ queryKey: ['teamMembers'] });
+      void queryClient.invalidateQueries({ queryKey: ['teams'] });
+      void queryClient.invalidateQueries({ queryKey: ['teamMembers'] });
     },
   });
 };

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '@/context/AuthContext';
 import { request } from '@/lib/api/core';
+
 import type { CreateInvitationCodePayload, InvitationCode } from '../types/teamSchemas';
 
 export const useGenerateInviteCode = () => {
@@ -19,7 +20,7 @@ export const useGenerateInviteCode = () => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['invitationCodes'] });
+      void queryClient.invalidateQueries({ queryKey: ['invitationCodes'] });
     },
   });
 };

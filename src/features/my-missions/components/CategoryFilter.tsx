@@ -42,7 +42,7 @@ export default function CategoryFilter({
   const allSelected = activeCategories.size === 0; // empty means "show all"
 
   return (
-    <div className="h-full rounded-2xl bg-white dark:bg-gray-900 border border-grey-150 dark:border-gray-700 shadow-card p-4 overflow-hidden">
+    <div className="h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-4 overflow-hidden">
       <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body mb-3">Categorías</h3>
 
       {/* Search */}

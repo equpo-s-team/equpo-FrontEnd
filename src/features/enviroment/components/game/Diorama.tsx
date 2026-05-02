@@ -71,7 +71,7 @@ export function Diorama({ tintMapRef, onLoaded }: DioramaProps) {
 
   return (
     <>
-      {/* Visual Scene */}
+      {/* Visual Scene */}a
       <primitive object={scene} scale={DIORAMA_SCALE} />
 
       {/* Collision Scene (invisible, filtered) */}

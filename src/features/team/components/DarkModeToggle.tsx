@@ -1,5 +1,5 @@
+import { useEffect, useState } from 'react';
 
-import { useState, useEffect } from 'react';
 import { darkModeManager } from '@/lib/darkMode';
 
 export default function DarkModeToggle() {

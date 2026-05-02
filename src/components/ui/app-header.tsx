@@ -57,7 +57,9 @@ export function AppHeader({
         />
         <div className="flex flex-col">
           <span>{title}</span>
-          {subtitle && <span className="text-xs text-grey-400 dark:text-grey-500 font-normal">{subtitle}</span>}
+          {subtitle && (
+            <span className="text-xs text-grey-400 dark:text-grey-500 font-normal">{subtitle}</span>
+          )}
         </div>
       </div>
 

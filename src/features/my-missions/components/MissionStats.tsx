@@ -36,33 +36,49 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-kanban-todo" />
-            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">Por Hacer</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              Por Hacer
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">{todo}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {todo}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-blue" />
-            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">En Progreso</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              En Progreso
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">{inProgress}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {inProgress}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-kanban-qa" />
-            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">En QA</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              En QA
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">{inQa}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {inQa}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-green" />
-            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">Completadas</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              Completadas
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">{done}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {done}
+          </span>
         </div>
 
         <hr className="border-grey-100 dark:border-gray-700 my-1" />
@@ -97,7 +113,9 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 select-none">
               <span className="w-2.5 h-2.5 rounded-full bg-red" />
-              <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">Vencidas</span>
+              <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+                Vencidas
+              </span>
             </div>
             <span className="text-xs font-bold font-body text-grey-800 dark:text-gray-300">0</span>
           </div>
@@ -110,27 +128,39 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-kanban-todo opacity-60" />
-                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">Por Hacer</span>
+                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">
+                    Por Hacer
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">{overdueTodo}</span>
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">
+                  {overdueTodo}
+                </span>
               </div>
             )}
             {overdueInProgress > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue opacity-60" />
-                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">En Progreso</span>
+                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">
+                    En Progreso
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">{overdueInProgress}</span>
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">
+                  {overdueInProgress}
+                </span>
               </div>
             )}
             {overdueInQa > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-kanban-qa opacity-60" />
-                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">En QA</span>
+                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">
+                    En QA
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">{overdueInQa}</span>
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">
+                  {overdueInQa}
+                </span>
               </div>
             )}
           </div>

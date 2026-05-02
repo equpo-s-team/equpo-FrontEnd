@@ -43,11 +43,16 @@ export default function CategoryFilter({
 
   return (
     <div className="h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-4 overflow-hidden">
-      <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body mb-3">Categorías</h3>
+      <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body mb-3">
+        Categorías
+      </h3>
 
       {/* Search */}
       <div className="relative mb-3">
-        <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-grey-400 dark:text-grey-500" />
+        <Search
+          size={14}
+          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-grey-400 dark:text-grey-500"
+        />
         <input
           type="text"
           value={search}
@@ -117,7 +122,9 @@ export default function CategoryFilter({
         })}
 
         {filteredCategories.length === 0 && (
-          <p className="text-xs text-grey-400 dark:text-grey-500 text-center py-3">Sin categorías</p>
+          <p className="text-xs text-grey-400 dark:text-grey-500 text-center py-3">
+            Sin categorías
+          </p>
         )}
       </div>
     </div>

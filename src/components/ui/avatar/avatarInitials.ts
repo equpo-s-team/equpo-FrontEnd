@@ -2,7 +2,7 @@ export const getInitials = (value: string | undefined | null, fallback = 'U'): s
   if (!value) {
     return fallback;
   }
-  
+
   const normalized = value.trim();
 
   if (!normalized) {

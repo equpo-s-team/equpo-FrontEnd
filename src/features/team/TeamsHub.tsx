@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useAuth } from '@/context/AuthContext';
+import DarkModeToggle from '@/features/team/components/DarkModeToggle.tsx';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
@@ -19,7 +20,6 @@ import { toastError, toastSuccess } from '@/lib/toast';
 import { AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
 import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
 import { useAchievements } from './hooks/useAchievements';
-import DarkModeToggle from "@/features/team/components/DarkModeToggle.tsx";
 
 type AuthContextUser = {
   uid?: string | null;
@@ -196,7 +196,6 @@ export const TeamsHub: React.FC = () => {
       {/* Main content - Responsive grid */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="grid h-full grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
-
           {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
@@ -204,11 +203,16 @@ export const TeamsHub: React.FC = () => {
 
           {/* Teams Section - Main content */}
           <section className="lg:col-span-3 h-full rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 flex flex-col min-h-0">
-
             {/* Teams Header with Search and Create */}
             <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 dark:bg-gray-900 dark:text-gray-100 dark:border-blue backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>
-                <div className="w-2 h-2 rounded-full" style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }} />
+              <div
+                className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 dark:bg-gray-900 dark:text-gray-100 dark:border-blue backdrop-blur-sm shrink-0"
+                style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}
+              >
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }}
+                />
                 <div className="flex flex-row gap-2 items-center">
                   <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
                     {teams.length}
@@ -300,7 +304,6 @@ export const TeamsHub: React.FC = () => {
         </div>
       </div>
 
-
       {/* Modals */}
       {(modal.mode === 'create' || modal.mode === 'edit') && (
         <TeamFormSidebar
@@ -321,7 +324,6 @@ export const TeamsHub: React.FC = () => {
           onSave={handleProfileSave}
         />
       )}
-
     </div>
   );
 };

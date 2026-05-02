@@ -48,7 +48,9 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
               format(dateRange.from, 'dd MMM yyyy', { locale: es })
             )
           ) : (
-            <span className="text-sm font-medium text-grey-700 dark:text-gray-300">Seleccionar rango</span>
+            <span className="text-sm font-medium text-grey-700 dark:text-gray-300">
+              Seleccionar rango
+            </span>
           )}
           <ChevronDownIcon className="ml-auto h-4 w-4" />
         </Button>

@@ -77,9 +77,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
       }}
     >
       {/* Glass inner */}
-      <div
-        className="rounded-2xl bg-white/80 dark:bg-gray-900 backdrop-blur-md p-5 flex flex-col gap-4"
-      >
+      <div className="rounded-2xl bg-white/80 dark:bg-gray-900 backdrop-blur-md p-5 flex flex-col gap-4">
         {/* Top row: name + currency badge */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">

@@ -236,7 +236,9 @@ export default function TaskCommentarySection({
       {isLoading ? (
         <p className="text-[12px] text-grey-300 dark:text-grey-500 py-2">Cargando comentarios…</p>
       ) : commentaries.length === 0 ? (
-        <p className="text-[12px] text-grey-400 dark:text-grey-500 italic py-2">No hay comentarios aún.</p>
+        <p className="text-[12px] text-grey-400 dark:text-grey-500 italic py-2">
+          No hay comentarios aún.
+        </p>
       ) : (
         <div className="flex flex-col gap-3 mb-4">
           {commentaries.map((c) => (

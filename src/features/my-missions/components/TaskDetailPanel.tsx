@@ -52,7 +52,12 @@ interface TaskDetailPanelProps {
   onClose: () => void;
   onEdit: (task: TeamTask) => void;
   members?: { uid: string; displayName: string | null; photoUrl?: string | null; role?: string }[];
-  groups?: { id: string; groupName: string; photoUrl?: string | null; members?: { uid: string }[] }[];
+  groups?: {
+    id: string;
+    groupName: string;
+    photoUrl?: string | null;
+    members?: { uid: string }[];
+  }[];
   currentUserUid?: string | null;
   myRole?: string;
 }
@@ -101,7 +106,9 @@ export default function TaskDetailPanel({
           <div className="w-12 h-12 rounded-2xl bg-grey-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-3">
             <Zap size={20} className="text-grey-300 dark:text-grey-500" />
           </div>
-          <p className="text-sm font-medium text-grey-400 dark:text-grey-500 font-body">Selecciona una misión</p>
+          <p className="text-sm font-medium text-grey-400 dark:text-grey-500 font-body">
+            Selecciona una misión
+          </p>
         </div>
       </div>
     );
@@ -116,8 +123,11 @@ export default function TaskDetailPanel({
   const panelAssignedUids = (task.assignedUsers ?? []).map((u) => u.uid);
   const isPanelSpectator = myRole === 'spectator';
   const isPanelLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isAssignedViaGroup = currentUserUid && selectedGroup?.members?.some((m) => m.uid === currentUserUid);
-  const isPanelAssigned = currentUserUid ? (panelAssignedUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)) : false;
+  const isAssignedViaGroup =
+    currentUserUid && selectedGroup?.members?.some((m) => m.uid === currentUserUid);
+  const isPanelAssigned = currentUserUid
+    ? panelAssignedUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)
+    : false;
   const canEditTask = !isPanelSpectator && (isPanelLeaderOrCollab || !isPanelAssigned);
 
   const assignableMembers = members.filter((m) => m.role !== 'spectator');
@@ -230,7 +240,9 @@ export default function TaskDetailPanel({
               <p className="text-xs font-bold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-1.5 font-body">
                 Descripción
               </p>
-              <p className="text-xs text-grey-600 dark:text-grey-400 font-body leading-relaxed">{task.description}</p>
+              <p className="text-xs text-grey-600 dark:text-grey-400 font-body leading-relaxed">
+                {task.description}
+              </p>
             </div>
           )}
 

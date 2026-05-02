@@ -94,7 +94,9 @@ export const resolveCanonicalAvatarUrl = async (
     if (isStorageAvatarUrlOwnedBy(photoUrl, uid)) {
       return photoUrl;
     }
-    log.warn('Avatar de Storage no pertenece al uid actual; se descarta para evitar fugas entre cuentas.');
+    log.warn(
+      'Avatar de Storage no pertenece al uid actual; se descarta para evitar fugas entre cuentas.',
+    );
     return null;
   }
 

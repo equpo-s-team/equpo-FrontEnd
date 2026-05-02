@@ -163,7 +163,9 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         >
           <span className="text-grey-400 dark:text-grey-500 font-body text-[10px]">{time}</span>
           {message.editedAt && (
-            <span className="text-grey-400 dark:text-grey-500 font-body text-[10px] italic">editado</span>
+            <span className="text-grey-400 dark:text-grey-500 font-body text-[10px] italic">
+              editado
+            </span>
           )}
 
           {isSent && (

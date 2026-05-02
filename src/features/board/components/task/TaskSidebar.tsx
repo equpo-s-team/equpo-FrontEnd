@@ -432,14 +432,19 @@ export default function TaskSidebar({
   const isSidebarSpectator = myRole === 'spectator';
   const isSidebarLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
   const hasAssignees = (task?.assignedUsers?.length ?? 0) > 0 || Boolean(task?.assignedGroupId);
-  
+
   const assignedGroupInfo = groups.find((g) => g.id === task?.assignedGroupId);
-  const isAssignedViaGroup = currentUserUid && assignedGroupInfo?.members?.some((m) => m.uid === currentUserUid);
-  const isSidebarAssigned = currentUserUid ? (assignedUserUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)) : false;
-  
+  const isAssignedViaGroup =
+    currentUserUid && assignedGroupInfo?.members?.some((m) => m.uid === currentUserUid);
+  const isSidebarAssigned = currentUserUid
+    ? assignedUserUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)
+    : false;
+
   const isTaskDone = task?.status === 'done';
   const canEditTask =
-    !isSidebarSpectator && !isTaskDone && (isSidebarLeaderOrCollab || !hasAssignees || isSidebarAssigned);
+    !isSidebarSpectator &&
+    !isTaskDone &&
+    (isSidebarLeaderOrCollab || !hasAssignees || isSidebarAssigned);
 
   const selectedPriority =
     PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? priority;
@@ -551,7 +556,9 @@ export default function TaskSidebar({
                     <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
                     Fecha Límite
                   </FieldLabel>
-                  <p className="text-sm font-body text-grey-800 dark:text-gray-300">{formattedDueDate}</p>
+                  <p className="text-sm font-body text-grey-800 dark:text-gray-300">
+                    {formattedDueDate}
+                  </p>
                 </div>
 
                 {/* Priority */}
@@ -596,7 +603,9 @@ export default function TaskSidebar({
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm font-body text-grey-800 dark:text-gray-300">Sin categorías</p>
+                    <p className="text-sm font-body text-grey-800 dark:text-gray-300">
+                      Sin categorías
+                    </p>
                   )}
                 </div>
 
@@ -818,7 +827,12 @@ export default function TaskSidebar({
                               {
                                 value: '__more_groups__',
                                 label: 'Crear grupo',
-                                icon: <Settings size={12} className="text-grey-400 dark:text-grey-500" />,
+                                icon: (
+                                  <Settings
+                                    size={12}
+                                    className="text-grey-400 dark:text-grey-500"
+                                  />
+                                ),
                               },
                             ]
                           : []),
@@ -866,7 +880,9 @@ export default function TaskSidebar({
                     {errors.categories ? (
                       <p className="mt-1 text-xs font-medium text-red">{errors.categories}</p>
                     ) : (
-                      <p className="mt-1 text-xs text-grey-400 dark:text-grey-500">Separadas por coma</p>
+                      <p className="mt-1 text-xs text-grey-400 dark:text-grey-500">
+                        Separadas por coma
+                      </p>
                     )}
                   </div>
 

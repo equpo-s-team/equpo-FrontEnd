@@ -232,12 +232,12 @@ export default function HeroVisual() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     /* ── Animation loop ───────────────────────────────────────────────── */
-    let animId: number | undefined;
-    const clock = new THREE.Clock();
+    let animId:  number | undefined;
+    const timer = { startTime: Date.now() };
 
     function animate() {
       animId = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
+      const t = timer.getElapsedTime();
 
       // Smooth parallax
       currentGhostOffset.lerp(targetGhostOffset, 0.06);

@@ -72,6 +72,20 @@ export default function TeamBoard() {
   const { data: groups = [] } = useTeamGroups(teamId);
   const { play } = useSoundEffects();
 
+  const [collapsedColumns, setCollapsedColumns] = useState({
+    todo: false,
+    progress: false,
+    qa: false,
+    done: false,
+  });
+
+  const toggleColumnCollapse = (columnId) => {
+    setCollapsedColumns((prev) => ({
+      ...prev,
+      [columnId]: !prev[columnId],
+    }));
+  };
+
   const myRole = useMemo(() => {
     if (!user?.uid || !members.length) return 'member';
     return members.find((m) => m.uid === user.uid)?.role ?? 'member';
@@ -293,12 +307,12 @@ export default function TeamBoard() {
 
       <div
         className="
-             px-4 md:px-8  pt-3 pb-10 flex gap-4 md:gap-5 overflow-x-auto md:overflow-x-visible md:grid md:grid-cols-4
-             snap-x snap-mandatory md:snap-none scroll-px-4
+             px-4 md:px-8  pt-3 pb-10 flex flex-col md:grid md:grid-cols-4 gap-4 md:gap-5 
+             overflow-y-auto md:overflow-y-visible
              "
       >
         {COLUMNS.map((col, index) => (
-          <div key={col.id} className="snap-start">
+          <div key={col.id}>
             <BoardColumn
               column={col}
               cards={displayCards[col.id] ?? []}
@@ -307,6 +321,8 @@ export default function TeamBoard() {
               columnIndex={index}
               isLeaderOrCollaborator={isLeaderOrCollaborator}
               canMoveCard={canMoveCard}
+              isCollapsed={collapsedColumns[col.id]}
+              onToggleCollapse={() => toggleColumnCollapse(col.id)}
             />
           </div>
         ))}

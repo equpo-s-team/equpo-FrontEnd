@@ -1,4 +1,5 @@
 import { EmptyState } from '@/components/ui/EmptyState';
+import { ChevronUp } from 'lucide-react';
 
 import BoardCard from './BoardCard.tsx';
 import {COLUMN_CONFIG, COLUMN_EMPTY} from './columnConfig.js';
@@ -39,7 +40,15 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ column, cards, onMoveCard, onCardClick, canMoveCard = true }) {
+export default function BoardColumn({ 
+  column, 
+  cards, 
+  onMoveCard, 
+  onCardClick, 
+  canMoveCard = true,
+  isCollapsed = false,
+  onToggleCollapse = () => {}
+}) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
@@ -56,7 +65,7 @@ export default function BoardColumn({ column, cards, onMoveCard, onCardClick, ca
         min-h-104 md:min-h-120
         relative overflow-hidden
         transition-all duration-300
-        shrink-0 w-[82vw] sm:w-[72vw] md:w-auto
+        w-full md:w-auto ${isCollapsed ? 'md:min-h-fit' : ''}
       `}
     >
       <div
@@ -83,32 +92,43 @@ export default function BoardColumn({ column, cards, onMoveCard, onCardClick, ca
             {cards.length}
           </span>
         </div>
+        <button
+          onClick={onToggleCollapse}
+          className="md:hidden p-1 hover:bg-secondary rounded-lg transition-all duration-200"
+          title={isCollapsed ? 'Expandir' : 'Contraer'}
+        >
+          <ChevronUp
+            size={16}
+            className={`transition-transform duration-300 ${isCollapsed ? 'rotate-180' : ''}`}
+          />
+        </button>
       </div>
 
-      <div
-        role="button"
-        className="flex flex-col gap-3 px-3 pb-3 flex-1"
-        onDrop={(e) => {
-          e.preventDefault();
-          if (!canMoveCard) return;
-          const cardId = e.dataTransfer.getData('text/card-id');
-          const fromColumnId = e.dataTransfer.getData('text/from-column');
+      {!isCollapsed && (
+        <div
+          role="button"
+          className="flex flex-col gap-3 px-3 pb-3 flex-1"
+          onDrop={(e) => {
+            e.preventDefault();
+            if (!canMoveCard) return;
+            const cardId = e.dataTransfer.getData('text/card-id');
+            const fromColumnId = e.dataTransfer.getData('text/from-column');
 
-          if (cardId && fromColumnId && fromColumnId !== id) {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const y = e.clientY - rect.top + e.currentTarget.scrollTop;
-            const cardHeight = 120;
-            const position = Math.floor(y / cardHeight);
-            handleExternalDrop(cardId, fromColumnId, position);
-          }
-        }}
-        onDragOver={(e) => {
-          e.preventDefault();
-          e.currentTarget.classList.add('bg-blue/5');
-        }}
-        onDragLeave={(e) => {
-          e.currentTarget.classList.remove('bg-blue/5');
-        }}
+            if (cardId && fromColumnId && fromColumnId !== id) {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const y = e.clientY - rect.top + e.currentTarget.scrollTop;
+              const cardHeight = 120;
+              const position = Math.floor(y / cardHeight);
+              handleExternalDrop(cardId, fromColumnId, position);
+            }
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add('bg-blue/5');
+          }}
+          onDragLeave={(e) => {
+            e.currentTarget.classList.remove('bg-blue/5');
+          }}
       >
         {cards.length === 0 ? (
           <EmptyState
@@ -135,6 +155,7 @@ export default function BoardColumn({ column, cards, onMoveCard, onCardClick, ca
           ))
         )}
       </div>
+      )}
     </div>
   );
 }

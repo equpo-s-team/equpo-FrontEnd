@@ -78,15 +78,14 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
     >
       {/* Glass inner */}
       <div
-        className="rounded-2xl bg-white/80 backdrop-blur-md p-5 flex flex-col gap-4"
-        style={{ backdropFilter: 'blur(16px)' }}
+        className="rounded-2xl bg-white/80 dark:bg-gray-900 backdrop-blur-md p-5 flex flex-col gap-4"
       >
         {/* Top row: name + currency badge */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             {/* Color indicator */}
             <div
-              className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white font-bold text-sm shadow-md"
+              className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white dark:text-gray-100 font-bold text-sm shadow-md"
               style={{
                 background: cfg.gradient,
                 boxShadow: `0 4px 14px ${cfg.glow.replace('0.18', '0.5')}`,
@@ -102,7 +101,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
             </div>
             <div>
               <h3
-                className="font-semibold text-grey-800 text-sm leading-tight"
+                className="font-semibold text-grey-800 dark:text-gray-100 text-sm leading-tight"
                 style={{ fontFamily: 'DM Sans, sans-serif' }}
               >
                 {team.name}
@@ -133,10 +132,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
         </div>
 
         {/* Description */}
-        <p
-          className="text-xs h-10 text-grey-500 leading-relaxed line-clamp-2"
-          style={{ fontFamily: 'DM Sans, sans-serif' }}
-        >
+        <p className="text-xs h-10 text-grey-500 leading-relaxed line-clamp-2">
           {team.description || 'Sin descripción'}
         </p>
 
@@ -193,7 +189,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 pt-1 border-t border-grey-100">
+        <div className="flex gap-2 pt-1 border-t border-grey-100 dark:border-gray-700">
           <button
             onClick={() => onEnter(team.id)}
             className="flex-1 py-2 rounded-xl text-xs font-semibold text-white transition-all duration-200 hover:opacity-90 active:scale-95"

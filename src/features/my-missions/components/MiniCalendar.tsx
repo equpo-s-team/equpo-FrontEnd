@@ -52,7 +52,7 @@ export default function MiniCalendar({
   tasksByDate,
 }: MiniCalendarProps) {
   return (
-    <div className="w-full rounded-xl border border-grey-150 bg-white px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
+    <div className="w-full rounded-xl border border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
       <div className="w-full overflow-visible">
         <Calendar
           mode="single"

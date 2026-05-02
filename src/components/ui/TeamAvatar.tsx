@@ -27,7 +27,7 @@ export function TeamAvatar({
   const baseImageClasses = cn('w-10 h-10 rounded-xl object-cover flex-shrink-0', className);
 
   const baseFallbackClasses = cn(
-    'w-10 h-10 rounded-xl flex items-center justify-center bg-grey-200 text-grey-700 font-semibold text-sm flex-shrink-0',
+    'w-10 h-10 rounded-xl flex items-center justify-center bg-grey-200 text-grey-100 font-semibold text-sm flex-shrink-0',
     className,
     fallbackClassName,
   );

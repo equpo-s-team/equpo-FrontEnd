@@ -81,7 +81,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
         <p
           className={cn(
             'w-full text-center text-xs font-semibold leading-tight font-body line-clamp-2',
-            isLocked ? 'text-grey-400' : 'text-secondary-foreground',
+            isLocked ? 'text-grey-400' : 'text-secondary-foreground dark:text-white',
           )}
         >
           {displayName}

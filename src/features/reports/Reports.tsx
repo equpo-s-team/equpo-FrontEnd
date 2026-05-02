@@ -125,16 +125,16 @@ export default function Reports() {
         : 'No se pudieron cargar los reportes.';
 
   return (
-    <div className="relative flex flex-col min-h-screen bg-white text-grey-800 font-body">
+    <div className="relative flex flex-col min-h-screen overflow-hidden bg-white dark:bg-gray-900 text-grey-800 dark:text-gray-300 font-body">
       <AppHeader />
       <FilterBar setActiveDays={setActiveDays} />
       <main className="relative z-10 mx-1 flex flex-1 flex-col overflow-y-auto px-4 py-4 sm:px-6 lg:px-9 pb-20 lg:pb-4">
-        <p className="mb-3.5 shrink-0 text-xs font-semibold uppercase tracking-[0.1em] text-grey-400">
+        <p className="mb-3.5 shrink-0 text-xs font-semibold uppercase tracking-[0.1em] text-grey-400 dark:text-grey-500">
           Resumen de estados
         </p>
 
         {isError && (
-          <div className="mb-3 rounded-lg border border-[#f6d2da] bg-[#fff4f7] px-3 py-2 text-sm text-[#c94155]">
+          <div className="mb-3 rounded-lg border border-[#f6d2da] bg-[#fff4f7] dark:bg-red/10 dark:border-red/30 px-3 py-2 text-sm text-[#c94155] dark:text-red">
             {errorMessage}
           </div>
         )}

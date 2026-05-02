@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { type UserProfileSaveInput } from '@/features/team/types';
 
 import { type UserProfile } from './UserProfileCard.tsx';
+import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
+import { Camera, Loader2 } from 'lucide-react';
 
 interface UserProfileSidebarProps {
   user: UserProfile;
@@ -22,6 +24,14 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<{ displayName?: string; form?: string }>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const accent = '#60AFFF';
+  const accentGlow = 'rgba(96,175,255,0.4)';
+
+  const photoPreview = photoFile ? URL.createObjectURL(photoFile) : photoURL;
 
   useEffect(() => {
     requestAnimationFrame(() => setIsVisible(true));
@@ -31,6 +41,16 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     if (isSaving) return;
     setIsVisible(false);
     setTimeout(onClose, 300);
+  };
+
+  const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.currentTarget.files?.[0] ?? null;
+    setPhotoFile(selectedFile);
+    setErrors((p) => ({ ...p, form: undefined }));
+
+    if (selectedFile) {
+      setPhotoURL(URL.createObjectURL(selectedFile));
+    }
   };
 
   const handleSave = async () => {
@@ -43,6 +63,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
     setErrors({});
     setIsSaving(true);
+    setIsUploading(true);
 
     try {
       await onSave({
@@ -55,15 +76,9 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
       setErrors({ form: 'No se pudo guardar el perfil. Intenta nuevamente.' });
     } finally {
       setIsSaving(false);
+      setIsUploading(false);
     }
   };
-
-  const initials = displayName
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .substring(0, 2)
-    .toUpperCase();
 
   const xpPercent = Math.min(100, Math.round((user.experience / user.experienceToNextLevel) * 100));
 
@@ -72,7 +87,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
       <button
         type="button"
         aria-label="Cerrar panel de perfil"
-        className={`absolute inset-0 bg-grey-900/20 backdrop-blur-sm transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-grey-900/20 dark:bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         onClick={handleClose}
       />
 
@@ -81,60 +96,69 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
         className={`relative h-full w-full sm:w-1/3 min-w-[320px] max-w-[460px] flex flex-col p-[1px] shadow-2xl transition-transform duration-300 ease-in-out ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
         style={{ background: 'linear-gradient(135deg,#60AFFF,#9b7fe1)' }}
       >
-        <div className="h-full bg-white/95 backdrop-blur-xl p-6 flex flex-col gap-5 overflow-y-auto">
+        <div className="h-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl p-6 flex flex-col gap-5 overflow-y-auto">
           {/* Header */}
           <div className="flex items-center justify-between">
             <div>
               <h2
-                className="text-lg font-bold text-grey-800"
+                className="text-lg font-bold text-grey-800 dark:text-gray-300"
                 style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
               >
                 Configuración de perfil
               </h2>
-              <p className="text-xs text-grey-400 mt-0.5">Personaliza tu identidad en Equpo</p>
+              <p className="text-xs text-grey-400 dark:text-grey-500 mt-0.5">Personaliza tu identidad en Equpo</p>
             </div>
             <button
               onClick={handleClose}
-              className="w-8 h-8 rounded-full bg-grey-100 hover:bg-grey-200 flex items-center justify-center text-grey-500 transition-colors text-sm shrink-0"
+              className="w-8 h-8 rounded-full bg-grey-100 dark:bg-gray-700 hover:bg-grey-200 dark:hover:bg-gray-600 flex items-center justify-center text-grey-500 dark:text-grey-400 transition-colors text-sm shrink-0"
             >
               ✕
             </button>
           </div>
 
           {/* Avatar preview */}
-          <div className="flex flex-col items-center gap-3 py-4 rounded-2xl border border-grey-150 bg-grey-50/50">
-            <UserAvatar
-              src={photoURL}
-              alt={displayName}
-              initials={initials}
-              className="w-16 h-16"
-              style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.3)' }}
-              fallbackClassName="text-white text-xl"
-              fallbackStyle={{
-                background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-                boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
-              }}
-              loading="eager"
-            />
-            <div className="text-center">
-              <p
-                className="text-sm font-bold text-grey-800"
-                style={{ fontFamily: 'DM Sans, sans-serif' }}
-              >
-                {displayName || 'Sin nombre'}
-              </p>
-              <p className="text-xs text-grey-400 font-mono mt-0.5 px-4 truncate max-w-[240px]">
-                {user.uid}
-              </p>
+          <div className="flex justify-center items-end shrink-0">
+            <div
+              className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center text-white text-2xl font-bold shadow-md"
+              style={{ background: photoPreview ? undefined : accent }}
+            >
+              <UserAvatar
+                src={photoPreview}
+                alt={displayName || 'User'}
+                className="w-full h-full"
+                fallbackClassName="w-full h-full text-white text-2xl"
+                fallbackStyle={{ background: accent }}
+                loading="eager"
+              />
             </div>
+            <AppTooltip content="Cambiar foto de perfil">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className=" absolute right-48 w-7 h-7 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 disabled:opacity-60"
+                style={{ background: accent, boxShadow: `0 3px 10px ${accentGlow}` }}
+              >
+                {isUploading ? (
+                  <Loader2 size={13} className="animate-spin" />
+                ) : (
+                  <Camera size={13} />
+                )}
+              </button>
+            </AppTooltip>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handlePhotoChange}
+            />
           </div>
 
           {/* Level & XP — read only */}
           <div
-            className="rounded-xl p-4 border border-grey-150"
-            style={{ background: 'rgba(96,175,255,0.04)' }}
+            className="rounded-xl p-4 border border-grey-150 dark:border-gray-700 bg-secondary dark:bg-gray-700"
           >
-            <p className="text-xs font-semibold text-grey-400 uppercase tracking-wider mb-3">
+            <p className="text-xs font-semibold text-grey-400 dark:text-grey-500 uppercase tracking-wider mb-3">
               Progreso
             </p>
             <div className="flex items-center justify-between mb-2">
@@ -146,8 +170,8 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                   {user.level}
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-grey-700">Nivel {user.level}</p>
-                  <p className="text-xs text-grey-400">
+                  <p className="text-xs font-bold text-grey-700 dark:text-gray-300">Nivel {user.level}</p>
+                  <p className="text-xs text-grey-400 dark:text-grey-500">
                     {user.experience.toLocaleString()} /{' '}
                     {user.experienceToNextLevel.toLocaleString()} XP
                   </p>
@@ -164,7 +188,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 {xpPercent}%
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-grey-150 overflow-hidden">
+            <div className="w-full h-1.5 rounded-full bg-grey-150 dark:bg-gray-700 overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{
@@ -178,7 +202,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
           {/* Display name */}
           <div>
-            <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-1.5 block">
+            <label className="text-xs font-semibold text-grey-500 dark:text-grey-400 uppercase tracking-wider mb-1.5 block">
               Nombre visible *
             </label>
             <input
@@ -189,7 +213,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 setErrors((p) => ({ ...p, displayName: undefined, form: undefined }));
               }}
               placeholder="Ej: Ana García"
-              className="w-full px-4 py-2.5 rounded-xl border text-sm text-grey-800 outline-none transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border text-sm text-grey-800 dark:text-gray-300 dark:bg-gray-700 outline-none transition-all"
               style={{
                 borderColor: errors.displayName ? '#F65A70' : 'rgba(0,0,0,0.1)',
                 fontFamily: 'DM Sans, sans-serif',
@@ -202,51 +226,17 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             )}
           </div>
 
-          {/* Photo URL */}
-          <div>
-            <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mt-4 mb-1.5 block">
-              Imagen desde tu dispositivo
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const selectedFile = e.currentTarget.files?.[0] ?? null;
-                setPhotoFile(selectedFile);
-                setErrors((p) => ({ ...p, form: undefined }));
-
-                if (selectedFile) {
-                  setPhotoURL(URL.createObjectURL(selectedFile));
-                }
-              }}
-              className="w-full px-4 py-2.5 rounded-xl border text-sm text-grey-700 bg-white"
-              style={{
-                borderColor: 'rgba(0,0,0,0.1)',
-                fontFamily: 'DM Sans, sans-serif',
-              }}
-            />
-            <p className="text-xs text-grey-400 mt-1">
-              Se guarda una sola imagen por usuario: cada nueva carga reemplaza la anterior.
-            </p>
-          </div>
-
           {/* UID — read only */}
           <div>
-            <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-1.5 block">
+            <label className="text-xs font-semibold text-grey-500 dark:text-grey-700 uppercase tracking-wider mb-1.5 block">
               UID
             </label>
             <div
-              className="w-full px-4 py-2.5 rounded-xl border text-sm text-grey-400 font-mono select-all break-all"
-              style={{
-                borderColor: 'rgba(0,0,0,0.06)',
-                background: 'rgba(250,250,248,0.8)',
-                fontFamily: 'monospace',
-                fontSize: '11px',
-              }}
+              className="w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all"
             >
               {user.uid}
             </div>
-            <p className="text-xs text-grey-400 mt-1">El UID no se puede modificar</p>
+            <p className="text-xs text-grey-400 dark:text-grey-500 mt-1">El UID no se puede modificar</p>
           </div>
 
           <div className="flex-grow" />
@@ -258,7 +248,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             <button
               onClick={handleClose}
               disabled={isSaving}
-              className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-500 hover:bg-grey-50 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex-1 py-2.5 rounded-xl border border-grey-200 dark:border-gray-700 text-sm font-medium text-grey-500 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >
               Cancelar
             </button>

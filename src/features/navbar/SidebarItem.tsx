@@ -15,8 +15,8 @@ export default function SidebarItem({ id, icon: Icon, label }: SidebarItemProps)
                 transition-all duration-200 cursor-pointer
                 ${
                   isActive
-                    ? 'bg-offwhite text-blue shadow-purple-glow/20'
-                    : 'text-primary-foreground hover:text-tertiary-foreground hover:bg-secondary'
+                    ? 'bg-offwhite text-blue shadow-purple-glow/20 dark:shadow-purple-glow/50 dark:bg-gray-700'
+                    : 'text-primary-foreground dark:text-gray-400 hover:text-tertiary-foreground hover:bg-secondary dark:hover:text-gray-400 dark:hover:bg-gray-700'
                 }
                 ${collapsed ? 'justify-center' : ''}
             `}

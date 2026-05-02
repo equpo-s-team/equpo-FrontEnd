@@ -52,9 +52,9 @@ export default function Sidebar() {
     <aside
       className={`
     hidden lg:flex flex-col fixed left-0 top-0 h-screen z-50
-    bg-primary border-r border-secondary transition-all duration-300 ease-in-out
+    bg-primary dark:bg-gray-800 border-r border-secondary dark:border-gray-700 transition-all duration-300 ease-in-out
     ${collapsed ? 'w-[68px]' : 'w-[220px]'}
-    shadow-neonPurple
+    shadow-neonPurple dark:shadow-lg
   `}
     >
       <SidebarLogo />

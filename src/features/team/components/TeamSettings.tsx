@@ -93,7 +93,7 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
           }
         }}
       />
-      <div className="relative z-10 w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-grey-150">
+      <div className="relative z-10 w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-2xl border border-grey-150">
         <div className="flex items-center gap-3 mb-4">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -174,7 +174,7 @@ function GroupDeleteConfirmDialog({
           }
         }}
       />
-      <div className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
         <div className="w-12 h-12 rounded-2xl bg-red/10 flex items-center justify-center text-red mb-5">
           <AlertTriangle size={24} />
         </div>

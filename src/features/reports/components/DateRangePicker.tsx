@@ -33,7 +33,7 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="flex items-center gap-2.5 bg-white border rounded-xl px-4 py-2.5 
+          className="flex items-center gap-2.5 bg-white dark:bg-gray-800 border rounded-xl px-4 py-2.5 
             shadow-sm transition-all duration-200 select-none text-left w-[340px] sm:w-[390px]
             hover:border-[rgba(96,175,255,0.5)] hover:shadow-[0_0_0_3px_rgba(96,175,255,0.1)]"
         >
@@ -48,13 +48,13 @@ export function DateRangePicker({ onRangeChange }: DateRangePickerProps) {
               format(dateRange.from, 'dd MMM yyyy', { locale: es })
             )
           ) : (
-            <span className="text-sm font-medium text-grey-700">Seleccionar rango</span>
+            <span className="text-sm font-medium text-grey-700 dark:text-gray-300">Seleccionar rango</span>
           )}
           <ChevronDownIcon className="ml-auto h-4 w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-auto p-0 bg-white border border-grey-200 rounded-2xl shadow-lg"
+        className="w-auto p-0 bg-white dark:bg-gray-800 border border-grey-200 dark:border-gray-700 rounded-2xl shadow-lg"
         align="start"
       >
         <Calendar

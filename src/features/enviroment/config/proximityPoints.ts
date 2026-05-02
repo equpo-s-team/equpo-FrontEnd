@@ -12,7 +12,7 @@ export const PROXIMITY_POINTS: ProximityPoint[] = [
   },
   {
     id: 'raccoon-quotes-area',
-    position: [66.5a, 6, -40],
+    position: [65, 2.5 , -30],
     label: 'Hablar',
     icon: MessageCircle,
     triggerDistance: 10,

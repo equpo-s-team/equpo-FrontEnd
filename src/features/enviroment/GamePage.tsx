@@ -4,8 +4,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 
-import { MobileJoystick } from './components/environment/MobileJoystick.tsx';
-import Experience from './components/Experience.tsx';
+import { MobileJoystick } from '@/features/enviroment/components/game/MobileJoystick.tsx';
+import Experience from './components/game/Experience.tsx';
 import HUD from './components/HUD.tsx';
 import NeonLoadingOverlay from './components/NeonLoadingOverlay.tsx';
 import { useHudData } from './hooks/useHudData.ts';

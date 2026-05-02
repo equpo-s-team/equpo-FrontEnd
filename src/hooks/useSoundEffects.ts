@@ -12,6 +12,10 @@ export const SOUND_EFFECTS = {
   messageReceived: '/sounds/message-received.mp3',
 
   ring: '/sounds/ring_tone.mp3',
+
+  duckFeeding: '/sounds/duck-feeding.mp3',
+  raccoonQuotes: '/sounds/raccoon-quotes.mp3',
+
 } as const;
 
 export type SoundEffectName = keyof typeof SOUND_EFFECTS;

@@ -23,7 +23,9 @@ export function AppTooltip({
           side={side}
           className="bg-grey-800 text-white text-xs rounded-lg px-2 py-1 border-0 font-body"
         >
-          {content}
+          {content.split('\n').map((line, index) => (
+            <div key={index}>{line}</div>
+          ))}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

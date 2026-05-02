@@ -262,7 +262,7 @@ export default function TeamBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-offwhite font-body">
+    <div className="min-h-screen bg-offwhite dark:bg-gray-900 font-body">
       <AppHeader />
       <FilterBar
         filters={filters}

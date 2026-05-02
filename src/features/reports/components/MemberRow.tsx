@@ -56,7 +56,7 @@ export function MemberRow({ member }: MemberRowProps) {
 
   return (
     <div
-      className="grid items-center gap-3 py-3 border-b border-grey-100 last:border-0 rounded-lg transition-all hover:bg-grey-50 hover:px-1
+      className="grid items-center gap-3 py-3 border-b border-grey-100 dark:border-gray-700 last:border-0 rounded-lg transition-all hover:bg-grey-50 dark:hover:bg-gray-700 hover:px-1
       grid-cols-[38px_1fr_130px_52px] sm:grid-cols-[38px_1fr_140px_54px]"
     >
       {/* Avatar */}
@@ -71,13 +71,13 @@ export function MemberRow({ member }: MemberRowProps) {
 
       {/* Name + role */}
       <div className="min-w-0">
-        <p className="text-sm font-medium text-grey-800 truncate">{member.name}</p>
-        <p className="text-xs text-grey-400 mt-px">{member.role}</p>
+        <p className="text-sm font-medium text-grey-800 dark:text-gray-300 truncate">{member.name}</p>
+        <p className="text-xs text-grey-400 dark:text-grey-500 mt-px">{member.role}</p>
       </div>
 
       {/* Progress bar */}
       <div>
-        <div className="flex justify-between mb-1.5 text-xs text-grey-500">
+        <div className="flex justify-between mb-1.5 text-xs text-grey-500 dark:text-grey-400">
           <span>Completadas</span>
           <span>
             {member.completed}/{member.total}

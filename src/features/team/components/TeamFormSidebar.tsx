@@ -103,7 +103,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
     <SidebarSheet
       open={isOpen}
       onOpenChange={handleOpenChange}
-      side="left"
+      side="right"
       contentClassName="w-full sm:w-1/3 min-w-[320px] max-w-[500px] border-none bg-transparent shadow-2xl"
     >
       <div className="flex h-full w-full flex-col p-[1px]" style={{ background: cfg.gradient }}>

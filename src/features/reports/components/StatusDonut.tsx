@@ -75,7 +75,7 @@ export function StatusDonut({ data }: StatusDonutProps) {
 
   return (
     <div
-      className="relative bg-white border border-grey-150 rounded-[14px] p-6 overflow-hidden"
+      className="relative bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 rounded-[14px] p-6 overflow-hidden"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.03)' }}
     >
       {/* Corner neon glow */}
@@ -87,7 +87,7 @@ export function StatusDonut({ data }: StatusDonutProps) {
       />
 
       <div className="flex items-center justify-between mb-5 relative z-10">
-        <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">Estado general</h2>
+        <h2 className="text-sm font-semibold text-grey-800 dark:text-gray-300  tracking-[-0.01em]">Estado general</h2>
         <span className="text-xs text-grey-400">{total} misiones</span>
       </div>
 
@@ -139,10 +139,10 @@ export function StatusDonut({ data }: StatusDonutProps) {
             </defs>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-semibold text-grey-900 tracking-[-0.04em]">
+            <span className="text-3xl font-semibold text-grey-900 dark:text-gray-100 tracking-[-0.04em]">
               {donePct}%
             </span>
-            <span className="text-xs text-grey-400 mt-0.5">completado</span>
+            <span className="text-xs text-grey-400 dark:text-grey-500 mt-0.5">completado</span>
           </div>
         </div>
 
@@ -151,17 +151,17 @@ export function StatusDonut({ data }: StatusDonutProps) {
           {STATUS_ITEMS.map((item) => (
             <div
               key={item.key}
-              className="flex items-center gap-2 px-3 py-2.5 bg-grey-50 border border-grey-100 rounded-xl"
+              className="flex items-center gap-2 px-3 py-2.5 bg-grey-50 dark:bg-gray-700 border border-grey-100 dark:border-gray-600 rounded-xl"
             >
               <div
                 className="w-[7px] h-[7px] rounded-full flex-shrink-0"
                 style={{ background: item.color, boxShadow: item.glow }}
               />
               <div>
-                <p className="text-xs text-grey-500">{item.label}</p>
-                <p className="text-sm font-semibold text-grey-800">
+                <p className="text-xs text-grey-500 dark:text-grey-400">{item.label}</p>
+                <p className="text-sm font-semibold text-grey-800 dark:text-gray-300">
                   {totals[item.key as keyof typeof totals]}{' '}
-                  <span className="text-xs font-normal text-grey-400">
+                  <span className="text-xs font-normal text-grey-400 dark:text-grey-500">
                     {total > 0
                       ? Math.round((totals[item.key as keyof typeof totals] / total) * 100)
                       : 0}
@@ -173,13 +173,13 @@ export function StatusDonut({ data }: StatusDonutProps) {
           ))}
 
           {/* Overdue - full width */}
-          <div className="col-span-2 flex items-center gap-2 px-3 py-2.5 bg-[rgba(246,90,112,0.04)] border border-[rgba(246,90,112,0.2)] rounded-xl">
+          <div className="col-span-2 flex items-center gap-2 px-3 py-2.5 bg-[rgba(246,90,112,0.04)] dark:bg-red/10 dark:border-red/30 border border-[rgba(246,90,112,0.2)] rounded-xl">
             <div
               className="w-[7px] h-[7px] rounded-full flex-shrink-0"
               style={{ background: '#F65A70', boxShadow: '0 0 12px rgba(246,90,112,0.9)' }}
             />
             <div className="flex-1">
-              <p className="text-xs text-grey-500">Vencidas</p>
+              <p className="text-xs text-grey-500 dark:text-grey-400">Vencidas</p>
               <p className="text-sm font-semibold text-[#c94155]">
                 {totals.overdue}{' '}
                 <span className="text-xs font-normal text-grey-400">

@@ -60,7 +60,7 @@ export default function BoardColumn({
   return (
     <div
       className={`
-        bg-primary rounded-[14px] flex flex-col
+        bg-primary dark:bg-gray-800 rounded-[14px] flex flex-col
         border-[1.5px] ${cfg.border} ${cfg.shadow}
         min-h-104 md:min-h-120
         relative overflow-hidden
@@ -88,7 +88,7 @@ export default function BoardColumn({
           >
             {label}
           </span>
-          <span className="text-xs font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-[9px]">
+          <span className="text-xs font-semibold text-grey-400 bg-secondary dark:bg-gray-600 px-2 py-0.5 rounded-[9px]">
             {cards.length}
           </span>
         </div>

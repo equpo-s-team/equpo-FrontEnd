@@ -19,6 +19,7 @@ import { toastError, toastSuccess } from '@/lib/toast';
 import { AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
 import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
 import { useAchievements } from './hooks/useAchievements';
+import DarkModeToggle from "@/features/team/components/DarkModeToggle.tsx";
 
 type AuthContextUser = {
   uid?: string | null;
@@ -180,38 +181,39 @@ export const TeamsHub: React.FC = () => {
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
   return (
-    <div className="h-[100dvh] bg-white relative overflow-hidden flex flex-col">
+    <div className="h-[100dvh] bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col">
       {/* Header */}
-      <div className="shrink-0 flex w-full items-center justify-between p-4 lg:p-6 border-b border-grey-150">
+      <div className="shrink-0 flex w-full items-center justify-between p-4 lg:p-6 border-b border-grey-150 dark:border-gray-700">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
             <span className="text-white text-sm font-bold">U</span>
           </div>
-          <span className="font-bold text-grey-800 text-lg">Equpo</span>
+          <span className="font-bold text-grey-800 dark:text-gray-100 text-lg">Equpo</span>
         </div>
+        <DarkModeToggle />
       </div>
 
       {/* Main content - Responsive grid */}
       <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
-          
+        <div className="grid h-full grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
+
           {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
           </section>
 
           {/* Teams Section - Main content */}
-          <section className="lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
-            
+          <section className="lg:col-span-3 h-full rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 flex flex-col min-h-0">
+
             {/* Teams Header with Search and Create */}
             <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>
+              <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 dark:bg-gray-900 dark:text-gray-100 dark:border-blue backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>
                 <div className="w-2 h-2 rounded-full" style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }} />
                 <div className="flex flex-row gap-2 items-center">
                   <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
                     {teams.length}
                   </p>
-                  <p className="text-xs text-grey-400">Equipos activos</p>
+                  <p className="text-xs text-grey-400 ">Equipos activos</p>
                 </div>
               </div>
 
@@ -226,7 +228,7 @@ export const TeamsHub: React.FC = () => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Buscar equipos…"
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
                     onFocus={(e) =>
                       (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
                     }
@@ -291,7 +293,7 @@ export const TeamsHub: React.FC = () => {
 
           {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
           <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
-            <div className="rounded-xl bg-grey-50 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
+            <div className="rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
               <AchievementsSection achievements={mappedAchievements} />
             </div>
           </section>
@@ -320,13 +322,6 @@ export const TeamsHub: React.FC = () => {
         />
       )}
 
-      {/* CSS for orb animation */}
-      <style>{`
-        @keyframes floatOrb {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-18px); }
-        }
-      `}</style>
     </div>
   );
 };

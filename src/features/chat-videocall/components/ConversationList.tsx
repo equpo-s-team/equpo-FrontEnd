@@ -21,7 +21,7 @@ function RoomItem({
       className={`
         w-full flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer
         transition-all duration-200 group relative
-        ${isActive ? 'bg-grey-150 shadow-card' : 'hover:bg-grey-100'}
+        ${isActive ? 'bg-grey-150 dark:bg-gray-800 shadow-card' : 'hover:bg-grey-100 dark:hover:bg-gray-700'}
       `}
     >
       {/* Avatar */}
@@ -35,7 +35,7 @@ function RoomItem({
           <span
             className={`
               font-body font-semibold text-sm truncate
-              ${isActive ? 'text-grey-900' : 'text-grey-700'}
+              ${isActive ? 'text-grey-900 dark:text-white' : 'text-grey-700 dark:text-gray-300'}
             `}
           >
             {room.name}
@@ -54,12 +54,12 @@ export default function ConversationList() {
   const { rooms, activeRoom, selectRoom, searchQuery, setSearchQuery } = useChatContext();
 
   return (
-    <aside className="w-[280px] flex-shrink-0 flex flex-col border-r border-grey-150 bg-primary h-full min-h-0">
+    <aside className="w-[280px] h-screen flex-shrink-0 flex flex-col border-r border-grey-150 dark:border-gray-700 bg-primary dark:bg-gray-900 h-full min-h-0">
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-5 pb-3">
         <div className="flex items-center gap-2">
           <MessageCircle size={18} className="text-purple" />
-          <h2 className="font-body font-bold text-grey-900 text-base">Mensajes</h2>
+          <h2 className="font-body font-bold text-grey-900 dark:text-white text-base">Mensajes</h2>
         </div>
       </div>
 
@@ -74,7 +74,7 @@ export default function ConversationList() {
             placeholder="Buscar sala..."
             className="
               w-full pl-8 pr-3 py-2 rounded-xl
-              bg-grey-100 border border-transparent
+              bg-grey-100 dark:bg-gray-800 border border-transparent
               focus:outline-none focus:border-grey-200 focus:bg-grey-50
               font-body text-sm text-grey-800 placeholder:text-grey-400
               transition-all duration-200

@@ -66,7 +66,11 @@ export function EmptyState({
       >
         <Icon size={sizeConfig.iconSize} className="text-grey-400" />
       </div>
-      <p className={cn('font-maxwell text-grey-700 dark:text-grey-300 mb-1', sizeConfig.titleClass)}>{title}</p>
+      <p
+        className={cn('font-maxwell text-grey-700 dark:text-grey-300 mb-1', sizeConfig.titleClass)}
+      >
+        {title}
+      </p>
       {description && (
         <p
           className={cn(

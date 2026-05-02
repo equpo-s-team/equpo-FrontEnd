@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { Camera, Loader2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
+import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { type UserProfileSaveInput } from '@/features/team/types';
 
 import { type UserProfile } from './UserProfileCard.tsx';
-import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
-import { Camera, Loader2 } from 'lucide-react';
 
 interface UserProfileSidebarProps {
   user: UserProfile;
@@ -106,7 +106,9 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
               >
                 Configuración de perfil
               </h2>
-              <p className="text-xs text-grey-400 dark:text-grey-500 mt-0.5">Personaliza tu identidad en Equpo</p>
+              <p className="text-xs text-grey-400 dark:text-grey-500 mt-0.5">
+                Personaliza tu identidad en Equpo
+              </p>
             </div>
             <button
               onClick={handleClose}
@@ -155,9 +157,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
           </div>
 
           {/* Level & XP — read only */}
-          <div
-            className="rounded-xl p-4 border border-grey-150 dark:border-gray-700 bg-secondary dark:bg-gray-700"
-          >
+          <div className="rounded-xl p-4 border border-grey-150 dark:border-gray-700 bg-secondary dark:bg-gray-700">
             <p className="text-xs font-semibold text-grey-400 dark:text-grey-500 uppercase tracking-wider mb-3">
               Progreso
             </p>
@@ -170,7 +170,9 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                   {user.level}
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-grey-700 dark:text-gray-300">Nivel {user.level}</p>
+                  <p className="text-xs font-bold text-grey-700 dark:text-gray-300">
+                    Nivel {user.level}
+                  </p>
                   <p className="text-xs text-grey-400 dark:text-grey-500">
                     {user.experience.toLocaleString()} /{' '}
                     {user.experienceToNextLevel.toLocaleString()} XP
@@ -231,12 +233,12 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             <label className="text-xs font-semibold text-grey-500 dark:text-grey-700 uppercase tracking-wider mb-1.5 block">
               UID
             </label>
-            <div
-              className="w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all"
-            >
+            <div className="w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all">
               {user.uid}
             </div>
-            <p className="text-xs text-grey-400 dark:text-grey-500 mt-1">El UID no se puede modificar</p>
+            <p className="text-xs text-grey-400 dark:text-grey-500 mt-1">
+              El UID no se puede modificar
+            </p>
           </div>
 
           <div className="flex-grow" />

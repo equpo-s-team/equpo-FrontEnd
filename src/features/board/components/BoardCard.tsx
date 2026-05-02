@@ -114,7 +114,9 @@ export default function BoardCard({
       `}
     >
       <div className="flex items-start justify-between mb-2">
-        <span className="font-maxwell text-[10px] text-grey-400 dark:text-grey-300 tracking-[0.3px]">{card.id}</span>
+        <span className="font-maxwell text-[10px] text-grey-400 dark:text-grey-300 tracking-[0.3px]">
+          {card.id}
+        </span>
         <span className={`flex items-center gap-1.5 text-[10px] font-bold ${prio.text}`}>
           <span className={`w-2 h-2 rounded-full ${prio.dot}`} />
           {prio.label}

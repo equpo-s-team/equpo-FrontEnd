@@ -71,7 +71,9 @@ export function MemberRow({ member }: MemberRowProps) {
 
       {/* Name + role */}
       <div className="min-w-0">
-        <p className="text-sm font-medium text-grey-800 dark:text-gray-300 truncate">{member.name}</p>
+        <p className="text-sm font-medium text-grey-800 dark:text-gray-300 truncate">
+          {member.name}
+        </p>
         <p className="text-xs text-grey-400 dark:text-grey-500 mt-px">{member.role}</p>
       </div>
 

@@ -24,7 +24,9 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
       />
 
       <div className="relative z-10 mb-5 flex shrink-0 items-center justify-between">
-        <h2 className="text-sm font-semibold text-grey-800 dark:text-gray-300 tracking-[-0.01em]">misiones vencidas</h2>
+        <h2 className="text-sm font-semibold text-grey-800 dark:text-gray-300 tracking-[-0.01em]">
+          misiones vencidas
+        </h2>
         <button className="text-xs text-[#c94155] font-medium hover:opacity-70 transition-opacity">
           Ver todas →
         </button>

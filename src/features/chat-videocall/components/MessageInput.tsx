@@ -139,7 +139,11 @@ export default function MessageInput() {
       {/* Emoji Picker Popover */}
       {showEmojiPicker && (
         <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 shadow-2xl">
-          <Picker data={data} onEmojiSelect={handleEmojiSelect} theme={darkModeManager.isDarkMode() ? 'dark' : 'light'} />
+          <Picker
+            data={data}
+            onEmojiSelect={handleEmojiSelect}
+            theme={darkModeManager.isDarkMode() ? 'dark' : 'light'}
+          />
         </div>
       )}
 

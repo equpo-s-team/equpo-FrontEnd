@@ -45,9 +45,7 @@ export function MemberList({ members }: MemberListProps) {
 
         {/* Fade overlay */}
         {!atBottom && (
-          <div
-            className="absolute bottom-0 left-0 right-1 h-12 pointer-events-none rounded-b-lg bg-gradient-to-top from-white to-transparent dark:from-gray-800 dark:to-gray-700"
-          />
+          <div className="absolute bottom-0 left-0 right-1 h-12 pointer-events-none rounded-b-lg bg-gradient-to-top from-white to-transparent dark:from-gray-800 dark:to-gray-700" />
         )}
       </div>
     </div>

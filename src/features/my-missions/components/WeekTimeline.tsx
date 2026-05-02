@@ -184,7 +184,9 @@ export default function WeekTimeline({
                   </p>
                   <div
                     className={`mx-auto mt-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body ${
-                      isToday ? 'bg-blue text-white shadow-neonBlue' : 'text-grey-800 dark:text-gray-300'
+                      isToday
+                        ? 'bg-blue text-white shadow-neonBlue'
+                        : 'text-grey-800 dark:text-gray-300'
                     }`}
                   >
                     {date.getDate()}

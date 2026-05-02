@@ -24,7 +24,8 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn('bg-background dark:bg-gray-800 group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent dark:[[data-slot=card-content]_&]:bg-gray-800 [[data-slot=popover-content]_&]:bg-transparent dark:[[data-slot=popover-content]_&]:bg-gray-800',
+      className={cn(
+        'bg-background dark:bg-gray-800 group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent dark:[[data-slot=card-content]_&]:bg-gray-800 [[data-slot=popover-content]_&]:bg-transparent dark:[[data-slot=popover-content]_&]:bg-gray-800',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -64,7 +65,10 @@ function Calendar({
           'has-focus:border-ring border-input dark:border-gray-700 shadow-xs has-focus:ring-ring/50 has-focus:ring-[3px] relative rounded-md border bg-background dark:bg-gray-800',
           defaultClassNames.dropdown_root,
         ),
-        dropdown: cn('bg-popover dark:bg-gray-800 absolute inset-0 opacity-0', defaultClassNames.dropdown),
+        dropdown: cn(
+          'bg-popover dark:bg-gray-800 absolute inset-0 opacity-0',
+          defaultClassNames.dropdown,
+        ),
         caption_label: cn(
           'select-none font-medium',
           captionLayout === 'label'
@@ -99,7 +103,10 @@ function Calendar({
           'text-muted-foreground dark:text-gray-500 aria-selected:text-muted-foreground dark:aria-selected:text-gray-500',
           defaultClassNames.outside,
         ),
-        disabled: cn('text-muted-foreground dark:text-gray-500 opacity-50', defaultClassNames.disabled),
+        disabled: cn(
+          'text-muted-foreground dark:text-gray-500 opacity-50',
+          defaultClassNames.disabled,
+        ),
         hidden: cn('invisible', defaultClassNames.hidden),
         ...classNames,
       }}

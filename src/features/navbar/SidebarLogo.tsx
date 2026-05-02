@@ -46,7 +46,7 @@ export default function SidebarLogo() {
           <div className="flex flex-col">
             <span className="flex flex-col gap-1 mt-0.5">
               <p
-                className="text-cyan text-md font-body font-bold tracking-wide whitespace-nowrap truncate max-w-[110px]"
+                className="text-primary dark:text-white text-md font-body font-bold tracking-wide whitespace-nowrap truncate max-w-[110px]"
                 title={teamName}
               >
                 {teamName}
@@ -62,7 +62,7 @@ export default function SidebarLogo() {
             <AppTooltip content="Cambiar de equipo">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-lg text-secondary-foreground dark:text-white hover:text-white hover:bg-white/10 transition-colors"
               >
                 <ArrowRightLeft size={16} />
               </button>

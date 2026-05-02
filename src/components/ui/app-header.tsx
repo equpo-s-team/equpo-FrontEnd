@@ -42,7 +42,7 @@ export function AppHeader({
     <header
       className={`
         sticky top-0 z-50
-        bg-primary border-b border-grey-200
+        bg-primary dark:bg-gray-800 border-b border-grey-200 dark:border-gray-600
         shadow-[0_1px_8px_rgba(0,0,0,0.06)]
         h-14 md:h-[62px]
         flex items-center justify-between
@@ -50,14 +50,14 @@ export function AppHeader({
         ${className}
       `}
     >
-      <div className="flex items-center gap-2.5 font-maxwell tracking-tight text-grey-900 text-base md:text-lg font-bold select-none">
+      <div className="flex items-center gap-2.5 font-maxwell tracking-tight text-grey-900 dark:text-white text-base md:text-lg font-bold select-none">
         <span
           className={cn('w-2.5 h-2.5 rounded-full animate-pulse-neon', config.bg)}
           style={{ boxShadow: config.shadow }}
         />
         <div className="flex flex-col">
           <span>{title}</span>
-          {subtitle && <span className="text-xs text-grey-400 font-normal">{subtitle}</span>}
+          {subtitle && <span className="text-xs text-grey-400 dark:text-grey-500 font-normal">{subtitle}</span>}
         </div>
       </div>
 

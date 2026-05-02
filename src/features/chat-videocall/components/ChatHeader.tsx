@@ -30,13 +30,13 @@ export default function ChatHeader() {
   const isCallActive = activeCalls.some((c) => c.roomId === activeRoom.id);
 
   return (
-    <div className="flex flex-col flex-shrink-0 bg-primary border-b border-grey-150">
+    <div className="flex flex-col flex-shrink-0 bg-primary dark:bg-gray-900 border-b border-grey-150 dark:border-gray-800">
       <div className="flex items-center justify-between px-5 py-3">
         {/* Room avatar + name */}
         <div className="flex items-center gap-3">
           <GroupAvatar src={activeRoom.photoUrl} name={activeRoom.name} />
           <div>
-            <h3 className="font-body font-semibold text-grey-900 text-sm leading-tight">
+            <h3 className="font-body font-semibold text-grey-900 dark:text-gray-300 text-sm leading-tight">
               {activeRoom.name}
             </h3>
             <p className="font-body text-xs leading-tight text-grey-400 flex items-center gap-1">
@@ -92,7 +92,7 @@ function ActionButton({
         onClick={onClick}
         className="
           w-8 h-8 rounded-xl flex items-center justify-center
-          text-grey-500 hover:text-grey-900 hover:bg-grey-100
+          text-grey-500 hover:text-grey-900 hover:bg-grey-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-800
           transition-all duration-200
         "
       >

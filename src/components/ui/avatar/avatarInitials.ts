@@ -1,4 +1,8 @@
-export const getInitials = (value: string, fallback = 'U'): string => {
+export const getInitials = (value: string | undefined | null, fallback = 'U'): string => {
+  if (!value) {
+    return fallback;
+  }
+  
   const normalized = value.trim();
 
   if (!normalized) {

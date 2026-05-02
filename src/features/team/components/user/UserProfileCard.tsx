@@ -94,7 +94,7 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-0.5">
             <h3
-              className="font-bold text-grey-800 text-lg leading-tight truncate"
+              className="font-bold text-grey-800 dark:text-white text-lg leading-tight truncate"
               style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
             >
               {user.displayName}
@@ -112,14 +112,14 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
 
           <div className="flex flex-row items-center mb-1">
             {/* Coins */}
-            <div className="flex px-2 py-1 rounded-lg text-orange-400 border border-orange-200 bg-yellow-100 w-14 max-w-16 items-center justify-between mb-1 justify-between">
+            <div className="flex h-7 px-2 rounded-lg text-orange-400 border border-orange-200 bg-yellow-100/90 w-14 max-w-16 items-center justify-between mb-1 justify-between">
               <Coins size={14} />
               <span className="text-xs font-semibold">{user.virtualCurrency}</span>
             </div>
 
             {/* Rank */}
             <div
-              className={`px-2 py-1 rounded-lg  ${rankBgColor} ${rankColor} flex max-w-24 items-center justify-center gap-1 text-xs font-bold m-2`}
+              className={`px-2 h-7 rounded-lg  ${rankBgColor} ${rankColor} flex max-w-24 items-center justify-center gap-1 text-xs font-bold mx-2`}
             >
               {React.createElement(rankIcon, { size: 14 })}
               {rankName}

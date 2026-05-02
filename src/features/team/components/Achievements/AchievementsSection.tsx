@@ -24,8 +24,7 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achiev
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 w-full justify-between">
           <h2
-            className="text-md font-bold text-grey-700"
-            style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
+            className="text-md font-bold text-grey-700 dark:text-white"
           >
             Logros
           </h2>

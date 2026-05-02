@@ -71,13 +71,13 @@ export function MemberRow({ member }: MemberRowProps) {
 
       {/* Name + role */}
       <div className="min-w-0">
-        <p className="text-xs sm:text-sm font-medium text-grey-800 truncate">{member.name}</p>
-        <p className="text-xs text-grey-400 mt-px">{member.role}</p>
+        <p className="text-xs sm:text-sm font-medium text-grey-800 dark:text-gray-300 truncate">{member.name}</p>
+        <p className="text-xs text-grey-400 dark:text-grey-500 mt-px">{member.role}</p>
       </div>
 
       {/* Progress bar - hidden on mobile, shown on sm+ */}
       <div className="hidden sm:block">
-        <div className="flex justify-between mb-1.5 text-xs text-grey-500">
+        <div className="flex justify-between mb-1.5 text-xs text-grey-500 dark:text-grey-400">
           <span>Completadas</span>
           <span>
             {member.completed}/{member.total}

@@ -6,7 +6,7 @@ export default function AppLayout({ children }:{ children: React.ReactNode }) {
   const { collapsed } = useSidebar();
 
   return (
-    <div className="min-h-screen bg-secondary font-body">
+    <div className="min-h-screen bg-secondary dark:bg-gray-800 font-body">
       <Sidebar />
       <main
         className={`

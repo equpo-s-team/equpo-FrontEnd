@@ -96,12 +96,12 @@ export default function TaskDetailPanel({
 
   if (!task) {
     return (
-      <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-6 flex items-center justify-center h-full">
+      <div className="rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-6 flex items-center justify-center h-full">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-2xl bg-grey-100 flex items-center justify-center mx-auto mb-3">
-            <Zap size={20} className="text-grey-300" />
+          <div className="w-12 h-12 rounded-2xl bg-grey-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-3">
+            <Zap size={20} className="text-grey-300 dark:text-grey-500" />
           </div>
-          <p className="text-sm font-medium text-grey-400 font-body">Selecciona una misión</p>
+          <p className="text-sm font-medium text-grey-400 dark:text-grey-500 font-body">Selecciona una misión</p>
         </div>
       </div>
     );
@@ -126,16 +126,16 @@ export default function TaskDetailPanel({
     <div className="flex flex-col gap-3">
       {/* ── Detalle bubble ── */}
       <div
-        className={`rounded-2xl border shadow-card flex flex-col overflow-hidden animate-fade-down ${isOverdue ? 'bg-red/10 border-red/20' : 'bg-white border-grey-150'}`}
+        className={`rounded-2xl border shadow-card flex flex-col overflow-hidden animate-fade-down ${isOverdue ? 'bg-red/10 border-red/20' : 'bg-white dark:bg-gray-800 border-grey-150 dark:border-gray-700'}`}
       >
         {/* Close / actions header */}
         <div className="flex items-center justify-between px-4 pt-4 pb-2">
-          <span className="text-xs font-bold uppercase tracking-widest text-grey-400 font-body">
+          <span className="text-xs font-bold uppercase tracking-widest text-grey-400 dark:text-grey-500 font-body">
             Detalle
           </span>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-grey-100 transition-colors text-grey-400 hover:text-grey-700"
+            className="p-1 rounded-lg hover:bg-grey-100 dark:hover:bg-gray-800 transition-colors text-grey-400 dark:text-grey-500 hover:text-grey-700 dark:hover:text-grey-300"
           >
             <X size={14} />
           </button>
@@ -163,14 +163,14 @@ export default function TaskDetailPanel({
           </div>
 
           {/* Task name */}
-          <h2 className="text-base font-bold text-grey-800 font-body leading-snug mb-1">
+          <h2 className="text-base font-bold text-grey-800 dark:text-gray-300 font-body leading-snug mb-1">
             {task.name}
           </h2>
 
           {/* Categories */}
           {task.categories?.length > 0 && (
             <div className="flex items-center gap-1.5 mb-3 flex-wrap">
-              <Tag size={12} className="text-grey-400 flex-shrink-0" />
+              <Tag size={12} className="text-grey-400 dark:text-grey-500 flex-shrink-0" />
               {task.categories.map((cat) => (
                 <span
                   key={cat}
@@ -182,13 +182,13 @@ export default function TaskDetailPanel({
             </div>
           )}
 
-          <hr className="border-grey-100 my-3" />
+          <hr className="border-grey-100 dark:border-gray-700 my-3" />
 
           {/* Priority */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Zap size={14} className="text-grey-400" />
-              <span className="text-xs text-grey-500 font-body">Prioridad</span>
+              <Zap size={14} className="text-grey-400 dark:text-grey-500" />
+              <span className="text-xs text-grey-500 dark:text-grey-400 font-body">Prioridad</span>
             </div>
             <span
               className={`flex items-center gap-1.5 text-xs font-bold font-body ${priority.color}`}
@@ -206,31 +206,31 @@ export default function TaskDetailPanel({
                   <Clock size={14} className="text-grey-400" />
                   <span className="text-xs text-grey-500 font-body">Hora</span>
                 </div>
-                <span className="text-xs font-bold text-grey-700 font-body">
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300 font-body">
                   {formatTime(task.dueDate)}
                 </span>
               </div>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <CalendarDays size={14} className="text-grey-400" />
-                  <span className="text-xs text-grey-500 font-body">Fecha</span>
+                  <CalendarDays size={14} className="text-grey-400 dark:text-grey-500" />
+                  <span className="text-xs text-grey-500 dark:text-grey-400 font-body">Fecha</span>
                 </div>
-                <span className="text-xs font-bold text-grey-700 font-body">
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300 font-body">
                   {formatDate(task.dueDate)}
                 </span>
               </div>
             </>
           )}
 
-          <hr className="border-grey-100 my-3" />
+          <hr className="border-grey-100 dark:border-gray-700 my-3" />
 
           {/* Description */}
           {task.description && (
             <div className="mb-4">
-              <p className="text-xs font-bold uppercase tracking-widest text-grey-400 mb-1.5 font-body">
+              <p className="text-xs font-bold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-1.5 font-body">
                 Descripción
               </p>
-              <p className="text-xs text-grey-600 font-body leading-relaxed">{task.description}</p>
+              <p className="text-xs text-grey-600 dark:text-grey-400 font-body leading-relaxed">{task.description}</p>
             </div>
           )}
 
@@ -253,7 +253,7 @@ export default function TaskDetailPanel({
                 <RefreshCw size={14} className="text-purple shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <p className="text-xs font-bold text-purple font-body">Tarea Recurrente</p>
-                  <p className="text-xs text-grey-500 font-body mt-0.5">
+                  <p className="text-xs text-grey-500 dark:text-grey-400 font-body mt-0.5">
                     Cada {task.recurringCount ?? 1}{' '}
                     {task.recurringInterval === 'days'
                       ? 'día(s)'
@@ -315,7 +315,7 @@ export default function TaskDetailPanel({
 
       {/* ── Comentarios bubble — only for real tasks ── */}
       {!isProjection && teamId && (
-        <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-4">
+        <div className="rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-4">
           <TaskCommentarySection
             teamId={teamId}
             taskId={task.id}

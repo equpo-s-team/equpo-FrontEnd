@@ -95,7 +95,7 @@ export default function FilterBar({
         className="
         hidden md:flex
         sticky top-[62px] z-40
-        bg-primary border-b border-grey-200
+        bg-primary dark:bg-gray-700 border-b border-grey-200 dark:border-gray-600
         shadow-[0_2px_8px_rgba(0,0,0,0.04)]
         px-8 py-2.5 items-center gap-2.5 flex-wrap
         justify-between

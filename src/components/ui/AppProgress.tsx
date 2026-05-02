@@ -20,7 +20,7 @@ export function AppProgress({
   const clampedValue = Math.min(100, Math.max(0, value));
 
   return (
-    <div className={cn('w-full bg-secondary rounded-full overflow-hidden', height, className)}>
+    <div className={cn('w-full bg-secondary dark:bg-gray-700 rounded-full overflow-hidden', height, className)}>
       <div
         className={cn(
           'h-full rounded-full relative transition-[width] duration-500 ease-out',

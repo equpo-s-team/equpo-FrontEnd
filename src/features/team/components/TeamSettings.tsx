@@ -229,7 +229,7 @@ export default function TeamSettings() {
   const team = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
 
-  
+
 
   const myRole: string | null = (() => {
     if (!team || !currentUid) return null;

@@ -67,3 +67,40 @@ export interface UpdateGroupPayload {
   memberUids?: string[];
   photoUrl?: string | null;
 }
+
+export interface InvitationCode {
+  code: string;
+  teamId: string;
+  teamName?: string;
+  teamPhotoUrl?: string | null;
+  teamDescription?: string | null;
+  createdBy: string;
+  createdAt: Date;
+  expiresAt: Date;
+  maxUses: number;
+  currentUses: number;
+  role: 'collaborator' | 'spectator' | 'member';
+}
+
+export interface CreateInvitationCodePayload {
+  teamId: string;
+  role?: 'collaborator' | 'spectator' | 'member';
+  expiresInHours?: number; // e.g., 24 for 1 day
+  maxUses?: number;
+}
+
+export interface RedeemInvitationCodePayload {
+  code: string;
+}
+
+export interface RedeemInvitationCodeResponse {
+  membership: {
+    userUid: string;
+    role: string;
+    joinedAt: string;
+  };
+  team: {
+    id: string;
+    name: string;
+  };
+}

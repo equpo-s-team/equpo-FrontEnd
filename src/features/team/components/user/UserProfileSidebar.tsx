@@ -1,7 +1,8 @@
-import { Camera, Loader2 } from 'lucide-react';
+import { Camera, Clipboard,Loader2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
+import { toastSuccess } from '@/components/ui/toast';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { type UserProfileSaveInput } from '@/features/team/types';
 
@@ -32,6 +33,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
   const accentGlow = 'rgba(96,175,255,0.4)';
 
   const photoPreview = photoFile ? URL.createObjectURL(photoFile) : photoURL;
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     requestAnimationFrame(() => setIsVisible(true));
@@ -41,6 +43,29 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     if (isSaving) return;
     setIsVisible(false);
     setTimeout(onClose, 300);
+  };
+
+  const handleCopyUid = async (): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(user.uid);
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+
+      // Resetear el estado después de 2 segundos
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch {
+      // Fallback para navegadores que no soportan clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = user.uid;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      setIsCopied(true);
+      toastSuccess('¡UID copiado!', 'El UID ha sido copiado al portapapeles');
+      setTimeout(() => setIsCopied(false), 2000);
+    }
   };
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -233,11 +258,33 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             <label className="text-xs font-semibold text-grey-500 dark:text-grey-700 uppercase tracking-wider mb-1.5 block">
               UID
             </label>
-            <div className="w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all">
-              {user.uid}
+            <div className="flex gap-2">
+              <div
+                className={`w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all transition-all duration-200 ${
+                  isCopied
+                    ? 'bg-green-50 border-green-200 text-green-700'
+                    : 'text-grey-400'
+                }`}
+              >
+                {user.uid}
+              </div>
+              <button
+                onClick={() => void handleCopyUid()}
+                className={`px-3 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center ${
+                  isCopied
+                    ? 'bg-green-500 text-white border-green-500'
+                    : 'bg-white border-grey-200 text-grey-600 hover:border-grey-300 hover:bg-grey-50'
+                }`}
+                title={isCopied ? '¡Copiado!' : 'Copiar UID'}
+              >
+                <Clipboard
+                  size={16}
+                  className={isCopied ? 'text-white' : 'text-grey-500'}
+                />
+              </button>
             </div>
             <p className="text-xs text-grey-400 dark:text-grey-500 mt-1">
-              El UID no se puede modificar
+              {isCopied ? '¡UID copiado al portapapeles!' : 'El UID no se puede modificar'}
             </p>
           </div>
 

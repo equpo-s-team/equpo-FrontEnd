@@ -12,6 +12,8 @@ import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import LandingPage from '@/features/presentation/page.tsx';
 import Reports from '@/features/reports/Reports.tsx';
+import JoinTeamPage from '@/features/team/components/JoinTeamPage.tsx';
+import RedeemInvitePage from '@/features/team/components/RedeemInvitePage.tsx';
 import TeamSettings from '@/features/team/components/TeamSettings.tsx';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
 import TeamsHub from '@/features/team/TeamsHub.tsx';
@@ -109,6 +111,8 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/invite/:code?" element={<RedeemInvitePage />} />
+        <Route path="/join/:code" element={<JoinTeamPage />} />
 
         <Route
           path="/teams"

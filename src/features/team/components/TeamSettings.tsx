@@ -24,7 +24,6 @@ import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import GroupFormSheet from '@/features/team/components/GroupFormSheet';
-import { useAddTeamMember } from '@/features/team/hooks/useAddTeamMember';
 import { useDeleteGroup } from '@/features/team/hooks/useDeleteGroup';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
@@ -35,6 +34,11 @@ import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
+
+import { InstantLinkModal } from './InstantLinkModal';
+import { InvitationChoiceModal } from './InvitationChoiceModal';
+import InviteMembersModal from './InviteMembersModal';
+import { UidInvitationModal } from './UidInvitationModal';
 
 const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   leader: { label: 'Líder', color: '#60AFFF', bg: 'rgba(96,175,255,0.12)' },
@@ -204,7 +208,6 @@ export default function TeamSettings() {
   const { data: groups = [], isLoading: groupsLoading } = useTeamGroups(teamId);
 
   const updateTeam = useUpdateTeam();
-  const addMember = useAddTeamMember();
   const updateRole = useUpdateMemberRole();
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
@@ -213,11 +216,18 @@ export default function TeamSettings() {
   const [showGroupSheet, setShowGroupSheet] = useState(false);
   const [groupToEdit, setGroupToEdit] = useState<TeamGroup | null>(null);
   const [groupToDelete, setGroupToDelete] = useState<TeamGroup | null>(null);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
+  const [isUidModalOpen, setIsUidModalOpen] = useState(false);
+  const [isInstantLinkModalOpen, setIsInstantLinkModalOpen] = useState(false);
+  const [instantLinkData, setInstantLinkData] = useState<{ code: string; link: string } | undefined>(undefined);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const team = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
+
+
 
   const myRole: string | null = (() => {
     if (!team || !currentUid) return null;
@@ -235,9 +245,6 @@ export default function TeamSettings() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const [inviteUid, setInviteUid] = useState('');
-  const [inviteRole, setInviteRole] = useState<'collaborator' | 'member' | 'spectator'>('member');
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
@@ -245,8 +252,6 @@ export default function TeamSettings() {
     setDescription(team?.description ?? '');
     setPhotoPreview(team?.photoUrl ?? null);
     setUploadError(null);
-    setInviteUid('');
-    setInviteRole('member');
     setShowDeleteDialog(false);
 
     if (fileInputRef.current) {
@@ -327,30 +332,6 @@ export default function TeamSettings() {
       },
     );
   };
-
-  const handleInvite = () => {
-    const uid = inviteUid.trim();
-    if (!uid) return;
-
-    addMember.mutate(
-      { teamId, payload: { userUid: uid, role: inviteRole } },
-      {
-        onSuccess: () => {
-          setInviteUid('');
-          toastSuccess(
-            'Usuario invitado',
-            `El usuario fue añadido al equipo como ${ROLE_CONFIG[inviteRole]?.label ?? inviteRole}.`,
-          );
-        },
-        onError: (err) =>
-          toastError(
-            'Error al invitar',
-            err instanceof Error ? err.message : 'Verifica el UID e intenta de nuevo.',
-          ),
-      },
-    );
-  };
-
   const handleKick = (member: TeamMember) => {
     removeMember.mutate(
       { teamId, userUid: member.uid },
@@ -396,6 +377,7 @@ export default function TeamSettings() {
     }
   };
 
+
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
   const accentGlow = 'rgba(96,175,255,0.3)';
 
@@ -440,7 +422,6 @@ export default function TeamSettings() {
                   src={photoPreview}
                   name={team.name}
                   className="w-full h-full rounded-2xl"
-                  fallbackClassName="w-full h-full rounded-2xl text-white text-2xl"
                   loading="eager"
                 />
               </div>
@@ -551,7 +532,6 @@ export default function TeamSettings() {
                         src={member.photoUrl}
                         alt={member.displayName ?? member.uid}
                         className="w-full h-full"
-                        fallbackClassName="text-white text-xs"
                       />
                     </div>
 
@@ -648,67 +628,16 @@ export default function TeamSettings() {
             </div>
           )}
 
-          {/* Invite section */}
+          {/* Invite Members Button */}
           <div className="border-t border-grey-100 pt-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-2">
-              Invitar usuario
-            </p>
-            <div className="flex gap-2 flex-wrap sm:flex-nowrap">
-              <input
-                type="text"
-                value={inviteUid}
-                onChange={(e) => setInviteUid(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleInvite();
-                  }
-                }}
-                placeholder="UID del usuario"
-                className="flex-1 min-w-0 px-4 py-2 rounded-xl border border-grey-150 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-grey-800 dark:text-grey-200 outline-none transition-all"
-                onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
-                onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-              />
-              <div className="flex w-[24vw] lg:w-[8vw]">
-                <RoleSelect
-                  value={inviteRole}
-                  onChange={(v) => setInviteRole(v as 'collaborator' | 'member' | 'spectator')}
-                  roles={[
-                    {
-                      value: 'collaborator',
-                      label: 'Colaborador',
-                      color: ROLE_CONFIG.collaborator.color,
-                      bg: ROLE_CONFIG.collaborator.bg,
-                    },
-                    {
-                      value: 'member',
-                      label: 'Miembro',
-                      color: ROLE_CONFIG.member.color,
-                      bg: ROLE_CONFIG.member.bg,
-                    },
-                    {
-                      value: 'spectator',
-                      label: 'Espectador',
-                      color: ROLE_CONFIG.spectator.color,
-                      bg: ROLE_CONFIG.spectator.bg,
-                    },
-                  ]}
-                />
-              </div>
-              <button
-                onClick={handleInvite}
-                disabled={!inviteUid.trim() || addMember.isPending}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 shrink-0"
-                style={{ background: accent }}
-              >
-                {addMember.isPending ? (
-                  <Loader2 size={13} className="animate-spin" />
-                ) : (
-                  <UserPlus size={13} />
-                )}
-                Invitar
-              </button>
-            </div>
+            <button
+              onClick={() => setIsChoiceModalOpen(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+              style={{ background: accent }}
+            >
+              <UserPlus size={16} />
+              Invitar personas
+            </button>
           </div>
         </section>
 
@@ -759,7 +688,6 @@ export default function TeamSettings() {
                         src={group.photoUrl}
                         name={group.groupName}
                         className="w-full h-full rounded-xl"
-                        fallbackClassName="w-full h-full rounded-xl text-white text-sm"
                         loading="lazy"
                       />
                     </div>
@@ -786,7 +714,6 @@ export default function TeamSettings() {
                             src={m.photoUrl}
                             alt={m.displayName ?? m.uid}
                             className="w-full h-full"
-                            fallbackClassName="text-white text-[8px]"
                           />
                         </div>
                       ))}
@@ -827,7 +754,8 @@ export default function TeamSettings() {
 
         {isLeader && (
           <section
-            className="rounded-2xl border p-5 border border-red bg-red/10 shadow-neonPink"
+            className="rounded-2xl border border-red/20 bg-red/5 p-5"
+            style={{ boxShadow: '0 4px 20px rgba(246,90,112,0.06)' }}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -878,6 +806,48 @@ export default function TeamSettings() {
           setGroupToEdit(null);
         }}
         initialData={groupToEdit}
+      />
+
+      <InviteMembersModal
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        teamId={teamId}
+        teamName={team?.name ?? ''}
+        accent={accent}
+        onGenerated={(code, link) => {
+          // Open InstantLinkModal with the newly generated link
+          setInstantLinkData({ code, link });
+          setIsInstantLinkModalOpen(true);
+        }}
+      />
+
+      <InvitationChoiceModal
+        isOpen={isChoiceModalOpen}
+        onClose={() => setIsChoiceModalOpen(false)}
+        onSelectLink={() => setIsInstantLinkModalOpen(true)}
+        onSelectUid={() => setIsUidModalOpen(true)}
+      />
+
+      <UidInvitationModal
+        isOpen={isUidModalOpen}
+        onClose={() => setIsUidModalOpen(false)}
+        accent={accent}
+      />
+
+      <InstantLinkModal
+        isOpen={isInstantLinkModalOpen}
+        onClose={() => {
+          setIsInstantLinkModalOpen(false);
+          setInstantLinkData(undefined);
+        }}
+        teamId={teamId}
+        teamName={team?.name ?? ''}
+        accent={accent}
+        onOpenConfiguration={() => {
+          setIsInstantLinkModalOpen(false);
+          setIsInviteModalOpen(true);
+        }}
+        initialData={instantLinkData}
       />
     </div>
   );

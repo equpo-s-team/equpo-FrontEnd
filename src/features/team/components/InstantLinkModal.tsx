@@ -1,5 +1,5 @@
 import { Check, Copy, Loader2, Settings, Share2, X } from 'lucide-react';
-import React, { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useGenerateInviteCode } from '@/features/team/hooks/useGenerateInviteCode';
 import { toastError, toastSuccess } from '@/lib/toast';
@@ -14,9 +14,19 @@ interface InstantLinkModalProps {
   initialData?: { code: string; link: string };
 }
 
-export function InstantLinkModal({ isOpen, onClose, teamId, teamName, accent, onOpenConfiguration, initialData }: InstantLinkModalProps) {
+export function InstantLinkModal({
+  isOpen,
+  onClose,
+  teamId,
+  teamName,
+  accent,
+  onOpenConfiguration,
+  initialData,
+}: InstantLinkModalProps) {
   const generateInviteCode = useGenerateInviteCode();
-  const [generated, setGenerated] = useState<{ code: string; link: string } | null>(initialData || null);
+  const [generated, setGenerated] = useState<{ code: string; link: string } | null>(
+    initialData || null,
+  );
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [hasAttempted, setHasAttempted] = useState(false);
@@ -34,9 +44,12 @@ export function InstantLinkModal({ isOpen, onClose, teamId, teamName, accent, on
             toastSuccess('¡Enlace generado!', 'Comparte el link con tu equipo');
           },
           onError: (err) => {
-            toastError('Error', err instanceof Error ? err.message : 'No se pudo generar el enlace');
+            toastError(
+              'Error',
+              err instanceof Error ? err.message : 'No se pudo generar el enlace',
+            );
           },
-        }
+        },
       );
     }
   }, [isOpen, generated, hasAttempted, teamId, generateInviteCode, initialData]);
@@ -69,7 +82,10 @@ export function InstantLinkModal({ isOpen, onClose, teamId, teamName, accent, on
         setCopiedLink(true);
         setTimeout(() => setCopiedLink(false), 2000);
       }
-      toastSuccess('Copiado', type === 'code' ? 'Código copiado al portapapeles' : 'Link copiado al portapapeles');
+      toastSuccess(
+        'Copiado',
+        type === 'code' ? 'Código copiado al portapapeles' : 'Link copiado al portapapeles',
+      );
     } catch {
       toastError('Error', 'No se pudo copiar al portapapeles');
     }
@@ -137,7 +153,9 @@ export function InstantLinkModal({ isOpen, onClose, teamId, teamName, accent, on
                       {generated.link}
                     </div>
                     <button
-                      onClick={() => copyToClipboard(generated.link, 'link')}
+                      onClick={() => {
+                        void copyToClipboard(generated.link, 'link');
+                      }}
                       className="px-3 py-2 rounded-lg bg-blue text-white hover:bg-blue/90 transition-colors flex items-center gap-2"
                     >
                       {copiedLink ? <Check size={16} /> : <Copy size={16} />}
@@ -155,7 +173,9 @@ export function InstantLinkModal({ isOpen, onClose, teamId, teamName, accent, on
                       {generated.code}
                     </div>
                     <button
-                      onClick={() => copyToClipboard(generated.code, 'code')}
+                      onClick={() => {
+                        void copyToClipboard(generated.code, 'code');
+                      }}
                       className="px-3 py-2 rounded-lg bg-blue text-white hover:bg-blue/90 transition-colors flex items-center gap-2"
                     >
                       {copiedCode ? <Check size={16} /> : <Copy size={16} />}
@@ -200,9 +220,12 @@ export function InstantLinkModal({ isOpen, onClose, teamId, teamName, accent, on
                           toastSuccess('¡Enlace generado!', 'Comparte el link con tu equipo');
                         },
                         onError: (err) => {
-                          toastError('Error', err instanceof Error ? err.message : 'No se pudo generar el enlace');
+                          toastError(
+                            'Error',
+                            err instanceof Error ? err.message : 'No se pudo generar el enlace',
+                          );
                         },
-                      }
+                      },
                     );
                   }}
                   disabled={generateInviteCode.isPending}

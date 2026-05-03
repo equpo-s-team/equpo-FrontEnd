@@ -14,22 +14,28 @@ export default function RedeemInvitePage() {
   const [code, setCode] = useState(urlCode || '');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleRedeem = useCallback(async (redeemCodeValue: string) => {
-    if (!redeemCodeValue.trim() || !user?.uid) return;
+  const handleRedeem = useCallback(
+    async (redeemCodeValue: string) => {
+      if (!redeemCodeValue.trim() || !user?.uid) return;
 
-    setIsProcessing(true);
-    try {
-      // Backend handles adding user to team
-      await redeemCode.mutateAsync({ code: redeemCodeValue.trim() });
+      setIsProcessing(true);
+      try {
+        // Backend handles adding user to team
+        await redeemCode.mutateAsync({ code: redeemCodeValue.trim() });
 
-      toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
-      void navigate('/teams');
-    } catch (error) {
-      toastError('Error', error instanceof Error ? error.message : 'No se pudo canjear el código.');
-    } finally {
-      setIsProcessing(false);
-    }
-  }, [user, redeemCode, navigate]);
+        toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
+        void navigate('/teams');
+      } catch (error) {
+        toastError(
+          'Error',
+          error instanceof Error ? error.message : 'No se pudo canjear el código.',
+        );
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [user, redeemCode, navigate],
+  );
 
   useEffect(() => {
     if (urlCode && isAuth && user?.uid) {

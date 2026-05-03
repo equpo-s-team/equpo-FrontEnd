@@ -44,7 +44,10 @@ export const useUserPreview = (uid?: string) => {
     gcTime: 10 * 60 * 1000, // 10 minutes
     retry: (failureCount, error) => {
       // Don't retry on 400 errors (bad request) or invalid format
-      if (error instanceof Error && (error.message.includes('400') || error.message.includes('Invalid'))) {
+      if (
+        error instanceof Error &&
+        (error.message.includes('400') || error.message.includes('Invalid'))
+      ) {
         return false;
       }
       return failureCount < 1; // Only retry once for other errors

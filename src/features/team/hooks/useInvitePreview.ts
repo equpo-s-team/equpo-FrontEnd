@@ -20,7 +20,7 @@ interface InvitePreviewResponse {
 async function fetchInvitePreview(code: string): Promise<InvitePreviewResponse> {
   return request<InvitePreviewResponse>(
     `/teams/invite-preview?code=${encodeURIComponent(code.toUpperCase())}`,
-    'GET'
+    'GET',
   );
 }
 

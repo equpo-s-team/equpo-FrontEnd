@@ -19,6 +19,7 @@ import { AppHeader } from '@/components/ui/app-header';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { RoleSelect } from '@/components/ui/RoleSelect';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
@@ -34,7 +35,6 @@ import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
-import { toastError, toastSuccess } from '@/lib/toast';
 
 const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   leader: { label: 'Líder', color: '#60AFFF', bg: 'rgba(96,175,255,0.12)' },
@@ -42,30 +42,6 @@ const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string }> 
   member: { label: 'Miembro', color: '#908E88', bg: 'rgba(144,142,136,0.12)' },
   spectator: { label: 'Espectador', color: '#B0ADA7', bg: 'rgba(176,173,167,0.12)' },
 };
-
-function getInitials(name: string | null, uid: string): string {
-  if (!name) return uid.slice(0, 2).toUpperCase();
-  const parts = name.trim().split(/\s+/);
-  return parts
-    .slice(0, 2)
-    .map((p) => p[0]?.toUpperCase() ?? '')
-    .join('');
-}
-
-const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg, #60AFFF, #5961F9)',
-  'linear-gradient(135deg, #9CEDC1, #86F0FD)',
-  'linear-gradient(135deg, #F65A70, #FF94AE)',
-  'linear-gradient(135deg, #9b7fe1, #5961F9)',
-  'linear-gradient(135deg, #FF94AE, #FCE98D)',
-  'linear-gradient(135deg, #86F0FD, #60AFFF)',
-];
-
-function avatarGradient(uid: string): string {
-  let hash = 0;
-  for (let i = 0; i < uid.length; i++) hash = (hash * 31 + uid.charCodeAt(i)) | 0;
-  return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length];
-}
 
 // ── Confirmation Dialog ────────────────────────────────────────────────────────
 
@@ -93,7 +69,7 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
           }
         }}
       />
-      <div className="relative z-10 w-full max-w-md bg-white rounded-2xl p-6 shadow-2xl border border-grey-150">
+      <div className="relative z-10 w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-2xl border border-grey-150 dark:border-gray-600">
         <div className="flex items-center gap-3 mb-4">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
@@ -102,14 +78,14 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
             <AlertTriangle size={20} className="text-red" style={{ color: '#F65A70' }} />
           </div>
           <div>
-            <h3 className="font-bold text-grey-800 font-body">¿Eliminar equipo?</h3>
-            <p className="text-xs text-grey-400">Esta acción es permanente e irreversible.</p>
+            <h3 className="font-bold text-grey-800 dark:text-grey-200 font-body">¿Eliminar equipo?</h3>
+            <p className="text-xs text-grey-400 dark:text-grey-500">Esta acción es permanente e irreversible.</p>
           </div>
         </div>
 
-        <p className="text-sm text-grey-600 mb-4 font-body">
+        <p className="text-sm text-grey-600 dark:text-grey-400 mb-4 font-body">
           Se eliminarán todas las misiones, grupos, archivos y miembros del equipo. Escribe{' '}
-          <span className="font-bold text-grey-800">{teamName}</span> para confirmar.
+          <span className="font-bold text-grey-800 dark:text-grey-200">{teamName}</span> para confirmar.
         </p>
 
         <input
@@ -117,7 +93,7 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
           value={typed}
           onChange={(e) => setTyped(e.target.value)}
           placeholder={teamName}
-          className="w-full px-4 py-2.5 rounded-xl border border-grey-200 text-sm text-grey-800 outline-none mb-4 font-body"
+          className="w-full px-4 py-2.5 rounded-xl border border-grey-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-grey-800 dark:text-grey-200 outline-none mb-4 font-body"
           onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(246,90,112,0.2)')}
           onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
         />
@@ -125,7 +101,7 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-500 hover:bg-grey-50 transition-colors font-body"
+            className="flex-1 py-2.5 rounded-xl border border-grey-200 dark:border-gray-600 text-sm font-medium text-grey-500 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-700 transition-colors font-body"
           >
             Cancelar
           </button>
@@ -174,15 +150,15 @@ function GroupDeleteConfirmDialog({
           }
         }}
       />
-      <div className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-white dark:bg-gray-800 rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
         <div className="w-12 h-12 rounded-2xl bg-red/10 flex items-center justify-center text-red mb-5">
           <AlertTriangle size={24} />
         </div>
 
-        <h3 className="font-maxwell font-bold text-xl text-grey-800 mb-2">Eliminar Grupo</h3>
-        <p className="text-sm text-grey-500 mb-5 font-body">
+        <h3 className="font-maxwell font-bold text-xl text-grey-800 dark:text-grey-200 mb-2">Eliminar Grupo</h3>
+        <p className="text-sm text-grey-500 dark:text-grey-400 mb-5 font-body">
           Esta acción es permanente. Para confirmar, escribe el nombre del grupo:{' '}
-          <strong className="text-grey-800 select-all">{groupName}</strong>
+          <strong className="text-grey-800 dark:text-grey-200 select-all">{groupName}</strong>
         </p>
 
         <input
@@ -190,7 +166,7 @@ function GroupDeleteConfirmDialog({
           value={typed}
           onChange={(e) => setTyped(e.target.value)}
           placeholder={groupName}
-          className="w-full px-4 py-2.5 rounded-xl border border-grey-200 text-sm text-grey-800 outline-none mb-4 font-body"
+          className="w-full px-4 py-2.5 rounded-xl border border-grey-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-grey-800 dark:text-grey-200 outline-none mb-4 font-body"
           onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(246,90,112,0.2)')}
           onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
         />
@@ -198,7 +174,7 @@ function GroupDeleteConfirmDialog({
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-500 hover:bg-grey-50 transition-colors font-body"
+            className="flex-1 py-2.5 rounded-xl border border-grey-200 dark:border-gray-600 text-sm font-medium text-grey-500 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-700 transition-colors font-body"
           >
             Cancelar
           </button>
@@ -281,7 +257,7 @@ export default function TeamSettings() {
   if (!team || !teamId) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-grey-400 text-sm font-body">Selecciona un equipo para continuar.</p>
+        <p className="text-grey-400 dark:text-grey-500 text-sm font-body">Selecciona un equipo para continuar.</p>
       </div>
     );
   }
@@ -295,8 +271,8 @@ export default function TeamSettings() {
         >
           <Shield size={28} className="text-grey-400" />
         </div>
-        <h2 className="text-grey-700 font-bold text-lg font-body">Acceso restringido</h2>
-        <p className="text-grey-400 text-sm text-center max-w-xs font-body">
+        <h2 className="text-grey-700 dark:text-grey-300 font-bold text-lg font-body">Acceso restringido</h2>
+        <p className="text-grey-400 dark:text-grey-500 text-sm text-center max-w-xs font-body">
           Solo el líder y los colaboradores del equipo pueden acceder a los ajustes.
         </p>
       </div>
@@ -424,7 +400,7 @@ export default function TeamSettings() {
   const accentGlow = 'rgba(96,175,255,0.3)';
 
   return (
-    <div className="relative flex flex-col h-[100dvh] overflow-hidden bg-white font-body text-grey-800">
+    <div className="relative flex flex-col h-[100dvh] overflow-hidden bg-secondary dark:bg-gray-900 font-body text-grey-800 dark:text-grey-200">
       {/* Background ambience */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
@@ -447,10 +423,10 @@ export default function TeamSettings() {
 
       <div className="relative z-10 flex-1 overflow-y-auto px-4 py-6 space-y-6 sm:px-8">
         <section
-          className="rounded-2xl border border-grey-100 bg-white p-5"
+          className="rounded-2xl border border-grey-100 dark:border-gray-700 bg-white dark:bg-gray-800 p-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-4">
             Información del equipo
           </p>
 
@@ -465,7 +441,6 @@ export default function TeamSettings() {
                   name={team.name}
                   className="w-full h-full rounded-2xl"
                   fallbackClassName="w-full h-full rounded-2xl text-white text-2xl"
-                  fallbackStyle={{ background: accent }}
                   loading="eager"
                 />
               </div>
@@ -493,8 +468,8 @@ export default function TeamSettings() {
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-grey-700 truncate">{team.name}</p>
-              <p className="text-xs text-grey-400 mt-0.5">
+              <p className="text-sm font-semibold text-grey-700 dark:text-grey-300 truncate">{team.name}</p>
+              <p className="text-xs text-grey-400 dark:text-grey-500 mt-0.5">
                 {isUploading ? 'Subiendo imagen…' : 'JPG, PNG, GIF — máx. 5 MB'}
               </p>
               {uploadError && (
@@ -506,28 +481,28 @@ export default function TeamSettings() {
           </div>
 
           <div className="mb-4">
-            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
+            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-1.5 block">
               Nombre del equipo *
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-grey-800 dark:text-grey-200 outline-none transition-all"
               onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
             />
           </div>
 
           <div className="mb-5">
-            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
+            <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-1.5 block">
               Descripción
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all resize-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-grey-800 dark:text-grey-200 outline-none transition-all resize-none"
               placeholder="¿De qué trata este equipo?"
               onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
@@ -548,47 +523,44 @@ export default function TeamSettings() {
 
         {/* ── MEMBERS CARD ───────────────────────────────────────────────── */}
         <section
-          className="rounded-2xl border border-grey-100 bg-white p-5"
+          className="rounded-2xl border border-grey-100 dark:border-gray-700 bg-white dark:bg-gray-800 p-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-4">
             Miembros · {members.length}
           </p>
 
           {membersLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 size={20} className="animate-spin text-grey-300" />
+              <Loader2 size={20} className="animate-spin text-grey-300 dark:text-grey-600" />
             </div>
           ) : (
             <div className="space-y-2 mb-5">
               {members.map((member) => {
                 const roleCfg = ROLE_CONFIG[member.role] ?? ROLE_CONFIG.member;
-                const grad = avatarGradient(member.uid);
                 const isCurrentUser = member.uid === currentUid;
 
                 return (
                   <div
                     key={member.uid}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-grey-50 border border-grey-100 hover:bg-grey-100/60 transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-grey-50 dark:bg-gray-700 border border-grey-100 dark:border-gray-600 hover:bg-grey-100/60 dark:hover:bg-gray-600 transition-colors"
                   >
                     {/* Avatar */}
                     <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
                       <UserAvatar
                         src={member.photoUrl}
                         alt={member.displayName ?? member.uid}
-                        initials={getInitials(member.displayName, member.uid)}
                         className="w-full h-full"
                         fallbackClassName="text-white text-xs"
-                        fallbackStyle={{ background: grad }}
                       />
                     </div>
 
                     {/* Name + role */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-grey-800 truncate">
+                      <p className="text-sm font-semibold text-grey-800 dark:text-grey-200 truncate">
                         {member.displayName ?? member.uid}
                         {isCurrentUser && (
-                          <span className="ml-1.5 text-xs text-grey-400 font-normal">(tú)</span>
+                          <span className="ml-1.5 text-xs text-grey-400 dark:text-grey-500 font-normal">(tú)</span>
                         )}
                       </p>
                       <span
@@ -678,7 +650,7 @@ export default function TeamSettings() {
 
           {/* Invite section */}
           <div className="border-t border-grey-100 pt-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-2">
               Invitar usuario
             </p>
             <div className="flex gap-2 flex-wrap sm:flex-nowrap">
@@ -693,7 +665,7 @@ export default function TeamSettings() {
                   }
                 }}
                 placeholder="UID del usuario"
-                className="flex-1 min-w-0 px-4 py-2 rounded-xl border border-grey-150 text-sm text-grey-800 outline-none transition-all"
+                className="flex-1 min-w-0 px-4 py-2 rounded-xl border border-grey-150 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-grey-800 dark:text-grey-200 outline-none transition-all"
                 onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
                 onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
               />
@@ -742,11 +714,11 @@ export default function TeamSettings() {
 
         {/* ── GROUPS CARD ───────────────────────────────────────────────── */}
         <section
-          className="rounded-2xl border border-grey-100 bg-white p-5"
+          className="rounded-2xl border border-grey-100 dark:border-gray-700 bg-white dark:bg-gray-800 p-5"
           style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}
         >
           <div className="flex items-center justify-between mb-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400">
+            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500">
               <Users size={12} className="inline mr-1 -mt-0.5" />
               Grupos de trabajo · {groups.length}
             </p>
@@ -763,10 +735,10 @@ export default function TeamSettings() {
 
           {groupsLoading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 size={20} className="animate-spin text-grey-300" />
+              <Loader2 size={20} className="animate-spin text-grey-300 dark:text-grey-600" />
             </div>
           ) : groups.length === 0 ? (
-            <p className="text-sm text-grey-400 text-center py-6 font-body">
+            <p className="text-sm text-grey-400 dark:text-grey-500 text-center py-6 font-body">
               No hay grupos de trabajo aún. Crea uno para organizar a tu equipo.
             </p>
           ) : (
@@ -779,7 +751,7 @@ export default function TeamSettings() {
                 return (
                   <div
                     key={group.id}
-                    className="group flex items-center gap-3 px-3 py-3 rounded-xl bg-grey-50 border border-grey-100 hover:bg-grey-100/60 transition-colors"
+                    className="group flex items-center gap-3 px-3 py-3 rounded-xl bg-grey-50 dark:bg-gray-700 border border-grey-100 dark:border-gray-600 hover:bg-grey-100/60 dark:hover:bg-gray-600 transition-colors"
                   >
                     {/* Group avatar */}
                     <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white text-sm font-bold shrink-0">
@@ -788,17 +760,16 @@ export default function TeamSettings() {
                         name={group.groupName}
                         className="w-full h-full rounded-xl"
                         fallbackClassName="w-full h-full rounded-xl text-white text-sm"
-                        fallbackStyle={{ background: accent }}
                         loading="lazy"
                       />
                     </div>
 
                     {/* Group info */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-grey-800 truncate">
+                      <p className="text-sm font-semibold text-grey-800 dark:text-grey-200 truncate">
                         {group.groupName}
                       </p>
-                      <p className="text-xs text-grey-400">
+                      <p className="text-xs text-grey-400 dark:text-grey-500">
                         {group.memberCount ?? groupMembers.length} miembro
                         {(group.memberCount ?? groupMembers.length) !== 1 ? 's' : ''}
                       </p>
@@ -809,20 +780,18 @@ export default function TeamSettings() {
                       {displayMembers.map((m) => (
                         <div
                           key={m.uid}
-                          className="w-6 h-6 rounded-full border-2 border-white overflow-hidden"
+                          className="w-6 h-6 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden"
                         >
                           <UserAvatar
                             src={m.photoUrl}
                             alt={m.displayName ?? m.uid}
-                            initials={getInitials(m.displayName, m.uid)}
                             className="w-full h-full"
                             fallbackClassName="text-white text-[8px]"
-                            fallbackStyle={{ background: avatarGradient(m.uid) }}
                           />
                         </div>
                       ))}
                       {overflow > 0 && (
-                        <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-bold text-grey-600 bg-grey-200">
+                        <div className="w-6 h-6 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center text-[8px] font-bold text-grey-600 dark:text-grey-400 bg-grey-200 dark:bg-gray-600">
                           +{overflow}
                         </div>
                       )}
@@ -858,12 +827,7 @@ export default function TeamSettings() {
 
         {isLeader && (
           <section
-            className="rounded-2xl border p-5"
-            style={{
-              borderColor: 'rgba(246,90,112,0.2)',
-              background: 'rgba(246,90,112,0.03)',
-              boxShadow: '0 4px 20px rgba(246,90,112,0.06)',
-            }}
+            className="rounded-2xl border p-5 border border-red bg-red/10 shadow-neonPink"
           >
             <div className="flex items-start justify-between gap-4">
               <div>

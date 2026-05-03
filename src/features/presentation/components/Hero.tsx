@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion';
-import { Activity, CheckCircle, MessageCircle, TrendingUp } from 'lucide-react';
+import {Activity, CheckCircle, LoaderCircle, MessageCircle, TrendingUp} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import HeroVisual from '@/features/presentation/components/HeroVisual.tsx';
 import { type FloatCardProps, type FloatCardRingProps } from '@/features/presentation/types';
+
+import AuthSwitch from "../../auth/components/AuthSwitch.tsx";
 
 export default function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
@@ -23,9 +25,12 @@ export default function Hero() {
     return () => clearTimeout(timeoutId);
   }, [titleNumber, titles]);
 
+  const [showAuth, setShowAuth] = useState(false);
+
   return (
-    <section className="relative overflow-hidden min-h-auto md:min-h-screen bg-white">
-      <div className="animated-gradient-bg-new" />
+    <>
+    <section className="relative overflow-hidden min-h-auto md:min-h-screen bg-white dark:bg-gray-900">
+      <div className="animated-gradient-bg-new dark:bg-animated-gradient-new-dark" />
 
       <div
         className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full pointer-events-none"
@@ -62,7 +67,7 @@ export default function Hero() {
             </span>
           </div>
 
-          <h1 className="font-maxwell text-3xl md:text-5xl lg:text-6xl text-grey-900 mb-4 md:mb-6 leading-[1.08]">
+          <h1 className="font-maxwell text-3xl md:text-5xl lg:text-6xl text-grey-900 dark:text-white mb-4 md:mb-6 leading-[1.08]">
             Organiza tareas. <br />
             <span className="relative inline-block h-[1.2em] md:pb-2 md:pt-1">
               &nbsp;
@@ -86,14 +91,14 @@ export default function Hero() {
             Haz que el equipo prospere.
           </h1>
 
-          <p className="font-body text-base md:text-lg leading-[1.65] text-grey-600 max-w-[480px] mb-6 md:mb-8">
+          <p className="font-body text-base md:text-lg leading-[1.65] text-grey-600 dark:text-gray-300 max-w-[480px] mb-6 md:mb-8">
             Con equpo, cada tarea completada no solo avanza proyectos: mejora el bienestar del
             espacio virtual del equipo. Trabajo real, impacto visible, motivación compartida.
           </p>
 
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 mb-6 md:mb-8">
-            <a
-              href="#"
+            <button
+              onClick={() => setShowAuth(true)}
               className="font-maxwell text-white px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-[14px] text-sm md:text-base no-underline hover:-translate-y-1 transition-all text-center"
               style={{
                 background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 100%)',
@@ -101,10 +106,10 @@ export default function Hero() {
               }}
             >
               Crear mi primer equipo
-            </a>
+            </button>
             <a
               href="#what"
-              className="font-maxwell text-grey-700 border border-grey-200 bg-white/70 backdrop-blur px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-[14px] text-sm md:text-base no-underline hover:-translate-y-1 hover:border-grey-300 transition-all text-center"
+              className="font-maxwell text-grey-700 dark:text-gray-200 border border-grey-200 dark:border-gray-600 bg-white/70 dark:bg-gray-800/50 backdrop-blur px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-[14px] text-sm md:text-base no-underline hover:-translate-y-1 hover:border-grey-300 dark:hover:border-gray-500 transition-all text-center"
             >
               Ver cómo funciona
             </a>
@@ -112,8 +117,11 @@ export default function Hero() {
 
           <div className="flex flex-col gap-2.5 mb-6 md:mb-8">
             {['Empieza en minutos.', 'Diseñado para equipos colaborativos.'].map((txt) => (
-              <p key={txt} className="font-body text-xs md:text-sm text-grey-500 flex items-center gap-2">
-                <Activity size={15} className="text-green-DEFAULT flex-shrink-0" />
+              <p
+                key={txt}
+                className="font-body text-xs md:text-sm text-grey-500 dark:text-gray-400 flex items-center gap-2"
+              >
+                <Activity size={15} className="text-green flex-shrink-0" />
                 {txt}
               </p>
             ))}
@@ -123,27 +131,27 @@ export default function Hero() {
             {[
               {
                 label: 'Tablero colaborativo',
-                grad: 'from-green-50 to-cyan-50',
-                border: 'border-green-200',
-                text: 'text-green-700',
+                grad: 'from-green-50 to-cyan-50 dark:from-green-900/20 dark:to-cyan-900/20',
+                border: 'border-green-200 dark:border-green-700',
+                text: 'text-green-700 dark:text-green-300',
               },
               {
                 label: 'Chat + llamadas',
-                grad: 'from-blue-50 to-cyan-50',
-                border: 'border-blue-200',
-                text: 'text-blue-700',
+                grad: 'from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20',
+                border: 'border-blue-200 dark:border-blue-700',
+                text: 'text-blue-700 dark:text-blue-300',
               },
               {
                 label: 'Puntos y niveles',
-                grad: 'from-purple-50 to-pink-50',
-                border: 'border-purple-200',
-                text: 'text-purple-700',
+                grad: 'from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20',
+                border: 'border-purple-200 dark:border-purple-700',
+                text: 'text-purple-700 dark:text-purple-300',
               },
               {
                 label: 'Responsabilidad colectiva',
-                grad: 'from-orange-50 to-red-50',
-                border: 'border-red-200',
-                text: 'text-red-600',
+                grad: 'from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20',
+                border: 'border-red-200 dark:border-red-700',
+                text: 'text-red-600 dark:text-red-300',
               },
             ].map((badge) => (
               <span
@@ -155,7 +163,7 @@ export default function Hero() {
             ))}
           </div>
 
-          <p className="font-body text-xs md:text-sm text-grey-400 italic border-t border-grey-150 pt-4 md:pt-5">
+          <p className="font-body text-xs md:text-sm text-grey-400 dark:text-gray-500 italic border-t border-grey-150 dark:border-gray-700 pt-4 md:pt-5">
             "Cuando todos aportan, el equipo lo siente."
           </p>
         </div>
@@ -195,40 +203,28 @@ export default function Hero() {
         </div>
       </div>
 
-      <style>{`
-                .animated-gradient-bg-new {
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(
-                        120deg,
-                        #ffffff 0%,
-                        #f0fdf6 25%,
-                        #eff8ff 55%,
-                        #fff5f7 80%,
-                        #fdf8ff 100%
-                    );
-                    background-size: 400% 400%;
-                    animation: gradShift 12s ease infinite;
-                }
-                @keyframes gradShift {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
-            `}</style>
+
     </section>
+      {showAuth && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center md:p-0 overflow-y-auto">
+          <button
+            onClick={() => setShowAuth(false)}
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/80 dark:text-gray-300 hover:text-white dark:hover:text-gray-100 text-sm z-10 bg-white/10 dark:bg-gray-800/50 backdrop-blur-sm p-2 rounded-lg border border-white/20 dark:border-gray-600/50"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+          <AuthSwitch onClose={() => setShowAuth(false)} />
+        </div>
+      )}
+    </>
   );
 }
 
 function FloatCard({ className = '', icon, title, label, iconBg }: FloatCardProps) {
   return (
     <motion.div
-      className={`backdrop-blur-xl border rounded-2xl px-5 py-3.5 flex items-center gap-3.5 shadow-xl font-body text-sm font-medium text-grey-800 whitespace-nowrap transition-all duration-500 ${className}`}
-      style={{
-        background: 'rgba(255,255,255,0.88)',
-        borderColor: 'rgba(255,255,255,0.6)',
-        boxShadow: `0 8px 32px rgba(0,0,0,0.10), 0 0 0 1px rgba(255,255,255,0.5)`,
-      }}
+      className={`bg-white/80 border border-secondary shadow-md backdrop-blur-xl border rounded-2xl px-5 py-3.5 flex items-center gap-3.5 shadow-xl font-body text-sm font-medium text-grey-800 dark:text-gray-200  dark:border-gray-700/80 dark:bg-gray-700/80 whitespace-nowrap transition-all duration-500 ${className}`}
       whileHover={{ scale: 1.05, y: -3, transition: { duration: 0.25 } }}
       whileTap={{ scale: 0.98 }}
     >
@@ -239,8 +235,8 @@ function FloatCard({ className = '', icon, title, label, iconBg }: FloatCardProp
         {icon}
       </div>
       <div className="flex flex-col">
-        <span className="font-semibold text-grey-900 text-sm">{title}</span>
-        <span className="text-grey-400 text-xs font-normal">{label}</span>
+        <span className="font-semibold text-grey-900 dark:text-white text-sm">{title}</span>
+        <span className="text-grey-400 dark:text-gray-400 text-xs font-normal">{label}</span>
       </div>
     </motion.div>
   );
@@ -249,43 +245,18 @@ function FloatCard({ className = '', icon, title, label, iconBg }: FloatCardProp
 function FloatCardRing({ title, label }: FloatCardRingProps) {
   return (
     <motion.div
-      className="backdrop-blur-xl rounded-2xl px-5 py-3.5 flex items-center gap-3.5 shadow-xl font-body text-sm font-medium text-grey-800 whitespace-nowrap"
-      style={{
-        background: 'rgba(255,255,255,0.88)',
-        border: '1px solid rgba(255,255,255,0.6)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
-      }}
+      className="bg-white/80 border border-secondary shadow-md backdrop-blur-xl rounded-2xl px-5 py-3.5 flex items-center gap-3.5 shadow-xl font-body text-sm font-medium text-grey-800 dark:bg-gray-700/80 dark:border-gray-700/80 dark:text-gray-200 whitespace-nowrap"
       whileHover={{ scale: 1.05, y: -3, transition: { duration: 0.25 } }}
       whileTap={{ scale: 0.98 }}
     >
       <div
-        className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ background: 'linear-gradient(135deg, #9CEDC1, #CEFB7C)' }}
+        className="w-9 h-9 bg-gradient-purple-bg rounded-xl flex items-center justify-center flex-shrink-0"
       >
-        <svg width="36" height="36" viewBox="0 0 40 40" style={{ transform: 'rotate(-90deg)' }}>
-          <circle
-            cx="20"
-            cy="20"
-            r="16"
-            fill="none"
-            stroke="rgba(255,255,255,0.3)"
-            strokeWidth="3"
-          />
-          <circle
-            cx="20"
-            cy="20"
-            r="16"
-            fill="none"
-            stroke="white"
-            strokeWidth="3"
-            strokeDasharray="75 100"
-            strokeLinecap="round"
-          />
-        </svg>
+        <LoaderCircle size={24}/>
       </div>
       <div className="flex flex-col">
-        <span className="font-semibold text-grey-900 text-sm">{title}</span>
-        <span className="text-grey-400 text-xs font-normal">{label}</span>
+        <span className="font-semibold text-grey-900 dark:text-white text-sm">{title}</span>
+        <span className="text-grey-400 dark:text-gray-400 text-xs font-normal">{label}</span>
       </div>
     </motion.div>
   );

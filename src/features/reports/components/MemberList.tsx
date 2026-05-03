@@ -12,7 +12,7 @@ export function MemberList({ members }: MemberListProps) {
 
   return (
     <div
-      className="relative flex flex-1 min-h-0 flex-col bg-white border border-grey-150 rounded-[14px] p-3 sm:p-4 lg:p-6 overflow-hidden"
+      className="relative flex flex-1 min-h-0 flex-col bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 rounded-[14px] p-3 sm:p-4 lg:p-6 overflow-hidden"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.03)' }}
     >
       {/* Corner neon glow */}
@@ -45,10 +45,7 @@ export function MemberList({ members }: MemberListProps) {
 
         {/* Fade overlay */}
         {!atBottom && (
-          <div
-            className="absolute bottom-0 left-0 right-1 h-12 pointer-events-none rounded-b-lg"
-            style={{ background: 'linear-gradient(to top, white 35%, transparent)' }}
-          />
+          <div className="absolute bottom-0 left-0 right-1 h-12 pointer-events-none rounded-b-lg bg-gradient-to-top from-white to-transparent dark:from-gray-800 dark:to-gray-700" />
         )}
       </div>
     </div>

@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useCreateGroup } from '@/features/team/hooks/useCreateGroup';
@@ -11,30 +12,6 @@ import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useUpdateGroup } from '@/features/team/hooks/useUpdateGroup';
 import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
-import { toastError, toastSuccess } from '@/lib/toast';
-
-const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg, #60AFFF, #5961F9)',
-  'linear-gradient(135deg, #9CEDC1, #86F0FD)',
-  'linear-gradient(135deg, #F65A70, #FF94AE)',
-  'linear-gradient(135deg, #9b7fe1, #5961F9)',
-  'linear-gradient(135deg, #FF94AE, #FCE98D)',
-  'linear-gradient(135deg, #86F0FD, #60AFFF)',
-];
-
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  return parts
-    .slice(0, 2)
-    .map((p) => p[0]?.toUpperCase() ?? '')
-    .join('');
-}
-
-function memberGradient(uid: string): string {
-  let hash = 0;
-  for (let i = 0; i < uid.length; i++) hash = (hash * 31 + uid.charCodeAt(i)) | 0;
-  return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length];
-}
 
 interface GroupFormSheetProps {
   isOpen: boolean;
@@ -175,17 +152,17 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
       onOpenChange={handleOpenChange}
       side="right"
       overlayClassName="z-[60]"
-      contentClassName="z-[60] h-full w-full sm:w-[420px] bg-white border-l border-grey-150 shadow-card-lg flex flex-col"
+      contentClassName="z-[60] h-full w-full sm:w-[420px] bg-white dark:bg-gray-800 border-l border-grey-150 dark:border-gray-600 shadow-card-lg flex flex-col"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-grey-150">
-        <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-grey-150 dark:border-gray-600">
+        <h2 className="font-maxwell text-base font-bold text-grey-800 dark:text-grey-200 tracking-wide">
           {initialData ? 'Editar Grupo' : 'Nuevo Grupo'}
         </h2>
         <button
           type="button"
           onClick={onClose}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-secondary transition-all duration-150 cursor-pointer"
+          className="w-8 h-8 rounded-full flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-grey-700 dark:hover:text-grey-300 hover:bg-secondary dark:hover:bg-gray-700 transition-all duration-150 cursor-pointer"
         >
           <X size={18} />
         </button>
@@ -205,7 +182,6 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
                 name={name || 'G'}
                 className="w-full h-full rounded-2xl"
                 fallbackClassName="w-full h-full rounded-2xl text-white text-2xl"
-                fallbackStyle={{ background: accent }}
                 loading="eager"
               />
             </div>
@@ -226,12 +202,12 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
               onChange={handlePhotoChange}
             />
           </div>
-          <p className="text-xs text-grey-400">JPG, PNG, GIF — máx. 5 MB</p>
+          <p className="text-xs text-grey-400 dark:text-grey-500">JPG, PNG, GIF — máx. 5 MB</p>
         </div>
 
         {/* Group Name */}
         <div>
-          <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-1.5 block">
+          <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-1.5 block">
             Nombre del grupo *
           </label>
           <input
@@ -243,8 +219,8 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
             }}
             maxLength={100}
             placeholder="Ej: Backend, Diseño, Marketing..."
-            className={`w-full px-4 py-2.5 rounded-xl border text-sm text-grey-800 outline-none transition-all font-body ${
-              nameError ? 'border-red' : 'border-grey-150 focus:border-blue'
+            className={`w-full px-4 py-2.5 rounded-xl border text-sm text-grey-800 dark:text-grey-200 bg-white dark:bg-gray-700 outline-none transition-all font-body ${
+              nameError ? 'border-red' : 'border-grey-150 dark:border-gray-600 focus:border-blue'
             }`}
             onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
             onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
@@ -254,14 +230,13 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
 
         {/* Members Selection */}
         <div>
-          <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 mb-2 block">
+          <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-2 block">
             <Users size={12} className="inline mr-1 -mt-0.5" />
             Miembros · {selectedUids.size} seleccionados
           </label>
           <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
             {members.map((member: TeamMember) => {
               const isSelected = selectedUids.has(member.uid);
-              const grad = memberGradient(member.uid);
 
               return (
                 <button
@@ -271,13 +246,13 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all cursor-pointer ${
                     isSelected
                       ? 'border-blue/40 bg-blue/5'
-                      : 'border-grey-100 bg-grey-50 hover:bg-grey-100/60'
+                      : 'border-grey-100 dark:border-gray-600 bg-grey-50 dark:bg-gray-700 hover:bg-grey-100/60 dark:hover:bg-gray-600'
                   }`}
                 >
                   {/* Checkbox */}
                   <div
                     className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${
-                      isSelected ? 'border-blue bg-blue' : 'border-grey-300 bg-white'
+                      isSelected ? 'border-blue bg-blue' : 'border-grey-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                     }`}
                   >
                     {isSelected && (
@@ -298,15 +273,13 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
                     <UserAvatar
                       src={member.photoUrl}
                       alt={member.displayName ?? member.uid}
-                      initials={getInitials(member.displayName ?? member.uid)}
                       className="w-full h-full"
                       fallbackClassName="text-white text-xs"
-                      fallbackStyle={{ background: grad }}
                     />
                   </div>
 
                   {/* Name */}
-                  <span className="text-sm font-semibold text-grey-800 truncate">
+                  <span className="text-sm font-semibold text-grey-800 dark:text-grey-200 truncate">
                     {member.displayName ?? member.uid}
                   </span>
                 </button>
@@ -317,11 +290,11 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4 border-t border-grey-150 flex items-center gap-3">
+      <div className="px-6 py-4 border-t border-grey-150 dark:border-gray-600 flex items-center gap-3">
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2.5 rounded-xl text-sm font-semibold text-grey-500 border border-grey-200 hover:border-grey-300 transition-all cursor-pointer"
+          className="px-4 py-2.5 rounded-xl text-sm font-semibold text-grey-500 dark:text-grey-400 border border-grey-200 dark:border-gray-600 hover:border-grey-300 dark:hover:border-gray-500 transition-all cursor-pointer"
         >
           Cancelar
         </button>

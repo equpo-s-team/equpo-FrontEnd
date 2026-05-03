@@ -9,6 +9,7 @@ import { useChatContext } from '@/features/chat-videocall/components/ChatContext
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
 import { storage } from '@/firebase';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { darkModeManager } from '@/lib/darkMode';
 
 export default function MessageInput() {
   const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId, myRole } = useChatContext();
@@ -119,7 +120,7 @@ export default function MessageInput() {
   const canSend = Boolean(value.trim() && activeRoom) && !isUploading && !isSpectator;
 
   return (
-    <div className="px-4 py-3 border-t border-grey-150 bg-primary flex-shrink-0 relative">
+    <div className="px-4 py-3 border-t border-grey-150 dark:border-gray-700 bg-primary dark:bg-gray-800 flex-shrink-0 relative">
       {/* ReplyTo Indicator */}
       {replyingTo && (
         <div className="mb-2 bg-grey-100 rounded-lg px-3 py-2 flex items-center justify-between border-l-4 border-purple-DEFAULT">
@@ -138,11 +139,15 @@ export default function MessageInput() {
       {/* Emoji Picker Popover */}
       {showEmojiPicker && (
         <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 shadow-2xl">
-          <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
+          <Picker
+            data={data}
+            onEmojiSelect={handleEmojiSelect}
+            theme={darkModeManager.isDarkMode() ? 'dark' : 'light'}
+          />
         </div>
       )}
 
-      <div className="flex items-center gap-2 bg-grey-100 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
+      <div className="flex items-center gap-2 bg-grey-100 dark:bg-gray-700 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
         {/* Attach */}
         <input
           type="file"
@@ -177,7 +182,7 @@ export default function MessageInput() {
           }
           className="
             flex-1 bg-transparent outline-none
-            font-body text-sm text-grey-800 placeholder:text-grey-400
+            font-body text-sm text-grey-800 dark:text-gray-300 placeholder:text-grey-400
             disabled:cursor-not-allowed
           "
           autoComplete="off"
@@ -206,7 +211,7 @@ export default function MessageInput() {
               ${
                 canSend
                   ? 'bg-gradient-purple-bg text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
-                  : 'bg-grey-200 text-grey-400 cursor-not-allowed'
+                  : 'bg-grey-200 text-grey-400 dark:bg-gray-800 dark:text-gray-300 cursor-not-allowed'
               }
             `}
           >

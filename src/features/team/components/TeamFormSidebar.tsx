@@ -103,7 +103,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
     <SidebarSheet
       open={isOpen}
       onOpenChange={handleOpenChange}
-      side="left"
+      side="right"
       contentClassName="w-full sm:w-1/3 min-w-[320px] max-w-[500px] border-none bg-transparent shadow-2xl"
     >
       <div className="flex h-full w-full flex-col p-[1px]" style={{ background: cfg.gradient }}>
@@ -262,10 +262,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                           <UserAvatar
                             src={m.photoUrl}
                             alt={memberName}
-                            initials={memberName.substring(0, 2).toUpperCase()}
                             className="w-full h-full"
                             fallbackClassName="text-white text-xs"
-                            fallbackStyle={{ background: cfg.gradient }}
                           />
                         </div>
                         <div className="flex-1 min-w-0">

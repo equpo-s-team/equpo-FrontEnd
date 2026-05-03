@@ -46,7 +46,7 @@ export default function SidebarLogo() {
           <div className="flex flex-col">
             <span className="flex flex-col gap-1 mt-0.5">
               <p
-                className="text-cyan text-md font-body font-bold tracking-wide whitespace-nowrap truncate max-w-[110px]"
+                className="text-primary-foreground dark:text-white text-md font-body font-bold tracking-wide whitespace-nowrap truncate max-w-[110px]"
                 title={teamName}
               >
                 {teamName}
@@ -62,7 +62,7 @@ export default function SidebarLogo() {
             <AppTooltip content="Cambiar de equipo">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-1.5 rounded-lg text-secondary-foreground hover:text-white hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-lg text-secondary-foreground dark:text-white hover:text-white hover:bg-white/10 transition-colors"
               >
                 <ArrowRightLeft size={16} />
               </button>
@@ -76,8 +76,8 @@ export default function SidebarLogo() {
                   className="fixed inset-0 z-40 bg-transparent border-0 p-0"
                   onClick={() => setIsOpen(false)}
                 />
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 z-50 overflow-hidden py-1">
-                  <p className="px-3 py-2 text-xs font-bold text-grey-400 uppercase tracking-wider">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-white dark:bg-gray-700 rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 dark:border-gray-800 z-50 overflow-hidden py-1">
+                  <p className="px-3 py-2 text-xs font-bold text-grey-400 dark:text-white uppercase tracking-wider">
                     Tus equipos
                   </p>
                   <div className="max-h-60 overflow-y-auto scrollbar-hide">
@@ -91,7 +91,7 @@ export default function SidebarLogo() {
                         className={`w-full text-left px-3 py-2.5 text-sm transition-colors flex items-center gap-2 ${
                           t.id === teamId
                             ? 'bg-blue/5 text-blue font-semibold'
-                            : 'text-grey-700 hover:bg-grey-50 font-medium'
+                            : 'text-grey-700 dark:text-white hover:bg-grey-50 dark:hover:bg-gray-800 font-medium'
                         }`}
                       >
                         <span className="truncate flex-1">{t.name}</span>

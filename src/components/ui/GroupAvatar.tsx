@@ -1,6 +1,7 @@
-import { useAvatarState } from '@/components/ui/avatar/avatarCore.ts';
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
-import { cn } from '@/lib/utils.ts';
+import {getAvatarGradientClass} from "@/lib/utils/avatar/avatarBackground.ts";
+import { useAvatarState } from '@/lib/utils/avatar/avatarCore.ts';
+import { getInitials } from '@/lib/utils/avatar/avatarInitials.ts';
+import { cn } from '@/lib/utils/utils.ts';
 
 interface GroupAvatarProps {
   src?: string | null;
@@ -9,7 +10,6 @@ interface GroupAvatarProps {
   className?: string;
   fallbackClassName?: string;
   style?: React.CSSProperties;
-  fallbackStyle?: React.CSSProperties;
   loading?: 'lazy' | 'eager';
 }
 
@@ -20,7 +20,6 @@ export function GroupAvatar({
   className,
   fallbackClassName,
   style,
-  fallbackStyle,
   loading = 'lazy',
 }: GroupAvatarProps) {
   const { shouldRenderImage, normalizedSrc, onError } = useAvatarState(src);
@@ -29,14 +28,15 @@ export function GroupAvatar({
   const baseImageClasses = cn('w-10 h-10 rounded-full object-cover flex-shrink-0', className);
 
   const baseFallbackClasses = cn(
-    'w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm bg-gradient-to-br from-blue to-purple flex-shrink-0',
+    `w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm flex-shrink-0`,
+    getAvatarGradientClass(name),
     className,
     fallbackClassName,
   );
 
   if (!shouldRenderImage) {
     return (
-      <div className={baseFallbackClasses} style={{ ...style, ...fallbackStyle }}>
+      <div className={baseFallbackClasses} style={{ ...style }}>
         {fallbackText}
       </div>
     );

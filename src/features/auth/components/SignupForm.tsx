@@ -3,7 +3,7 @@ import React from 'react';
 
 import { type FormData, type FormErrors } from '@/features/auth';
 import { PasswordStrengthIndicator } from '@/features/auth';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils/utils.ts';
 
 // Google icon SVG (same as LoginForm)
 const GoogleIcon = () => (
@@ -53,16 +53,16 @@ export const SignupForm: React.FC<SignupFormProps> = ({
   onGoogleSignIn,
 }) => {
   return (
-    <div className="space-y-4 animate-in fade-in-50 slide-in-from-right-5">
+    <div className="space-y-2.5 animate-in fade-in-50 slide-in-from-right-5">
       {/* ── Google button ── */}
       <button
         type="button"
         onClick={onGoogleSignIn}
         disabled={isLoading}
         className={cn(
-          'w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-200 bg-white',
-          'text-gray-700 font-medium text-sm transition-all',
-          'hover:border-gray-300 hover:shadow-md hover:bg-gray-50',
+          'w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800',
+          'text-gray-700 dark:text-gray-200 font-medium text-sm transition-all',
+          'hover:border-gray-300 dark:hover:border-gray-500 hover:shadow-md hover:bg-gray-50 dark:hover:bg-gray-700',
           'focus:outline-none focus:ring-2 focus:ring-emerald-400/20',
           'disabled:opacity-50 disabled:cursor-not-allowed',
         )}
@@ -73,15 +73,15 @@ export const SignupForm: React.FC<SignupFormProps> = ({
 
       {/* ── Divider ── */}
       <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-gray-200" />
-        <span className="text-xs text-gray-400 font-medium">O con correo electrónico</span>
-        <div className="flex-1 h-px bg-gray-200" />
+        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
+        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">O con correo electrónico</span>
+        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
       </div>
 
       {/* ── Full Name ── */}
       <div>
         <div className="relative">
-          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
             placeholder="Nombre completo"
@@ -89,16 +89,16 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             onChange={(e) => onInputChange('name', e.target.value)}
             onBlur={() => onFieldBlur('name')}
             className={cn(
-              'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.name ? 'border-red' : 'border-gray-200',
+              'w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
+              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
+              errors.name ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Nombre completo"
             aria-describedby={errors.name ? 'name-error' : undefined}
           />
         </div>
         {errors.name && (
-          <p id="name-error" className="text-red text-xs mt-1 flex items-center gap-1">
+          <p id="name-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.name}
           </p>
@@ -108,7 +108,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
       {/* ── Email ── */}
       <div>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-300" />
           <input
             type="email"
             placeholder="Correo electrónico"
@@ -116,16 +116,16 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             onChange={(e) => onInputChange('email', e.target.value)}
             onBlur={() => onFieldBlur('email')}
             className={cn(
-              'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.email ? 'border-red' : 'border-gray-200',
+              'w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
+              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
+              errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Correo electrónico"
             aria-describedby={errors.email ? 'email-error' : undefined}
           />
         </div>
         {errors.email && (
-          <p id="email-error" className="text-red text-xs mt-1 flex items-center gap-1">
+          <p id="email-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.email}
           </p>
@@ -135,7 +135,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
       {/* ── Password ── */}
       <div>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-300" />
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Contraseña"
@@ -143,9 +143,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             onChange={(e) => onInputChange('password', e.target.value)}
             onBlur={() => onFieldBlur('password')}
             className={cn(
-              'w-full pl-10 pr-12 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.password ? 'border-red' : 'border-gray-200',
+              'w-full pl-10 pr-12 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
+              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
+              errors.password ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Contraseña"
             aria-describedby={errors.password ? 'password-error' : undefined}
@@ -153,14 +153,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           <button
             type="button"
             onClick={onTogglePassword}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           >
             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </button>
         </div>
         {errors.password && (
-          <p id="password-error" className="text-red text-xs mt-1 flex items-center gap-1">
+          <p id="password-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.password}
           </p>
@@ -171,7 +171,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
       {/* ── Confirm Password ── */}
       <div>
         <div className="relative">
-          <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-300" />
           <input
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder="Confirmar contraseña"
@@ -179,9 +179,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             onChange={(e) => onInputChange('confirmPassword', e.target.value)}
             onBlur={() => onFieldBlur('confirmPassword')}
             className={cn(
-              'w-full pl-10 pr-12 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.confirmPassword ? 'border-red' : 'border-gray-200',
+              'w-full pl-10 pr-12 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
+              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
+              errors.confirmPassword ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Confirmar contraseña"
             aria-describedby={errors.confirmPassword ? 'confirm-password-error' : undefined}
@@ -189,14 +189,14 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           <button
             type="button"
             onClick={onToggleConfirmPassword}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
             aria-label={showConfirmPassword ? 'Ocultar confirmación' : 'Mostrar confirmación'}
           >
             {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </button>
         </div>
         {errors.confirmPassword && (
-          <p id="confirm-password-error" className="text-red text-xs mt-1 flex items-center gap-1">
+          <p id="confirm-password-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.confirmPassword}
           </p>
@@ -210,22 +210,22 @@ export const SignupForm: React.FC<SignupFormProps> = ({
             type="checkbox"
             checked={formData.agreeToTerms}
             onChange={(e) => onInputChange('agreeToTerms', e.target.checked)}
-            className="w-4 h-4 mt-0.5 rounded border-gray-300 bg-white text-emerald-500 focus:ring-emerald-400 focus:ring-offset-0"
+            className="w-4 h-4 mt-0.5 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-emerald-500 focus:ring-emerald-400 focus:ring-offset-0"
             aria-describedby={errors.agreeToTerms ? 'terms-error' : undefined}
           />
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-gray-600 dark:text-gray-400">
             Acepto los{' '}
-            <a href="#" className="text-emerald-500 hover:underline transition-colors">
+            <a href="#" className="text-emerald-500 dark:text-emerald-400 hover:underline transition-colors">
               Términos de Servicio
             </a>{' '}
             y la{' '}
-            <a href="#" className="text-emerald-500 hover:underline transition-colors">
+            <a href="#" className="text-emerald-500 dark:text-emerald-400 hover:underline transition-colors">
               Política de Privacidad
             </a>
           </span>
         </label>
         {errors.agreeToTerms && (
-          <p id="terms-error" className="text-red text-xs mt-1 flex items-center gap-1">
+          <p id="terms-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.agreeToTerms}
           </p>

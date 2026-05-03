@@ -68,11 +68,13 @@ function NucleusDots({ count, activeIdx, onDotClick }: NucleusDotsProps) {
           key={i}
           onClick={() => onDotClick(i)}
           aria-label={`Ir a diapositiva ${i + 1}`}
-          className="border-none cursor-pointer transition-all rounded-full"
+          className={`border-none cursor-pointer transition-all rounded-full ${
+            i === activeIdx
+              ? 'w-6 h-2'
+              : 'w-2 h-2 bg-dot-inactive dark:bg-dot-inactive-dark'
+          }`}
           style={{
-            width: i === activeIdx ? '24px' : '8px',
-            height: '8px',
-            background: i === activeIdx ? SLIDES[i % SLIDES.length].grad : 'rgba(0,0,0,0.15)',
+            background: i === activeIdx ? SLIDES[i % SLIDES.length].grad : undefined,
           }}
         />
       ))}
@@ -132,8 +134,8 @@ function NucleusCarouselInner() {
                 {slide.icon}
               </div>
 
-              <h3 className="font-maxwell text-lg text-grey-900 mb-3">{slide.title}</h3>
-              <p className="font-body text-sm leading-[1.7] text-grey-500">{slide.text}</p>
+              <h3 className="font-maxwell text-lg text-grey-900 dark:text-white mb-3">{slide.title}</h3>
+              <p className="font-body text-sm leading-[1.7] text-grey-500 dark:text-gray-400">{slide.text}</p>
             </div>
           </CarouselItem>
         ))}
@@ -151,16 +153,13 @@ export default function Nucleus() {
   return (
     <section
       id="nucleus"
-      className="relative py-24 px-[5vw] overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #fafffe 0%, #f5f8ff 50%, #fff8fa 100%)' }}
+      className="relative py-24 px-[5vw] overflow-hidden bg-final-gradient dark:bg-final-gradient-dark"
     >
       <div
-        className="absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(89,97,249,0.08), transparent 70%)' }}
+        className="absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full pointer-events-none bg-nucleus-blob-purple"
       />
       <div
-        className="absolute bottom-[-60px] left-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(246,90,112,0.08), transparent 70%)' }}
+        className="absolute bottom-[-60px] left-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none bg-nucleus-blob-orange"
       />
 
       <div className="max-w-[1160px] mx-auto relative z-10">
@@ -172,12 +171,12 @@ export default function Nucleus() {
           >
             El núcleo
           </SectionLabel>
-          <h2 className="font-maxwell text-display-lg text-grey-900 mb-4">
+          <h2 className="font-maxwell text-display-lg text-grey-900 dark:text-white mb-4">
             Tu equipo comparte un espacio.
             <br />
             Tus acciones dejan huella.
           </h2>
-          <p className="font-body text-base leading-[1.7] text-grey-500">
+          <p className="font-body text-base leading-[1.7] text-grey-500 dark:text-gray-400">
             Aquí la productividad no es fría: se traduce en bienestar visible. Cuando alguien
             avanza, el equipo lo celebra; cuando el equipo se organiza, el mundo mejora.
           </p>

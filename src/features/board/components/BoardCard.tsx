@@ -15,6 +15,7 @@ import {
 import { COLUMN_CONFIG, PRIORITY_CONFIG } from '../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 
+
 export default function BoardCard({
   card,
   accent,
@@ -104,7 +105,7 @@ export default function BoardCard({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       className={`
-        bg-primary rounded-[10px] p-3.5
+        bg-primary dark:bg-gray-800 rounded-[10px] p-3.5
         ${canMoveCard ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}
         border-[1.5px] transition-all duration-200
         ${cfg.cardBorder} ${cfg.cardShadow}
@@ -114,20 +115,22 @@ export default function BoardCard({
       `}
     >
       <div className="flex items-start justify-between mb-2">
-        <span className="font-maxwell text-[10px] text-grey-400 tracking-[0.3px]">{card.id}</span>
+        <span className="font-maxwell text-[10px] text-grey-400 dark:text-grey-300 tracking-[0.3px]">
+          {card.id}
+        </span>
         <span className={`flex items-center gap-1.5 text-[10px] font-bold ${prio.text}`}>
           <span className={`w-2 h-2 rounded-full ${prio.dot}`} />
           {prio.label}
         </span>
       </div>
 
-      <p className="text-[13.5px] font-semibold text-grey-800 leading-snug mb-1.5 line-clamp-2">
+      <p className="text-[13.5px] font-semibold text-grey-800 dark:text-white leading-snug mb-1.5 line-clamp-2">
         {card.name}
       </p>
 
       {descriptionHtml ? (
         <div
-          className="text-[12px] text-grey-500 leading-relaxed mb-2.5 line-clamp-2 [&_p]:inline [&_ul]:inline [&_ol]:inline [&_li]:inline [&_li]:mr-1.5 [&_strong]:font-bold [&_em]:italic"
+          className="text-[12px] text-grey-500 dark:text-grey-300 leading-relaxed mb-2.5 line-clamp-2 [&_p]:inline [&_ul]:inline [&_ol]:inline [&_li]:inline [&_li]:mr-1.5 [&_strong]:font-bold [&_em]:italic"
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />
       ) : (
@@ -151,7 +154,7 @@ export default function BoardCard({
             {progress}%
           </span>
         </div>
-        <div className="h-1 bg-secondary rounded-full overflow-hidden">
+        <div className="h-1 bg-secondary dark:bg-gray-600 rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full relative ${cfg.progressFill} transition-[width] duration-500 ease-out`}
             style={{ width: `${progress}%` }}

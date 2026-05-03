@@ -13,9 +13,9 @@ import MessageBubble from './MessageBubble';
 function DateDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 my-4">
-      <div className="flex-1 h-px bg-grey-150" />
-      <span className="font-body text-xs text-grey-400 font-medium">{label}</span>
-      <div className="flex-1 h-px bg-grey-150" />
+      <div className="flex-1 h-px bg-grey-150 dark: dark:bg-grey-700" />
+      <span className="font-body text-xs text-grey-300 font-medium">{label}</span>
+      <div className="flex-1 h-px bg-grey-150 dark: dark:bg-grey-700" />
     </div>
   );
 }
@@ -23,7 +23,7 @@ function DateDivider({ label }: { label: string }) {
 function SystemMessage({ message }: { message: ChatMessage }) {
   return (
     <div className="flex justify-center my-2">
-      <span className="px-3 py-1 rounded-full bg-grey-100 border border-grey-150 font-body text-xs text-grey-500">
+      <span className="px-3 py-1 rounded-full bg-grey-100 dark:bg-gray-900 border border-grey-150 dark:border-gray-700 font-body text-xs text-grey-500 dark:text-gray-300">
         {message.text}
       </span>
     </div>
@@ -66,7 +66,6 @@ export default function MessageArea() {
 
   const { typingUsers } = useTyping(teamId, activeRoom?.id || null);
 
-  // Reset initialization when switching rooms
   useEffect(() => {
     isInitializedRef.current = false;
     messagesRef.current = [];
@@ -75,30 +74,25 @@ export default function MessageArea() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
 
-    // Initialize on first load - don't play sounds for existing messages
     if (!isInitializedRef.current && messages.length > 0) {
       messagesRef.current = messages;
       isInitializedRef.current = true;
       return;
     }
 
-    // Play sound only for new messages received after initialization
     const previousMessages = messagesRef.current;
     const newMessages = messages.filter(
       (msg) => !previousMessages.find((prev) => prev.id === msg.id),
     );
 
-    // Play sound only for messages from other users
     newMessages.forEach((msg) => {
       if (msg.senderUid !== currentUid && msg.type !== 'system') {
         play('messageReceived');
       }
     });
 
-    // Update messages ref
     messagesRef.current = messages;
 
-    // Mark messages as read
     if (activeRoom && currentUid && teamId) {
       messages.forEach((msg) => {
         if (msg.senderUid !== currentUid && (!msg.readBy || !msg.readBy.includes(currentUid))) {
@@ -114,7 +108,7 @@ export default function MessageArea() {
   if (!activeRoom) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
-        <div className="w-16 h-16 rounded-3xl bg-grey-100 flex items-center justify-center mb-4">
+        <div className="w-16 h-16 rounded-3xl bg-grey-100 dark:bg-gray-600 flex items-center justify-center mb-4">
           <MessageCircle size={28} strokeWidth={1.5} className="text-grey-300" />
         </div>
         <h3 className="font-body font-semibold text-grey-700 text-base mb-1">

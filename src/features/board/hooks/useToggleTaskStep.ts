@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { toastError } from '@/lib/toast';
+import { toastError } from '@/components/ui/toast.ts';
 
 import { tasksApi } from '../api/tasksApi';
 import type { TaskStep } from '../types/taskSchema';

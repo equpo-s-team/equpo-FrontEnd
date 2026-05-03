@@ -124,10 +124,10 @@ export default function WeekTimeline({
   const nowOffset = ((nowMinutes - START_HOUR * 60) / (TOTAL_HOURS * 60)) * 100;
 
   return (
-    <div className="flex flex-col h-full rounded-2xl bg-white border border-grey-150 shadow-card overflow-hidden">
+    <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-gray-900 border border-grey-150 dark:border-gray-700 shadow-card overflow-hidden">
       {/* Header */}
       <div
-        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 shrink-0"
+        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 dark:border-gray-700 shrink-0"
         style={{
           background: 'linear-gradient(135deg, #5961F9 0%, #60AFFF 100%)',
         }}
@@ -166,25 +166,27 @@ export default function WeekTimeline({
       </div>
 
       {/* Grid container */}
-      <div className="flex-1 flex flex-col min-h-0 bg-white relative">
+      <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-gray-800 relative">
         {/* Sticky Header Row for Days */}
-        <div className="flex border-b border-grey-150 bg-white shrink-0 z-20">
+        <div className="flex border-b border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 shrink-0 z-20">
           {/* Spacer for hours column */}
-          <div className="w-[50px] shrink-0 border-r border-grey-150 bg-grey-50" />
-          <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150">
+          <div className="w-[50px] shrink-0 border-r border-grey-150 dark:border-gray-700 bg-grey-50 dark:bg-gray-800" />
+          <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700">
             {weekDays.map(({ date, key }) => {
               const isToday = key === todayKey;
               return (
                 <div
                   key={`header-${key}`}
-                  className={`py-3 px-1 text-center bg-white ${isToday ? 'bg-blue/5' : ''}`}
+                  className={`py-3 px-1 text-center bg-white dark:bg-gray-800 ${isToday ? 'bg-blue/5' : ''}`}
                 >
-                  <p className="text-xs font-bold text-grey-400 uppercase tracking-widest font-body">
+                  <p className="text-xs font-bold text-grey-400 dark:text-grey-500 uppercase tracking-widest font-body">
                     {DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1]}
                   </p>
                   <div
                     className={`mx-auto mt-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body ${
-                      isToday ? 'bg-blue text-white shadow-neonBlue' : 'text-grey-800'
+                      isToday
+                        ? 'bg-blue text-white shadow-neonBlue'
+                        : 'text-grey-800 dark:text-gray-300'
                     }`}
                   >
                     {date.getDate()}
@@ -208,17 +210,17 @@ export default function WeekTimeline({
                     className="absolute left-0 right-0 flex items-start"
                     style={{ top: `${i * HOUR_HEIGHT}px` }}
                   >
-                    <span className="w-[50px] text-right text-xs pr-2 text-grey-400 font-body font-medium -translate-y-1/2 bg-white">
+                    <span className="w-[50px] text-right text-xs pr-2 text-grey-400 dark:text-grey-500 font-body font-medium -translate-y-1/2 bg-white dark:bg-gray-800">
                       {formatHour(hour)}
                     </span>
-                    <div className="flex-1 h-px bg-grey-150" />
+                    <div className="flex-1 h-px bg-grey-150 dark:bg-gray-700" />
                   </div>
                 );
               })}
             </div>
 
             {/* Day Columns */}
-            <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 ml-[50px] relative z-10">
+            <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700 ml-[50px] relative z-10">
               {weekDays.map(({ key, tasks: dayTasks }) => {
                 const isToday = key === todayKey;
                 const laidOut = layoutTasks(dayTasks);

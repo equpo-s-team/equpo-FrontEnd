@@ -21,9 +21,7 @@ export default function GamePage() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const localUid = useMemo(() => user?.uid ?? null, [user?.uid]);
 
-  // Unified keyboard + touch input (ref-based — no re-renders)
   const inputRef = usePlayerInput();
-
   const { data: teamMembers } = useTeamMembers(teamId || undefined);
 
   const [localPos, setLocalPos] = useState<Vector3State>({ x: 0, y: 0, z: 0 });
@@ -87,9 +85,11 @@ export default function GamePage() {
     const map: Record<string, string> = {};
     for (const member of teamMembers) {
       if (member.displayName) {
+        // Extract first name
         map[member.uid] = member.displayName.split(' ')[0] || member.displayName;
       }
     }
+    // Also include local user's first name if possible
     const authUser = user as { uid?: string; displayName?: string } | null;
     if (authUser?.uid && authUser.displayName) {
       map[authUser.uid] = authUser.displayName.split(' ')[0] || authUser.displayName;

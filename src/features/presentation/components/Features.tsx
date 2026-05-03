@@ -78,7 +78,7 @@ const FEATURES: feature[] = [
 
 export default function Features() {
   return (
-    <section id="features" className="relative py-24 px-[5vw] overflow-hidden bg-white">
+    <section id="features" className="relative py-24 px-[5vw] overflow-hidden bg-white dark:bg-gray-900">
       {/* Subtle background pattern */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -98,7 +98,7 @@ export default function Features() {
           >
             Funcionalidades
           </SectionLabel>
-          <h2 className="font-maxwell text-display-lg text-grey-900">
+          <h2 className="font-maxwell text-display-lg text-grey-900 dark:text-white">
             Todo lo que tu equipo necesita para moverse como uno solo.
           </h2>
         </div>
@@ -119,7 +119,7 @@ function FeatureCard({ feat }: { feat: feature }) {
     <button
       className={`group relative rounded-[20px] p-7 cursor-default transition-all duration-300 hover:-translate-y-1`}
       style={{
-        background: 'white',
+        background: 'white dark:gray-800',
         border: `1.5px solid ${feat.border}`,
         boxShadow: '0 2px 16px rgba(0,0,0,0.04)',
       }}
@@ -129,7 +129,7 @@ function FeatureCard({ feat }: { feat: feature }) {
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.boxShadow = '0 2px 16px rgba(0,0,0,0.04)';
-        e.currentTarget.style.background = 'white';
+        e.currentTarget.style.background = 'white dark:gray-800';
       }}
     >
       {/* Icon */}
@@ -140,8 +140,8 @@ function FeatureCard({ feat }: { feat: feature }) {
         {feat.icon}
       </div>
 
-      <h3 className="font-maxwell text-[1rem] text-grey-900 mb-1.5">{feat.title}</h3>
-      <p className="font-body text-[.87rem] leading-[1.6] text-grey-400 mb-3">{feat.desc}</p>
+      <h3 className="font-maxwell text-[1rem] text-grey-900 dark:text-white mb-1.5">{feat.title}</h3>
+      <p className="font-body text-[.87rem] leading-[1.6] text-grey-400 dark:text-gray-400 mb-3">{feat.desc}</p>
       <span
         className="font-body text-[.78rem] font-semibold flex items-center gap-1"
         style={{ color: feat.microColor }}

@@ -2,10 +2,10 @@ import { onIdTokenChanged, signOut, updateProfile } from 'firebase/auth';
 import log from 'loglevel';
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 
-import { resolveCanonicalAvatarUrl } from '@/components/ui/avatar/avatarStorage';
 import { createUser, getUser } from '@/dataconnect-generated';
 import { auth } from '@/firebase.ts';
-import { queryClient } from '@/lib/queryClient.ts';
+import { resolveCanonicalAvatarUrl } from '@/lib/utils/avatar/avatarStorage';
+import { queryClient } from '@/lib/utils/queryClient.ts';
 
 interface AuthUser {
   uid: string;

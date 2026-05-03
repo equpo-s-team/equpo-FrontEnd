@@ -19,7 +19,7 @@ export type Rank = {
 };
 
 export const ranks: Rank[] = [
-  { name: 'Novato', color: 'text-grey-500', bgColor: 'bg-grey-100', icon: Footprints },
+  { name: 'Novato', color: 'text-grey-500', bgColor: 'bg-grey-100/80', icon: Footprints },
   { name: 'Aprendiz', color: 'text-green-300', bgColor: 'bg-green-100', icon: BookOpen },
   { name: 'Practicante', color: 'text-blue-300', bgColor: 'bg-blue-100', icon: Hammer },
   { name: 'Avanzado', color: 'text-blue-foreground', bgColor: 'bg-blue-50', icon: Rocket },

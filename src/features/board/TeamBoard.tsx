@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 
+import { toastError } from '@/components/ui/toast.ts';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext';
 import type { BoardColumnId, Card, TaskSidebarMode } from '@/features/board/types/columnTypes';
@@ -8,7 +9,6 @@ import { COLUMN_TO_STATUS, COLUMNS, STATUS_TO_COLUMN } from '@/features/board/ut
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
-import { toastError } from '@/lib/toast';
 
 import AppHeader from './components/AppHeader';
 import BoardColumn from './components/BoardColumn';
@@ -276,7 +276,7 @@ export default function TeamBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-offwhite font-body">
+    <div className="min-h-screen bg-offwhite dark:bg-gray-900 font-body">
       <AppHeader />
       <FilterBar
         filters={filters}

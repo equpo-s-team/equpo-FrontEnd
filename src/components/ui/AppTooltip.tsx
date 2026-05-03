@@ -21,7 +21,7 @@ export function AppTooltip({
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
           side={side}
-          className="bg-grey-800 text-white text-xs rounded-lg px-2 py-1 border-0 font-body"
+          className="bg-gray-800 text-white text-xs rounded-lg px-2 py-1 border-0 font-body"
         >
           {content}
         </TooltipContent>

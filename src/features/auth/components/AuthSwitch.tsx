@@ -68,16 +68,16 @@ export const AuthSwitch = ({ onClose }: AuthSwitchProps) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
-              className="w-full h-full md:w-[90vw] lg:w-[80vw] md:h-auto md:max-h-[90vh] rounded-none md:rounded-[1.5rem] md:overflow-hidden"
+              className="w-full h-full md:w-[90vw] lg:w-[80vw] md:h-[80vh] rounded-none md:rounded-[1.5rem] md:overflow-hidden"
             >
-              <div className="bg-white/10 backdrop-blur-2xl border-0 md:border border-white/20 shadow-2xl h-full md:h-auto md:flex overflow-hidden">
+              <div className="flex h-full items-center bg-white/10 dark:bg-gray-900/10 backdrop-blur-2xl border-0 md:border border-white/20 dark:border-gray-700/20 shadow-2xl overflow-hidden">
                 {/* Marketing Panel - Hidden on mobile, visible on desktop */}
                 <div className="hidden md:flex md:w-2/5">
                   <MarketingPanel />
                 </div>
 
                 {/* Auth Form - Full width on mobile, 3/5 on desktop */}
-                <div className="w-full md:w-3/5 bg-white/95 backdrop-blur-xl p-6 md:p-12 h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
+                <div className="w-full h-full md:w-3/5 bg-white/95 dark:bg-gray-900/60 backdrop-blur-xl p-6 md:p-12 overflow-y-auto">
                   <AuthForm
                     onSuccess={handleSuccess}
                     onClose={() => {

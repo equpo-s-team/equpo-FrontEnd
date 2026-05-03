@@ -4,17 +4,17 @@ import React from 'react';
 
 export const MarketingPanel: React.FC = () => {
   return (
-    <div className="w-2/5 p-12 flex flex-col justify-center relative">
+    <div className="w-full p-12 flex flex-col justify-center relative">
       <motion.h1
         className="text-8xl font-maxwell tracking-tight text-white mb-8"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
       >
-        eq<span className="text-emerald-400">u</span>po
+        eq<span className="text-emerald-400 dark:text-emerald-300">u</span>po
       </motion.h1>
       <motion.p
-        className="text-xl text-white/80 mb-12"
+        className="text-xl text-white/90 dark:text-white/80 mb-12"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.3 }}
@@ -29,32 +29,32 @@ export const MarketingPanel: React.FC = () => {
         transition={{ delay: 0.4 }}
       >
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-            <Users className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-white/20 dark:bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 dark:border-white/20">
+            <Users className="w-6 h-6 text-white dark:text-gray-100" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">Trabajo en equipo</h3>
-            <p className="text-white/70">Colabora sin límites</p>
+            <h3 className="text-lg font-semibold text-white dark:text-gray-100">Trabajo en equipo</h3>
+            <p className="text-white/80 dark:text-white/70">Colabora sin límites</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-            <Zap className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-white/20 dark:bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 dark:border-white/20">
+            <Zap className="w-6 h-6 text-white dark:text-gray-100" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">Productividad</h3>
-            <p className="text-white/70">10x más eficiente</p>
+            <h3 className="text-lg font-semibold text-white dark:text-gray-100">Productividad</h3>
+            <p className="text-white/80 dark:text-white/70">10x más eficiente</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-            <CheckCircle className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-white/20 dark:bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30 dark:border-white/20">
+            <CheckCircle className="w-6 h-6 text-white dark:text-gray-100" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">Resultados</h3>
-            <p className="text-white/70">Impacto medible</p>
+            <h3 className="text-lg font-semibold text-white dark:text-gray-100">Resultados</h3>
+            <p className="text-white/80 dark:text-white/70">Impacto medible</p>
           </div>
         </div>
       </motion.div>

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useCallback, useState } from 'react';
 
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import {
   type AuthMode,
   type FormData,
@@ -8,17 +9,14 @@ import {
   type RegistrationStep,
 } from '@/features/auth';
 import { useAuthValidation } from '@/features/auth';
-import {type AuthFormProps} from "@/features/auth/types/auth-types.ts";
+import { type AuthFormProps } from '@/features/auth/types/auth-types.ts';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth.ts';
-import { toastError, toastSuccess } from '@/lib/toast';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils/utils.ts';
 
 import { CompleteForm } from './CompleteForm.tsx';
 import { LoginForm } from './LoginForm.tsx';
 import { ResetForm } from './ResetForm.tsx';
 import { SignupForm } from './SignupForm.tsx';
-
-
 
 export const AuthForm: React.FC<AuthFormProps> = ({
   onSuccess,
@@ -210,7 +208,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           <motion.h2
             key={`title-${authMode}`}
             id="auth-title"
-            className="text-2xl font-bold mb-2"
+            className="text-2xl font-bold mb-2 text-gray-900 dark:text-white"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -227,7 +225,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
         <AnimatePresence mode="wait">
           <motion.p
             key={`desc-${authMode}`}
-            className="text-gray-600"
+            className="text-gray-600 dark:text-gray-400"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -244,14 +242,14 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
       {/* ── Login / Sign Up tabs ── */}
       {authMode !== 'reset' && (
-        <div className="flex bg-gray-100 rounded-xl p-1 mb-4">
+        <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-4">
           <motion.button
             onClick={() => setAuthMode('login')}
             className={cn(
               'flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all',
               authMode === 'login'
-                ? 'bg-white text-gray-800 shadow-sm'
-                : 'text-gray-600 hover:text-gray-800',
+                ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200',
             )}
             type="button"
             whileTap={{ scale: 0.98 }}
@@ -267,8 +265,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
             className={cn(
               'flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all',
               authMode === 'signup'
-                ? 'bg-white text-gray-800 shadow-sm'
-                : 'text-gray-600 hover:text-gray-800',
+                ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200',
             )}
             type="button"
             whileTap={{ scale: 0.98 }}
@@ -299,12 +297,12 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
       {authMode !== 'reset' && registrationStep === 'details' && (
         <div className="text-center mt-6">
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
             {authMode === 'login' ? '¿No tienes cuenta? ' : '¿Ya tienes cuenta? '}
             <button
               type="button"
               onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-              className="text-emerald-500 hover:text-emerald-600 font-medium transition-colors"
+              className="text-emerald-500 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 font-medium transition-colors"
             >
               {authMode === 'login' ? 'Regístrate' : 'Inicia sesión'}
             </button>

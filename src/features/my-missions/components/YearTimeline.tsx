@@ -79,10 +79,10 @@ export default function YearTimeline({
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="flex flex-col h-full rounded-2xl bg-white border border-grey-150 shadow-card overflow-hidden">
+    <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card overflow-hidden">
       {/* Header */}
       <div
-        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 shrink-0"
+        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 dark:border-gray-700 shrink-0"
         style={{
           background: 'linear-gradient(135deg, #5961F9 0%, #60AFFF 100%)',
         }}
@@ -143,17 +143,17 @@ export default function YearTimeline({
                 className={`
                   p-4 rounded-2xl border-[1.5px] cursor-pointer transition-all duration-200
                   hover:-translate-y-1 hover:shadow-card
-                  ${isCurrentMonth ? 'border-blue bg-blue/5' : 'border-grey-150 bg-white hover:border-grey-200'}
+                  ${isCurrentMonth ? 'border-blue bg-blue/5' : 'border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-grey-200 dark:hover:border-gray-600'}
                 `}
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3
-                    className={`text-sm font-bold font-body ${isCurrentMonth ? 'text-blue' : 'text-grey-800'}`}
+                    className={`text-sm font-bold font-body ${isCurrentMonth ? 'text-blue' : 'text-grey-800 dark:text-gray-300'}`}
                   >
                     {MONTH_NAMES[data.monthIndex]}
                   </h3>
                   {data.total > 0 && (
-                    <span className="bg-grey-100 text-grey-600 text-xs font-bold px-2 py-0.5 rounded-full font-body">
+                    <span className="bg-grey-100 dark:bg-gray-800 text-grey-600 dark:text-grey-400 text-xs font-bold px-2 py-0.5 rounded-full font-body">
                       {data.total}
                     </span>
                   )}
@@ -161,12 +161,14 @@ export default function YearTimeline({
 
                 {data.total === 0 ? (
                   <div className="h-20 flex items-center justify-center">
-                    <p className="text-xs text-grey-400 font-medium font-body">Vacío</p>
+                    <p className="text-xs text-grey-400 dark:text-grey-500 font-medium font-body">
+                      Vacío
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-2">
                     {/* Tiny bars summary */}
-                    <div className="h-1.5 w-full bg-grey-100 rounded-full overflow-hidden flex">
+                    <div className="h-1.5 w-full bg-grey-100 dark:bg-gray-800 rounded-full overflow-hidden flex">
                       {data.todo.length > 0 && (
                         <div
                           style={{ width: `${(data.todo.length / data.total) * 100}%` }}
@@ -196,7 +198,7 @@ export default function YearTimeline({
                     <div className="space-y-1 text-xs">
                       <div className="flex items-center gap-1">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('todo')}`} />
-                        <span className="text-grey-600 font-body truncate">
+                        <span className="text-grey-600 dark:text-grey-400 font-body truncate">
                           {data.todo.length} Por Hacer
                         </span>
                       </div>
@@ -204,19 +206,19 @@ export default function YearTimeline({
                         <div
                           className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-progress')}`}
                         />
-                        <span className="text-grey-600 font-body truncate">
+                        <span className="text-grey-600 dark:text-grey-400 font-body truncate">
                           {data.inProgress.length} Proceso
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('in-qa')}`} />
-                        <span className="text-grey-600 font-body truncate">
+                        <span className="text-grey-600 dark:text-grey-400 font-body truncate">
                           {data.inQa.length} En QA
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
                         <div className={`w-1.5 h-1.5 rounded-full ${getTaskDotClass('done')}`} />
-                        <span className="text-grey-600 font-body truncate">
+                        <span className="text-grey-600 dark:text-grey-400 font-body truncate">
                           {data.done.length} Completadas
                         </span>
                       </div>

@@ -2,7 +2,6 @@ import { Check, CheckCheck, FileText, Pencil, Reply, Trash2, X } from 'lucide-re
 import { useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip';
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -60,9 +59,8 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           <UserAvatar
             src={senderPhotoUrl}
             alt={message.senderName ?? 'Usuario'}
-            initials={getInitials(message.senderName ?? 'Usuario', 'U')}
             className="w-7 h-7"
-            fallbackClassName="bg-gradient-to-br from-[#60AFFF] to-[#5961F9] text-white text-[10px]"
+            fallbackClassName="bg-gradient-orange-bg text-white text-[10px]"
           />
         </div>
       )}
@@ -77,7 +75,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       >
         {/* Sender name (for received messages) */}
         {!isSent && (
-          <span className="text-[10px] font-body font-semibold text-grey-500 mb-0.5 px-1">
+          <span className="text-[10px] font-body font-semibold text-grey-500 dark:text-grey-400 mb-0.5 px-1">
             {message.senderName}
           </span>
         )}
@@ -92,18 +90,18 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                 if (e.key === 'Enter') handleSaveEdit();
                 if (e.key === 'Escape') setIsEditing(false);
               }}
-              className="flex-1 px-3 py-2 rounded-xl bg-grey-100 border border-grey-200 font-body text-sm text-grey-800 focus:outline-none focus:border-purple-DEFAULT"
+              className="flex-1 px-3 py-2 rounded-xl bg-grey-100 dark:bg-gray-800 border border-grey-200 dark:border-gray-700 font-body text-sm text-grey-800 dark:text-gray-300 focus:outline-none focus:border-purple-DEFAULT"
               autoFocus
             />
             <button
               onClick={handleSaveEdit}
-              className="w-7 h-7 rounded-lg bg-green/10 text-green flex items-center justify-center hover:bg-green/20 transition-colors"
+              className="w-7 h-7 rounded-lg bg-green/10 dark:bg-green-20 text-green dark:text-green-400 flex items-center justify-center hover:bg-green/20 dark:hover:bg-green-30 transition-colors"
             >
               <Check size={12} />
             </button>
             <button
               onClick={() => setIsEditing(false)}
-              className="w-7 h-7 rounded-lg bg-red/10 text-red flex items-center justify-center hover:bg-red/20 transition-colors"
+              className="w-7 h-7 rounded-lg bg-red/10 dark:bg-red-20 text-red dark:text-red-400 flex items-center justify-center hover:bg-red/20 dark:hover:bg-red-30 transition-colors"
             >
               <X size={12} />
             </button>
@@ -116,7 +114,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
             ${
               isSent
                 ? 'bg-gradient-purple-bg text-white rounded-br-sm'
-                : 'bg-grey-100 text-grey-800 rounded-bl-sm border border-grey-150'
+                : 'bg-grey-100 dark:bg-gray-900 text-grey-800 dark:text-gray-300 rounded-bl-sm border border-grey-150 dark:border-gray-800'
             }
           `}
           >
@@ -161,13 +159,15 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
         <div
           className={`flex items-center gap-1 mt-1 px-1 ${isSent ? 'flex-row-reverse' : 'flex-row'}`}
         >
-          <span className="text-grey-400 font-body text-[10px]">{time}</span>
+          <span className="text-grey-400 dark:text-grey-500 font-body text-[10px]">{time}</span>
           {message.editedAt && (
-            <span className="text-grey-400 font-body text-[10px] italic">editado</span>
+            <span className="text-grey-400 dark:text-grey-500 font-body text-[10px] italic">
+              editado
+            </span>
           )}
 
           {isSent && (
-            <span className="text-grey-400">
+            <span className="text-grey-400 dark:text-grey-500">
               {isReadByOthers ? (
                 <CheckCheck size={12} className="text-blue-500" />
               ) : (
@@ -182,7 +182,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
               <AppTooltip content="Responder">
                 <button
                   onClick={handleReply}
-                  className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors"
+                  className="w-6 h-6 rounded flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-grey-700 dark:hover:text-grey-300 transition-colors"
                 >
                   <Reply size={14} />
                 </button>
@@ -195,7 +195,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                         setEditText(message.text);
                         setIsEditing(true);
                       }}
-                      className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors"
+                      className="w-6 h-6 rounded flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-grey-700 dark:hover:text-grey-300 transition-colors"
                     >
                       <Pencil size={14} />
                     </button>
@@ -203,7 +203,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
                   <AppTooltip content="Eliminar">
                     <button
                       onClick={handleDelete}
-                      className="w-6 h-6 rounded flex items-center justify-center text-grey-400 hover:text-red transition-colors"
+                      className="w-6 h-6 rounded flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-red dark:hover:text-red-400 transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>

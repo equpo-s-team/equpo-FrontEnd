@@ -23,12 +23,7 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achiev
       {/* Section header with toggle button for mobile */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 w-full justify-between">
-          <h2
-            className="text-md font-bold text-grey-700"
-            style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
-          >
-            Logros
-          </h2>
+          <h2 className="text-md font-bold text-grey-700 dark:text-white">Logros</h2>
           <div className="flex items-center gap-2">
             <span
               className="text-sm font-semibold px-2 py-0.5 rounded-full"
@@ -59,7 +54,9 @@ export const AchievementsSection: React.FC<AchievementsSectionProps> = ({ achiev
       {/* Badges grid - collapses on mobile, always visible on desktop */}
       <div
         className={`transition-all duration-300 overflow-hidden lg:overflow-visible ${
-          isOpen ? 'max-h-[60vh] opacity-100 lg:max-h-none' : 'max-h-0 opacity-0 lg:max-h-none lg:opacity-100'
+          isOpen
+            ? 'max-h-[60vh] opacity-100 lg:max-h-none'
+            : 'max-h-0 opacity-0 lg:max-h-none lg:opacity-100'
         }`}
       >
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 gap-2 overflow-y-auto max-h-[55vh] lg:max-h-none">

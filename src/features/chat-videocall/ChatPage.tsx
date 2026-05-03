@@ -7,13 +7,13 @@ import MessageInput from './components/MessageInput.tsx';
 
 function ChatLayout() {
   return (
-    <div className="flex h-full min-h-0 bg-primary">
+    <div className="flex h-full min-h-0 bg-primary dark:bg-gray-900">
       <CallNotification />
       {/* Conversation sidebar */}
       <ConversationList />
 
       {/* Main chat area */}
-      <main className="flex-1 flex flex-col min-w-0 h-screen max-h-screen bg-grey-50">
+      <main className="flex-1 flex flex-col min-w-0 h-screen max-h-screen bg-grey-50 dark:bg-gray-800">
         <ChatHeader />
         <MessageArea />
         <MessageInput />

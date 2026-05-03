@@ -26,7 +26,14 @@ interface InviteMembersModalProps {
 
 type RoleOption = 'member' | 'collaborator' | 'spectator';
 
-const ROLE_OPTIONS: { value: RoleOption; label: string; icon: React.ReactNode; desc: string; color: string; bg: string }[] = [
+const ROLE_OPTIONS: {
+  value: RoleOption;
+  label: string;
+  icon: React.ReactNode;
+  desc: string;
+  color: string;
+  bg: string;
+}[] = [
   {
     value: 'member',
     label: 'Miembro',
@@ -67,7 +74,14 @@ const USES_OPTIONS = [
   { label: 'Sin límite', value: 1000 },
 ];
 
-export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, accent, onGenerated }: InviteMembersModalProps) {
+export default function InviteMembersModal({
+  isOpen,
+  onClose,
+  teamId,
+  teamName,
+  accent,
+  onGenerated,
+}: InviteMembersModalProps) {
   const generateInviteCode = useGenerateInviteCode();
 
   const [role, setRole] = useState<RoleOption>('member');
@@ -94,8 +108,12 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
             onClose();
           }
         },
-        onError: (err) => toastError('Error', err instanceof Error ? err.message : 'No se pudo generar la invitación'),
-      }
+        onError: (err) =>
+          toastError(
+            'Error',
+            err instanceof Error ? err.message : 'No se pudo generar la invitación',
+          ),
+      },
     );
   };
 
@@ -109,7 +127,10 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
         setCopiedLink(true);
         setTimeout(() => setCopiedLink(false), 2000);
       }
-      toastSuccess('Copiado', type === 'code' ? 'Código copiado al portapapeles' : 'Link copiado al portapapeles');
+      toastSuccess(
+        'Copiado',
+        type === 'code' ? 'Código copiado al portapapeles' : 'Link copiado al portapapeles',
+      );
     } catch {
       toastError('Error', 'No se pudo copiar al portapapeles');
     }
@@ -143,7 +164,10 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
             <p className="text-xs text-grey-400 mt-0.5">{teamName}</p>
           </div>
           <button
-            onClick={() => { reset(); onClose(); }}
+            onClick={() => {
+              reset();
+              onClose();
+            }}
             className="w-8 h-8 flex items-center justify-center rounded-xl text-grey-400 hover:text-grey-600 hover:bg-grey-100 transition-colors"
           >
             <X size={18} />
@@ -168,14 +192,26 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
                         ? 'border-current shadow-sm'
                         : 'border-grey-150 hover:border-grey-200 bg-grey-50'
                     }`}
-                    style={role === opt.value ? { borderColor: opt.color, background: opt.bg } : undefined}
+                    style={
+                      role === opt.value
+                        ? { borderColor: opt.color, background: opt.bg }
+                        : undefined
+                    }
                   >
-                    <span style={{ color: role === opt.value ? opt.color : '#908E88' }}>{opt.icon}</span>
-                    <span className={`text-xs font-medium ${role === opt.value ? 'text-grey-800' : 'text-grey-600'}`}>{opt.label}</span>
+                    <span style={{ color: role === opt.value ? opt.color : '#908E88' }}>
+                      {opt.icon}
+                    </span>
+                    <span
+                      className={`text-xs font-medium ${role === opt.value ? 'text-grey-800' : 'text-grey-600'}`}
+                    >
+                      {opt.label}
+                    </span>
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-grey-400">{ROLE_OPTIONS.find((r) => r.value === role)?.desc}</p>
+              <p className="text-xs text-grey-400">
+                {ROLE_OPTIONS.find((r) => r.value === role)?.desc}
+              </p>
             </div>
 
             {/* Expiry Selection */}
@@ -255,13 +291,17 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
                 <Check size={24} className="text-green" />
               </div>
               <h3 className="text-lg font-bold text-grey-800">¡Invitación lista!</h3>
-              <p className="text-xs text-grey-400 mt-1">Comparte el código o el link con quien quieras invitar</p>
+              <p className="text-xs text-grey-400 mt-1">
+                Comparte el código o el link con quien quieras invitar
+              </p>
             </div>
 
             {/* Code Card */}
             <div className="bg-grey-50 rounded-xl p-4 space-y-3 border border-grey-100">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400">Código de invitación</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400">
+                  Código de invitación
+                </span>
                 <button
                   onClick={() => void copyToClipboard(generated.code, 'code')}
                   className="flex items-center gap-1.5 text-xs font-medium text-grey-500 hover:text-grey-700 transition-colors"
@@ -280,7 +320,9 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
             {/* Link Card */}
             <div className="bg-grey-50 rounded-xl p-4 space-y-3 border border-grey-100">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400">Link de invitación</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400">
+                  Link de invitación
+                </span>
                 <button
                   onClick={() => void copyToClipboard(generated.link, 'link')}
                   className="flex items-center gap-1.5 text-xs font-medium text-grey-500 hover:text-grey-700 transition-colors"
@@ -290,7 +332,9 @@ export default function InviteMembersModal({ isOpen, onClose, teamId, teamName, 
                 </button>
               </div>
               <div className="bg-white rounded-lg border border-grey-150 px-4 py-3">
-                <p className="text-xs text-grey-600 break-all font-mono leading-relaxed">{generated.link}</p>
+                <p className="text-xs text-grey-600 break-all font-mono leading-relaxed">
+                  {generated.link}
+                </p>
               </div>
             </div>
 

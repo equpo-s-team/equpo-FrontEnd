@@ -1,5 +1,5 @@
 import { CheckCircle, Loader2, LogIn } from 'lucide-react';
-import { useNavigate,useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
@@ -21,7 +21,10 @@ export default function JoinTeamPage() {
       { code },
       {
         onSuccess: () => {
-          toastSuccess('¡Te has unido al equipo!', 'Bienvenido a ' + (preview?.team?.name || 'el equipo'));
+          toastSuccess(
+            '¡Te has unido al equipo!',
+            'Bienvenido a ' + (preview?.team?.name || 'el equipo'),
+          );
           void navigate('/teams');
         },
         onError: (err) => {
@@ -53,7 +56,9 @@ export default function JoinTeamPage() {
           </div>
           <h1 className="text-xl font-bold text-grey-800 mb-2">Invitación no válida</h1>
           <p className="text-grey-600 mb-6">
-            {previewError instanceof Error ? previewError.message : 'Este link de invitación no es válido o ha expirado.'}
+            {previewError instanceof Error
+              ? previewError.message
+              : 'Este link de invitación no es válido o ha expirado.'}
           </p>
           <button
             onClick={() => void navigate('/')}
@@ -73,7 +78,10 @@ export default function JoinTeamPage() {
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 border border-grey-100">
         <div className="text-center mb-6">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden flex items-center justify-center text-white text-2xl font-bold" style={{ background: accent }}>
+          <div
+            className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden flex items-center justify-center text-white text-2xl font-bold"
+            style={{ background: accent }}
+          >
             <TeamAvatar
               src={team.photoUrl}
               name={team.name}
@@ -83,7 +91,9 @@ export default function JoinTeamPage() {
             />
           </div>
           <h1 className="text-2xl font-bold text-grey-800 mb-2">Únete a {team.name}</h1>
-          <p className="text-grey-600">{team.description || 'Un equipo colaborativo para trabajar juntos.'}</p>
+          <p className="text-grey-600">
+            {team.description || 'Un equipo colaborativo para trabajar juntos.'}
+          </p>
         </div>
 
         <div className="bg-grey-50 rounded-lg p-4 mb-6 text-sm text-grey-600">
@@ -100,7 +110,11 @@ export default function JoinTeamPage() {
               disabled={redeemInviteCode.isPending}
               className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {redeemInviteCode.isPending ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle size={16} />}
+              {redeemInviteCode.isPending ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <CheckCircle size={16} />
+              )}
               Unirme al equipo
             </button>
           ) : (

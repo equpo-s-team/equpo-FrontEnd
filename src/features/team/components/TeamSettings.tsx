@@ -25,7 +25,6 @@ import { useTeam } from '@/context/TeamContext.tsx';
 import GroupFormSheet from '@/features/team/components/GroupFormSheet';
 import { useDeleteGroup } from '@/features/team/hooks/useDeleteGroup';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
-import { useDirectInvitation } from '@/features/team/hooks/useDirectInvitation';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -179,9 +178,7 @@ function GroupDeleteConfirmDialog({
           }
         }}
       />
-      <div
-        className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200"
-      >
+      <div className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
         <div className="w-12 h-12 rounded-2xl bg-red/10 flex items-center justify-center text-red mb-5">
           <AlertTriangle size={24} />
         </div>
@@ -239,7 +236,6 @@ export default function TeamSettings() {
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
   const deleteGroupMutation = useDeleteGroup();
-  const directInvitation = useDirectInvitation();
 
   const [showGroupSheet, setShowGroupSheet] = useState(false);
   const [groupToEdit, setGroupToEdit] = useState<TeamGroup | null>(null);
@@ -248,19 +244,19 @@ export default function TeamSettings() {
   const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
   const [isUidModalOpen, setIsUidModalOpen] = useState(false);
   const [isInstantLinkModalOpen, setIsInstantLinkModalOpen] = useState(false);
-  const [instantLinkData, setInstantLinkData] = useState<{ code: string; link: string } | null>(null);
+  const [instantLinkData, setInstantLinkData] = useState<
+    { code: string; link: string } | undefined
+  >(undefined);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const team = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
 
-  
-
   const myRole: string | null = (() => {
     if (!team || !currentUid) return null;
     if (team.leaderUid === currentUid) return 'leader';
-    return team.members.find((m) => m.uid === currentUid)?.role ?? null;
+    return team.members.find((m) => m.userUid === currentUid)?.role ?? null;
   })();
 
   const isLeader = myRole === 'leader';
@@ -404,7 +400,6 @@ export default function TeamSettings() {
       toastError('Error', 'No se pudo eliminar el grupo.');
     }
   };
-
 
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
   const accentGlow = 'rgba(96,175,255,0.3)';
@@ -734,7 +729,8 @@ export default function TeamSettings() {
                         {group.groupName}
                       </p>
                       <p className="text-xs text-grey-400">
-                        {group.memberCount ?? groupMembers.length} miembro{(group.memberCount ?? groupMembers.length) !== 1 ? 's' : ''}
+                        {group.memberCount ?? groupMembers.length} miembro
+                        {(group.memberCount ?? groupMembers.length) !== 1 ? 's' : ''}
                       </p>
                     </div>
 
@@ -756,9 +752,7 @@ export default function TeamSettings() {
                         </div>
                       ))}
                       {overflow > 0 && (
-                        <div
-                          className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-bold text-grey-600 bg-grey-200"
-                        >
+                        <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-bold text-grey-600 bg-grey-200">
                           +{overflow}
                         </div>
                       )}
@@ -870,7 +864,6 @@ export default function TeamSettings() {
         onClose={() => setIsChoiceModalOpen(false)}
         onSelectLink={() => setIsInstantLinkModalOpen(true)}
         onSelectUid={() => setIsUidModalOpen(true)}
-        accent={accent}
       />
 
       <UidInvitationModal
@@ -883,7 +876,7 @@ export default function TeamSettings() {
         isOpen={isInstantLinkModalOpen}
         onClose={() => {
           setIsInstantLinkModalOpen(false);
-          setInstantLinkData(null);
+          setInstantLinkData(undefined);
         }}
         teamId={teamId}
         teamName={team?.name ?? ''}

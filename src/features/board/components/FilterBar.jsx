@@ -1,4 +1,4 @@
-  import { format } from 'date-fns';
+import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import {
   CalendarDays,
@@ -508,7 +508,6 @@ function AssignedGroupFilter({ groups, selected, onChange }) {
   );
 }
 
-
 export default function FilterBar({
   filters,
   setFilter,
@@ -601,8 +600,8 @@ export default function FilterBar({
       >
         <div className="flex items-center gap-2.5">
           <span className="text-[11px] font-bold uppercase tracking-[0.9px] text-grey-400 mr-1 shrink-0">
-          Filtros
-        </span>
+            Filtros
+          </span>
           {filterControls}
         </div>
         {canCreateTask && (

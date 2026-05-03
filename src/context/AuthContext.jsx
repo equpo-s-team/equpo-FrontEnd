@@ -44,7 +44,7 @@ export function AuthProvider({ children }) {
       setUser(null);
 
       // Pequeña pausa para asegurar que el estado se limpie completamente
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       // First set basic Firebase user data
       const userData = {

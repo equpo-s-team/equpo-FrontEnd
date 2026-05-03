@@ -1,10 +1,10 @@
-import { Bolt, Clipboard, Coins} from 'lucide-react';
+import { Bolt, Clipboard, Coins } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { AppProgress } from '@/components/ui/AppProgress';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import {type Rank, ranks} from "@/features/team/types/rankTypes.ts";
+import { type Rank, ranks } from '@/features/team/types/rankTypes.ts';
 import { toastSuccess } from '@/lib/toast';
 
 export interface UserProfile {
@@ -26,19 +26,28 @@ export function levelToRank(nivel: number): Rank {
   const rankProgress = Math.max(0, Math.floor((nivel - 1) / 5));
 
   switch (rankProgress) {
-    case 0: return ranks[0];
-    case 1: return ranks[1];
-    case 2: return ranks[2];
-    case 3: return ranks[3];
-    case 4: return ranks[4];
-    case 5: return ranks[5];
-    case 6: return ranks[6];
-    case 7: return ranks[7];
-    case 8: return ranks[8];
-    default: return ranks[9];
+    case 0:
+      return ranks[0];
+    case 1:
+      return ranks[1];
+    case 2:
+      return ranks[2];
+    case 3:
+      return ranks[3];
+    case 4:
+      return ranks[4];
+    case 5:
+      return ranks[5];
+    case 6:
+      return ranks[6];
+    case 7:
+      return ranks[7];
+    case 8:
+      return ranks[8];
+    default:
+      return ranks[9];
   }
 }
-
 
 export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSettings }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -65,11 +74,10 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
     }
   };
 
-  const rankName:string = levelToRank(user.level).name;
-  const rankColor:string = levelToRank(user.level).color;
-  const rankBgColor:string = levelToRank(user.level).bgColor;
-  const rankIcon:React.ElementType = levelToRank(user.level).icon;
-
+  const rankName: string = levelToRank(user.level).name;
+  const rankColor: string = levelToRank(user.level).color;
+  const rankBgColor: string = levelToRank(user.level).bgColor;
+  const rankIcon: React.ElementType = levelToRank(user.level).icon;
 
   const initials = user.displayName
     .split(' ')
@@ -153,16 +161,17 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
           <div className="flex flex-row items-center mb-1">
             {/* Coins */}
             <div className="flex px-2 py-1 rounded-lg text-orange-400 border border-orange-200 bg-yellow-100 w-14 max-w-16 items-center justify-between mb-1 justify-between">
-              <Coins size={14}/>
+              <Coins size={14} />
               <span className="text-xs font-semibold">{user.virtualCurrency}</span>
             </div>
 
             {/* Rank */}
-            <div className={`px-2 py-1 rounded-lg  ${rankBgColor} ${rankColor} flex max-w-24 items-center justify-center gap-1 text-xs font-bold m-2`}>
+            <div
+              className={`px-2 py-1 rounded-lg  ${rankBgColor} ${rankColor} flex max-w-24 items-center justify-center gap-1 text-xs font-bold m-2`}
+            >
               {React.createElement(rankIcon, { size: 14 })}
               {rankName}
             </div>
-
           </div>
 
           {/* XP bar */}

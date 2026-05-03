@@ -1,6 +1,6 @@
 import { signOut } from 'firebase/auth';
 import log from 'loglevel';
-import { Loader2,LogOut, Users, X } from 'lucide-react';
+import { Loader2, LogOut, Users, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -216,239 +216,242 @@ export const TeamsHub: React.FC = () => {
           </button>
         </div>
 
-      {/* Main content - Responsive grid */}
-      <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
+        {/* Main content - Responsive grid */}
+        <div className="flex-1 min-h-0 overflow-y-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
+            {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
+            <section className="lg:col-span-3">
+              <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
+            </section>
 
-          {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
-          <section className="lg:col-span-3">
-            <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
-          </section>
-
-          {/* Teams Section - Main content */}
-          <section className="lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
-
-            {/* Teams Header with Search and Create */}
-            <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>
-                <div className="w-2 h-2 rounded-full" style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }} />
-                <div className="flex flex-row gap-2 items-center">
-                  <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
-                    {teams.length}
-                  </p>
-                  <p className="text-xs text-grey-400">Equipos activos</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3 w-full lg:flex-row lg:w-auto lg:gap-4">
-                {/* Search Input */}
-                <div className="relative flex flex-row flex-1 lg:flex-none lg:w-64">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm pointer-events-none">
-                    ⌕
-                  </span>
-                  <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Buscar equipos…"
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
-                    onFocus={(e) =>
-                      (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
-                    }
-                    onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-                  />
-                </div>
-
-                {/* Create Team Button */}
-                <button
-                  onClick={openCreate}
-                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
-                  style={{
-                    background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-                    boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
-                  }}
+            {/* Teams Section - Main content */}
+            <section className="lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
+              {/* Teams Header with Search and Create */}
+              <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
+                <div
+                  className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm shrink-0"
+                  style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}
                 >
-                  <span className="text-base leading-none">+</span>
-                  <span className="hidden sm:inline">Crear equipo</span>
-                </button>
-
-                {/* Redeem Code Button */}
-                <button
-                  onClick={() => setIsRedeemModalOpen(true)}
-                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 bg-white border border-grey-200 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
-                >
-                  <span className="hidden sm:inline">Unirte a equipo</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Teams Grid */}
-            <div className="flex-1 min-h-0">
-              {isLoading ? (
-                <div className="text-center py-20">
                   <div
-                    className="inline-block w-10 h-10 rounded-full border-4 border-grey-200 animate-spin"
-                    style={{ borderTopColor: '#60AFFF' }}
+                    className="w-2 h-2 rounded-full"
+                    style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }}
                   />
-                  <p className="text-grey-400 text-sm mt-4">Cargando tus equipos…</p>
+                  <div className="flex flex-row gap-2 items-center">
+                    <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
+                      {teams.length}
+                    </p>
+                    <p className="text-xs text-grey-400">Equipos activos</p>
+                  </div>
                 </div>
-              ) : error ? (
-                <div className="text-center py-20">
-                  <p className="text-[#F65A70] text-sm">
-                    Error al cargar los equipos. Intenta de nuevo.
-                  </p>
+
+                <div className="flex flex-col gap-3 w-full lg:flex-row lg:w-auto lg:gap-4">
+                  {/* Search Input */}
+                  <div className="relative flex flex-row flex-1 lg:flex-none lg:w-64">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-300 text-sm pointer-events-none">
+                      ⌕
+                    </span>
+                    <input
+                      type="text"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Buscar equipos…"
+                      className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
+                      onFocus={(e) =>
+                        (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
+                      }
+                      onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
+                    />
+                  </div>
+
+                  {/* Create Team Button */}
+                  <button
+                    onClick={openCreate}
+                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 shrink-0"
+                    style={{
+                      background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
+                      boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
+                    }}
+                  >
+                    <span className="text-base leading-none">+</span>
+                    <span className="hidden sm:inline">Crear equipo</span>
+                  </button>
+
+                  {/* Redeem Code Button */}
+                  <button
+                    onClick={() => setIsRedeemModalOpen(true)}
+                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 bg-white border border-grey-200 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
+                  >
+                    <span className="hidden sm:inline">Unirte a equipo</span>
+                  </button>
                 </div>
-              ) : filtered.length === 0 && search ? (
-                <div className="text-center py-20">
-                  <p className="text-grey-400 text-sm">
-                    No se encontraron equipos para "<strong>{search}</strong>"
-                  </p>
-                </div>
-              ) : filtered.length === 0 && !search ? (
-                <EmptyState
-                  icon={Users}
-                  title="Aún no tienes equipos"
-                  description="Crea tu primer equipo e invita a tus compañeros para empezar a colaborar."
-                  action={{ label: '+ Crear equipo', onClick: openCreate }}
-                  size="lg"
-                />
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 overflow-y-auto pr-1">
-                  {filtered.map((team) => (
-                    <TeamCard key={team.id} team={team} onEnter={handleEnter} />
-                  ))}
-                </div>
-              )}
-            </div>
-          </section>
-
-          {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
-          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
-            <div className="rounded-xl bg-grey-50 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
-              <AchievementsSection achievements={mappedAchievements} />
-            </div>
-          </section>
-        </div>
-      </div>
-
-
-      {/* Modals */}
-      {(modal.mode === 'create' || modal.mode === 'edit') && (
-        <TeamFormSidebar
-          mode={modal.mode}
-          team={modal.mode === 'edit' ? activeTeam : undefined}
-          onClose={closeModal}
-          onSubmit={(payload) => {
-            if (modal.mode === 'create') handleCreate(payload);
-            else if (modal.mode === 'edit' && activeTeam) handleEdit(activeTeam.id, payload);
-          }}
-        />
-      )}
-
-      {isProfileOpen && (
-        <UserProfileSidebar
-          user={user}
-          onClose={() => setIsProfileOpen(false)}
-          onSave={handleProfileSave}
-        />
-      )}
-
-      {/* Redeem Code Modal */}
-      {isRedeemModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-grey-800">Unirte a equipo</h2>
-              <button
-                onClick={() => {
-                  setIsRedeemModalOpen(false);
-                  setRedeemCode('');
-                }}
-                className="text-grey-400 hover:text-grey-600 transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <p className="text-sm text-grey-600 mb-4">
-              Ingresa el código que recibiste para unirte a un equipo.
-            </p>
-
-            <form
-              onSubmit={(e) => void (async (e) => {
-                e.preventDefault();
-                if (!redeemCode.trim() || !authUser?.uid) return;
-
-                setIsRedeeming(true);
-                try {
-                  // Use the redeemCode hook - backend handles adding user to team
-                  await redeemInviteCode.mutateAsync({
-                    code: redeemCode.trim().toUpperCase(),
-                  });
-
-                  toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
-                  setIsRedeemModalOpen(false);
-                  setRedeemCode('');
-                } catch (error) {
-                  toastError(
-                    'Error',
-                    error instanceof Error ? error.message : 'No se pudo canjear el código.',
-                  );
-                } finally {
-                  setIsRedeeming(false);
-                }
-              })(e)}
-              className="space-y-4"
-            >
-              <div>
-                <label className="block text-sm font-medium text-grey-700 mb-2">
-                  Código
-                </label>
-                <input
-                  type="text"
-                  value={redeemCode}
-                  onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
-                  placeholder="Ej: ABC123XY"
-                  disabled={isRedeeming}
-                  className="w-full px-4 py-3 border border-grey-200 rounded-xl text-sm text-grey-800 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
-                  required
-                />
               </div>
 
-              <div className="flex gap-3">
+              {/* Teams Grid */}
+              <div className="flex-1 min-h-0">
+                {isLoading ? (
+                  <div className="text-center py-20">
+                    <div
+                      className="inline-block w-10 h-10 rounded-full border-4 border-grey-200 animate-spin"
+                      style={{ borderTopColor: '#60AFFF' }}
+                    />
+                    <p className="text-grey-400 text-sm mt-4">Cargando tus equipos…</p>
+                  </div>
+                ) : error ? (
+                  <div className="text-center py-20">
+                    <p className="text-[#F65A70] text-sm">
+                      Error al cargar los equipos. Intenta de nuevo.
+                    </p>
+                  </div>
+                ) : filtered.length === 0 && search ? (
+                  <div className="text-center py-20">
+                    <p className="text-grey-400 text-sm">
+                      No se encontraron equipos para "<strong>{search}</strong>"
+                    </p>
+                  </div>
+                ) : filtered.length === 0 && !search ? (
+                  <EmptyState
+                    icon={Users}
+                    title="Aún no tienes equipos"
+                    description="Crea tu primer equipo e invita a tus compañeros para empezar a colaborar."
+                    action={{ label: '+ Crear equipo', onClick: openCreate }}
+                    size="lg"
+                  />
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 overflow-y-auto pr-1">
+                    {filtered.map((team) => (
+                      <TeamCard key={team.id} team={team} onEnter={handleEnter} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
+            <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
+              <div className="rounded-xl bg-grey-50 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
+                <AchievementsSection achievements={mappedAchievements} />
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* Modals */}
+        {(modal.mode === 'create' || modal.mode === 'edit') && (
+          <TeamFormSidebar
+            mode={modal.mode}
+            team={modal.mode === 'edit' ? activeTeam : undefined}
+            onClose={closeModal}
+            onSubmit={(payload) => {
+              if (modal.mode === 'create') handleCreate(payload);
+              else if (modal.mode === 'edit' && activeTeam) handleEdit(activeTeam.id, payload);
+            }}
+          />
+        )}
+
+        {isProfileOpen && (
+          <UserProfileSidebar
+            user={user}
+            onClose={() => setIsProfileOpen(false)}
+            onSave={handleProfileSave}
+          />
+        )}
+
+        {/* Redeem Code Modal */}
+        {isRedeemModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+            <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-grey-800">Unirte a equipo</h2>
                 <button
-                  type="button"
                   onClick={() => {
                     setIsRedeemModalOpen(false);
                     setRedeemCode('');
                   }}
-                  disabled={isRedeeming}
-                  className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-600 hover:bg-grey-50 disabled:opacity-50 transition-colors"
+                  className="text-grey-400 hover:text-grey-600 transition-colors"
                 >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  disabled={!redeemCode.trim() || isRedeeming}
-                  className="flex-1 py-2.5 rounded-xl bg-blue text-white text-sm font-semibold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
-                >
-                  {isRedeeming && <Loader2 size={14} className="animate-spin" />}
-                  {isRedeeming ? 'Canjeando...' : 'Canjear'}
+                  <X size={20} />
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
 
-      {/* CSS for orb animation */}
-      <style>{`
+              <p className="text-sm text-grey-600 mb-4">
+                Ingresa el código que recibiste para unirte a un equipo.
+              </p>
+
+              <form
+                onSubmit={(e) =>
+                  void (async (e) => {
+                    e.preventDefault();
+                    if (!redeemCode.trim() || !authUser?.uid) return;
+
+                    setIsRedeeming(true);
+                    try {
+                      // Use the redeemCode hook - backend handles adding user to team
+                      await redeemInviteCode.mutateAsync({
+                        code: redeemCode.trim().toUpperCase(),
+                      });
+
+                      toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
+                      setIsRedeemModalOpen(false);
+                      setRedeemCode('');
+                    } catch (error) {
+                      toastError(
+                        'Error',
+                        error instanceof Error ? error.message : 'No se pudo canjear el código.',
+                      );
+                    } finally {
+                      setIsRedeeming(false);
+                    }
+                  })(e)
+                }
+                className="space-y-4"
+              >
+                <div>
+                  <label className="block text-sm font-medium text-grey-700 mb-2">Código</label>
+                  <input
+                    type="text"
+                    value={redeemCode}
+                    onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
+                    placeholder="Ej: ABC123XY"
+                    disabled={isRedeeming}
+                    className="w-full px-4 py-3 border border-grey-200 rounded-xl text-sm text-grey-800 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
+                    required
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsRedeemModalOpen(false);
+                      setRedeemCode('');
+                    }}
+                    disabled={isRedeeming}
+                    className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-600 hover:bg-grey-50 disabled:opacity-50 transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!redeemCode.trim() || isRedeeming}
+                    className="flex-1 py-2.5 rounded-xl bg-blue text-white text-sm font-semibold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+                  >
+                    {isRedeeming && <Loader2 size={14} className="animate-spin" />}
+                    {isRedeeming ? 'Canjeando...' : 'Canjear'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* CSS for orb animation */}
+        <style>{`
         @keyframes floatOrb {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-18px); }
         }
       `}</style>
-    </div>
+      </div>
     </div>
   );
 };

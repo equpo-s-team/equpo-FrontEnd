@@ -27,21 +27,22 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
   const [isInvitingByUid, setIsInvitingByUid] = useState(false);
 
   // User preview for UID invitation
-  const { data: userPreview, isLoading: isUserPreviewLoading, error: userPreviewError } = useUserPreview(
-    inviteUid.trim() || undefined
-  );
+  const {
+    data: userPreview,
+    isLoading: isUserPreviewLoading,
+    error: userPreviewError,
+  } = useUserPreview(inviteUid.trim() || undefined);
 
   // Check if user is already in team
-  const isUserAlreadyInTeam = userPreview?.exists && (
-    members.some(m => m.uid === userPreview.uid) ||
-    team?.leaderUid === userPreview.uid
-  );
+  const isUserAlreadyInTeam =
+    userPreview?.exists &&
+    (members.some((m) => m.uid === userPreview.uid) || team?.leaderUid === userPreview.uid);
 
   const getInitials = (displayName: string | null, uid: string): string => {
     if (displayName) {
       return displayName
         .split(' ')
-        .map(word => word.charAt(0))
+        .map((word) => word.charAt(0))
         .join('')
         .toUpperCase()
         .slice(0, 2);
@@ -50,7 +51,7 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
   };
 
   const handleInvite = async () => {
-    if (userPreview?.exists && userPreview.uid && !isUserAlreadyInTeam) {
+    if (userPreview?.exists && userPreview.uid && !isUserAlreadyInTeam && teamId) {
       setIsInvitingByUid(true);
       try {
         await directInvitation.mutateAsync({
@@ -62,7 +63,10 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
         setInviteUid('');
         onClose();
       } catch (error) {
-        toastError('Error', error instanceof Error ? error.message : 'No se pudo invitar al usuario');
+        toastError(
+          'Error',
+          error instanceof Error ? error.message : 'No se pudo invitar al usuario',
+        );
       } finally {
         setIsInvitingByUid(false);
       }
@@ -140,9 +144,7 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
                       <p className="text-xs font-medium text-grey-800 truncate">
                         {userPreview.displayName}
                       </p>
-                      <p className="text-xs text-grey-400 truncate">
-                        {userPreview.uid}
-                      </p>
+                      <p className="text-xs text-grey-400 truncate">{userPreview.uid}</p>
                     </div>
                     {userPreview.exists ? (
                       isUserAlreadyInTeam ? (
@@ -181,7 +183,9 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
 
           {/* Action Button */}
           <button
-            onClick={handleInvite}
+            onClick={() => {
+              void handleInvite();
+            }}
             disabled={!userPreview?.exists || isUserAlreadyInTeam || isInvitingByUid}
             className="w-full flex items-center justify-center gap-1.5 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ background: accent }}

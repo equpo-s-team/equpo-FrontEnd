@@ -63,7 +63,7 @@ function Dashboard() {
       case 'settings':
         return <TeamSettings />;
       default:
-        return <TeamBoard/>;
+        return <TeamBoard />;
     }
   };
 

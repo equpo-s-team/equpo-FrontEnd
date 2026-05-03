@@ -3,13 +3,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/AuthContext';
 import { request } from '@/lib/api/core';
 
-import type { RedeemInvitationCodePayload, RedeemInvitationCodeResponse } from '../types/teamSchemas';
+import type {
+  RedeemInvitationCodePayload,
+  RedeemInvitationCodeResponse,
+} from '../types/teamSchemas';
 
 export function useRedeemInviteCode() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
-  const mutationFn = async (payload: RedeemInvitationCodePayload): Promise<RedeemInvitationCodeResponse> => {
+  const mutationFn = async (
+    payload: RedeemInvitationCodePayload,
+  ): Promise<RedeemInvitationCodeResponse> => {
     if (!user?.uid) {
       throw new Error('User not authenticated');
     }
@@ -24,4 +29,4 @@ export function useRedeemInviteCode() {
       void queryClient.invalidateQueries({ queryKey: ['teamMembers'] });
     },
   });
-};
+}

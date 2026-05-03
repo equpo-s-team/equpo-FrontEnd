@@ -1,14 +1,18 @@
-import { ArrowRight,Link2, UserPlus, X } from 'lucide-react';
+import { ArrowRight, Link2, UserPlus, X } from 'lucide-react';
 
 interface InvitationChoiceModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectLink: () => void;
   onSelectUid: () => void;
-  accent: string;
 }
 
-export function InvitationChoiceModal({ isOpen, onClose, onSelectLink, onSelectUid, accent }: InvitationChoiceModalProps) {
+export function InvitationChoiceModal({
+  isOpen,
+  onClose,
+  onSelectLink,
+  onSelectUid,
+}: InvitationChoiceModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -16,7 +20,9 @@ export function InvitationChoiceModal({ isOpen, onClose, onSelectLink, onSelectU
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl border border-grey-100 transform transition-all duration-300 scale-100 animate-slide-up">
         {/* Header */}
         <div className="flex flex-col items-center p-8 pb-6 border-b border-grey-100">
-          <h2 className="text-2xl font-bold text-grey-800 font-body mb-2">¿Cómo quieres invitar?</h2>
+          <h2 className="text-2xl font-bold text-grey-800 font-body mb-2">
+            ¿Cómo quieres invitar?
+          </h2>
           <p className="text-sm text-grey-500 font-body text-center max-w-xs">
             Elige el método que mejor se adapte a tus necesidades
           </p>
@@ -43,8 +49,12 @@ export function InvitationChoiceModal({ isOpen, onClose, onSelectLink, onSelectU
                 <Link2 size={20} className="text-blue" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-grey-800 mb-1 font-body text-base">Invitar con enlace</h3>
-                <p className="text-sm text-grey-500 font-body">Cualquiera con el link puede unirse</p>
+                <h3 className="font-semibold text-grey-800 mb-1 font-body text-base">
+                  Invitar con enlace
+                </h3>
+                <p className="text-sm text-grey-500 font-body">
+                  Cualquiera con el link puede unirse
+                </p>
               </div>
               <div className="w-10 h-10 rounded-full bg-blue text-white flex items-center justify-center group-hover:bg-blue/600 transition-colors">
                 <ArrowRight size={20} />
@@ -65,7 +75,9 @@ export function InvitationChoiceModal({ isOpen, onClose, onSelectLink, onSelectU
                 <UserPlus size={20} className="text-purple" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-grey-800 mb-1 font-body text-base">Invitar por UID</h3>
+                <h3 className="font-semibold text-grey-800 mb-1 font-body text-base">
+                  Invitar por UID
+                </h3>
                 <p className="text-sm text-grey-500 font-body">Para usuarios específicos</p>
               </div>
               <div className="w-10 h-10 rounded-full bg-purple text-white flex items-center justify-center group-hover:bg-purple/600 transition-colors">

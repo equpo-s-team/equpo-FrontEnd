@@ -806,7 +806,10 @@ export default function TaskSidebar({
                       onChange={setAssignedUserUid}
                       options={[
                         { value: '', label: 'Sin asignar' },
-                        ...assignableMembers.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                        ...assignableMembers.map((m) => ({
+                          value: m.uid,
+                          label: m.displayName || m.uid,
+                        })),
                       ]}
                       triggerClassName="w-full"
                     />

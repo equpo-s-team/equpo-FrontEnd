@@ -1,7 +1,7 @@
 import { EmptyState } from '@/components/ui/EmptyState';
 
 import BoardCard from './BoardCard.tsx';
-import {COLUMN_CONFIG, COLUMN_EMPTY} from './columnConfig.js';
+import { COLUMN_CONFIG, COLUMN_EMPTY } from './columnConfig.js';
 
 function ColIndicator({ accent }) {
   const cfg = COLUMN_CONFIG[accent];
@@ -39,7 +39,13 @@ function DropZone({ onDrop, position }) {
   );
 }
 
-export default function BoardColumn({ column, cards, onMoveCard, onCardClick, canMoveCard = true }) {
+export default function BoardColumn({
+  column,
+  cards,
+  onMoveCard,
+  onCardClick,
+  canMoveCard = true,
+}) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;

@@ -264,9 +264,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             <div className="flex gap-2">
               <div
                 className={`flex-1 px-4 py-2.5 rounded-xl border text-sm font-mono select-all break-all transition-all duration-200 ${
-                  isCopied
-                    ? 'bg-green-50 border-green-200 text-green-700'
-                    : 'text-grey-400'
+                  isCopied ? 'bg-green-50 border-green-200 text-green-700' : 'text-grey-400'
                 }`}
                 style={{
                   borderColor: isCopied ? 'rgba(34,197,94,0.2)' : 'rgba(0,0,0,0.06)',
@@ -286,10 +284,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 }`}
                 title={isCopied ? '¡Copiado!' : 'Copiar UID'}
               >
-                <Clipboard
-                  size={16}
-                  className={isCopied ? 'text-white' : 'text-grey-500'}
-                />
+                <Clipboard size={16} className={isCopied ? 'text-white' : 'text-grey-500'} />
               </button>
             </div>
             <p className="text-xs text-grey-400 mt-1">

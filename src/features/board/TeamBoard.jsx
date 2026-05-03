@@ -80,10 +80,7 @@ export default function TeamBoard() {
   const isLeaderOrCollaborator = myRole === 'leader' || myRole === 'collaborator';
   const canMoveCard = myRole !== 'spectator';
 
-  const assignableMembers = useMemo(
-    () => members.filter((m) => m.role !== 'spectator'),
-    [members]
-  );
+  const assignableMembers = useMemo(() => members.filter((m) => m.role !== 'spectator'), [members]);
 
   const { filters, setFilter, resetFilters, activeFilterCount, applyFilters } = useTaskFilters();
 
@@ -139,8 +136,7 @@ export default function TeamBoard() {
     if (fromColumnId !== toColumnId) {
       if (fromColumnId === 'todo' && toColumnId === 'progress') {
         const raw = card._raw ?? {};
-        const hasAssignment =
-          (raw.assignedUsers?.length ?? 0) > 0 || Boolean(raw.assignedGroupId);
+        const hasAssignment = (raw.assignedUsers?.length ?? 0) > 0 || Boolean(raw.assignedGroupId);
         if (!hasAssignment) {
           toastError(
             'No se puede iniciar',

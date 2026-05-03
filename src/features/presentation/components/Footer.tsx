@@ -20,8 +20,8 @@ const LEGAL = ['Términos', 'Privacidad', 'Seguridad'];
 export default function Footer() {
   return (
     <footer
-      className="relative overflow-hidden px-[5vw] pt-16 pb-8"
-      style={{ background: 'linear-gradient(160deg, #f5fdf8 0%, #f0f7ff 50%, #fdf5ff 100%)' }}
+      className="relative overflow-hidden px-[5vw] pt-16 pb-8 dark:bg-gray-900/95"
+      style={{ background: 'linear-gradient(160deg, #f5fdf8 0%, #f0f7ff 50%, #fdf5ff 100%) dark:linear-gradient(160deg, #1f2937 0%, #111827 50%, #181f29 100%)' }}
     >
       {/* Subtle border top */}
       <div
@@ -40,10 +40,10 @@ export default function Footer() {
 
       <div className="max-w-[1160px] mx-auto relative z-10">
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-10 border-b border-grey-150 mb-7">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-10 border-b border-grey-150 dark:border-gray-700 mb-7">
           {/* Brand */}
           <div>
-            <div className="font-maxwell text-2xl text-grey-900 mb-4">
+            <div className="font-maxwell text-2xl text-grey-900 dark:text-white mb-4">
               eq
               <span
                 style={{
@@ -56,7 +56,7 @@ export default function Footer() {
               </span>
               po
             </div>
-            <p className="font-body text-sm leading-[1.7] text-grey-400 max-w-[260px]">
+            <p className="font-body text-sm leading-[1.7] text-grey-400 dark:text-gray-500 max-w-[260px]">
               Una plataforma para equipos que quieren colaborar bien, crecer juntos y ver el impacto
               de su trabajo.
             </p>
@@ -83,7 +83,7 @@ export default function Footer() {
           {/* Nav cols */}
           {NAV_COLS.map((col) => (
             <div key={col.title}>
-              <h4 className="font-body text-xs font-semibold tracking-[.1em] uppercase text-grey-400 mb-4">
+              <h4 className="font-body text-xs font-semibold tracking-[.1em] uppercase text-grey-400 dark:text-gray-500 mb-4">
                 {col.title}
               </h4>
               <ul className="list-none flex flex-col gap-3">
@@ -91,7 +91,7 @@ export default function Footer() {
                   <li key={link}>
                     <a
                       href="#"
-                      className="font-body text-sm text-grey-500 no-underline hover:text-grey-900 transition-colors"
+                      className="font-body text-sm text-grey-500 dark:text-gray-400 no-underline hover:text-grey-900 dark:hover:text-white transition-colors"
                       onMouseEnter={(e) => {
                         e.currentTarget.style.background =
                           'linear-gradient(90deg, #38b97a, #2e8fd4)';
@@ -119,7 +119,7 @@ export default function Footer() {
             <a
               key={item}
               href="#"
-              className="font-body text-sm text-grey-300 no-underline hover:text-grey-600 transition-colors"
+              className="font-body text-sm text-grey-300 dark:text-gray-600 no-underline hover:text-grey-600 dark:hover:text-gray-300 transition-colors"
             >
               {item}
             </a>
@@ -128,11 +128,11 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <p className="font-body text-sm text-grey-400">
-            <strong className="text-grey-600 font-semibold">equpo</strong> - Trabajo real. Impacto
+          <p className="font-body text-sm text-grey-400 dark:text-gray-500">
+            <strong className="text-grey-600 dark:text-gray-300 font-semibold">equpo</strong> - Trabajo real. Impacto
             compartido.
           </p>
-          <p className="font-body text-xs text-grey-300">
+          <p className="font-body text-xs text-grey-300 dark:text-gray-600">
             © 2025 equpo. Todos los derechos reservados.
           </p>
         </div>

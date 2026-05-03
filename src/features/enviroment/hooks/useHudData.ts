@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { getInitials } from '@/lib/utils/avatar/avatarInitials.ts';
 import { useReportsKpi } from '@/features/reports/hooks';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
+import { getInitials } from '@/lib/utils/avatar/avatarInitials.ts';
 import { computeEnvironmentHealth } from '@/lib/utils/healthUtils.ts';
 
 import type { ConnectedUser, PlayerStats, SessionInfo } from '../types/hud.ts';

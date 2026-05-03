@@ -56,9 +56,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         onClick={() => void onGoogleSignIn()}
         disabled={isLoading}
         className={cn(
-          'w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-200 bg-white',
-          'text-gray-700 font-medium text-sm transition-all',
-          'hover:border-gray-300 hover:shadow-md hover:bg-gray-50',
+          'w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800',
+          'text-gray-700 dark:text-gray-200 font-medium text-sm transition-all',
+          'hover:border-gray-300 dark:hover:border-gray-500 hover:shadow-md hover:bg-gray-50 dark:hover:bg-gray-700',
           'focus:outline-none focus:ring-2 focus:ring-emerald-400/20',
           'disabled:opacity-50 disabled:cursor-not-allowed',
         )}
@@ -69,15 +69,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
       {/* ── Divider ── */}
       <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-gray-200" />
-        <span className="text-xs text-gray-400 font-medium">O con correo electrónico</span>
-        <div className="flex-1 h-px bg-gray-200" />
+        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
+        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">O con correo electrónico</span>
+        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
       </div>
 
       {/* ── Email ── */}
       <div>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-300" />
           <input
             type="email"
             placeholder="Correo electrónico"
@@ -85,16 +85,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             onChange={(e) => onInputChange('email', e.target.value)}
             onBlur={() => onFieldBlur('email')}
             className={cn(
-              'w-full pl-10 pr-4 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.email ? 'border-red' : 'border-gray-200',
+              'w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
+              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
+              errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Correo electrónico"
             aria-describedby={errors.email ? 'email-error' : undefined}
           />
         </div>
         {errors.email && (
-          <p id="email-error" className="text-red text-xs mt-1 flex items-center gap-1">
+          <p id="email-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.email}
           </p>
@@ -104,7 +104,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       {/* ── Password ── */}
       <div>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-300" />
           <input
             type={showPassword ? 'text' : 'password'}
             placeholder="Contraseña"
@@ -112,9 +112,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             onChange={(e) => onInputChange('password', e.target.value)}
             onBlur={() => onFieldBlur('password')}
             className={cn(
-              'w-full pl-10 pr-12 py-3 bg-white/50 border rounded-xl placeholder:text-gray-400',
-              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all',
-              errors.password ? 'border-red' : 'border-gray-200',
+              'w-full pl-10 pr-12 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
+              'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
+              errors.password ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Contraseña"
             aria-describedby={errors.password ? 'password-error' : undefined}
@@ -122,14 +122,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <button
             type="button"
             onClick={onTogglePassword}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           >
             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </button>
         </div>
         {errors.password && (
-          <p id="password-error" className="text-red text-xs mt-1 flex items-center gap-1">
+          <p id="password-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.password}
           </p>
@@ -144,14 +144,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             checked={formData.rememberMe}
             onChange={(e) => onInputChange('rememberMe', e.target.checked)}
             aria-label="Recordarme"
-            className="w-4 h-4 rounded border-gray-300 bg-white text-emerald-500 focus:ring-emerald-400 focus:ring-offset-0"
+            className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-emerald-500 focus:ring-emerald-400 focus:ring-offset-0"
           />
-          <span className="text-sm text-gray-600">Recordarme</span>
+          <span className="text-sm text-gray-600 dark:text-gray-400">Recordarme</span>
         </label>
         <button
           type="button"
           onClick={onResetPassword}
-          className="text-sm text-emerald-500 hover:text-emerald-600 transition-colors"
+          className="text-sm text-emerald-500 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 transition-colors"
         >
           ¿Olvidaste tu contraseña?
         </button>

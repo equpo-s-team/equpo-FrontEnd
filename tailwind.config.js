@@ -113,6 +113,16 @@ export default {
         'avatar-lv': 'linear-gradient(135deg, #9b7fe1, #5961F9)',
         'avatar-dm': 'linear-gradient(135deg, #86F0FD, #60AFFF)',
         'avatar-sr': 'linear-gradient(135deg, #F65A70, #9b7fe1)',
+        'animated-gradient-new': 'linear-gradient(120deg, #ffffff 0%, #f0fdf6 25%, #eff8ff 55%, #fff5f7 80%, #fdf8ff 100%)',
+        'animated-gradient-new-dark': 'linear-gradient(120deg, #0f172a 0%, #1e293b 15%, #242E3D 35%, #111827 55%, #181f29 75%, #0f172a 100%)',
+        'final-gradient': 'linear-gradient(150deg, #f0fdf6 0%, #eff8ff 45%, #fdf5ff 80%, #fff5f7 100%)',
+        'final-gradient-dark': 'linear-gradient(150deg, #0f172a 0%, #1e293b 45%, #181f29 80%, #0f172a 100%)',
+        'cta-blob-green': 'radial-gradient(circle, rgba(34,197,94,0.15), transparent 65%)',
+        'cta-blob-blue': 'radial-gradient(circle, rgba(59,130,246,0.12), transparent 65%)',
+        'cta-blob-purple': 'radial-gradient(ellipse, rgba(147,51,234,0.08), transparent 70%)',
+        'cta-button-shadow': '0 10px 40px rgba(56,185,122,0.35), 0 4px 16px rgba(46,143,212,0.25)',
+        'nucleus-blob-purple': 'radial-gradient(circle, rgba(89,97,249,0.08), transparent 70%)',
+        'nucleus-blob-orange': 'radial-gradient(circle, rgba(246,90,112,0.08), transparent 70%)',
       },
 
       fontFamily: {
@@ -177,6 +187,7 @@ export default {
         'fade-down': 'fadeDown 0.18s ease both',
         'loader-bounce': 'loaderBounce 0.58s alternate infinite ease',
         'loader-shadow': 'loaderShadow 0.58s alternate infinite ease',
+        'gradient-shift': 'gradShift 12s ease infinite',
       },
 
       keyframes: {
@@ -229,6 +240,13 @@ export default {
             transform: 'scaleX(0.38)',
             opacity: '0.08',
           },
+        },
+        gradShift: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '25%': { backgroundPosition: '25% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '75%': { backgroundPosition: '75% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         },
       },
 

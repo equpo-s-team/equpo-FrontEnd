@@ -6,7 +6,6 @@ import type {
 import { useRef } from 'react';
 
 import { TagChip } from '@/components/ui/TagChip.tsx';
-import {type BoardCardProps, type BoardColumnId, type PointerTracking} from "@/features/board/types";
 import {
   type BoardCardProps,
   type BoardColumnId,

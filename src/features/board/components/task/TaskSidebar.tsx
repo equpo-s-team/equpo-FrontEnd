@@ -9,12 +9,12 @@ import { FieldLabel } from '@/components/ui/FieldLabel.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { TagChip } from '@/components/ui/TagChip.tsx';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import { STATUS_TO_COLUMN, type TaskSidebarProps } from '@/features/board/types';
 import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
-import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 
 import { useCreateTask } from '../../hooks/useCreateTask.ts';
 import { useCreateTaskStep } from '../../hooks/useCreateTaskStep.ts';

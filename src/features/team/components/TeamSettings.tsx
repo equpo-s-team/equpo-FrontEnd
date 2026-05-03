@@ -19,6 +19,7 @@ import { AppHeader } from '@/components/ui/app-header';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { RoleSelect } from '@/components/ui/RoleSelect';
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
@@ -34,7 +35,6 @@ import { useUpdateMemberRole } from '@/features/team/hooks/useUpdateMemberRole';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import type { TeamGroup, TeamMember } from '@/features/team/types/teamSchemas';
 import { storage } from '@/firebase';
-import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 
 const ROLE_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   leader: { label: 'Líder', color: '#60AFFF', bg: 'rgba(96,175,255,0.12)' },

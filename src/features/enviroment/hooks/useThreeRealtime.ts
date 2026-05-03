@@ -98,11 +98,7 @@ export function useThreeRealtime({
     };
   }, [isEnabled, teamId, localUid, clientId, localSlotId]);
 
-  const latestState = useRef({ position: localPosition, rotation: localRotation });
-  useEffect(() => {
-    latestState.current = { position: localPosition, rotation: localRotation };
-  }, [localPosition, localRotation]);
-
+  // Interval for sending local movement updates
   useEffect(() => {
     if (!isEnabled || !teamId || !localUid || !localSlotId) return;
 

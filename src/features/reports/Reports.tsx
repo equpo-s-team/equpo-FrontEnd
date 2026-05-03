@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
+import { getInitials } from '@/lib/utils/avatar/avatarInitials.ts';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { KpiStrip, MemberList, OverdueTable, StatusDonut } from '@/features/reports/components';
 import AppHeader from '@/features/reports/components/AppHeader.tsx';

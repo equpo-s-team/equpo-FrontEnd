@@ -2,7 +2,6 @@ import { collection, getDocs } from 'firebase/firestore';
 import { Phone, Users, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { teamsApi } from '@/features/team/api/teamsApi';
@@ -162,7 +161,6 @@ export default function ChatInfoModal({ onClose, usersInfo = [] }: ChatInfoModal
                 <UserAvatar
                   src={m.photoURL}
                   alt={m.name}
-                  initials={getInitials(m.name, m.uid)}
                   className="w-8 h-8 border border-grey-200 dark:border-gray-700"
                   fallbackClassName="text-xs"
                 />

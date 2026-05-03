@@ -56,13 +56,6 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
   const rankBgColor: string = levelToRank(user.level).bgColor;
   const rankIcon: React.ElementType = levelToRank(user.level).icon;
 
-  const initials = user.displayName
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .substring(0, 2)
-    .toUpperCase();
-
   return (
     <div className="relative w-full">
       <div className="backdrop-blur-md p-5 flex items-center gap-4">
@@ -71,14 +64,9 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
           <UserAvatar
             src={user.photoURL}
             alt={user.displayName}
-            initials={initials}
             className="w-14 h-14"
             style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.35)' }}
             fallbackClassName="text-white text-lg"
-            fallbackStyle={{
-              background: 'linear-gradient(135deg, #60AFFF 0%, #9b7fe1 100%)',
-              boxShadow: '0 4px 14px rgba(96,175,255,0.4)',
-            }}
             loading="eager"
           />
           {/* Level badge */}

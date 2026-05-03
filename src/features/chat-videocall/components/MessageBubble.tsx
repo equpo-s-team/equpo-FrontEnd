@@ -2,7 +2,6 @@ import { Check, CheckCheck, FileText, Pencil, Reply, Trash2, X } from 'lucide-re
 import { useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip';
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -60,7 +59,6 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           <UserAvatar
             src={senderPhotoUrl}
             alt={message.senderName ?? 'Usuario'}
-            initials={getInitials(message.senderName ?? 'Usuario', 'U')}
             className="w-7 h-7"
             fallbackClassName="bg-gradient-orange-bg text-white text-[10px]"
           />

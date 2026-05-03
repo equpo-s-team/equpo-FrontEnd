@@ -14,7 +14,7 @@ import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
-import { toastError, toastSuccess } from '@/lib/toast.ts';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 
 import { useCreateTask } from '../../hooks/useCreateTask.ts';
 import { useCreateTaskStep } from '../../hooks/useCreateTaskStep.ts';

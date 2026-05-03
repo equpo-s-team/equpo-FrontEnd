@@ -8,7 +8,7 @@ import { COLUMN_TO_STATUS, COLUMNS, STATUS_TO_COLUMN } from '@/features/board/ut
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
-import { toastError } from '@/lib/toast';
+import { toastError } from '@/components/ui/toast.ts';
 
 import AppHeader from './components/AppHeader';
 import BoardColumn from './components/BoardColumn';
@@ -57,7 +57,7 @@ export default function TeamBoard() {
     done: false,
   });
 
-  const toggleColumnCollapse = (columnId) => {
+  const toggleColumnCollapse = (columnId: BoardColumnId) => {
     setCollapsedColumns((prev) => ({
       ...prev,
       [columnId]: !prev[columnId],
@@ -303,7 +303,7 @@ export default function TeamBoard() {
              overflow-y-auto md:overflow-y-visible
              "
       >
-        {COLUMNS.map((col, index) => (
+        {COLUMNS.map((col) => (
           <div key={col.id}>
             <BoardColumn
               column={col}

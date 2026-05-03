@@ -10,8 +10,8 @@ import {
 import { useAuthValidation } from '@/features/auth';
 import { type AuthFormProps } from '@/features/auth/types/auth-types.ts';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth.ts';
-import { toastError, toastSuccess } from '@/lib/toast';
-import { cn } from '@/lib/utils.ts';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
+import { cn } from '@/lib/utils/utils.ts';
 
 import { CompleteForm } from './CompleteForm.tsx';
 import { LoginForm } from './LoginForm.tsx';

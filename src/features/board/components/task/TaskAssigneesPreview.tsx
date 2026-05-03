@@ -3,7 +3,6 @@ import { collection, getDocs } from 'firebase/firestore';
 import { ChevronLeft, ChevronRight, Users } from 'lucide-react';
 import { useState } from 'react';
 
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { db } from '@/firebase.ts';
@@ -95,7 +94,6 @@ export function TaskAssigneesPreview({
                 <UserAvatar
                   src={user.photoUrl}
                   alt={user.displayName}
-                  initials={getInitials(user.displayName, 'U')}
                   className="w-7 h-7"
                 />
                 <p className="text-sm font-body text-grey-700 truncate">{user.displayName}</p>

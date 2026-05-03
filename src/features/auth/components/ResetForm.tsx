@@ -2,7 +2,7 @@ import { AlertTriangle, KeyRound, Loader2, Mail } from 'lucide-react';
 import React from 'react';
 
 import { type FormData, type FormErrors } from '@/features/auth';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils/utils.ts';
 
 interface ResetFormProps {
   formData: FormData;

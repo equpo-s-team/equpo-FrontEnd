@@ -2,7 +2,7 @@ import { AlertTriangle, Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
 import React from 'react';
 
 import { type FormData, type FormErrors } from '@/features/auth';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils/utils.ts';
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">

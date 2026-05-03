@@ -84,17 +84,12 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
             {/* Color indicator */}
             <div
               className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white dark:text-gray-100 font-bold text-sm shadow-md"
-              style={{
-                background: cfg.gradient,
-                boxShadow: `0 4px 14px ${cfg.glow.replace('0.18', '0.5')}`,
-              }}
             >
               <TeamAvatar
                 src={team.photoUrl}
                 name={team.name}
                 className="w-full h-full"
                 fallbackClassName="w-full h-full"
-                fallbackStyle={{ background: cfg.gradient }}
               />
             </div>
             <div>
@@ -142,7 +137,6 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
               {membersForDisplay.slice(0, 4).map((m, i) => {
                 const memberUid = 'uid' in m ? m.uid : m.userUid;
                 const memberName = m.displayName ?? memberUid;
-                const initial = memberName.substring(0, 2).toUpperCase();
                 return (
                   <div
                     key={memberUid}
@@ -153,10 +147,8 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                     <UserAvatar
                       src={m.photoUrl}
                       alt={memberName}
-                      initials={initial}
                       className="w-full h-full"
                       fallbackClassName="text-white text-xs"
-                      fallbackStyle={{ background: cfg.gradient }}
                     />
                   </div>
                 );

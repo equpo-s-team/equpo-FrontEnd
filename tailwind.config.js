@@ -100,6 +100,7 @@ export default {
         'gradient-purple-bg': 'linear-gradient(135deg, #d99aee 0%, #5961F9 100%)',
         'gradient-blue-bg': 'linear-gradient(135deg, #60AFFF 0%, #86F0FD 100%)',
         'gradient-green-bg': 'linear-gradient(135deg, #9CEDC1 0%, #CEFB7C 100%)',
+        'gradient-darkblue-bg': 'linear-gradient(135deg,#3BA3CC 0%, #273169 100%)',
         'gradient-todo-bg': 'linear-gradient(135deg, #9b7fe1 0%, #5961F9 100%)',
         'gradient-progress-bg': 'linear-gradient(135deg, #86F0FD 0%, #60AFFF 100%)',
         'gradient-qa-bg': 'linear-gradient(135deg, #FF94AE 0%, #F65A70 100%)',

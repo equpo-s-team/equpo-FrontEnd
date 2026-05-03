@@ -1,6 +1,7 @@
+import { ChevronUp } from 'lucide-react';
+
 import { EmptyState } from '@/components/ui/EmptyState';
 import {type BoardColumnProps, type DropZoneProps} from "@/features/board/types";
-import { ChevronUp } from 'lucide-react';
 
 import { COLUMN_CONFIG, COLUMN_EMPTY } from '../utils/columnConfig.ts';
 import BoardCard from './BoardCard.tsx';

@@ -129,7 +129,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 alt={displayName || 'User'}
                 className="w-full h-full"
                 fallbackClassName="w-full h-full text-white text-2xl"
-                fallbackStyle={{ background: accent }}
+
                 loading="eager"
               />
             </div>

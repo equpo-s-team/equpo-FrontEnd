@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react';
 
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils.ts';
 
 export interface AppSelectOption {
   value: string;

@@ -26,7 +26,6 @@ import { useTeam } from '@/context/TeamContext.tsx';
 import GroupFormSheet from '@/features/team/components/GroupFormSheet';
 import { useDeleteGroup } from '@/features/team/hooks/useDeleteGroup';
 import { useDeleteTeam } from '@/features/team/hooks/useDeleteTeam';
-import { useDirectInvitation } from '@/features/team/hooks/useDirectInvitation';
 import { useRemoveTeamMember } from '@/features/team/hooks/useRemoveTeamMember';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
@@ -213,7 +212,6 @@ export default function TeamSettings() {
   const removeMember = useRemoveTeamMember();
   const deleteTeam = useDeleteTeam();
   const deleteGroupMutation = useDeleteGroup();
-  const directInvitation = useDirectInvitation();
 
   const [showGroupSheet, setShowGroupSheet] = useState(false);
   const [groupToEdit, setGroupToEdit] = useState<TeamGroup | null>(null);
@@ -222,7 +220,7 @@ export default function TeamSettings() {
   const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
   const [isUidModalOpen, setIsUidModalOpen] = useState(false);
   const [isInstantLinkModalOpen, setIsInstantLinkModalOpen] = useState(false);
-  const [instantLinkData, setInstantLinkData] = useState<{ code: string; link: string } | null>(null);
+  const [instantLinkData, setInstantLinkData] = useState<{ code: string; link: string } | undefined>(undefined);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -234,7 +232,7 @@ export default function TeamSettings() {
   const myRole: string | null = (() => {
     if (!team || !currentUid) return null;
     if (team.leaderUid === currentUid) return 'leader';
-    return team.members.find((m) => m.uid === currentUid)?.role ?? null;
+    return team.members.find((m) => m.userUid === currentUid)?.role ?? null;
   })();
 
   const isLeader = myRole === 'leader';
@@ -424,7 +422,6 @@ export default function TeamSettings() {
                   src={photoPreview}
                   name={team.name}
                   className="w-full h-full rounded-2xl"
-                  fallbackClassName="w-full h-full rounded-2xl text-white text-2xl"
                   loading="eager"
                 />
               </div>
@@ -535,7 +532,6 @@ export default function TeamSettings() {
                         src={member.photoUrl}
                         alt={member.displayName ?? member.uid}
                         className="w-full h-full"
-                        fallbackClassName="text-white text-xs"
                       />
                     </div>
 
@@ -632,87 +628,6 @@ export default function TeamSettings() {
             </div>
           )}
 
-          {/* Invite section */}
-          <div className="border-t border-grey-100 pt-4">
-            <p className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 mb-2">
-              Invitar usuario
-            </p>
-            <div className="flex gap-2 flex-wrap sm:flex-nowrap">
-              <input
-                type="text"
-                value={inviteUid}
-                onChange={(e) => setInviteUid(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleInvite();
-                  }
-                }}
-                placeholder="UID del usuario"
-                className="flex-1 min-w-0 px-4 py-2 rounded-xl border border-grey-150 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-grey-800 dark:text-grey-200 outline-none transition-all"
-                onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
-                onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
-              />
-              <div className="flex w-[24vw] lg:w-[8vw]">
-                <RoleSelect
-                  value={inviteRole}
-                  onChange={(v) => setInviteRole(v as 'collaborator' | 'member' | 'spectator')}
-                  roles={[
-                    {
-                      value: 'collaborator',
-                      label: 'Colaborador',
-                      color: ROLE_CONFIG.collaborator.color,
-                      bg: ROLE_CONFIG.collaborator.bg,
-                    },
-                    {
-                      value: 'member',
-                      label: 'Miembro',
-                      color: ROLE_CONFIG.member.color,
-                      bg: ROLE_CONFIG.member.bg,
-                    },
-                    {
-                      value: 'spectator',
-                      label: 'Espectador',
-                      color: ROLE_CONFIG.spectator.color,
-                      bg: ROLE_CONFIG.spectator.bg,
-                    },
-                  ]}
-                />
-              </div>
-              <button
-                onClick={handleInvite}
-                disabled={
-                  !inviteUid.trim() ||
-                  addMember.isPending ||
-                  !isValidUidFormat(inviteUid) ||
-                  isUserAlreadyInTeam(inviteUid.trim())
-                  // !doesUserExist(inviteUid.trim())
-                }
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 shrink-0"
-                style={{ background: accent }}
-              >
-                {addMember.isPending ? (
-                  <Loader2 size={13} className="animate-spin" />
-                ) : (
-                  <UserPlus size={13} />
-                )}
-                Invitar
-              </button>
-            </div>
-
-            {/* User Preview
-            {inviteUid.trim() && (
-              <div className="mt-3">
-                <UserPreviewCard
-                  user={searchedUser}
-                  isLoading={isSearchingUser}
-                  isValidFormat={isValidUidFormat(inviteUid)}
-                  isAlreadyInTeam={isUserAlreadyInTeam(inviteUid.trim())}
-                />
-              </div>
-            )}
-            */}
-
           {/* Invite Members Button */}
           <div className="border-t border-grey-100 pt-4">
             <button
@@ -773,7 +688,6 @@ export default function TeamSettings() {
                         src={group.photoUrl}
                         name={group.groupName}
                         className="w-full h-full rounded-xl"
-                        fallbackClassName="w-full h-full rounded-xl text-white text-sm"
                         loading="lazy"
                       />
                     </div>
@@ -800,7 +714,6 @@ export default function TeamSettings() {
                             src={m.photoUrl}
                             alt={m.displayName ?? m.uid}
                             className="w-full h-full"
-                            fallbackClassName="text-white text-[8px]"
                           />
                         </div>
                       ))}
@@ -841,7 +754,8 @@ export default function TeamSettings() {
 
         {isLeader && (
           <section
-            className="rounded-2xl border p-5 border border-red bg-red/10 shadow-neonPink"
+            className="rounded-2xl border border-red/20 bg-red/5 p-5"
+            style={{ boxShadow: '0 4px 20px rgba(246,90,112,0.06)' }}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -912,7 +826,6 @@ export default function TeamSettings() {
         onClose={() => setIsChoiceModalOpen(false)}
         onSelectLink={() => setIsInstantLinkModalOpen(true)}
         onSelectUid={() => setIsUidModalOpen(true)}
-        accent={accent}
       />
 
       <UidInvitationModal
@@ -925,7 +838,7 @@ export default function TeamSettings() {
         isOpen={isInstantLinkModalOpen}
         onClose={() => {
           setIsInstantLinkModalOpen(false);
-          setInstantLinkData(null);
+          setInstantLinkData(undefined);
         }}
         teamId={teamId}
         teamName={team?.name ?? ''}

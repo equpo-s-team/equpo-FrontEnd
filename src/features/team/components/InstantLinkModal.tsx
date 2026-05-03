@@ -1,8 +1,8 @@
 import { Check, Copy, Loader2, Settings, Share2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import { toastError, toastSuccess } from '@/components/ui/toast';
 import { useGenerateInviteCode } from '@/features/team/hooks/useGenerateInviteCode';
-import { toastError, toastSuccess } from '@/lib/toast';
 
 interface InstantLinkModalProps {
   isOpen: boolean;

@@ -2,10 +2,10 @@ import { CheckCircle, Loader2, LogIn } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { TeamAvatar } from '@/components/ui/TeamAvatar.tsx';
+import { toastError, toastSuccess } from '@/components/ui/toast';
 import { useAuth } from '@/context/AuthContext';
 import { useInvitePreview } from '@/features/team/hooks/useInvitePreview';
 import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
-import { toastError, toastSuccess } from '@/lib/toast';
 
 export default function JoinTeamPage() {
   const { code } = useParams<{ code: string }>();
@@ -87,7 +87,6 @@ export default function JoinTeamPage() {
               name={team.name}
               className="w-full h-full rounded-2xl"
               fallbackClassName="w-full h-full rounded-2xl text-white text-2xl"
-              fallbackStyle={{ background: accent }}
             />
           </div>
           <h1 className="text-2xl font-bold text-grey-800 mb-2">Únete a {team.name}</h1>

@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 
 import { AppProgress } from '@/components/ui/AppProgress';
 import { AppTooltip } from '@/components/ui/AppTooltip';
+import { toastSuccess } from '@/components/ui/toast';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import {type Rank, ranks} from "@/features/team/types/rankTypes.ts";
-import { toastSuccess } from '@/lib/toast';
 
 export interface UserProfile {
   uid: string;

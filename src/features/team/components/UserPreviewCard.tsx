@@ -58,15 +58,6 @@ export const UserPreviewCard: React.FC<UserPreviewCardProps> = ({
     );
   }
 
-  const initials = user.displayName
-    ? user.displayName
-        .split(' ')
-        .map((w) => w[0])
-        .join('')
-        .substring(0, 2)
-        .toUpperCase()
-    : 'U';
-
   return (
     <div className={`flex items-center gap-3 p-3 rounded-lg border ${
       isAlreadyInTeam
@@ -81,14 +72,8 @@ export const UserPreviewCard: React.FC<UserPreviewCardProps> = ({
       <UserAvatar
         src={user.photoURL}
         alt={user.displayName || 'Usuario'}
-        initials={initials}
         className="w-10 h-10"
         fallbackClassName="text-white text-sm font-medium"
-        fallbackStyle={{
-          background: isAlreadyInTeam
-            ? 'linear-gradient(135deg, #9ca3af, #6b7280)'
-            : 'linear-gradient(135deg, #10b981, #059669)',
-        }}
       />
       <div className="flex-1 min-w-0">
         <p className={`text-sm font-semibold truncate ${

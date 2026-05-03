@@ -12,8 +12,8 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 
+import { toastError, toastSuccess } from '@/components/ui/toast';
 import { useGenerateInviteCode } from '@/features/team/hooks/useGenerateInviteCode';
-import { toastError, toastSuccess } from '@/lib/toast';
 
 interface InviteMembersModalProps {
   isOpen: boolean;

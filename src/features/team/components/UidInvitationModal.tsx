@@ -1,13 +1,13 @@
 import { AlertCircle, Check, Loader2, Send, Users, X } from 'lucide-react';
 import { useState } from 'react';
 
+import { toastError, toastSuccess } from '@/components/ui/toast';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { useDirectInvitation } from '@/features/team/hooks/useDirectInvitation';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUserPreview } from '@/features/team/hooks/useUserPreview';
-import { toastError, toastSuccess } from '@/lib/toast';
 
 interface UidInvitationModalProps {
   isOpen: boolean;
@@ -37,18 +37,6 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
   const isUserAlreadyInTeam =
     userPreview?.exists &&
     (members.some((m) => m.uid === userPreview.uid) || team?.leaderUid === userPreview.uid);
-
-  const getInitials = (displayName: string | null, uid: string): string => {
-    if (displayName) {
-      return displayName
-        .split(' ')
-        .map((word) => word.charAt(0))
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
-    }
-    return uid.slice(0, 2).toUpperCase();
-  };
 
   const handleInvite = async () => {
     if (userPreview?.exists && userPreview.uid && !isUserAlreadyInTeam && teamId) {
@@ -135,7 +123,6 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
                       <UserAvatar
                         src={userPreview.photoUrl}
                         alt={userPreview.displayName}
-                        initials={getInitials(userPreview.displayName, userPreview.uid)}
                         className="w-full h-full"
                         fallbackClassName="text-white text-[8px]"
                       />

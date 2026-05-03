@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { toastError, toastSuccess } from '@/components/ui/toast';
 import { useAuth } from '@/context/AuthContext';
 import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
-import { toastError, toastSuccess } from '@/lib/toast';
 
 export default function RedeemInvitePage() {
   const { code: urlCode } = useParams<{ code: string }>();

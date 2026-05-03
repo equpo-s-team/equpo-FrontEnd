@@ -1,9 +1,9 @@
-import { Camera, Loader2,Clipboard } from 'lucide-react';
+import { Camera, Clipboard,Loader2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
-import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { toastSuccess } from '@/components/ui/toast';
+import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { type UserProfileSaveInput } from '@/features/team/types';
 
 import { type UserProfile } from './UserProfileCard.tsx';

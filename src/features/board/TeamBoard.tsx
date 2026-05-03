@@ -8,7 +8,7 @@ import { COLUMN_TO_STATUS, COLUMNS, STATUS_TO_COLUMN } from '@/features/board/ut
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
-import { toastError } from '@/lib/toast';
+import { toastError } from '@/components/ui/toast.ts';
 
 import AppHeader from './components/AppHeader';
 import BoardColumn from './components/BoardColumn';

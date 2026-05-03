@@ -1,5 +1,7 @@
+import {MoonIcon, SunIcon} from "lucide-react";
 import { useEffect, useState } from 'react';
 
+import {AppTooltip} from "@/components/ui/AppTooltip.tsx";
 import { darkModeManager } from '@/lib/darkMode';
 
 export default function DarkModeToggle() {
@@ -15,12 +17,16 @@ export default function DarkModeToggle() {
   };
 
   return (
+    <AppTooltip content={"Cambiar entre temas"}>
+
+
     <button
       onClick={handleToggle}
-      className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+      className="p-2 rounded-lg bg-gradient-orange-bg text-white  dark:text-white dark:bg-gradient-darkblue-bg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors shadow-neonPink dark:shadow-neonBlue"
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
-      {isDark ? '🌙' : '☀️'}
+      {isDark ? <MoonIcon /> : <SunIcon />}
     </button>
+    </AppTooltip>
   );
 }

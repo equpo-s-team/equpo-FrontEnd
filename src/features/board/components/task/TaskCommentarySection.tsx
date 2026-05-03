@@ -26,15 +26,6 @@ function timeAgo(dateStr: string): string {
   return `hace ${days} d`;
 }
 
-function getInitialsFrom(name: string | null): string {
-  if (!name) return '?';
-  return name
-    .split(' ')
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? '')
-    .join('');
-}
-
 interface AuthorInfo {
   displayName: string | null;
   photoURL: string | null;
@@ -75,7 +66,6 @@ function CommentaryItem({
         <UserAvatar
           src={author.photoURL ?? null}
           alt={author.displayName ?? commentary.userUid}
-          initials={getInitialsFrom(author.displayName)}
           className="w-7 h-7 text-[10px]"
         />
       </div>

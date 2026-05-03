@@ -75,7 +75,7 @@ export function StatusDonut({ data }: StatusDonutProps) {
 
   return (
     <div
-      className="relative flex-shrink-0 bg-white dark:bg-gray-800 border border-grey-150 rounded-[14px] p-3 sm:p-4 lg:p-6 overflow-hidden"
+      className="relative flex-shrink-0 bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 rounded-[14px] p-3 sm:p-4 lg:p-6 overflow-hidden"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.03)' }}
     >
       {/* Corner neon glow */}

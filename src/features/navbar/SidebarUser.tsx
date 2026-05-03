@@ -19,17 +19,14 @@ export default function SidebarUser() {
   const navigate = useNavigate();
 
   const activeTeam = teams.find((t) => t.id === teamId);
-  // Default to member if not found for whatever reason
   const teamRole = activeTeam?.members?.find((m) => m.userUid === user?.uid)?.role || 'Miembro';
 
-  // Create a friendlier display version of the role
   const displayRole =
     typeof teamRole === 'string' && teamRole.length > 0
       ? teamRole.charAt(0).toUpperCase() + teamRole.slice(1)
       : 'Miembro';
 
   const userName = user?.displayName || user?.email?.split('@')[0] || 'Usuario';
-  const initial = userName.charAt(0).toUpperCase();
 
   return (
     <div
@@ -43,9 +40,7 @@ export default function SidebarUser() {
         <UserAvatar
           src={user?.photoURL}
           alt={userName}
-          initials={initial}
           className="w-8 h-8"
-          fallbackClassName="bg-gradient-blue-bg text-secondary font-maxwell text-xs select-none"
           loading="eager"
         />
         <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green border-[1.5px] border-dark" />

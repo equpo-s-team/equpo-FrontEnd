@@ -15,7 +15,7 @@ import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
-import { toastError, toastSuccess } from '@/lib/toast';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 
 import { AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
 import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';

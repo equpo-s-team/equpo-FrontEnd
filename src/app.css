@@ -401,7 +401,7 @@
 /* ── CUSTOM SCROLLBAR ── */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #bbaee7 #f5f4f1;
+  scrollbar-color: #bbaee7 transparent;
 }
 
 html::-webkit-scrollbar {
@@ -410,17 +410,17 @@ html::-webkit-scrollbar {
 }
 
 html::-webkit-scrollbar-track {
-  background: #f5f4f1;
+  background: transparent;
   border-radius: 4px;
 }
 
 html::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #9cedc1 0%, #60afff 100%);
+  background: transparent;
   border-radius: 4px;
 }
 
 html::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #86f0fd 0%, #5961f9 100%);
+  background: transparent;
 }
 
 html::-webkit-scrollbar-button {

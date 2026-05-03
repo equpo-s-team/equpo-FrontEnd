@@ -1,6 +1,6 @@
 import { updateProfile } from 'firebase/auth';
 
-import { uploadUserProfileFile } from '@/components/ui/avatar/avatarStorage';
+import { uploadUserProfileFile } from '@/lib/utils/avatar/avatarStorage';
 import {
   type GeneratedDataConnectModule,
   type UpdateUserProfileInput,

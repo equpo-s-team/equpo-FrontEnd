@@ -11,7 +11,7 @@ import {
 } from 'firebase/auth';
 import { useCallback, useState } from 'react';
 
-import { resolveCanonicalAvatarUrl } from '@/components/ui/avatar/avatarStorage';
+import { resolveCanonicalAvatarUrl } from '@/lib/utils/avatar/avatarStorage';
 import { auth } from '@/firebase';
 
 import { useDatabaseUser } from './useDatabaseUser';

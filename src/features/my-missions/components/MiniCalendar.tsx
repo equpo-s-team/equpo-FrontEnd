@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar';
 import type { TeamTask } from '@/features/board/types';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils.ts';
 
 interface MiniCalendarProps {
   selectedDate: Date;

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { type FormData, type FormErrors } from '@/features/auth';
 import { PasswordStrengthIndicator } from '@/features/auth';
-import { cn } from '@/lib/utils.ts';
+import { cn } from '@/lib/utils/utils.ts';
 
 // Google icon SVG (same as LoginForm)
 const GoogleIcon = () => (

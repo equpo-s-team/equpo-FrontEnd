@@ -262,10 +262,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                           <UserAvatar
                             src={m.photoUrl}
                             alt={memberName}
-                            initials={memberName.substring(0, 2).toUpperCase()}
                             className="w-full h-full"
                             fallbackClassName="text-white text-xs"
-                            fallbackStyle={{ background: cfg.gradient }}
                           />
                         </div>
                         <div className="flex-1 min-w-0">

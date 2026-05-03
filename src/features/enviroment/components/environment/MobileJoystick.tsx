@@ -1,3 +1,4 @@
+import {ArrowUpFromLine} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { type InputState } from '../../hooks/usePlayerInput';
@@ -157,7 +158,7 @@ export function MobileJoystick({ inputRef }: MobileJoystickProps) {
         onPointerUp={handleJumpEnd}
         onPointerCancel={handleJumpEnd}
       >
-        Saltar
+        <ArrowUpFromLine className="w-8 h-8"/>
       </button>
     </>
   );

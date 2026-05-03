@@ -13,9 +13,9 @@ import MessageBubble from './MessageBubble';
 function DateDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 my-4">
-      <div className="flex-1 h-px bg-grey-150 dark: bg-grey-700" />
-      <span className="font-body text-xs text-grey-400 font-medium">{label}</span>
-      <div className="flex-1 h-px bg-grey-150 dark: bg-grey-700" />
+      <div className="flex-1 h-px bg-grey-150 dark: dark:bg-grey-700" />
+      <span className="font-body text-xs text-grey-300 font-medium">{label}</span>
+      <div className="flex-1 h-px bg-grey-150 dark: dark:bg-grey-700" />
     </div>
   );
 }

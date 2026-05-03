@@ -196,10 +196,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({
           </button>
         </div>
         {errors.confirmPassword && (
-          <p
-            id="confirm-password-error"
-            className="text-red text-xs mt-1 flex items-center gap-1"
-          >
+          <p id="confirm-password-error" className="text-red text-xs mt-1 flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
             {errors.confirmPassword}
           </p>

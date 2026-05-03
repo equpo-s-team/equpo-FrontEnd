@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 import { useTeam } from '@/context/TeamContext.tsx';
-import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
+import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useAuth } from '@/hooks/useAuth';

@@ -9,8 +9,8 @@ import { FieldLabel } from '@/components/ui/FieldLabel.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { TagChip } from '@/components/ui/TagChip.tsx';
-import type { TaskStatus, TeamTask } from '@/features/board/types';
-import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
+import { STATUS_TO_COLUMN, type TaskSidebarProps } from '@/features/board/types';
+import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
@@ -25,6 +25,7 @@ import { useRecurringRollover } from '../../hooks/useRecurringRollover.ts';
 import { useUpdateTask } from '../../hooks/useUpdateTask.ts';
 import { useUpdateTaskStep } from '../../hooks/useUpdateTaskStep.ts';
 import type { TaskStep } from '../../types/taskSchema.ts';
+import { COLUMN_CONFIG } from '../../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../../utils/markdownUtils.ts';
 import { needsRollover } from '../../utils/recurringRollover.ts';
 import {
@@ -35,37 +36,11 @@ import {
   STATUS_TO_PROGRESS,
   toInputDatetime,
 } from '../../utils/taskUtils.ts';
-import { COLUMN_CONFIG } from '../columnConfig';
 import { MarkdownDescriptionEditor } from '../MarkdownDescriptionEditor.tsx';
 import { TaskAssigneesPreview } from './TaskAssigneesPreview';
 import TaskCommentarySection from './TaskCommentarySection';
 import type { LocalStepDraft } from './TaskStepsSection';
 import TaskStepsSection from './TaskStepsSection';
-
-type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
-
-const STATUS_TO_COLUMN: Record<TaskStatus, BoardColumnId> = {
-  todo: 'todo',
-  'in-progress': 'progress',
-  'in-qa': 'qa',
-  done: 'done',
-};
-
-interface TaskSidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-  mode: 'create' | 'edit' | 'view' | 'readonly';
-  task?: TeamTask | null;
-  teamId: string;
-  defaultStatus?: string;
-  onTaskCreated?: () => void;
-  onTaskUpdated?: () => void;
-  onTaskDeleted?: () => void;
-  /** Current user's role in the team */
-  myRole?: string;
-  /** Current user's Firebase UID */
-  currentUserUid?: string | null;
-}
 
 export default function TaskSidebar({
   isOpen,
@@ -223,11 +198,11 @@ export default function TaskSidebar({
 
     // Require at least one step in create mode
     if (mode === 'create' && localSteps.length === 0) {
-      e.steps = 'Agrega al menos un paso antes de crear la tarea';
+      e.steps = 'Agrega al menos un paso antes de crear la misión';
     }
     // Require at least one step in edit mode when drafts are loaded
     if (mode !== 'create' && editStepDrafts !== null && editStepDrafts.length === 0) {
-      e.steps = 'La tarea debe tener al menos un paso';
+      e.steps = 'La misión debe tener al menos un paso';
     }
 
     const catArray = categories
@@ -317,7 +292,7 @@ export default function TaskSidebar({
       }
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al guardar la tarea';
+      const msg = err instanceof Error ? err.message : 'Error al guardar la misión';
       toastError('Error al guardar', msg);
     } finally {
       setIsSubmitting(false);
@@ -330,10 +305,10 @@ export default function TaskSidebar({
     try {
       await deleteTask.mutateAsync({ teamId, taskId: task.id });
       play('taskDeleted');
-      toastSuccess('Tarea eliminada', 'La tarea fue eliminada permanentemente.');
+      toastSuccess('Tarea eliminada', 'La misión fue eliminada permanentemente.');
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al eliminar la tarea';
+      const msg = err instanceof Error ? err.message : 'Error al eliminar la misión';
       toastError('Error al eliminar', msg);
     } finally {
       setIsSubmitting(false);
@@ -456,10 +431,15 @@ export default function TaskSidebar({
   const assignedUserUids = (task?.assignedUsers ?? []).map((u) => u.uid);
   const isSidebarSpectator = myRole === 'spectator';
   const isSidebarLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isSidebarAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
+  const hasAssignees = (task?.assignedUsers?.length ?? 0) > 0 || Boolean(task?.assignedGroupId);
+  
+  const assignedGroupInfo = groups.find((g) => g.id === task?.assignedGroupId);
+  const isAssignedViaGroup = currentUserUid && assignedGroupInfo?.members?.some((m) => m.uid === currentUserUid);
+  const isSidebarAssigned = currentUserUid ? (assignedUserUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)) : false;
+  
   const isTaskDone = task?.status === 'done';
   const canEditTask =
-    !isSidebarSpectator && (isSidebarLeaderOrCollab || !isSidebarAssigned) && !isTaskDone;
+    !isSidebarSpectator && !isTaskDone && (isSidebarLeaderOrCollab || !hasAssignees || isSidebarAssigned);
 
   const selectedPriority =
     PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? priority;
@@ -656,7 +636,7 @@ export default function TaskSidebar({
                 taskStatus={task.status}
                 currentUserUid={currentUserUid}
                 myRole={myRole}
-                assignedUserUids={(task.assignedUsers ?? []).map((u) => u.uid)}
+                isAssigned={isSidebarAssigned}
                 canEdit={isEditView}
                 taskHasAssignment={
                   (task.assignedUsers?.length ?? 0) > 0 || Boolean(task.assignedGroupId)
@@ -692,7 +672,7 @@ export default function TaskSidebar({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   maxLength={100}
-                  placeholder="Nombre de la tarea"
+                  placeholder="Nombre de la misión"
                   className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
                 />
                 {errors.name && <p className="mt-1 text-xs text-red">{errors.name}</p>}
@@ -732,7 +712,7 @@ export default function TaskSidebar({
                     taskStatus={task?.status ?? 'todo'}
                     currentUserUid={currentUserUid}
                     myRole={myRole}
-                    assignedUserUids={(task?.assignedUsers ?? []).map((u) => u.uid)}
+                    isAssigned={isSidebarAssigned}
                     canEdit={true}
                     createMode={mode === 'create'}
                     localSteps={localSteps}
@@ -806,7 +786,10 @@ export default function TaskSidebar({
                       onChange={setAssignedUserUid}
                       options={[
                         { value: '', label: 'Sin asignar' },
-                        ...assignableMembers.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                        ...assignableMembers.map((m) => ({
+                          value: m.uid,
+                          label: m.displayName || m.uid,
+                        })),
                       ]}
                       triggerClassName="w-full"
                     />

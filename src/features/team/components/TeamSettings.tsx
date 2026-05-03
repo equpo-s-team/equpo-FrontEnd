@@ -108,7 +108,7 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
         </div>
 
         <p className="text-sm text-grey-600 mb-4 font-body">
-          Se eliminarán todas las tareas, grupos, archivos y miembros del equipo. Escribe{' '}
+          Se eliminarán todas las misiones, grupos, archivos y miembros del equipo. Escribe{' '}
           <span className="font-bold text-grey-800">{teamName}</span> para confirmar.
         </p>
 
@@ -174,9 +174,7 @@ function GroupDeleteConfirmDialog({
           }
         }}
       />
-      <div
-        className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200"
-      >
+      <div className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-card-lg w-full max-w-sm animate-in fade-in zoom-in-95 duration-200">
         <div className="w-12 h-12 rounded-2xl bg-red/10 flex items-center justify-center text-red mb-5">
           <AlertTriangle size={24} />
         </div>
@@ -801,7 +799,8 @@ export default function TeamSettings() {
                         {group.groupName}
                       </p>
                       <p className="text-xs text-grey-400">
-                        {group.memberCount ?? groupMembers.length} miembro{(group.memberCount ?? groupMembers.length) !== 1 ? 's' : ''}
+                        {group.memberCount ?? groupMembers.length} miembro
+                        {(group.memberCount ?? groupMembers.length) !== 1 ? 's' : ''}
                       </p>
                     </div>
 
@@ -823,9 +822,7 @@ export default function TeamSettings() {
                         </div>
                       ))}
                       {overflow > 0 && (
-                        <div
-                          className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-bold text-grey-600 bg-grey-200"
-                        >
+                        <div className="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-bold text-grey-600 bg-grey-200">
                           +{overflow}
                         </div>
                       )}
@@ -872,7 +869,7 @@ export default function TeamSettings() {
               <div>
                 <p className="text-sm font-semibold text-red mb-1 font-body">Zona de Peligro</p>
                 <p className="text-xs text-red/80 font-body">
-                  Eliminar este equipo borrará permanentemente todas sus misiones, tareas, y
+                  Eliminar este equipo borrará permanentemente todas sus misiones, misiones, y
                   recompensas asociadas.
                 </p>
               </div>

@@ -31,7 +31,7 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
       </div>
 
       <div className="relative z-10 grid shrink-0 grid-cols-[1fr_auto_auto] gap-2 sm:gap-3 border-b border-grey-150 pb-2">
-        <span className="text-xs text-grey-400">Tarea</span>
+        <span className="text-xs text-grey-400">Misión</span>
         <span className="text-xs text-grey-400">Dias</span>
         <span className="text-xs text-grey-400">Prio.</span>
       </div>

@@ -270,7 +270,7 @@ export default function DayTimeline({
               <div className="text-center">
                 <Calendar size={32} className="mx-auto mb-2 text-grey-300" />
                 <p className="text-sm font-medium text-grey-400 font-body">
-                  Sin tareas para este día
+                  Sin misiones para este día
                 </p>
                 <p className="text-xs text-grey-300 font-body mt-1">
                   Selecciona otro día en el calendario

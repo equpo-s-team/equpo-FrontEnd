@@ -1,7 +1,7 @@
 import { Check, ChevronLeft, ChevronRight, Lock, Plus, Shield, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import {useSoundEffects} from "@/hooks/useSoundEffects.ts";
+import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 import { toastError } from '@/lib/toast.ts';
 
 import { useTaskStepsRealtime } from '../../hooks/useTaskStepsRealtime.ts';
@@ -27,8 +27,8 @@ interface TaskStepsSectionProps {
   currentUserUid: string | null;
   /** Role of the current user in the team */
   myRole: string;
-  /** UIDs of users assigned to the task */
-  assignedUserUids: string[];
+  /** Whether the current user is assigned to the task (directly or via group) */
+  isAssigned: boolean;
   /** Whether to show the add-step input (create/edit mode) */
   canEdit: boolean;
   /** In create mode we receive the steps locally (not from API) */
@@ -161,9 +161,8 @@ export default function TaskStepsSection({
   teamId,
   taskId,
   taskStatus,
-  currentUserUid,
   myRole,
-  assignedUserUids,
+  isAssigned,
   canEdit,
   createMode = false,
   localSteps = [],
@@ -184,7 +183,6 @@ export default function TaskStepsSection({
 
   const isSpectator = myRole === 'spectator';
   const isLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
 
   // Edit task (add/delete/edit steps): reviewers + leadership can edit, assigned workers cannot.
   const canEditTask = !isSpectator && (isLeaderOrCollab || !isAssigned);
@@ -230,7 +228,7 @@ export default function TaskStepsSection({
       <div className="flex flex-col mt-4 gap-2">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400">
-            Pasos de la tarea
+            Pasos de la misión
           </span>
           <span className="text-[11px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-full">
             0%
@@ -355,7 +353,7 @@ export default function TaskStepsSection({
     if (!isSuperoStep && taskStatus === 'todo' && isDone && !taskHasAssignment) {
       toastError(
         'No se puede iniciar',
-        'Asigna un usuario o grupo a la tarea antes de marcar pasos.',
+        'Asigna un usuario o grupo a la misión antes de marcar pasos.',
       );
       return;
     }
@@ -386,7 +384,7 @@ export default function TaskStepsSection({
     <div className="mt-4">
       <div className="flex items-center justify-between mb-2">
         <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400">
-          Pasos de la tarea
+          Pasos de la misión
         </span>
         {isLoading && !isDraftEditing ? (
           <span className="text-[11px] text-grey-300">Cargando…</span>

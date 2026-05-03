@@ -52,7 +52,7 @@ interface TaskDetailPanelProps {
   onClose: () => void;
   onEdit: (task: TeamTask) => void;
   members?: { uid: string; displayName: string | null; photoUrl?: string | null; role?: string }[];
-  groups?: { id: string; groupName: string; photoUrl?: string | null }[];
+  groups?: { id: string; groupName: string; photoUrl?: string | null; members?: { uid: string }[] }[];
   currentUserUid?: string | null;
   myRole?: string;
 }
@@ -101,7 +101,7 @@ export default function TaskDetailPanel({
           <div className="w-12 h-12 rounded-2xl bg-grey-100 flex items-center justify-center mx-auto mb-3">
             <Zap size={20} className="text-grey-300" />
           </div>
-          <p className="text-sm font-medium text-grey-400 font-body">Selecciona una tarea</p>
+          <p className="text-sm font-medium text-grey-400 font-body">Selecciona una misión</p>
         </div>
       </div>
     );
@@ -113,11 +113,11 @@ export default function TaskDetailPanel({
   const selectedGroup = groups.find((group) => group.id === task.assignedGroupId) ?? null;
   const isOverdue = isTaskOverdue(task);
 
-
   const panelAssignedUids = (task.assignedUsers ?? []).map((u) => u.uid);
   const isPanelSpectator = myRole === 'spectator';
   const isPanelLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isPanelAssigned = currentUserUid ? panelAssignedUids.includes(currentUserUid) : false;
+  const isAssignedViaGroup = currentUserUid && selectedGroup?.members?.some((m) => m.uid === currentUserUid);
+  const isPanelAssigned = currentUserUid ? (panelAssignedUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)) : false;
   const canEditTask = !isPanelSpectator && (isPanelLeaderOrCollab || !isPanelAssigned);
 
   const assignableMembers = members.filter((m) => m.role !== 'spectator');
@@ -294,7 +294,7 @@ export default function TaskDetailPanel({
               "
             >
               <Edit3 size={13} />
-              Editar tarea
+              Editar misión
             </button>
           )}
 
@@ -307,7 +307,7 @@ export default function TaskDetailPanel({
               canEdit={false}
               currentUserUid={currentUserUid}
               myRole={myRole}
-              assignedUserUids={panelAssignedUids}
+              isAssigned={isPanelAssigned}
             />
           )}
         </div>

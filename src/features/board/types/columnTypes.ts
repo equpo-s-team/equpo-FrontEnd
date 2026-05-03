@@ -93,6 +93,8 @@ export interface BoardColumnProps {
   ) => void | Promise<void>;
   onCardClick: (card: Card) => void;
   canMoveCard?: boolean;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 export type BoardCardData = {

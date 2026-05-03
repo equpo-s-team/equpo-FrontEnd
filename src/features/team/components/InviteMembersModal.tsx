@@ -154,21 +154,21 @@ export default function InviteMembersModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm font-body animate-fade-in">
       <div
-        className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100 animate-slide-up"
+        className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100 animate-slide-up"
         style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 pb-4 border-b border-grey-100">
+        <div className="flex items-center justify-between p-6 pb-4 border-b border-grey-100 dark:border-gray-700">
           <div>
-            <h2 className="text-lg font-bold text-grey-800">Invitar miembros</h2>
-            <p className="text-xs text-grey-400 mt-0.5">{teamName}</p>
+            <h2 className="text-lg font-bold text-grey-800 dark:text-gray-100">Invitar miembros</h2>
+            <p className="text-xs text-grey-400 dark:text-grey-500 mt-0.5">{teamName}</p>
           </div>
           <button
             onClick={() => {
               reset();
               onClose();
             }}
-            className="w-8 h-8 flex items-center justify-center rounded-xl text-grey-400 hover:text-grey-600 hover:bg-grey-100 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-xl text-grey-400 dark:text-grey-500 hover:text-grey-600 dark:hover:text-grey-300 hover:bg-grey-100 dark:hover:bg-gray-700 transition-colors"
           >
             <X size={18} />
           </button>
@@ -178,7 +178,7 @@ export default function InviteMembersModal({
           <div className="px-6 py-6 space-y-6">
             {/* Role Selection */}
             <div className="space-y-3">
-              <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 flex items-center gap-2">
+              <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 flex items-center gap-2">
                 <Crown size={12} />
                 Rol del invitado
               </label>
@@ -190,7 +190,7 @@ export default function InviteMembersModal({
                     className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${
                       role === opt.value
                         ? 'border-current shadow-sm'
-                        : 'border-grey-150 hover:border-grey-200 bg-grey-50'
+                        : 'border-grey-150 dark:border-gray-600 hover:border-grey-200 dark:hover:border-gray-500 bg-grey-50 dark:bg-gray-700'
                     }`}
                     style={
                       role === opt.value
@@ -202,21 +202,21 @@ export default function InviteMembersModal({
                       {opt.icon}
                     </span>
                     <span
-                      className={`text-xs font-medium ${role === opt.value ? 'text-grey-800' : 'text-grey-600'}`}
+                      className={`text-xs font-medium ${role === opt.value ? 'text-grey-800 dark:text-gray-100' : 'text-grey-600 dark:text-grey-400'}`}
                     >
                       {opt.label}
                     </span>
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-grey-400">
+              <p className="text-xs text-grey-400 dark:text-grey-500">
                 {ROLE_OPTIONS.find((r) => r.value === role)?.desc}
               </p>
             </div>
 
             {/* Expiry Selection */}
             <div className="space-y-3">
-              <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 flex items-center gap-2">
+              <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 flex items-center gap-2">
                 <Clock size={12} />
                 Válido por
               </label>
@@ -227,8 +227,8 @@ export default function InviteMembersModal({
                     onClick={() => setExpiresHours(opt.hours)}
                     className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium border transition-all ${
                       expiresHours === opt.hours
-                        ? 'text-grey-800 border-grey-300 bg-grey-100'
-                        : 'text-grey-600 border-grey-150 bg-white hover:bg-grey-50'
+                        ? 'text-grey-800 dark:text-gray-100 border-grey-300 dark:border-gray-600 bg-grey-100 dark:bg-gray-700'
+                        : 'text-grey-600 dark:text-grey-400 border-grey-150 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-grey-50 dark:hover:bg-gray-700'
                     }`}
                   >
                     {opt.label}
@@ -239,7 +239,7 @@ export default function InviteMembersModal({
 
             {/* Uses Selection */}
             <div className="space-y-3">
-              <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 flex items-center gap-2">
+              <label className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500 flex items-center gap-2">
                 <Share2 size={12} />
                 Usos máximos
               </label>
@@ -250,8 +250,8 @@ export default function InviteMembersModal({
                     onClick={() => setMaxUses(opt.value)}
                     className={`py-2 px-4 rounded-xl text-sm font-medium border transition-all ${
                       maxUses === opt.value
-                        ? 'text-grey-800 border-grey-300 bg-grey-100'
-                        : 'text-grey-600 border-grey-150 bg-white hover:bg-grey-50'
+                        ? 'text-grey-800 dark:text-gray-100 border-grey-300 dark:border-gray-600 bg-grey-100 dark:bg-gray-700'
+                        : 'text-grey-600 dark:text-grey-400 border-grey-150 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-grey-50 dark:hover:bg-gray-700'
                     }`}
                   >
                     {opt.label}
@@ -290,49 +290,49 @@ export default function InviteMembersModal({
               >
                 <Check size={24} className="text-green" />
               </div>
-              <h3 className="text-lg font-bold text-grey-800">¡Invitación lista!</h3>
-              <p className="text-xs text-grey-400 mt-1">
+              <h3 className="text-lg font-bold text-grey-800 dark:text-gray-100">¡Invitación lista!</h3>
+              <p className="text-xs text-grey-400 dark:text-grey-500 mt-1">
                 Comparte el código o el link con quien quieras invitar
               </p>
             </div>
 
             {/* Code Card */}
-            <div className="bg-grey-50 rounded-xl p-4 space-y-3 border border-grey-100">
+            <div className="bg-grey-50 dark:bg-gray-700 rounded-xl p-4 space-y-3 border border-grey-100 dark:border-gray-600">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400">
+                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500">
                   Código de invitación
                 </span>
                 <button
                   onClick={() => void copyToClipboard(generated.code, 'code')}
-                  className="flex items-center gap-1.5 text-xs font-medium text-grey-500 hover:text-grey-700 transition-colors"
+                  className="flex items-center gap-1.5 text-xs font-medium text-grey-500 dark:text-grey-400 hover:text-grey-700 dark:hover:text-grey-300 transition-colors"
                 >
                   {copiedCode ? <Check size={14} className="text-green" /> : <Copy size={14} />}
                   {copiedCode ? 'Copiado' : 'Copiar'}
                 </button>
               </div>
-              <div className="bg-white rounded-lg border border-grey-150 px-4 py-3 text-center">
-                <span className="text-2xl font-bold tracking-[0.15em] text-grey-800 font-mono">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-grey-150 dark:border-gray-600 px-4 py-3 text-center">
+                <span className="text-2xl font-bold tracking-[0.15em] text-grey-800 dark:text-gray-100 font-mono">
                   {generated.code}
                 </span>
               </div>
             </div>
 
             {/* Link Card */}
-            <div className="bg-grey-50 rounded-xl p-4 space-y-3 border border-grey-100">
+            <div className="bg-grey-50 dark:bg-gray-700 rounded-xl p-4 space-y-3 border border-grey-100 dark:border-gray-600">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400">
+                <span className="text-xs font-semibold uppercase tracking-widest text-grey-400 dark:text-grey-500">
                   Link de invitación
                 </span>
                 <button
                   onClick={() => void copyToClipboard(generated.link, 'link')}
-                  className="flex items-center gap-1.5 text-xs font-medium text-grey-500 hover:text-grey-700 transition-colors"
+                  className="flex items-center gap-1.5 text-xs font-medium text-grey-500 dark:text-grey-400 hover:text-grey-700 dark:hover:text-grey-300 transition-colors"
                 >
                   {copiedLink ? <Check size={14} className="text-green" /> : <Copy size={14} />}
                   {copiedLink ? 'Copiado' : 'Copiar'}
                 </button>
               </div>
-              <div className="bg-white rounded-lg border border-grey-150 px-4 py-3">
-                <p className="text-xs text-grey-600 break-all font-mono leading-relaxed">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-grey-150 dark:border-gray-600 px-4 py-3">
+                <p className="text-xs text-grey-600 dark:text-grey-400 break-all font-mono leading-relaxed">
                   {generated.link}
                 </p>
               </div>
@@ -342,7 +342,7 @@ export default function InviteMembersModal({
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => void copyToClipboard(generated.link, 'link')}
-                className="flex items-center justify-center gap-2 py-3 rounded-xl bg-grey-800 text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
+                className="flex items-center justify-center gap-2 py-3 rounded-xl bg-grey-800 dark:bg-gray-900 text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
               >
                 <Copy size={16} />
                 Copiar link
@@ -360,7 +360,7 @@ export default function InviteMembersModal({
             {/* Create Another */}
             <button
               onClick={reset}
-              className="w-full py-3 rounded-xl border border-grey-150 text-sm font-medium text-grey-600 hover:bg-grey-50 transition-all"
+              className="w-full py-3 rounded-xl border border-grey-150 dark:border-gray-600 text-sm font-medium text-grey-600 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-700 transition-all"
             >
               Crear otra invitación
             </button>

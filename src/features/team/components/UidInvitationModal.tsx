@@ -65,13 +65,13 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fade-in">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl border border-grey-100 transform transition-all duration-300 scale-100 animate-slide-up">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-2xl border border-grey-100 dark:border-gray-700 transform transition-all duration-300 scale-100 animate-slide-up">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-grey-100">
-          <h2 className="text-lg font-bold text-grey-800 font-body">Invitar por UID</h2>
+        <div className="flex items-center justify-between p-6 border-b border-grey-100 dark:border-gray-700">
+          <h2 className="text-lg font-bold text-grey-800 dark:text-gray-100 font-body">Invitar por UID</h2>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-600 hover:bg-grey-100 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-grey-600 dark:hover:text-grey-300 hover:bg-grey-100 dark:hover:bg-gray-700 transition-colors"
           >
             <X size={16} />
           </button>
@@ -81,7 +81,7 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
         <div className="p-6 space-y-4">
           {/* Input */}
           <div>
-            <label className="block text-sm font-medium text-grey-700 mb-2 font-body">
+            <label className="block text-sm font-medium text-grey-700 dark:text-gray-300 mb-2 font-body">
               UID del usuario
             </label>
             <div className="relative">
@@ -90,12 +90,12 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
                 value={inviteUid}
                 onChange={(e) => setInviteUid(e.target.value)}
                 placeholder="Ingresa el UID del usuario"
-                className="w-full px-3 py-2 text-sm border border-grey-200 rounded-lg bg-white text-grey-800 placeholder-grey-400 focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-grey-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-grey-800 dark:text-gray-100 placeholder-grey-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent"
                 autoFocus
               />
               {isUserPreviewLoading && (
                 <div className="absolute right-3 top-2.5">
-                  <Loader2 size={14} className="animate-spin text-grey-300" />
+                  <Loader2 size={14} className="animate-spin text-grey-300 dark:text-grey-600" />
                 </div>
               )}
             </div>
@@ -103,18 +103,18 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
 
           {/* User Preview */}
           {inviteUid.trim() && (
-            <div className="bg-grey-50 rounded-xl p-3 border border-grey-100">
+            <div className="bg-grey-50 dark:bg-gray-700 rounded-xl p-3 border border-grey-100 dark:border-gray-600">
               {isUserPreviewLoading ? (
                 <div className="flex items-center gap-2 py-1">
-                  <div className="w-6 h-6 rounded-full bg-grey-200 animate-pulse" />
+                  <div className="w-6 h-6 rounded-full bg-grey-200 dark:bg-gray-600 animate-pulse" />
                   <div className="flex-1">
-                    <div className="h-3 bg-grey-200 rounded animate-pulse w-3/4" />
+                    <div className="h-3 bg-grey-200 dark:bg-gray-600 rounded animate-pulse w-3/4" />
                   </div>
                 </div>
               ) : userPreviewError ? (
                 <div className="flex items-center gap-2 py-1">
                   <AlertCircle size={14} className="text-red" />
-                  <span className="text-xs text-red">Error al buscar usuario</span>
+                  <span className="text-xs text-red dark:text-red-400">Error al buscar usuario</span>
                 </div>
               ) : userPreview ? (
                 <div className="space-y-2">
@@ -128,10 +128,10 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-grey-800 truncate">
+                      <p className="text-xs font-medium text-grey-800 dark:text-gray-100 truncate">
                         {userPreview.displayName}
                       </p>
-                      <p className="text-xs text-grey-400 truncate">{userPreview.uid}</p>
+                      <p className="text-xs text-grey-400 dark:text-grey-500 truncate">{userPreview.uid}</p>
                     </div>
                     {userPreview.exists ? (
                       isUserAlreadyInTeam ? (
@@ -149,17 +149,17 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
                     {!userPreview.exists ? (
                       <div className="flex items-center gap-2 text-red">
                         <X size={14} className="flex-shrink-0" />
-                        <span className="font-medium">Usuario no encontrado</span>
+                        <span className="font-medium dark:text-gray-100">Usuario no encontrado</span>
                       </div>
                     ) : isUserAlreadyInTeam ? (
                       <div className="flex items-center gap-2 text-blue">
                         <Users size={14} className="flex-shrink-0" />
-                        <span className="font-medium">Ya está en el equipo</span>
+                        <span className="font-medium dark:text-gray-100">Ya está en el equipo</span>
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 text-green">
                         <Check size={14} className="flex-shrink-0" />
-                        <span className="font-medium">Listo para invitar</span>
+                        <span className="font-medium dark:text-gray-100">Listo para invitar</span>
                       </div>
                     )}
                   </div>

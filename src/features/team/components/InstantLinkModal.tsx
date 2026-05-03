@@ -106,16 +106,16 @@ export function InstantLinkModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fade-in">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl border border-grey-100 transform transition-all duration-300 scale-100 animate-slide-up">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-2xl border border-grey-100 dark:border-gray-700 transform transition-all duration-300 scale-100 animate-slide-up">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-grey-100">
+        <div className="flex items-center justify-between p-6 border-b border-grey-100 dark:border-gray-700">
           <div>
-            <h2 className="text-2xl font-bold text-grey-800 font-body">Enlace de invitación</h2>
-            <p className="text-sm text-grey-400 mt-0.5">{teamName}</p>
+            <h2 className="text-2xl font-bold text-grey-800 dark:text-gray-100 font-body">Enlace de invitación</h2>
+            <p className="text-sm text-grey-400 dark:text-grey-500 mt-0.5">{teamName}</p>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-grey-400 hover:text-grey-600 hover:bg-grey-100 transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-grey-600 dark:hover:text-grey-300 hover:bg-grey-100 dark:hover:bg-gray-700 transition-colors"
           >
             <X size={18} />
           </button>
@@ -126,18 +126,18 @@ export function InstantLinkModal({
           {generateInviteCode.isPending ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 size={32} className="animate-spin text-blue mb-4" />
-              <p className="text-sm text-grey-500 font-body">Generando enlace...</p>
+              <p className="text-sm text-grey-500 dark:text-grey-400 font-body">Generando enlace...</p>
             </div>
           ) : generated ? (
             <>
               {/* Success Message */}
-              <div className="bg-green/5 border border-green/20 rounded-xl p-4">
+              <div className="bg-green/5 dark:bg-green/10 border border-green/20 dark:border-green/30 rounded-xl p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-green text-white flex items-center justify-center">
                     <Check size={20} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-green font-body">¡Enlace listo!</h3>
+                    <h3 className="font-semibold text-green dark:text-green-400 font-body">¡Enlace listo!</h3>
                   </div>
                 </div>
               </div>
@@ -145,11 +145,11 @@ export function InstantLinkModal({
               {/* Link Display */}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-grey-700 mb-2 font-body">
+                  <label className="block text-sm font-medium text-grey-700 dark:text-gray-300 mb-2 font-body">
                     Enlace de invitación
                   </label>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 px-3 py-2 bg-grey-50 border border-grey-200 rounded-lg text-sm text-grey-800 font-mono truncate">
+                    <div className="flex-1 px-3 py-2 bg-grey-50 dark:bg-gray-700 border border-grey-200 dark:border-gray-600 rounded-lg text-sm text-grey-800 dark:text-gray-100 font-mono truncate">
                       {generated.link}
                     </div>
                     <button
@@ -165,11 +165,11 @@ export function InstantLinkModal({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-grey-700 mb-2 font-body">
+                  <label className="block text-sm font-medium text-grey-700 dark:text-gray-300 mb-2 font-body">
                     Código de invitación
                   </label>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 px-3 py-2 bg-grey-50 border border-grey-200 rounded-lg text-sm text-grey-800 font-mono text-center">
+                    <div className="flex-1 px-3 py-2 bg-grey-50 dark:bg-gray-700 border border-grey-200 dark:border-gray-600 rounded-lg text-sm text-grey-800 dark:text-gray-100 font-mono text-center">
                       {generated.code}
                     </div>
                     <button
@@ -189,7 +189,7 @@ export function InstantLinkModal({
               <div className="flex gap-3">
                 <button
                   onClick={shareViaWhatsApp}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-grey-200 hover:bg-grey-50 transition-colors font-body font-medium text-sm"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-grey-200 dark:border-gray-600 hover:bg-grey-50 dark:hover:bg-gray-700 transition-colors font-body font-medium text-sm text-grey-700 dark:text-gray-300"
                 >
                   <Share2 size={16} />
                   Compartir por WhatsApp
@@ -206,7 +206,7 @@ export function InstantLinkModal({
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
-              <p className="text-sm text-red font-body mb-4">Error al generar el enlace</p>
+              <p className="text-sm text-red dark:text-red-400 font-body mb-4">Error al generar el enlace</p>
               <div className="flex gap-3">
                 <button
                   onClick={() => {
@@ -239,7 +239,7 @@ export function InstantLinkModal({
                 </button>
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 rounded-lg border border-grey-200 hover:bg-grey-50 transition-colors text-sm font-body"
+                  className="px-4 py-2 rounded-lg border border-grey-200 dark:border-gray-600 hover:bg-grey-50 dark:hover:bg-gray-700 transition-colors text-sm font-body text-grey-700 dark:text-gray-300"
                 >
                   Cancelar
                 </button>

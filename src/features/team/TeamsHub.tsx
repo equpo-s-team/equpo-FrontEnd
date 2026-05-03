@@ -207,13 +207,15 @@ export const TeamsHub: React.FC = () => {
           </div>
           <span className="font-bold text-grey-800 dark:text-gray-100 text-lg">Equpo</span>
         </div>
-        <DarkModeToggle />
-        <button
-          onClick={() => void handleLogout()}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-200 text-sm font-medium text-red-600 bg-white hover:bg-red-50 transition-colors"
-        >
-          <LogOut size={16} />
-        </button>
+        <div className="w-full flex items-end justify-end gap-3">
+          <DarkModeToggle />
+          <button
+            onClick={() => void handleLogout()}
+            className="flex p-2 h-10 w-10 rounded-lg items-center gap-2 rounded-xl border border-red-200 text-sm font-medium text-red-600 bg-white dark:bg-gray-800 dark:text-red dark:border-red hover:bg-red-50 transition-colors gap-2"
+          >
+            <LogOut size={20} />
+          </button>
+        </div>
       </div>
 
       {/* Main content - Responsive grid */}

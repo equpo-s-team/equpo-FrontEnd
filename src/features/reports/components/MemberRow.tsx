@@ -56,27 +56,27 @@ export function MemberRow({ member }: MemberRowProps) {
 
   return (
     <div
-      className="grid items-center gap-3 py-3 border-b border-grey-100 last:border-0 rounded-lg transition-all hover:bg-grey-50 hover:px-1
-      grid-cols-[38px_1fr_130px_52px] sm:grid-cols-[38px_1fr_140px_54px]"
+      className="grid items-center gap-2 sm:gap-3 py-2 sm:py-3 px-1 border-b border-grey-100 last:border-0 rounded-lg transition-all hover:bg-grey-50
+      grid-cols-[32px_1fr_auto_auto] sm:grid-cols-[38px_1fr_140px_54px]"
     >
       {/* Avatar */}
       <UserAvatar
         src={member.photoUrl}
         alt={member.name}
         initials={member.initials}
-        className="w-9 h-9"
-        fallbackClassName="text-white tracking-wide"
+        className="w-8 sm:w-9 h-8 sm:h-9"
+        fallbackClassName="text-white tracking-wide text-xs sm:text-sm"
         fallbackStyle={avatarStyle}
       />
 
       {/* Name + role */}
       <div className="min-w-0">
-        <p className="text-sm font-medium text-grey-800 truncate">{member.name}</p>
+        <p className="text-xs sm:text-sm font-medium text-grey-800 truncate">{member.name}</p>
         <p className="text-xs text-grey-400 mt-px">{member.role}</p>
       </div>
 
-      {/* Progress bar */}
-      <div>
+      {/* Progress bar - hidden on mobile, shown on sm+ */}
+      <div className="hidden sm:block">
         <div className="flex justify-between mb-1.5 text-xs text-grey-500">
           <span>Completadas</span>
           <span>
@@ -93,7 +93,7 @@ export function MemberRow({ member }: MemberRowProps) {
 
       {/* Percentage */}
       <p
-        className="text-sm font-semibold text-right whitespace-nowrap"
+        className="text-xs sm:text-sm font-semibold text-right whitespace-nowrap"
         style={{ color: member.pctColor }}
       >
         {pct}%

@@ -78,7 +78,7 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-grey-100 dark:border-gray-700">
           <h2 className="text-lg font-bold text-grey-800 dark:text-gray-100 font-body">
-            Invitar usuario
+            Agregar usuario
           </h2>
           <button
             onClick={onClose}
@@ -220,7 +220,7 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
             ) : (
               <Send size={14} />
             )}
-            {isUserAlreadyInTeam ? 'Ya está en el equipo' : 'Invitar usuario'}
+            {isUserAlreadyInTeam ? 'Ya está en el equipo' : 'Agregar usuario'}
           </button>
         </div>
       </div>

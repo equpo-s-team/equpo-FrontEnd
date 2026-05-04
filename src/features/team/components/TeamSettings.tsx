@@ -636,7 +636,7 @@ export default function TeamSettings() {
               style={{ background: accent }}
             >
               <UserPlus size={16} />
-              Invitar personas
+              Invitar/Agregar personas
             </button>
           </div>
         </section>

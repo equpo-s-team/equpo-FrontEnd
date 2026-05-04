@@ -20,6 +20,7 @@ You can also follow the instructions from the [Data Connect documentation](https
   - [*GetUser*](#getuser)
 - [**Mutations**](#mutations)
   - [*CreateUser*](#createuser)
+  - [*BackfillUserEmail*](#backfilluseremail)
   - [*TouchUserLastActive*](#touchuserlastactive)
   - [*UpdateUserProfile*](#updateuserprofile)
 
@@ -137,6 +138,7 @@ export interface GetUserData {
   users: ({
     uid: string;
     displayName: string;
+    email: string;
     level: number;
     experiencePoints: number;
     virtualCurrency: number;
@@ -234,6 +236,7 @@ The `CreateUser` Mutation requires an argument of type `CreateUserVariables`, wh
 export interface CreateUserVariables {
   displayName: string;
   photoURL?: string | null;
+  email?: string | null;
 }
 ```
 ### Return Type
@@ -285,10 +288,11 @@ export default function CreateUserComponent() {
   const createUserVars: CreateUserVariables = {
     displayName: ..., 
     photoURL: ..., // optional
+    email: ..., // optional
   };
   mutation.mutate(createUserVars);
   // Variables can be defined inline as well.
-  mutation.mutate({ displayName: ..., photoURL: ..., });
+  mutation.mutate({ displayName: ..., photoURL: ..., email: ..., });
 
   // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
   const options = {
@@ -308,6 +312,102 @@ export default function CreateUserComponent() {
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
     console.log(mutation.data.user_upsert);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## BackfillUserEmail
+You can execute the `BackfillUserEmail` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [dataconnect-generated/react/index.d.ts](./index.d.ts)):
+```javascript
+useBackfillUserEmail(options?: useDataConnectMutationOptions<BackfillUserEmailData, FirebaseError, BackfillUserEmailVariables>): UseDataConnectMutationResult<BackfillUserEmailData, BackfillUserEmailVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useBackfillUserEmail(dc: DataConnect, options?: useDataConnectMutationOptions<BackfillUserEmailData, FirebaseError, BackfillUserEmailVariables>): UseDataConnectMutationResult<BackfillUserEmailData, BackfillUserEmailVariables>;
+```
+
+### Variables
+The `BackfillUserEmail` Mutation requires an argument of type `BackfillUserEmailVariables`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface BackfillUserEmailVariables {
+  uid: string;
+  email: string;
+}
+```
+### Return Type
+Recall that calling the `BackfillUserEmail` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `BackfillUserEmail` Mutation is of type `BackfillUserEmailData`, which is defined in [dataconnect-generated/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface BackfillUserEmailData {
+  user_update?: User_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `BackfillUserEmail`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, BackfillUserEmailVariables } from '@dataconnect/generated';
+import { useBackfillUserEmail } from '@dataconnect/generated/react'
+
+export default function BackfillUserEmailComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useBackfillUserEmail();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useBackfillUserEmail(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useBackfillUserEmail(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useBackfillUserEmail(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useBackfillUserEmail` Mutation requires an argument of type `BackfillUserEmailVariables`:
+  const backfillUserEmailVars: BackfillUserEmailVariables = {
+    uid: ..., 
+    email: ..., 
+  };
+  mutation.mutate(backfillUserEmailVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ uid: ..., email: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(backfillUserEmailVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.user_update);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }

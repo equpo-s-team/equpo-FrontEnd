@@ -1,4 +1,4 @@
-import { AlertCircle, Check, Loader2, Send, Users, X } from 'lucide-react';
+import { AlertCircle, Check, Loader2, Mail, Send, Users, X } from 'lucide-react';
 import { useState } from 'react';
 
 import { toastError, toastSuccess } from '@/components/ui/toast';
@@ -15,6 +15,8 @@ interface UidInvitationModalProps {
   accent: string;
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationModalProps) {
   const { teamId } = useTeam();
   const { data: teams = [] } = useTeams();
@@ -23,41 +25,48 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
 
   const team = teams.find((t) => t.id === teamId);
 
-  const [inviteUid, setInviteUid] = useState('');
-  const [isInvitingByUid, setIsInvitingByUid] = useState(false);
+  const [inviteInput, setInviteInput] = useState('');
+  const [isInviting, setIsInviting] = useState(false);
 
-  // User preview for UID invitation
+  const trimmed = inviteInput.trim();
+  const isEmail = EMAIL_RE.test(trimmed);
+  const isUid = !isEmail && trimmed.length >= 20;
+
+  // Only run the UID preview for UID-style inputs
   const {
     data: userPreview,
     isLoading: isUserPreviewLoading,
     error: userPreviewError,
-  } = useUserPreview(inviteUid.trim() || undefined);
+  } = useUserPreview(isUid ? trimmed : undefined);
 
-  // Check if user is already in team
   const isUserAlreadyInTeam =
     userPreview?.exists &&
     (members.some((m) => m.uid === userPreview.uid) || team?.leaderUid === userPreview.uid);
 
+  const canInviteByUid = isUid && userPreview?.exists && !isUserAlreadyInTeam;
+  const canInviteByEmail = isEmail;
+  const canInvite = canInviteByUid || canInviteByEmail;
+
   const handleInvite = async () => {
-    if (userPreview?.exists && userPreview.uid && !isUserAlreadyInTeam && teamId) {
-      setIsInvitingByUid(true);
-      try {
-        await directInvitation.mutateAsync({
-          teamId,
-          userUid: userPreview.uid,
-          role: 'member',
-        });
-        toastSuccess('Invitación enviada', `${userPreview.displayName} se ha unido al equipo`);
-        setInviteUid('');
-        onClose();
-      } catch (error) {
-        toastError(
-          'Error',
-          error instanceof Error ? error.message : 'No se pudo invitar al usuario',
-        );
-      } finally {
-        setIsInvitingByUid(false);
-      }
+    if (!teamId || !canInvite) return;
+    setIsInviting(true);
+    try {
+      await directInvitation.mutateAsync({
+        teamId,
+        ...(isEmail ? { email: trimmed } : { userUid: userPreview!.uid }),
+        role: 'member',
+      });
+      const label = isEmail ? trimmed : (userPreview?.displayName ?? trimmed);
+      toastSuccess('Invitación enviada', `${label} se ha unido al equipo`);
+      setInviteInput('');
+      onClose();
+    } catch (error) {
+      toastError(
+        'Error',
+        error instanceof Error ? error.message : 'No se pudo invitar al usuario',
+      );
+    } finally {
+      setIsInviting(false);
     }
   };
 
@@ -68,7 +77,9 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-2xl border border-grey-100 dark:border-gray-700 transform transition-all duration-300 scale-100 animate-slide-up">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-grey-100 dark:border-gray-700">
-          <h2 className="text-lg font-bold text-grey-800 dark:text-gray-100 font-body">Invitar por UID</h2>
+          <h2 className="text-lg font-bold text-grey-800 dark:text-gray-100 font-body">
+            Invitar usuario
+          </h2>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-lg flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-grey-600 dark:hover:text-grey-300 hover:bg-grey-100 dark:hover:bg-gray-700 transition-colors"
@@ -82,14 +93,20 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
           {/* Input */}
           <div>
             <label className="block text-sm font-medium text-grey-700 dark:text-gray-300 mb-2 font-body">
-              UID del usuario
+              UID o correo electrónico
             </label>
             <div className="relative">
               <input
                 type="text"
-                value={inviteUid}
-                onChange={(e) => setInviteUid(e.target.value)}
-                placeholder="Ingresa el UID del usuario"
+                value={inviteInput}
+                onChange={(e) => setInviteInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    void handleInvite();
+                  }
+                }}
+                placeholder="UID del usuario o correo@ejemplo.com"
                 className="w-full px-3 py-2 text-sm border border-grey-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-grey-800 dark:text-gray-100 placeholder-grey-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue focus:border-transparent"
                 autoFocus
               />
@@ -101,10 +118,24 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
             </div>
           </div>
 
-          {/* User Preview */}
-          {inviteUid.trim() && (
+          {/* Preview area */}
+          {trimmed && (
             <div className="bg-grey-50 dark:bg-gray-700 rounded-xl p-3 border border-grey-100 dark:border-gray-600">
-              {isUserPreviewLoading ? (
+              {/* Email path — no preview needed, just confirm it looks valid */}
+              {isEmail ? (
+                <div className="flex items-center gap-2 py-1">
+                  <Mail size={14} className="text-blue flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-grey-800 dark:text-gray-100 truncate">
+                      {trimmed}
+                    </p>
+                    <p className="text-xs text-grey-400 dark:text-grey-500">
+                      Se buscará la cuenta por correo electrónico
+                    </p>
+                  </div>
+                  <Check size={14} className="text-green flex-shrink-0" />
+                </div>
+              ) : /* UID path — show user preview */ isUserPreviewLoading ? (
                 <div className="flex items-center gap-2 py-1">
                   <div className="w-6 h-6 rounded-full bg-grey-200 dark:bg-gray-600 animate-pulse" />
                   <div className="flex-1">
@@ -114,7 +145,9 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
               ) : userPreviewError ? (
                 <div className="flex items-center gap-2 py-1">
                   <AlertCircle size={14} className="text-red" />
-                  <span className="text-xs text-red dark:text-red-400">Error al buscar usuario</span>
+                  <span className="text-xs text-red dark:text-red-400">
+                    Error al buscar usuario
+                  </span>
                 </div>
               ) : userPreview ? (
                 <div className="space-y-2">
@@ -131,7 +164,9 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
                       <p className="text-xs font-medium text-grey-800 dark:text-gray-100 truncate">
                         {userPreview.displayName}
                       </p>
-                      <p className="text-xs text-grey-400 dark:text-grey-500 truncate">{userPreview.uid}</p>
+                      <p className="text-xs text-grey-400 dark:text-grey-500 truncate">
+                        {userPreview.uid}
+                      </p>
                     </div>
                     {userPreview.exists ? (
                       isUserAlreadyInTeam ? (
@@ -144,12 +179,13 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
                     )}
                   </div>
 
-                  {/* Status Message */}
                   <div className="px-3 py-2 rounded-xl text-xs font-body">
                     {!userPreview.exists ? (
                       <div className="flex items-center gap-2 text-red">
                         <X size={14} className="flex-shrink-0" />
-                        <span className="font-medium dark:text-gray-100">Usuario no encontrado</span>
+                        <span className="font-medium dark:text-gray-100">
+                          Usuario no encontrado
+                        </span>
                       </div>
                     ) : isUserAlreadyInTeam ? (
                       <div className="flex items-center gap-2 text-blue">
@@ -173,11 +209,11 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
             onClick={() => {
               void handleInvite();
             }}
-            disabled={!userPreview?.exists || isUserAlreadyInTeam || isInvitingByUid}
+            disabled={!canInvite || isUserAlreadyInTeam || isInviting}
             className="w-full flex items-center justify-center gap-1.5 py-3 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ background: accent }}
           >
-            {isInvitingByUid ? (
+            {isInviting ? (
               <Loader2 size={14} className="animate-spin" />
             ) : isUserAlreadyInTeam ? (
               <Users size={14} />

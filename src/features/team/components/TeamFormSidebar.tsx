@@ -9,7 +9,11 @@ interface TeamFormSidebarProps {
   mode: 'create' | 'edit';
   team?: Team;
   onClose: () => void;
-  onSubmit: (payload: { name: string; description: string; memberUids: string[] }) => void;
+  onSubmit: (payload: {
+    name: string;
+    description: string;
+    memberIdentifiers: string[];
+  }) => void;
 }
 
 const COLORS = [
@@ -38,8 +42,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   const [description, setDescription] = useState(team?.description || '');
   const [errors, setErrors] = useState<{ name?: string; description?: string }>({});
   const [isOpen, setIsOpen] = useState(true);
-  const [newMemberUid, setNewMemberUid] = useState('');
-  const [memberUids, setMemberUids] = useState<string[]>([]);
+  const [newMemberInput, setNewMemberInput] = useState('');
+  const [memberIdentifiers, setMemberIdentifiers] = useState<string[]>([]);
   const { data: members = [], isLoading: membersLoading } = useTeamMembers(team?.id);
 
   const handleClose = () => {
@@ -54,18 +58,21 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   };
 
   const handleAddMember = () => {
-    const uid = newMemberUid.trim();
-    if (!uid) return;
-    if (memberUids.includes(uid) || team?.members.some((m) => m.userUid === uid)) {
-      setNewMemberUid('');
+    const identifier = newMemberInput.trim();
+    if (!identifier) return;
+    const isEmail = identifier.includes('@');
+    const isAlreadyPending = memberIdentifiers.includes(identifier);
+    const isAlreadyMember = !isEmail && team?.members.some((m) => m.userUid === identifier);
+    if (isAlreadyPending || isAlreadyMember) {
+      setNewMemberInput('');
       return;
     }
-    setMemberUids((prev) => [...prev, uid]);
-    setNewMemberUid('');
+    setMemberIdentifiers((prev) => [...prev, identifier]);
+    setNewMemberInput('');
   };
 
-  const handleRemoveNewMember = (uid: string) => {
-    setMemberUids((prev) => prev.filter((m) => m !== uid));
+  const handleRemoveNewMember = (identifier: string) => {
+    setMemberIdentifiers((prev) => prev.filter((m) => m !== identifier));
   };
 
   const handleSubmit = () => {
@@ -76,20 +83,21 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
       return;
     }
 
-    const finalMemberUids = [...memberUids];
-    const pendingUid = newMemberUid.trim();
+    const finalMemberIdentifiers = [...memberIdentifiers];
+    const pending = newMemberInput.trim();
+    const pendingIsEmail = pending.includes('@');
     if (
-      pendingUid &&
-      !finalMemberUids.includes(pendingUid) &&
-      !team?.members.some((m) => m.userUid === pendingUid)
+      pending &&
+      !finalMemberIdentifiers.includes(pending) &&
+      (pendingIsEmail || !team?.members.some((m) => m.userUid === pending))
     ) {
-      finalMemberUids.push(pendingUid);
+      finalMemberIdentifiers.push(pending);
     }
 
     onSubmit({
       name: name.trim(),
       description: description.trim(),
-      memberUids: finalMemberUids,
+      memberIdentifiers: finalMemberIdentifiers,
     });
   };
 
@@ -185,20 +193,20 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
           {/* Add Members */}
           <div>
             <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-1.5 block">
-              Invitar usuarios (por UID)
+              Invitar usuarios (UID o email)
             </label>
             <div className="flex gap-2">
               <input
                 type="text"
-                value={newMemberUid}
-                onChange={(e) => setNewMemberUid(e.target.value)}
+                value={newMemberInput}
+                onChange={(e) => setNewMemberInput(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
                     handleAddMember();
                   }
                 }}
-                placeholder="Ej: lOks...90s"
+                placeholder="Ej: lOks...90s o user@email.com"
                 className="flex-1 px-4 py-2 rounded-xl border text-sm text-grey-800 outline-none transition-all"
                 style={{ borderColor: 'rgba(0,0,0,0.1)' }}
                 onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${cfg.glow}`)}
@@ -216,30 +224,30 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
           </div>
 
           {/* Members list — Pending & Current */}
-          {(memberUids.length > 0 || (!isCreate && membersForDisplay.length > 0)) && (
+          {(memberIdentifiers.length > 0 || (!isCreate && membersForDisplay.length > 0)) && (
             <div>
               <label className="text-xs font-semibold text-grey-500 uppercase tracking-wider mb-2 block">
                 Miembros
               </label>
               <div className="flex flex-col gap-2">
                 {/* Nuevos invitados (temporales) */}
-                {memberUids.map((uid) => (
+                {memberIdentifiers.map((identifier) => (
                   <div
-                    key={uid}
+                    key={identifier}
                     className="flex items-center gap-3 px-3 py-2 rounded-xl bg-blue-50 border border-blue-100"
                   >
                     <div
                       className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
                       style={{ background: cfg.gradient }}
                     >
-                      {uid.substring(0, 2).toUpperCase()}
+                      {identifier.substring(0, 2).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-grey-700 truncate">{uid}</p>
+                      <p className="text-xs font-semibold text-grey-700 truncate">{identifier}</p>
                       <p className="text-xs text-blue-500">Pendiente de añadir...</p>
                     </div>
                     <button
-                      onClick={() => handleRemoveNewMember(uid)}
+                      onClick={() => handleRemoveNewMember(identifier)}
                       className="text-grey-400 hover:text-[#F65A70] font-bold px-2 py-0.5"
                     >
                       ✕

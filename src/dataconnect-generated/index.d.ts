@@ -15,6 +15,15 @@ export interface Achievement_Key {
   __typename?: 'Achievement_Key';
 }
 
+export interface BackfillUserEmailData {
+  user_update?: User_Key | null;
+}
+
+export interface BackfillUserEmailVariables {
+  uid: string;
+  email: string;
+}
+
 export interface CreateUserData {
   user_upsert: User_Key;
 }
@@ -22,12 +31,14 @@ export interface CreateUserData {
 export interface CreateUserVariables {
   displayName: string;
   photoURL?: string | null;
+  email?: string | null;
 }
 
 export interface GetUserData {
   users: ({
     uid: string;
     displayName: string;
+    email: string;
     level: number;
     experiencePoints: number;
     virtualCurrency: number;
@@ -135,6 +146,18 @@ export const createUserRef: CreateUserRef;
 
 export function createUser(vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
 export function createUser(dc: DataConnect, vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
+
+interface BackfillUserEmailRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: BackfillUserEmailVariables): MutationRef<BackfillUserEmailData, BackfillUserEmailVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: BackfillUserEmailVariables): MutationRef<BackfillUserEmailData, BackfillUserEmailVariables>;
+  operationName: string;
+}
+export const backfillUserEmailRef: BackfillUserEmailRef;
+
+export function backfillUserEmail(vars: BackfillUserEmailVariables): MutationPromise<BackfillUserEmailData, BackfillUserEmailVariables>;
+export function backfillUserEmail(dc: DataConnect, vars: BackfillUserEmailVariables): MutationPromise<BackfillUserEmailData, BackfillUserEmailVariables>;
 
 interface TouchUserLastActiveRef {
   /* Allow users to create refs without passing in DataConnect */

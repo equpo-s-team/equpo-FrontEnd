@@ -85,7 +85,7 @@ export const useFirebaseAuth = () => {
         }
 
         // Upsert current profile shape before touching lastActive.
-        await createDatabaseUser(displayName, canonicalPhotoURL);
+        await createDatabaseUser(displayName, canonicalPhotoURL, credential.user.email);
         await touchUserLastActive();
 
         return {
@@ -116,7 +116,7 @@ export const useFirebaseAuth = () => {
         await sendEmailVerification(credential.user);
 
         // Create user in Data Connect using current auth.uid context.
-        await createDatabaseUser(displayName, undefined);
+        await createDatabaseUser(displayName, undefined, email);
 
         return {
           success: true,
@@ -161,7 +161,7 @@ export const useFirebaseAuth = () => {
       }
 
       // Ensure database user exists and always touch login time.
-      await createDatabaseUser(displayName, canonicalPhotoURL);
+      await createDatabaseUser(displayName, canonicalPhotoURL, credential.user.email);
       await touchUserLastActive();
 
       return {

@@ -106,12 +106,16 @@ export const TeamsHub: React.FC = () => {
   const openCreate = () => setModal({ mode: 'create' });
   const closeModal = () => setModal({ mode: null });
 
-  const handleCreate = (payload: { name: string; description: string; memberUids: string[] }) => {
+  const handleCreate = (payload: {
+    name: string;
+    description: string;
+    memberIdentifiers: string[];
+  }) => {
     createTeam.mutate(
       {
         name: payload.name,
         description: payload.description || null,
-        memberUids: payload.memberUids,
+        memberIdentifiers: payload.memberIdentifiers,
       },
       {
         onSuccess: () => {
@@ -129,14 +133,14 @@ export const TeamsHub: React.FC = () => {
 
   const handleEdit = (
     teamId: string,
-    payload: { name: string; description: string; memberUids: string[] },
+    payload: { name: string; description: string; memberIdentifiers: string[] },
   ) => {
     const updatePayload: Record<string, string | null> = {};
     if (activeTeam && payload.name !== activeTeam.name) updatePayload.name = payload.name;
     if (activeTeam && payload.description !== (activeTeam.description || ''))
       updatePayload.description = payload.description || null;
     updateTeam.mutate(
-      { teamId, payload: updatePayload, memberUids: payload.memberUids },
+      { teamId, payload: updatePayload, memberIdentifiers: payload.memberIdentifiers },
       {
         onSuccess: () => {
           closeModal();

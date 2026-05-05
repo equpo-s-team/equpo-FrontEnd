@@ -2,6 +2,7 @@ import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { MessageCircle } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
+import { ResponsiveIcon } from '@/components/ui/ResponsiveIcon';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
 import { auth, db } from '@/firebase';
@@ -109,7 +110,7 @@ export default function MessageArea() {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-center p-4 sm:p-8">
         <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-3xl bg-grey-100 dark:bg-gray-600 flex items-center justify-center mb-3 sm:mb-4">
-          <MessageCircle size={24} sm:size={28} strokeWidth={1.5} className="text-grey-300" />
+          <ResponsiveIcon component={MessageCircle} mobileSize={24} desktopSize={28} strokeWidth={1.5} className="text-grey-300" />
         </div>
         <h3 className="font-body font-semibold text-grey-700 text-sm sm:text-base mb-1">
           Selecciona una sala

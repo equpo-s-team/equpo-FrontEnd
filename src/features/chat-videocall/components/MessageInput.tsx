@@ -5,6 +5,7 @@ import { Paperclip, Send, Smile, X } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip';
+import { ResponsiveIcon } from '@/components/ui/ResponsiveIcon';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
 import { storage } from '@/firebase';
@@ -161,7 +162,7 @@ export default function MessageInput() {
             onClick={() => fileInputRef.current?.click()}
             className="w-6 sm:w-7 h-6 sm:h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40 flex-shrink-0"
           >
-            <Paperclip size={14} sm:size={16} />
+            <ResponsiveIcon component={Paperclip} mobileSize={14} desktopSize={16} />
           </button>
         </AppTooltip>
 
@@ -196,7 +197,7 @@ export default function MessageInput() {
             onClick={() => setShowEmojiPicker((prev) => !prev)}
             className="w-6 sm:w-7 h-6 sm:h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40 flex-shrink-0"
           >
-            <Smile size={14} sm:size={16} />
+            <ResponsiveIcon component={Smile} mobileSize={14} desktopSize={16} />
           </button>
         </AppTooltip>
 
@@ -215,7 +216,7 @@ export default function MessageInput() {
               }
             `}
           >
-            <Send size={12} sm:size={14} />
+            <ResponsiveIcon component={Send} mobileSize={12} desktopSize={14} />
           </button>
         </AppTooltip>
       </div>

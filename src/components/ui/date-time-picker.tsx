@@ -23,7 +23,7 @@ interface DateTimePickerProps {
 export function DateTimePicker({
   value,
   onChange,
-  placeholder = 'Seleccionar fecha y hora',
+  placeholder = 'Fecha y hora',
   className = '',
   error = false,
   required = false,
@@ -32,7 +32,7 @@ export function DateTimePicker({
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(value ? new Date(value) : undefined);
   const [time, setTime] = React.useState<string>(
-    value ? value.split('T')[1]?.slice(0, 5) || '23:00' : '23:00',
+    value ? value.split('T')[1]?.slice(0, 5) || '12:00' : '12:00',
   );
 
   React.useEffect(() => {
@@ -40,11 +40,11 @@ export function DateTimePicker({
       const newDate = new Date(value);
       if (!isNaN(newDate.getTime())) {
         setDate(newDate);
-        setTime(value.split('T')[1]?.slice(0, 5) || '23:00');
+        setTime(value.split('T')[1]?.slice(0, 5) || '12:00');
       }
     } else {
       setDate(undefined);
-      setTime('23:00');
+      setTime('12:00');
     }
   }, [value]);
 
@@ -87,16 +87,15 @@ export function DateTimePicker({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className={`w-full justify-between text-left font-normal font-body text-sm ${
-              error ? 'border-red' : 'border-grey-200 hover:border-blue focus:border-blue'
-            } ${!displayLabel ? 'text-grey-400' : 'text-grey-800'}`}
+            className={`w-full justify-between text-left font-normal font-body text-sm ${error ? 'border-red' : 'border-grey-200 dark:border-gray-600 hover:border-blue focus:border-blue'
+              } ${!displayLabel ? 'text-grey-400 dark:text-grey-500' : 'text-grey-800 dark:text-gray-300'} bg-primary dark:bg-gray-800`}
           >
-            {displayLabel ?? placeholder}
-            <ChevronDownIcon className="h-4 w-4 text-grey-400" />
+            <span className="truncate">{displayLabel ?? placeholder}</span>
+            <ChevronDownIcon className="h-4 w-4 shrink-0 text-grey-400 dark:text-gray-500" />
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto overflow-hidden p-0 rounded-2xl border-grey-150 shadow-card"
+          className="w-auto overflow-hidden p-0 rounded-2xl border-grey-150 dark:border-gray-700 shadow-card"
           align="start"
         >
           <Calendar
@@ -107,15 +106,15 @@ export function DateTimePicker({
             initialFocus
           />
           {/* Time selector inside the popover */}
-          <div className="border-t border-grey-100 px-4 py-3">
+          <div className="border-t bg-primary dark:bg-gray-800 border-grey-100 dark:border-gray-700 px-4 py-3">
             <div className="flex items-center gap-2">
-              <Clock size={14} className="text-grey-400 shrink-0" />
-              <span className="text-xs text-grey-500 font-body font-medium">Hora límite</span>
+              <Clock size={14} className="text-grey-400 dark:text-gray-300 shrink-0" />
+              <span className="text-xs text-grey-500 dark:text-gray-300 font-body font-medium">Hora límite</span>
               <input
                 type="time"
                 value={time}
                 onChange={(e) => handleTimeChange(e.target.value)}
-                className="ml-auto w-28 px-2 py-1 rounded-lg border border-grey-200 text-sm font-body text-grey-800 outline-none focus:border-blue transition-colors bg-white appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
+                className="ml-auto w-28 px-2 py-1 rounded-lg border border-grey-200 dark:border-gray-700 text-sm font-body text-grey-800 dark:text-gray-300 outline-none focus:border-blue transition-colors bg-white appearance-none dark:bg-gray-800 [&::-webkit-calendar-picker-indicator]:hidden"
               />
             </div>
           </div>

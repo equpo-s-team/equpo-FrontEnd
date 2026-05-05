@@ -119,7 +119,6 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
       {/* Panel */}
       <div
         className={`relative h-full w-full sm:w-1/3 min-w-[320px] max-w-[460px] flex flex-col p-[1px] shadow-2xl transition-transform duration-300 ease-in-out ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
-        style={{ background: 'linear-gradient(135deg,#60AFFF,#9b7fe1)' }}
       >
         <div className="h-full bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl p-6 flex flex-col gap-5 overflow-y-auto">
           {/* Header */}
@@ -260,7 +259,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             </label>
             <div className="flex gap-2">
               <div
-                className={`w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all transition-all duration-200 ${
+                className={`w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary dark:border-gray-700 text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all transition-all duration-200 ${
                   isCopied
                     ? 'bg-green-50 border-green-200 text-green-700'
                     : 'text-grey-400'
@@ -273,7 +272,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 className={`px-3 py-2.5 rounded-xl border transition-all duration-200 flex items-center justify-center ${
                   isCopied
                     ? 'bg-green-500 text-white border-green-500'
-                    : 'bg-white border-grey-200 text-grey-600 hover:border-grey-300 hover:bg-grey-50'
+                    : 'bg-white dark:bg-gray-700 border-grey-200 dark:border-gray-700 text-grey-600 dark:text-gray-300 hover:border-grey-300 hover:bg-grey-50 dark:hover:bg-gray-600'
                 }`}
                 title={isCopied ? '¡Copiado!' : 'Copiar UID'}
               >

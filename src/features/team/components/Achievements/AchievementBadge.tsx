@@ -102,14 +102,14 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
 
           <section
             className={cn(
-              'relative w-full max-w-sm max-h-sm rounded-2xl bg-white p-5 shadow-card-lg transition-all duration-200',
+              'relative w-full max-w-sm max-h-sm rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-card-lg transition-all duration-200',
               modalVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0',
             )}
           >
             <button
               type="button"
               onClick={closeModal}
-              className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-grey-100 text-xs text-grey-500 transition-colors hover:bg-grey-200"
+              className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-grey-100 dark:bg-transparent text-xs text-grey-500 transition-colors hover:bg-grey-200"
             >
               <CircleX size={20} />
             </button>
@@ -139,7 +139,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
                 )}
               </div>
 
-              <h3 className="text-center text-base font-bold text-grey-800 font-body">
+              <h3 className="text-center text-base font-bold text-grey-800 dark:text-gray-300 font-body">
                 {isLocked ? '???' : displayName}
               </h3>
               <p className="text-center text-xs text-grey-400">{subtitle}</p>

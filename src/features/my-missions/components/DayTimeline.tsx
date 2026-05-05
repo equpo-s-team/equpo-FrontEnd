@@ -7,8 +7,8 @@ import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 import { getTaskClasses } from '../utils/timelineStyles';
 
 const HOUR_HEIGHT = 64; // px per hour slot
-const START_HOUR = 6;
-const END_HOUR = 22;
+const START_HOUR = 0;
+const END_HOUR = 24;
 const TOTAL_HOURS = END_HOUR - START_HOUR;
 
 const STATUS_LABEL: Record<string, string> = {
@@ -190,7 +190,7 @@ export default function DayTimeline({
               >
                 {/* Hour label */}
                 <span className="absolute -left-16 w-14 text-right text-xs text-grey-400 dark:text-grey-500 font-body font-medium -translate-y-1/2">
-                  {formatHour(hour)}
+                  {hour === END_HOUR ? '' : formatHour(hour)}
                 </span>
                 {/* Grid line */}
                 <div className="w-full h-px bg-grey-150 dark:bg-gray-700" />
@@ -250,11 +250,11 @@ export default function DayTimeline({
                     {STATUS_LABEL[task.status] ?? task.status}
                   </span>
                 </div>
-                <p className="text-[11px] font-bold text-white leading-1 font-body truncate">
+                <p className="text-[11px] font-bold text-gray-100 leading-1 font-body truncate">
                   {task.name}
                 </p>
                 {task.categories?.length > 0 && (
-                  <p className="text-[9px] text-white/75 mt-1 line-clamp-1 font-body leading-none">
+                  <p className="text-[10px] text-gray-100 mt-1 line-clamp-1 font-body leading-none">
                     {task.categories.length > 2
                       ? `${task.categories.slice(0, 2).join(' · ')} + ${task.categories.length - 2} más`
                       : task.categories.join(' · ')}

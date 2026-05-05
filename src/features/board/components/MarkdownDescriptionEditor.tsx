@@ -21,7 +21,7 @@ export function MarkdownDescriptionEditor({
   const editorRef = useRef<HTMLDivElement>(null);
   const lastValidMarkdownRef = useRef(value || '');
 
-  const baseContainer = hasError ? 'border-red/50' : 'border-grey-200 focus-within:border-blue';
+  const baseContainer = hasError ? 'border-red/50' : 'border-grey-200 dark:border-gray-700 focus-within:border-blue';
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -99,9 +99,9 @@ export function MarkdownDescriptionEditor({
 
   return (
     <div
-      className={`rounded-[10px] border-[1.5px] bg-primary transition-colors duration-150 ${baseContainer}`}
+      className={`rounded-[10px] border-[1.5px] bg-primary dark:bg-gray-800 transition-colors duration-150 ${baseContainer}`}
     >
-      <div className="flex items-center justify-between border-b border-grey-150">
+      <div className="flex items-center justify-between border-b border-grey-150 dark:border-gray-700">
         <div className="flex items-center">
           <ToggleGroup type="multiple" className="gap-0">
             <ToggleGroupItem
@@ -110,7 +110,7 @@ export function MarkdownDescriptionEditor({
               onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
               onClick={() => runCommand('bold')}
               aria-label="Negrita"
-              className="h-9 w-10 px-0 text-sm font-bold text-grey-700 !rounded-none"
+              className="h-9 w-10 px-0 text-sm font-bold text-grey-700 dark:text-gray-300 !rounded-none"
             >
               B
             </ToggleGroupItem>
@@ -120,7 +120,7 @@ export function MarkdownDescriptionEditor({
               onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
               onClick={() => runCommand('italic')}
               aria-label="Itálica"
-              className="h-9 w-10 px-0 text-sm italic text-grey-700 !rounded-none"
+              className="h-9 w-10 px-0 text-sm italic text-grey-700 dark:text-gray-300  !rounded-none"
             >
               I
             </ToggleGroupItem>
@@ -130,13 +130,13 @@ export function MarkdownDescriptionEditor({
               onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
               onClick={insertBulletItem}
               aria-label="Viñeta"
-              className="h-9 w-10 px-0 text-grey-700 !rounded-none"
+              className="h-9 w-10 px-0 text-grey-700 dark:text-gray-300 !rounded-none"
             >
               <List size={14} />
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
-        <span className="text-[11px] text-grey-400 px-3">
+        <span className="text-[11px] text-grey-400 dark:text-gray-300 px-3">
           {charCount}/{maxLength}
         </span>
       </div>
@@ -150,7 +150,7 @@ export function MarkdownDescriptionEditor({
         onInput={syncEditorToMarkdown}
         onBlur={syncEditorToMarkdown}
         onPaste={handlePaste}
-        className="min-h-[280px] sm:min-h-[420px] max-h-[560px] overflow-y-auto px-3 py-2.5 text-sm font-body text-grey-800 outline-none [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5 [&_li]:text-grey-700"
+        className="min-h-[280px] sm:min-h-[420px] max-h-[560px] overflow-y-auto px-3 py-2.5 text-sm font-body text-grey-800 dark:text-gray-300 outline-none [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5 [&_li]:text-grey-700"
       />
     </div>
   );

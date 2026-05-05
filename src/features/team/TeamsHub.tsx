@@ -1,6 +1,6 @@
 import { signOut } from 'firebase/auth';
 import log from 'loglevel';
-import { Loader2,LogOut, Users, X } from 'lucide-react';
+import { Loader2, LogOut, Plus, UserPlus, Users, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -224,14 +224,14 @@ export const TeamsHub: React.FC = () => {
 
       {/* Main content - Responsive grid */}
       <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="grid h-full grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
+        <div className="grid lg:h-full grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
           {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
           </section>
 
           {/* Teams Section - Main content */}
-          <section className="lg:col-span-3 h-full rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 flex flex-col min-h-0">
+          <section className="lg:col-span-3 lg:h-full rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 flex flex-col min-h-0">
             {/* Teams Header with Search and Create */}
             <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
               <div
@@ -278,7 +278,7 @@ export const TeamsHub: React.FC = () => {
                     boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
                   }}
                 >
-                  <span className="text-base leading-none">+</span>
+                  <Plus size={18} />
                   <span className="hidden sm:inline">Crear equipo</span>
                 </button>
 
@@ -287,6 +287,7 @@ export const TeamsHub: React.FC = () => {
                   onClick={() => setIsRedeemModalOpen(true)}
                   className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 dark:text-gray-300 darbg-white border dark:bg-gray-600 border-grey-200 dark:border-gray-500 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
                 >
+                  <UserPlus size={18} />
                   <span className="hidden sm:inline">Unirte a equipo</span>
                 </button>
               </div>
@@ -333,7 +334,7 @@ export const TeamsHub: React.FC = () => {
           </section>
 
           {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
-          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
+          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full lg:max-h-none lg:overflow-visible">
             <div className="rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
               <AchievementsSection achievements={mappedAchievements} />
             </div>

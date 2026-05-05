@@ -50,7 +50,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement 
       <button
         type="button"
         onClick={openModal}
-        className="group flex h-36 flex-col items-center gap-2 p-2 transition-all duration-200"
+        className="group flex h-28 sm:h-32 lg:h-36 flex-col items-center gap-1 sm:gap-2 p-1.5 sm:p-2 transition-all duration-200"
         title={displayName}
       >
         <div className="flex-1 w-full overflow-hidden rounded-xl">

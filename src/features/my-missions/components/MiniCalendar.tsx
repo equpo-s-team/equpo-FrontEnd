@@ -52,8 +52,8 @@ export default function MiniCalendar({
   tasksByDate,
 }: MiniCalendarProps) {
   return (
-    <div className="w-full rounded-xl border border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 px-[1vw] py-[2vh] shadow-card sm:rounded-2xl">
-      <div className="w-full overflow-visible">
+    <div className="w-full rounded-xl border border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 px-2 py-3 shadow-card sm:rounded-2xl sm:px-3 sm:py-4">
+      <div className="w-full overflow-hidden">
         <Calendar
           mode="single"
           selected={selectedDate}
@@ -62,7 +62,10 @@ export default function MiniCalendar({
           }}
           defaultMonth={selectedDate}
           locale={es}
-          className="w-full p-0"
+          className="w-full p-0 [--cell-size:1.75rem] sm:[--cell-size:2rem]"
+          classNames={{
+            weekday: 'text-muted-foreground dark:text-gray-500 flex-1 select-none rounded-md text-[0.65rem] font-normal sm:text-[0.8rem]',
+          }}
           modifiers={{
             hasTask: (date) => {
               return !!tasksByDate.get(toDateKey(date))?.length;

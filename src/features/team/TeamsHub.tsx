@@ -285,7 +285,7 @@ export const TeamsHub: React.FC = () => {
                 {/* Redeem Code Button */}
                 <button
                   onClick={() => setIsRedeemModalOpen(true)}
-                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 bg-white border border-grey-200 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 dark:text-gray-300 darbg-white border dark:bg-gray-600 border-grey-200 dark:border-gray-500 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
                 >
                   <span className="hidden sm:inline">Unirte a equipo</span>
                 </button>
@@ -365,9 +365,9 @@ export const TeamsHub: React.FC = () => {
       {/* Redeem Code Modal */}
       {isRedeemModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 max-w-sm w-full">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-grey-800">Unirte a equipo</h2>
+              <h2 className="text-lg font-bold text-grey-800 dark:text-gray-300">Unirte a equipo</h2>
               <button
                 onClick={() => {
                   setIsRedeemModalOpen(false);
@@ -379,7 +379,7 @@ export const TeamsHub: React.FC = () => {
               </button>
             </div>
 
-            <p className="text-sm text-grey-600 mb-4">
+            <p className="text-sm text-grey-600 dark:text-gray-300 mb-4">
               Ingresa el código que recibiste para unirte a un equipo.
             </p>
 
@@ -410,7 +410,7 @@ export const TeamsHub: React.FC = () => {
               className="space-y-4"
             >
               <div>
-                <label className="block text-sm font-medium text-grey-700 mb-2">
+                <label className="block text-sm font-medium text-grey-700 dark:text-gray-300 mb-2">
                   Código
                 </label>
                 <input
@@ -419,7 +419,7 @@ export const TeamsHub: React.FC = () => {
                   onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
                   placeholder="Ej: ABC123XY"
                   disabled={isRedeeming}
-                  className="w-full px-4 py-3 border border-grey-200 rounded-xl text-sm text-grey-800 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
+                  className="w-full px-4 py-3 border dark:bg-gray-800 dark:border-gray-700 rounded-xl text-sm text-grey-800 dark:text-gray-300 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
                   required
                 />
               </div>
@@ -432,7 +432,7 @@ export const TeamsHub: React.FC = () => {
                     setRedeemCode('');
                   }}
                   disabled={isRedeeming}
-                  className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-600 hover:bg-grey-50 disabled:opacity-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border dark:bg-gray-800 border-grey-200 dark:border-gray-700 text-sm font-medium text-grey-600 dark:text-gray-300 hover:bg-grey-50 dark:hover:bg-gray-900 disabled:opacity-50 transition-colors"
                 >
                   Cancelar
                 </button>

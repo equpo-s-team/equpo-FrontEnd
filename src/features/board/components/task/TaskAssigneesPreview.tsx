@@ -73,7 +73,7 @@ export function TaskAssigneesPreview({
   const hasGroup = !!assignedGroup;
 
   if (!hasUsers && !hasGroup) {
-    return <p className="text-sm font-body text-grey-400">Sin asignar</p>;
+    return <p className="text-sm font-body text-grey-400 dark:text-grey-300">Sin asignar</p>;
   }
 
   const totalPages = Math.ceil(resolved.length / usersPerPage);
@@ -84,7 +84,7 @@ export function TaskAssigneesPreview({
       {/* Users section */}
       {hasUsers && (
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400 mb-2">
+          <p className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400 dark:text-grey-300 mb-2">
             {resolved.length === 1 ? 'Usuario asignado' : 'Usuarios asignados'}
           </p>
 
@@ -96,7 +96,7 @@ export function TaskAssigneesPreview({
                   alt={user.displayName}
                   className="w-7 h-7"
                 />
-                <p className="text-sm font-body text-grey-700 truncate">{user.displayName}</p>
+                <p className="text-sm font-body text-grey-700 dark:text-grey-300 truncate">{user.displayName}</p>
               </div>
             ))}
           </div>
@@ -108,18 +108,18 @@ export function TaskAssigneesPreview({
                 type="button"
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="p-1 rounded-lg text-grey-400 hover:text-grey-700 hover:bg-grey-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150"
+                className="p-1 rounded-lg text-grey-400 dark:text-grey-300 hover:text-grey-700 hover:bg-grey-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150"
               >
                 <ChevronLeft size={14} />
               </button>
-              <span className="text-[10px] text-grey-400 font-body">
+              <span className="text-[10px] text-grey-400 dark:text-grey-300 font-body">
                 {page + 1} / {totalPages}
               </span>
               <button
                 type="button"
                 onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={page >= totalPages - 1}
-                className="p-1 rounded-lg text-grey-400 hover:text-grey-700 hover:bg-grey-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150"
+                className="p-1 rounded-lg text-grey-400 dark:text-grey-300 hover:text-grey-700 hover:bg-grey-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150"
               >
                 <ChevronRight size={14} />
               </button>

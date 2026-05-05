@@ -140,7 +140,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
                 return (
                   <div
                     key={memberUid}
-                    className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold border-2 border-white"
+                    className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold border"
                     style={{ zIndex: 10 - i }}
                     title={memberName}
                   >

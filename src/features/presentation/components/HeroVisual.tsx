@@ -237,7 +237,7 @@ export default function HeroVisual() {
 
     function animate() {
       animId = requestAnimationFrame(animate);
-      const t = timer.getElapsedTime();
+      const t = (Date.now() - timer.startTime) / 1000;
 
       // Smooth parallax
       currentGhostOffset.lerp(targetGhostOffset, 0.06);

@@ -1,6 +1,7 @@
 import { MessageCircle, Search, Users } from 'lucide-react';
 
 import { GroupAvatar } from '@/components/ui/GroupAvatar.tsx';
+import { ResponsiveIcon } from '@/components/ui/ResponsiveIcon';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 
 import type { ChatRoom } from '../types/chat';
@@ -58,7 +59,7 @@ export default function ConversationList() {
       {/* Header */}
       <div className="flex items-center justify-between px-3 sm:px-4 pt-3 sm:pt-5 pb-2 sm:pb-3">
         <div className="flex items-center gap-2">
-          <MessageCircle size={16} sm:size={18} className="text-purple flex-shrink-0" />
+          <ResponsiveIcon component={MessageCircle} mobileSize={16} desktopSize={18} className="text-purple flex-shrink-0" />
           <h2 className="font-body font-bold text-grey-900 dark:text-white text-sm sm:text-base">Mensajes</h2>
         </div>
       </div>
@@ -87,7 +88,7 @@ export default function ConversationList() {
       <div className="flex-1 overflow-y-auto px-1.5 sm:px-2 pb-4 flex flex-col gap-0.5 scrollbar-hide">
         {rooms.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 sm:py-12 text-grey-400">
-            <MessageCircle size={24} sm:size={32} strokeWidth={1.5} />
+            <ResponsiveIcon component={MessageCircle} mobileSize={24} desktopSize={32} strokeWidth={1.5} />
             <p className="mt-2 font-body text-xs sm:text-sm">Sin salas disponibles</p>
           </div>
         ) : (

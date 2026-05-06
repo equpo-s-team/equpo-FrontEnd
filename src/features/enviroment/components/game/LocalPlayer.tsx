@@ -4,11 +4,13 @@ import { BallCollider, type RapierRigidBody, RigidBody, useRapier } from '@react
 import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-import { type InputState } from '../../hooks/usePlayerInput';
+import {type InputState} from '../../hooks/usePlayerInput';
 import {
   GHOST_PHYSICS_RADIUS,
   GHOST_SCALE,
+  GHOST_SPAWN_X,
   GHOST_SPAWN_Y,
+  GHOST_SPAWN_Z,
   GHOST_Y_OFFSET,
   GROUND_RAY_EXTRA,
   JUMP_IMPULSE,
@@ -17,7 +19,7 @@ import {
   RESPAWN_Y_THRESHOLD,
   ROTATION_SPEED,
 } from '../../lib/physicsConstants';
-import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../../types/realtime';
+import {type SlotId, THREE_SLOT_MODELS, type Vector3State} from '../../types/realtime';
 
 interface LocalPlayerProps {
   slotId: SlotId;
@@ -96,7 +98,7 @@ export function LocalPlayer({
     }
 
     if (pos.y < RESPAWN_Y_THRESHOLD) {
-      body.setTranslation({ x: 0, y: GHOST_SPAWN_Y, z: 0 }, true);
+      body.setTranslation({ x: GHOST_SPAWN_X, y: GHOST_SPAWN_Y, z: GHOST_SPAWN_Z }, true);
       body.setLinvel({ x: 0, y: 0, z: 0 }, true);
     }
 
@@ -119,7 +121,7 @@ export function LocalPlayer({
       <RigidBody
         ref={rigidBodyRef}
         colliders={false}
-        position={[0, GHOST_SPAWN_Y, 0]}
+        position={[ GHOST_SPAWN_X, GHOST_SPAWN_Y, GHOST_SPAWN_Z ]}
         linearDamping={4}
         angularDamping={10}
         lockRotations

@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+
 import { quotesApi, type RaccoonQuote } from '@/features/enviroment/api/quotesApi';
 
 export function useRaccoonQuote() {

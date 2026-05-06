@@ -5,11 +5,13 @@ export interface ProximityPoint {
   position: [number, number, number];
   label: string;
   triggerDistance: number;
-  eventType: 'feed-ducks' | 'raccoon-quotes';
+  eventType: 'feed-ducks' | 'raccoon-quotes' | 'duck-statue' | 'board-entry' | 'water-garden';
   icon: LucideIcon;
 }
 
 export interface ProximityEventHandlers {
   onFeedDucks?: (pointId: string) => void;
   onRaccoonQuotes?: (pointId: string) => void;
+  onWaterGarden?: (pointId: string) => void;
+  onBoardEntry?: () => void;
 }

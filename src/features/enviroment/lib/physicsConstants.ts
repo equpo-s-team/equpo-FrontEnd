@@ -3,6 +3,9 @@ export const GHOST_SCALE = 0.5;
 export const GHOST_Y_OFFSET = 3;
 export const GHOST_PHYSICS_RADIUS = 0.5;
 export const GHOST_SPAWN_Y = 10;
+export const GHOST_SPAWN_X = 27.5;
+export const GHOST_SPAWN_Z =12.5;
+
 
 export const MOVEMENT_SPEED = 20;
 export const ROTATION_SPEED = 20;
@@ -18,11 +21,11 @@ export const CLEAN_SKY_COLOR = 0x84eefa;
 export const DETERIORATED_SKY_COLOR = 0x8b8c79;
 export const CLEAN_FOG_COLOR = 0x48dbda;
 export const DETERIORATED_FOG_COLOR = 0x8b8c79;
-export const AMBIENT_LIGHT_CLEAN = 0.7;
+export const AMBIENT_LIGHT_CLEAN = 0.8;
 export const AMBIENT_LIGHT_DIRTY = 0.25;
-export const SUN_LIGHT_CLEAN = 1.2;
+export const SUN_LIGHT_CLEAN = 1.5;
 export const SUN_LIGHT_DIRTY = 0.35;
-export const FOG_NEAR_CLEAN = 10;
+export const FOG_NEAR_CLEAN = 5;
 export const FOG_FAR_CLEAN = 60;
 export const FOG_NEAR_DIRTY = 12;
 export const FOG_FAR_DIRTY = 32;

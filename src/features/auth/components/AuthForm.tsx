@@ -76,7 +76,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   // ── Google Sign-In ──────────────────────────────────────────────────────────
   const handleGoogleSignIn = async () => {
     setErrors({});
-    const result = await loginWithGoogle();
+    const remember = authMode === 'login' ? formData.rememberMe : true;
+    const result = await loginWithGoogle(remember);
     if (result.success && result.user) {
       toastSuccess('¡Bienvenido!');
       onSuccess?.({
@@ -101,7 +102,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
 
     // ── LOGIN ──
     if (authMode === 'login') {
-      const result = await loginWithEmail(formData.email, formData.password);
+      const result = await loginWithEmail(formData.email, formData.password, formData.rememberMe);
       if (result.success && result.user) {
         if (formData.rememberMe) {
           localStorage.setItem('userEmail', formData.email);

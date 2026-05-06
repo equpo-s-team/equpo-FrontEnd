@@ -1,10 +1,13 @@
 import {
   type AuthError,
+  browserLocalPersistence,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   reload,
   sendEmailVerification,
   sendPasswordResetEmail,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile,
@@ -74,9 +77,10 @@ export const useFirebaseAuth = () => {
 
   // ── Email / Password Login ──────────────────────────────────────────────────
   const loginWithEmail = useCallback(
-    async (email: string, password: string): Promise<FirebaseAuthResult> => {
+    async (email: string, password: string, remember = true): Promise<FirebaseAuthResult> => {
       setIsLoading(true);
       try {
+        await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
         const credential = await signInWithEmailAndPassword(auth, email, password);
         const displayName =
           credential.user.displayName ?? credential.user.email?.split('@')[0] ?? 'Usuario';
@@ -112,6 +116,7 @@ export const useFirebaseAuth = () => {
     async (email: string, password: string, displayName: string): Promise<FirebaseAuthResult> => {
       setIsLoading(true);
       try {
+        await setPersistence(auth, browserLocalPersistence);
         const credential = await createUserWithEmailAndPassword(auth, email, password);
 
         await updateProfile(credential.user, { displayName });
@@ -173,11 +178,12 @@ export const useFirebaseAuth = () => {
   }, []);
 
   // ── Google Sign-In ──────────────────────────────────────────────────────────
-  const loginWithGoogle = useCallback(async (): Promise<FirebaseAuthResult> => {
+  const loginWithGoogle = useCallback(async (remember = true): Promise<FirebaseAuthResult> => {
     setIsLoading(true);
     try {
       // Limpiar caché de autenticación para evitar el bug de múltiples cuentas
       await auth.signOut();
+      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
 
       // Crear un nuevo provider para asegurar parámetros frescos
       const freshProvider = new GoogleAuthProvider();

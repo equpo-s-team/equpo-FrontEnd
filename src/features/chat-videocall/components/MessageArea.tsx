@@ -125,7 +125,7 @@ export default function MessageArea() {
   const groups = groupMessagesByDate(messages);
 
   return (
-    <div className="flex-1 overflow-y-auto px-3 sm:px-4 lg:px-5 py-2 flex flex-col gap-1 scrollbar-hide">
+    <div className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-4 lg:px-5 py-2 flex flex-col gap-1 scrollbar-hide">
       {groups.map((group) => (
         <div key={group.date}>
           <DateDivider label={group.date} />

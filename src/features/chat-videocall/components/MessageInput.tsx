@@ -120,6 +120,10 @@ export default function MessageInput() {
 
   const canSend = Boolean(value.trim() && activeRoom) && !isUploading && !isSpectator;
 
+  if (!activeRoom) {
+    return null;
+  }
+
   return (
     <div className="px-3 sm:px-4 py-0.5 border-t border-grey-150 dark:border-gray-700 bg-primary dark:bg-gray-800 flex-shrink-0 relative">
       {/* ReplyTo Indicator */}

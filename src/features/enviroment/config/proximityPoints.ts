@@ -1,5 +1,6 @@
+import {Droplets, Heart, MessageCircle, NotebookPen, Sparkles} from 'lucide-react';
+
 import type { ProximityPoint } from '../types/proximityConfig';
-import { Heart, MessageCircle } from 'lucide-react';
 
 export const PROXIMITY_POINTS: ProximityPoint[] = [
   {
@@ -15,7 +16,47 @@ export const PROXIMITY_POINTS: ProximityPoint[] = [
     position: [65, 2.5 , -30],
     label: 'Hablar',
     icon: MessageCircle,
-    triggerDistance: 10,
+    triggerDistance: 15,
     eventType: 'raccoon-quotes'
+  },
+  {
+    id: 'duck-statue',
+    position: [-32, 35, -27],
+    label: 'Ver',
+    icon: Sparkles,
+    triggerDistance: 50,
+    eventType: 'duck-statue'
+  },
+  {
+    id: 'board-entry-point',
+    position: [-2, 4, -30],
+    label: 'Ver tareas',
+    icon: NotebookPen,
+    triggerDistance: 50,
+    eventType: 'board-entry'
+  },
+  {
+    id: 'water-garden1',
+    position: [-25.5, 4, 70],
+    label: 'Regar\nCosto: 15',
+    icon: Droplets,
+    triggerDistance: 10,
+    eventType: 'water-garden'
+  },
+  {
+    id: 'water-garden2',
+    position: [-2.5, 4, 70],
+    label: 'Regar\nCosto: 15',
+    icon: Droplets,
+    triggerDistance: 10,
+    eventType: 'water-garden'
+  },
+  {
+    id: 'water-garden3',
+    position: [17.2, 4, 70],
+    label: 'Regar\nCosto: 15',
+    icon: Droplets,
+    triggerDistance: 10,
+    eventType: 'water-garden'
   }
 ];

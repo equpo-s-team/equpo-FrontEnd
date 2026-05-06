@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
-import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
-
 import { MobileJoystick } from '@/features/enviroment/components/game/MobileJoystick.tsx';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
+import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
+
 import Experience from './components/game/Experience.tsx';
 import HUD from './components/HUD.tsx';
 import NeonLoadingOverlay from './components/NeonLoadingOverlay.tsx';
@@ -16,6 +17,7 @@ import { type Vector3State } from './types/realtime.ts';
 export default function GamePage() {
   const { user, isAuth } = useAuth();
   const { teamId } = useTeam();
+  const { setActiveItem } = useSidebar();
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -61,7 +63,7 @@ export default function GamePage() {
     localRotation: localRot,
   });
 
-  const { stats, session } = useHudData({
+  const { stats, session, setCoinBalance } = useHudData({
     teamId,
     connectedUsers,
     connectedUserUids,
@@ -79,6 +81,10 @@ export default function GamePage() {
   const handleLoaded = useCallback(() => {
     setIsReady(true);
   }, []);
+
+  const handleBoardEntry = useCallback(() => {
+    setActiveItem('missiones');
+  }, [setActiveItem]);
 
   const playerNames = useMemo(() => {
     if (!teamMembers) return {};
@@ -112,6 +118,9 @@ export default function GamePage() {
           playerNames={playerNames}
           onLoaded={handleLoaded}
           onLocalMove={handleLocalMove}
+          teamId={teamId ?? null}
+          onCoinSpent={setCoinBalance}
+          onBoardEntry={handleBoardEntry}
         />
       </div>
 

@@ -1,4 +1,4 @@
-import {Sprout} from "lucide-react";
+import { Coins, Sprout } from 'lucide-react';
 
 import StatBar from '@/features/enviroment/components/StatBar.tsx';
 
@@ -37,6 +37,19 @@ export default function TopBar({ session, stats }: TopBarProps) {
         icon={<Sprout size={16}/>}
         neonClass="border-green/50 h-12"
       />
+
+      {/* Coin balance pill */}
+      <div
+        className="
+        bg-white/30 border border-yellow-400/50
+        backdrop-blur-md rounded-full
+        px-4 py-2 h-12 flex items-center gap-2
+        text-yellow-200 font-maxwell font-bold text-sm
+      "
+      >
+        <Coins size={16} className="text-yellow-300" />
+        <span>{stats.coinBalance}</span>
+      </div>
     </div>
   );
 }

@@ -15,6 +15,8 @@ export const SOUND_EFFECTS = {
 
   duckFeeding: '/sounds/duck-feeding.mp3',
   raccoonQuotes: '/sounds/raccoon-quotes.mp3',
+  waterGarden: '/sounds/water-garden.mp3',
+  boardEntry: '/sounds/board-entry.mp3',
 
 } as const;
 

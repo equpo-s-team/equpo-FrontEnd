@@ -1,17 +1,50 @@
-import { useCallback } from 'react';
 import { Html } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useCallback, useRef, useState } from 'react';
+import * as THREE from 'three';
 
-import {PROXIMITY_POINTS} from "@/features/enviroment/config/proximityPoints.ts";
-import {ProximityEventHandlers, ProximityPoint} from "@/features/enviroment/types/proximityConfig.ts";
-import {AppTooltip} from "@/components/ui/AppTooltip.tsx";
+import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
+import { PROXIMITY_POINTS } from '@/features/enviroment/config/proximityPoints.ts';
+import { type ProximityEventHandlers, type ProximityPoint } from '@/features/enviroment/types/proximityConfig.ts';
 
 interface ProximityButtonsProps {
   eventHandlers: ProximityEventHandlers;
+  playerPosRef: React.MutableRefObject<THREE.Vector3>;
 }
 
+const CHECK_INTERVAL_MS = 200;
+
 export function ProximityButtons({
-  eventHandlers
+  eventHandlers,
+  playerPosRef,
 }: ProximityButtonsProps) {
+  const [nearbyIds, setNearbyIds] = useState<Set<string>>(new Set());
+  const lastCheckRef = useRef(0);
+  const _pointPositions = useRef(
+    PROXIMITY_POINTS.map(p => new THREE.Vector3(...p.position))
+  );
+
+  useFrame(() => {
+    const now = performance.now();
+    if (now - lastCheckRef.current < CHECK_INTERVAL_MS) return;
+    lastCheckRef.current = now;
+
+    const player = playerPosRef.current;
+    const next = new Set<string>();
+    PROXIMITY_POINTS.forEach((point, i) => {
+      const dist = player.distanceTo(_pointPositions.current[i]);
+      if (dist < point.triggerDistance) {
+        next.add(point.id);
+      }
+    });
+
+    setNearbyIds(prev => {
+      const same =
+        prev.size === next.size && [...prev].every(id => next.has(id));
+      return same ? prev : next;
+    });
+  });
+
   const handleButtonClick = useCallback((point: ProximityPoint) => {
     switch (point.eventType) {
       case 'feed-ducks':
@@ -20,14 +53,19 @@ export function ProximityButtons({
       case 'raccoon-quotes':
         eventHandlers.onRaccoonQuotes?.(point.id);
         break;
+      case 'water-garden':
+        eventHandlers.onWaterGarden?.(point.id);
+        break;
+      case 'board-entry':
+        eventHandlers.onBoardEntry?.();
+        break;
     }
   }, [eventHandlers]);
 
   return (
     <>
-      {PROXIMITY_POINTS.map(point => (
+      {PROXIMITY_POINTS.filter(p => nearbyIds.has(p.id)).map(point => (
         <group key={point.id} position={point.position}>
-
           <Html
             position={[0, 2, 0]}
             center

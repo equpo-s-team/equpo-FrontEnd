@@ -9,6 +9,7 @@ interface TeamFormSidebarProps {
   mode: 'create' | 'edit';
   team?: Team;
   onClose: () => void;
+  isSubmitting?: boolean;
   onSubmit: (payload: {
     name: string;
     description: string;
@@ -36,6 +37,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   mode,
   team,
   onClose,
+  isSubmitting = false,
   onSubmit,
 }) => {
   const [name, setName] = useState(team?.name || '');
@@ -310,10 +312,11 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
             </button>
             <button
               onClick={handleSubmit}
-              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95"
+              disabled={isSubmitting}
+              className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
               style={{ background: cfg.gradient, boxShadow: `0 6px 20px ${cfg.glow}` }}
             >
-              {isCreate ? 'Crear equipo ✦' : 'Guardar cambios'}
+              {isSubmitting ? 'Guardando...' : isCreate ? 'Crear equipo ✦' : 'Guardar cambios'}
             </button>
           </div>
         </div>

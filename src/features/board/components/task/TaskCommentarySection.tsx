@@ -35,8 +35,9 @@ interface CommentaryItemProps {
   commentary: TaskCommentary;
   currentUserUid: string | null;
   resolveAuthor: (uid: string) => AuthorInfo;
-  onEdit: (id: string, text: string) => void;
+  onEdit: (id: string, text: string) => Promise<void>;
   onDelete: (id: string) => void;
+  isDeleting?: boolean;
 }
 
 function CommentaryItem({
@@ -45,17 +46,25 @@ function CommentaryItem({
   resolveAuthor,
   onEdit,
   onDelete,
+  isDeleting = false,
 }: CommentaryItemProps) {
   const [editMode, setEditMode] = useState(false);
   const [editText, setEditText] = useState(commentary.commentary);
+  const [isSaving, setIsSaving] = useState(false);
   const isOwner = commentary.userUid === currentUserUid;
   const author = resolveAuthor(commentary.userUid);
 
-  const handleSaveEdit = () => {
-    if (editText.trim()) {
-      onEdit(commentary.commentary, editText.trim());
+  const handleSaveEdit = async () => {
+    if (!editText.trim()) return;
+    setIsSaving(true);
+    try {
+      await onEdit(commentary.commentary, editText.trim());
+      setEditMode(false);
+    } catch {
+      // keep edit mode open so user doesn't lose their text
+    } finally {
+      setIsSaving(false);
     }
-    setEditMode(false);
   };
 
   const renderedHtml = markdownToEditorHtml(commentary.commentary);
@@ -93,16 +102,18 @@ function CommentaryItem({
             <div className="flex gap-2 mt-1.5">
               <button
                 onClick={handleSaveEdit}
-                className="px-3 py-1 rounded-[7px] bg-blue text-white text-[12px] font-semibold hover:bg-blue/90 cursor-pointer transition-colors"
+                disabled={isSaving}
+                className="px-3 py-1 rounded-[7px] bg-blue text-white text-[12px] font-semibold hover:bg-blue/90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
-                Guardar
+                {isSaving ? 'Guardando...' : 'Guardar'}
               </button>
               <button
                 onClick={() => {
                   setEditText(commentary.commentary);
                   setEditMode(false);
                 }}
-                className="px-3 py-1 rounded-[7px] border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] hover:border-blue hover:text-blue cursor-pointer transition-colors"
+                disabled={isSaving}
+                className="px-3 py-1 rounded-[7px] border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] hover:border-blue hover:text-blue disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
                 Cancelar
               </button>
@@ -126,7 +137,8 @@ function CommentaryItem({
           </button>
           <button
             onClick={() => onDelete(commentary.commentary)}
-            className="p-1 rounded text-grey-400 dark:text-grey-500 hover:text-red transition-colors cursor-pointer"
+            disabled={isDeleting}
+            className="p-1 rounded text-grey-400 dark:text-grey-500 hover:text-red disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             <Trash2 size={12} />
           </button>
@@ -151,6 +163,7 @@ export default function TaskCommentarySection({
 }: TaskCommentarySectionProps) {
   const [newText, setNewText] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [pendingDeleteIds, setPendingDeleteIds] = useState<Set<string>>(new Set());
   const formRef = useRef<HTMLDivElement | null>(null);
 
   const { user: authUser } = useAuth();
@@ -191,12 +204,24 @@ export default function TaskCommentarySection({
     setShowForm(false);
   };
 
-  const handleEdit = (commentaryId: string, commentary: string) => {
-    updateCommentary.mutate({ teamId, taskId, commentaryId, commentary });
+  const handleEdit = (commentaryId: string, commentary: string): Promise<void> => {
+    return updateCommentary.mutateAsync({ teamId, taskId, commentaryId, commentary }).then(() => {});
   };
 
   const handleDelete = (commentaryId: string) => {
-    deleteCommentary.mutate({ teamId, taskId, commentaryId });
+    if (pendingDeleteIds.has(commentaryId)) return;
+    setPendingDeleteIds((prev) => new Set(prev).add(commentaryId));
+    deleteCommentary.mutate(
+      { teamId, taskId, commentaryId },
+      {
+        onSettled: () =>
+          setPendingDeleteIds((prev) => {
+            const next = new Set(prev);
+            next.delete(commentaryId);
+            return next;
+          }),
+      },
+    );
   };
 
   return (
@@ -239,6 +264,7 @@ export default function TaskCommentarySection({
               resolveAuthor={resolveAuthor}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              isDeleting={pendingDeleteIds.has(c.commentary)}
             />
           ))}
         </div>

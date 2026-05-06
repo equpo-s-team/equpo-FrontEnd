@@ -1,4 +1,3 @@
-import { signOut } from 'firebase/auth';
 import log from 'loglevel';
 import { Loader2, LogOut, Plus, UserPlus, Users, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
@@ -6,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
 import { toastError, toastSuccess } from '@/components/ui/toast';
-import { useAuth } from '@/context/AuthContext';
+import { logOut, useAuth } from '@/context/AuthContext.tsx';
 import DarkModeToggle from '@/features/team/components/DarkModeToggle.tsx';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
@@ -18,7 +17,6 @@ import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
-import { auth } from '@/firebase';
 
 import { AchievementsSection } from './components/Achievements/AchievementsSection';
 import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard';
@@ -194,7 +192,7 @@ export const TeamsHub: React.FC = () => {
 
   const handleLogout = async (): Promise<void> => {
     try {
-      await signOut(auth);
+      await logOut();
       void navigate('/');
     } catch {
       toastError('Error al cerrar sesión', 'No se pudo cerrar la sesión. Intenta de nuevo.');

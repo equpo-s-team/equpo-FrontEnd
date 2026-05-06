@@ -51,6 +51,7 @@ function StepRow({
   isBlocked,
   canEdit,
   canToggle,
+  isToggling,
   onToggle,
   onDelete,
   onEdit,
@@ -60,6 +61,7 @@ function StepRow({
   isBlocked: boolean;
   canEdit: boolean;
   canToggle: boolean;
+  isToggling: boolean;
   onToggle: (isDone: boolean) => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
@@ -86,7 +88,7 @@ function StepRow({
     >
       {/* Checkbox */}
       <button
-        disabled={!canToggle || isBlocked}
+        disabled={!canToggle || isBlocked || isToggling}
         onClick={() => onToggle(!step.isDone)}
         className={`shrink-0 w-4 h-4 rounded border-[1.5px] flex items-center justify-center transition-all duration-200
           ${
@@ -175,6 +177,7 @@ export default function TaskStepsSection({
 }: TaskStepsSectionProps) {
   const [page, setPage] = useState(0);
   const [newStepText, setNewStepText] = useState('');
+  const [togglingIds, setTogglingIds] = useState<Set<string>>(new Set());
 
   const { data, isLoading } = useTaskStepsRealtime(
     createMode ? '' : teamId,
@@ -270,6 +273,7 @@ export default function TaskStepsSection({
                 isBlocked={true}
                 canEdit={!isSupero}
                 canToggle={false}
+                isToggling={false}
                 onToggle={() => {}}
                 onDelete={() => handleDeleteLocal(globalIndex)}
                 onEdit={(text) => {
@@ -340,6 +344,7 @@ export default function TaskStepsSection({
   const pageSteps = nonSupero.slice(page * STEPS_PER_PAGE, (page + 1) * STEPS_PER_PAGE);
 
   const handleToggle = (step: TaskStep, isDone: boolean) => {
+    if (togglingIds.has(step.step)) return;
     const isSuperoStep = step.step === 'Supero Review';
     // Toggling a regular step done while task is 'todo' would auto-transition
     // it to 'in-progress' on the backend; require an assignment first.
@@ -351,7 +356,18 @@ export default function TaskStepsSection({
       return;
     }
     play('stepChecked');
-    toggleStep.mutate({ teamId, taskId, stepId: step.step, isDone });
+    setTogglingIds((prev) => new Set(prev).add(step.step));
+    toggleStep.mutate(
+      { teamId, taskId, stepId: step.step, isDone },
+      {
+        onSettled: () =>
+          setTogglingIds((prev) => {
+            const next = new Set(prev);
+            next.delete(step.step);
+            return next;
+          }),
+      },
+    );
   };
 
   const handleDelete = (step: TaskStep) => {
@@ -400,6 +416,7 @@ export default function TaskStepsSection({
                 isBlocked={false}
                 canEdit={canEdit && canEditTask}
                 canToggle={!canEdit && canToggleRegularStep}
+                isToggling={togglingIds.has(step.step)}
                 onToggle={(isDone) => handleToggle(step, isDone)}
                 onDelete={() => handleDelete(step)}
                 onEdit={(text) => handleEdit(step, text)}
@@ -467,6 +484,7 @@ export default function TaskStepsSection({
                   isBlocked={isBlocked}
                   canEdit={false}
                   canToggle={canToggle}
+                  isToggling={togglingIds.has(superoStep.step)}
                   onToggle={(isDone) => handleToggle(superoStep, isDone)}
                   onDelete={() => {}}
                   onEdit={() => {}}

@@ -346,6 +346,7 @@ export const TeamsHub: React.FC = () => {
           mode={modal.mode}
           team={modal.mode === 'edit' ? activeTeam : undefined}
           onClose={closeModal}
+          isSubmitting={createTeam.isPending || updateTeam.isPending}
           onSubmit={(payload) => {
             if (modal.mode === 'create') handleCreate(payload);
             else if (modal.mode === 'edit' && activeTeam) handleEdit(activeTeam.id, payload);

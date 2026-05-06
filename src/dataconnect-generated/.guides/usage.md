@@ -12,10 +12,12 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useCreateUser, useTouchUserLastActive, useUpdateUserProfile, useGetUser } from '@dataconnect/generated/react';
+import { useCreateUser, useBackfillUserEmail, useTouchUserLastActive, useUpdateUserProfile, useGetUser } from '@dataconnect/generated/react';
 // The types of these hooks are available in react/index.d.ts
 
 const { data, isPending, isSuccess, isError, error } = useCreateUser(createUserVars);
+
+const { data, isPending, isSuccess, isError, error } = useBackfillUserEmail(backfillUserEmailVars);
 
 const { data, isPending, isSuccess, isError, error } = useTouchUserLastActive();
 
@@ -60,11 +62,14 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { createUser, touchUserLastActive, updateUserProfile, getUser } from '@dataconnect/generated';
+import { createUser, backfillUserEmail, touchUserLastActive, updateUserProfile, getUser } from '@dataconnect/generated';
 
 
 // Operation CreateUser:  For variables, look at type CreateUserVars in ../index.d.ts
 const { data } = await CreateUser(dataConnect, createUserVars);
+
+// Operation BackfillUserEmail:  For variables, look at type BackfillUserEmailVars in ../index.d.ts
+const { data } = await BackfillUserEmail(dataConnect, backfillUserEmailVars);
 
 // Operation TouchUserLastActive: 
 const { data } = await TouchUserLastActive(dataConnect);

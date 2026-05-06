@@ -7,8 +7,8 @@ import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 import { getTaskClasses } from '../utils/timelineStyles';
 
 const HOUR_HEIGHT = 64; // px per hour slot
-const START_HOUR = 6;
-const END_HOUR = 22;
+const START_HOUR = 0;
+const END_HOUR = 24;
 const TOTAL_HOURS = END_HOUR - START_HOUR;
 interface WeekTimelineProps {
   selectedDate: Date;
@@ -167,39 +167,39 @@ export default function WeekTimeline({
 
       {/* Grid container */}
       <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-gray-800 relative">
-        {/* Sticky Header Row for Days */}
-        <div className="flex border-b border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 shrink-0 z-20">
-          {/* Spacer for hours column */}
-          <div className="w-[50px] shrink-0 border-r border-grey-150 dark:border-gray-700 bg-grey-50 dark:bg-gray-800" />
-          <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700">
-            {weekDays.map(({ date, key }) => {
-              const isToday = key === todayKey;
-              return (
-                <div
-                  key={`header-${key}`}
-                  className={`py-3 px-1 text-center bg-white dark:bg-gray-800 ${isToday ? 'bg-blue/5' : ''}`}
-                >
-                  <p className="text-xs font-bold text-grey-400 dark:text-grey-500 uppercase tracking-widest font-body">
-                    {DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1]}
-                  </p>
-                  <div
-                    className={`mx-auto mt-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body ${
-                      isToday
-                        ? 'bg-blue text-white shadow-neonBlue'
-                        : 'text-grey-800 dark:text-gray-300'
-                    }`}
-                  >
-                    {date.getDate()}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Scrollable Timeline */}
         <div className="flex-1 overflow-y-auto custom-scrollbar relative">
-          <div className="flex relative" style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}>
+          {/* Sticky Header Row for Days */}
+          <div className="flex border-b border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 sticky top-0 z-40">
+            {/* Spacer for hours column */}
+            <div className="w-[60px] shrink-0 border-r border-grey-150 dark:border-gray-700 bg-grey-50 dark:bg-gray-800" />
+            <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700">
+              {weekDays.map(({ date, key }) => {
+                const isToday = key === todayKey;
+                return (
+                  <div
+                    key={`header-${key}`}
+                    className={`py-3 px-1 text-center bg-white dark:bg-gray-800 ${isToday ? 'bg-blue/5' : ''}`}
+                  >
+                    <p className="text-xs font-bold text-grey-400 dark:text-grey-500 uppercase tracking-widest font-body">
+                      {DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1]}
+                    </p>
+                    <div
+                      className={`mx-auto mt-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body ${
+                        isToday
+                          ? 'bg-blue text-white shadow-neonBlue'
+                          : 'text-grey-800 dark:text-gray-300'
+                      }`}
+                    >
+                      {date.getDate()}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex relative mt-6 mb-6" style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}>
             {/* Hours Background Lines */}
             <div className="absolute inset-0 pointer-events-none">
               {Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => {
@@ -210,8 +210,10 @@ export default function WeekTimeline({
                     className="absolute left-0 right-0 flex items-start"
                     style={{ top: `${i * HOUR_HEIGHT}px` }}
                   >
-                    <span className="w-[50px] text-right text-xs pr-2 text-grey-400 dark:text-grey-500 font-body font-medium -translate-y-1/2 bg-white dark:bg-gray-800">
-                      {formatHour(hour)}
+                    <span
+                      className="w-[60px] whitespace-nowrap text-right text-xs pr-2 text-grey-400 dark:text-grey-500 font-body font-medium bg-white dark:bg-gray-800 -translate-y-1/2"
+                    >
+                      {hour === END_HOUR ? '' : formatHour(hour)}
                     </span>
                     <div className="flex-1 h-px bg-grey-150 dark:bg-gray-700" />
                   </div>
@@ -220,7 +222,7 @@ export default function WeekTimeline({
             </div>
 
             {/* Day Columns */}
-            <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700 ml-[50px] relative z-10">
+            <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700 ml-[60px] relative z-10">
               {weekDays.map(({ key, tasks: dayTasks }) => {
                 const isToday = key === todayKey;
                 const laidOut = layoutTasks(dayTasks);

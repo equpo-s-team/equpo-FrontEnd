@@ -74,13 +74,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const shouldUpsertDatabaseUser =
               !databaseUser ||
               databaseUser.displayName !== baseDisplayName ||
-              (databaseUser.photoURL ?? null) !== canonicalPhotoURL;
+              (databaseUser.photoURL ?? null) !== canonicalPhotoURL ||
+              (databaseUser.email ?? null) !== (userData.email ?? null);
 
             if (shouldUpsertDatabaseUser) {
               try {
                 await createUser({
                   displayName: baseDisplayName,
                   photoURL: canonicalPhotoURL,
+                  email: userData.email ?? null,
                 });
               } catch (error) {
                 log.warn('No se pudo sincronizar el perfil del usuario en Data Connect:', error);

@@ -76,7 +76,7 @@ export function InvitationChoiceModal({
               </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-grey-800 dark:text-gray-100 mb-1 font-body text-base">
-                  Invitar por UID
+                  Agregar por UID o Email
                 </h3>
                 <p className="text-sm text-grey-500 dark:text-grey-400 font-body">Para usuarios específicos</p>
               </div>

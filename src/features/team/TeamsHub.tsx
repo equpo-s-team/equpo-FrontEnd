@@ -1,6 +1,6 @@
 import { signOut } from 'firebase/auth';
 import log from 'loglevel';
-import { Loader2,LogOut, Users, X } from 'lucide-react';
+import { Loader2, LogOut, Plus, UserPlus, Users, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -106,12 +106,16 @@ export const TeamsHub: React.FC = () => {
   const openCreate = () => setModal({ mode: 'create' });
   const closeModal = () => setModal({ mode: null });
 
-  const handleCreate = (payload: { name: string; description: string; memberUids: string[] }) => {
+  const handleCreate = (payload: {
+    name: string;
+    description: string;
+    memberIdentifiers: string[];
+  }) => {
     createTeam.mutate(
       {
         name: payload.name,
         description: payload.description || null,
-        memberUids: payload.memberUids,
+        memberIdentifiers: payload.memberIdentifiers,
       },
       {
         onSuccess: () => {
@@ -129,14 +133,14 @@ export const TeamsHub: React.FC = () => {
 
   const handleEdit = (
     teamId: string,
-    payload: { name: string; description: string; memberUids: string[] },
+    payload: { name: string; description: string; memberIdentifiers: string[] },
   ) => {
     const updatePayload: Record<string, string | null> = {};
     if (activeTeam && payload.name !== activeTeam.name) updatePayload.name = payload.name;
     if (activeTeam && payload.description !== (activeTeam.description || ''))
       updatePayload.description = payload.description || null;
     updateTeam.mutate(
-      { teamId, payload: updatePayload, memberUids: payload.memberUids },
+      { teamId, payload: updatePayload, memberIdentifiers: payload.memberIdentifiers },
       {
         onSuccess: () => {
           closeModal();
@@ -220,14 +224,14 @@ export const TeamsHub: React.FC = () => {
 
       {/* Main content - Responsive grid */}
       <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="grid h-full grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
+        <div className="grid lg:h-full grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
           {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
           </section>
 
           {/* Teams Section - Main content */}
-          <section className="lg:col-span-3 h-full rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 flex flex-col min-h-0">
+          <section className="lg:col-span-3 lg:h-full rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 flex flex-col min-h-0">
             {/* Teams Header with Search and Create */}
             <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
               <div
@@ -274,15 +278,16 @@ export const TeamsHub: React.FC = () => {
                     boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
                   }}
                 >
-                  <span className="text-base leading-none">+</span>
+                  <Plus size={18} />
                   <span className="hidden sm:inline">Crear equipo</span>
                 </button>
 
                 {/* Redeem Code Button */}
                 <button
                   onClick={() => setIsRedeemModalOpen(true)}
-                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 bg-white border border-grey-200 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 dark:text-gray-300 darbg-white border dark:bg-gray-600 border-grey-200 dark:border-gray-500 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
                 >
+                  <UserPlus size={18} />
                   <span className="hidden sm:inline">Unirte a equipo</span>
                 </button>
               </div>
@@ -329,7 +334,7 @@ export const TeamsHub: React.FC = () => {
           </section>
 
           {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
-          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
+          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full lg:max-h-none lg:overflow-visible">
             <div className="rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
               <AchievementsSection achievements={mappedAchievements} />
             </div>
@@ -361,9 +366,9 @@ export const TeamsHub: React.FC = () => {
       {/* Redeem Code Modal */}
       {isRedeemModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 max-w-sm w-full">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-grey-800">Unirte a equipo</h2>
+              <h2 className="text-lg font-bold text-grey-800 dark:text-gray-300">Unirte a equipo</h2>
               <button
                 onClick={() => {
                   setIsRedeemModalOpen(false);
@@ -375,7 +380,7 @@ export const TeamsHub: React.FC = () => {
               </button>
             </div>
 
-            <p className="text-sm text-grey-600 mb-4">
+            <p className="text-sm text-grey-600 dark:text-gray-300 mb-4">
               Ingresa el código que recibiste para unirte a un equipo.
             </p>
 
@@ -406,7 +411,7 @@ export const TeamsHub: React.FC = () => {
               className="space-y-4"
             >
               <div>
-                <label className="block text-sm font-medium text-grey-700 mb-2">
+                <label className="block text-sm font-medium text-grey-700 dark:text-gray-300 mb-2">
                   Código
                 </label>
                 <input
@@ -415,7 +420,7 @@ export const TeamsHub: React.FC = () => {
                   onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
                   placeholder="Ej: ABC123XY"
                   disabled={isRedeeming}
-                  className="w-full px-4 py-3 border border-grey-200 rounded-xl text-sm text-grey-800 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
+                  className="w-full px-4 py-3 border dark:bg-gray-800 dark:border-gray-700 rounded-xl text-sm text-grey-800 dark:text-gray-300 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
                   required
                 />
               </div>
@@ -428,7 +433,7 @@ export const TeamsHub: React.FC = () => {
                     setRedeemCode('');
                   }}
                   disabled={isRedeeming}
-                  className="flex-1 py-2.5 rounded-xl border border-grey-200 text-sm font-medium text-grey-600 hover:bg-grey-50 disabled:opacity-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border dark:bg-gray-800 border-grey-200 dark:border-gray-700 text-sm font-medium text-grey-600 dark:text-gray-300 hover:bg-grey-50 dark:hover:bg-gray-900 disabled:opacity-50 transition-colors"
                 >
                   Cancelar
                 </button>

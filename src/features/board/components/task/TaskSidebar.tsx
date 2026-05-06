@@ -650,6 +650,7 @@ export default function TaskSidebar({
                 taskHasAssignment={
                   (task.assignedUsers?.length ?? 0) > 0 || Boolean(task.assignedGroupId)
                 }
+                percentageBgClass="bg-transparent"
               />
             )}
 
@@ -731,6 +732,7 @@ export default function TaskSidebar({
                     taskHasAssignment={
                       (task?.assignedUsers?.length ?? 0) > 0 || Boolean(task?.assignedGroupId)
                     }
+                    percentageBgClass="bg-transparent"
                   />
                   {errors.steps && <p className="mt-1 text-xs text-red">{errors.steps}</p>}
                 </div>
@@ -746,7 +748,7 @@ export default function TaskSidebar({
                     <DateTimePicker
                       value={dueDate}
                       onChange={setDueDate}
-                      placeholder="Seleccionar fecha y hora"
+                      placeholder="Fecha y hora"
                       error={!!errors.dueDate}
                       required={true}
                       showLabel={false}

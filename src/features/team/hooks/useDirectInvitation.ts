@@ -5,7 +5,8 @@ import { request } from '@/lib/api/core';
 
 export interface DirectInvitationPayload {
   teamId: string;
-  userUid: string;
+  userUid?: string;
+  email?: string;
   role?: 'member' | 'collaborator' | 'spectator';
 }
 
@@ -25,10 +26,19 @@ export const useDirectInvitation = () => {
         throw new Error('User not authenticated');
       }
 
-      return request<DirectInvitationResponse>(`/teams/${payload.teamId}/members`, 'POST', {
-        userUid: payload.userUid,
-        role: payload.role || 'member',
-      });
+      if (!payload.userUid && !payload.email) {
+        throw new Error('userUid or email is required');
+      }
+
+      const body: Record<string, string> = { role: payload.role || 'member' };
+      if (payload.userUid) body.userUid = payload.userUid;
+      else if (payload.email) body.email = payload.email;
+
+      return request<DirectInvitationResponse>(
+        `/teams/${payload.teamId}/members`,
+        'POST',
+        body,
+      );
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['teamMembers'] });

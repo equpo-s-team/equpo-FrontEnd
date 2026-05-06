@@ -81,102 +81,113 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
 
   return (
     <div className="relative w-full">
-      <div className="backdrop-blur-md p-5 flex items-center gap-4">
-        {/* Avatar */}
-        <div className="relative shrink-0">
-          <UserAvatar
-            src={user.photoURL}
-            alt={user.displayName}
-            className="w-14 h-14"
-            style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.35)' }}
-            fallbackClassName="text-white text-lg"
-            loading="eager"
-          />
-          {/* Level badge */}
-          <div
-            className="absolute -bottom-2 -right-2 w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold border-2 border-white"
-            style={{ background: 'linear-gradient(135deg, #9b7fe1, #5961F9)' }}
-          >
-            {user.level}
+      <div className="backdrop-blur-md p-5 flex items-start gap-4">
+        {/* Left Column: Avatar & Mobile Settings */}
+        <div className="flex flex-col items-center gap-3 shrink-0">
+          <div className="relative">
+            <UserAvatar
+              src={user.photoURL}
+              alt={user.displayName}
+              className="w-14 h-14"
+              style={{ boxShadow: '0 4px 14px rgba(96,175,255,0.35)' }}
+              fallbackClassName="text-white text-lg"
+              loading="eager"
+            />
+            {/* Level badge */}
+            <div
+              className="absolute -bottom-2 -right-2 w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold border-2 border-white"
+              style={{ background: 'linear-gradient(135deg, #9b7fe1, #5961F9)' }}
+            >
+              {user.level}
+            </div>
           </div>
+
+          {/* Mobile Settings Button - Only visible on mobile */}
+          <button
+            onClick={onOpenSettings}
+            className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:shadow-lg hover:scale-105 transition-all"
+            aria-label="Configuración de perfil"
+          >
+            <Bolt size={18} />
+          </button>
         </div>
 
-        {/* Info */}
+        {/* Right Column: Name, Desktop Settings, UID, Stats, Progress */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="flex items-start justify-between gap-3 mb-1">
             <div className="flex-1 min-w-0">
               <h3
-                className="font-bold text-grey-800 dark:text-white text-xl leading-tight mb-2"
+                className="font-bold text-grey-800 dark:text-white text-xl leading-tight"
                 style={{ fontFamily: 'DM Sans, sans-serif', letterSpacing: '-0.02em' }}
               >
                 {user.displayName}
               </h3>
 
-              <div className="flex items-center gap-2">
+              {/* UID display */}
+              <div className="flex items-center gap-2 mt-1 mb-2">
                 <p
-                  className={`text-sm font-mono transition-colors duration-200 ${
+                  className={`text-xs font-mono transition-colors duration-200 truncate ${
                     isCopied ? 'text-green-600' : 'text-grey-400'
                   }`}
                   title={user.uid}
                 >
                   {user.uid}
                 </p>
-                <AppTooltip content={isCopied ? '¡Copiado!' : 'Copiar UID'}>
-                  <button
-                    onClick={() => void handleCopyUid()}
-                    className={`p-2 rounded-lg transition-all duration-200 transform hover:scale-105 ${
-                      isCopied
-                        ? 'bg-green-100 text-green-600'
-                        : 'text-grey-400 hover:text-grey-600 hover:bg-grey-100'
-                    }`}
-                  >
-                    <Clipboard size={16} />
-                  </button>
-                </AppTooltip>
+                <button
+                  onClick={() => void handleCopyUid()}
+                  className={`p-1 rounded-lg transition-all duration-200 transform hover:scale-105 shrink-0 ${
+                    isCopied
+                      ? 'bg-green-100 text-green-600'
+                      : 'text-grey-400 hover:text-grey-600 dark:hover:text-gray-300 hover:bg-grey-100 dark:hover:bg-gray-700'
+                  }`}
+                >
+                  <Clipboard size={14} />
+                </button>
               </div>
             </div>
 
+            {/* Desktop Settings Button - Hidden on mobile */}
             <AppTooltip content="Configuración de perfil">
               <button
                 onClick={onOpenSettings}
-                className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:shadow-lg hover:scale-105 transition-all shrink-0"
+                className="hidden lg:flex w-10 h-10 rounded-xl items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:shadow-lg hover:scale-105 transition-all shrink-0"
               >
                 <Bolt size={20} />
               </button>
             </AppTooltip>
           </div>
 
-          <div className="flex flex-row items-center mb-1">
+          {/* Stats: Coins & Rank */}
+          <div className="flex flex-row items-center gap-2 mb-3">
             {/* Coins */}
-            <div className="flex h-7 px-2 rounded-lg text-orange-400 border border-orange-200 bg-yellow-100/90 w-14 max-w-16 items-center justify-between mb-1 justify-between">
+            <div className="flex h-7 px-2.5 rounded-lg text-orange-400 border border-orange-200 bg-yellow-100/90 items-center gap-1.5">
               <Coins size={14} />
-              <span className="text-xs font-semibold">{user.virtualCurrency}</span>
+              <span className="text-xs font-bold">{user.virtualCurrency}</span>
             </div>
 
             {/* Rank */}
             <div
-              className={`px-2 h-7 rounded-lg  ${rankBgColor} ${rankColor} flex max-w-24 items-center justify-center gap-1 text-xs font-bold mx-2`}
+              className={`px-2.5 h-7 rounded-lg ${rankBgColor} ${rankColor} flex items-center gap-1.5 text-xs font-bold`}
             >
               {React.createElement(rankIcon, { size: 14 })}
               {rankName}
             </div>
           </div>
 
-          {/* XP bar */}
-          <div>
-            <div className="flex items-left justify-between mb-1">
-              <span className="text-xs font-semibold text-grey-500">
+          {/* XP Progress Section */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] sm:text-xs font-semibold text-grey-500 uppercase tracking-wider">
                 Nivel {user.level} → {user.level + 1}
               </span>
-              <span className="text-xs font-bold" style={{ color: '#9b7fe1' }}>
-                {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()}{' '}
-                XP
+              <span className="text-[10px] sm:text-xs font-bold" style={{ color: '#9b7fe1' }}>
+                {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()} XP
               </span>
             </div>
             <AppProgress
               value={xpPercent}
               gradientStyle="linear-gradient(90deg, #60AFFF 0%, #9b7fe1 100%)"
-              glow="0 0 8px rgba(155,127,225,0.5)"
+              glow="0 0 8px rgba(155,127,225,0.4)"
               height="h-1.5"
             />
           </div>

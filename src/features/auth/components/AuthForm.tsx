@@ -17,6 +17,7 @@ import { CompleteForm } from './CompleteForm.tsx';
 import { LoginForm } from './LoginForm.tsx';
 import { ResetForm } from './ResetForm.tsx';
 import { SignupForm } from './SignupForm.tsx';
+import { VerifyEmailStep } from './VerifyEmailStep.tsx';
 
 export const AuthForm: React.FC<AuthFormProps> = ({
   onSuccess,
@@ -121,9 +122,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     if (authMode === 'signup') {
       const result = await signupWithEmail(formData.email, formData.password, formData.name);
       if (result.success) {
-        setRegistrationStep('complete');
-        toastSuccess('¡Cuenta creada con éxito!');
-        onSuccess?.({ email: formData.email, name: formData.name });
+        setRegistrationStep('verify');
+        toastSuccess('¡Te enviamos un enlace de verificación a tu correo!');
       } else if (result.error) {
         toastError(result.error);
       }
@@ -153,6 +153,17 @@ export const AuthForm: React.FC<AuthFormProps> = ({
           onInputChange={handleInputChange}
           onFieldBlur={handleFieldBlur}
           onBackToLogin={() => setAuthMode('login')}
+        />
+      );
+    }
+
+    if (authMode === 'signup' && registrationStep === 'verify') {
+      return (
+        <VerifyEmailStep
+          email={formData.email}
+          onVerified={() => {
+            onSuccess?.({ email: formData.email, name: formData.name });
+          }}
         />
       );
     }
@@ -241,7 +252,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
       </div>
 
       {/* ── Login / Sign Up tabs ── */}
-      {authMode !== 'reset' && (
+      {authMode !== 'reset' && registrationStep === 'details' && (
         <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1 mb-4">
           <motion.button
             onClick={() => setAuthMode('login')}

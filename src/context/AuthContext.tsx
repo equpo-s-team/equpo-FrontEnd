@@ -12,6 +12,7 @@ interface AuthUser {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  emailVerified: boolean;
   level?: number;
   experiencePoints?: number;
   virtualCurrency?: number;
@@ -24,6 +25,7 @@ interface AuthContextType {
   user: AuthUser | null;
   isLoading: boolean;
   isAuth: boolean;
+  isVerified: boolean;
   updateUserData: (newData: Partial<AuthUser>) => void;
 }
 
@@ -56,6 +58,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Wrap async operations in an IIFE to avoid returning a Promise
         void (async () => {
           try {
+            // Gate: native password users must verify their email before getting a
+            // Data Connect record. Google and other federated providers are already
+            // verified by their identity provider.
+            const isPasswordOnly =
+              user.providerData.length > 0 &&
+              user.providerData.every((p) => p.providerId === 'password');
+            const isVerifiedUser = !isPasswordOnly || user.emailVerified;
+
+            if (!isVerifiedUser) {
+              setUser({
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                emailVerified: false,
+              });
+              setIsLoading(false);
+              return;
+            }
+
             const databaseUser = await fetchDatabaseUser();
             const baseDisplayName =
               userData.displayName ?? userData.email?.split('@')[0] ?? 'Usuario';
@@ -92,6 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (databaseUser) {
               setUser({
                 ...userData,
+                emailVerified: user.emailVerified,
                 photoURL: canonicalPhotoURL,
                 level: databaseUser.level,
                 experiencePoints: databaseUser.experiencePoints,
@@ -103,6 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             } else {
               setUser({
                 ...userData,
+                emailVerified: user.emailVerified,
                 displayName: baseDisplayName,
                 photoURL: canonicalPhotoURL,
               });
@@ -129,6 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     isLoading,
     isAuth: !!user,
+    isVerified: !!user && user.emailVerified !== false,
     updateUserData,
   };
 

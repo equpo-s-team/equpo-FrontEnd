@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AppLayout from '@/components/AppLayout.tsx';
 import { useAuth } from '@/context/AuthContext';
 import { TeamProvider, useTeam } from '@/context/TeamContext.tsx';
+import { AuthActionPage } from '@/features/auth/components/AuthActionPage.tsx';
 import TeamBoard from '@/features/board/TeamBoard.tsx';
 import ChatPage from '@/features/chat-videocall/ChatPage.tsx';
 import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
@@ -71,7 +72,7 @@ function Dashboard() {
 }
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuth, isLoading } = useAuth();
+  const { isVerified, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -81,7 +82,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return isAuth ? (
+  return isVerified ? (
     <TeamProvider>
       <SidebarProvider>
         <ChatProvider>{children}</ChatProvider>
@@ -93,7 +94,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function TeamsRoute({ children }: { children: React.ReactNode }) {
-  const { isAuth, isLoading } = useAuth();
+  const { isVerified, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -103,7 +104,7 @@ function TeamsRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return isAuth ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace />;
+  return isVerified ? <SidebarProvider>{children}</SidebarProvider> : <Navigate to="/" replace />;
 }
 
 export default function Router() {
@@ -111,6 +112,7 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/auth/action" element={<AuthActionPage />} />
         <Route path="/invite/:code?" element={<RedeemInvitePage />} />
         <Route path="/join/:code" element={<JoinTeamPage />} />
 

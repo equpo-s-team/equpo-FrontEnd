@@ -1,5 +1,5 @@
 export type AuthMode = 'login' | 'signup' | 'reset';
-export type RegistrationStep = 'details' | 'complete';
+export type RegistrationStep = 'details' | 'verify' | 'complete';
 
 export interface AuthFormProps {
   onSuccess?: (userData: { email: string; name?: string }) => void;

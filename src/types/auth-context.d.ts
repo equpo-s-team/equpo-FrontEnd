@@ -10,6 +10,7 @@ declare module '@/context/AuthContext' {
   export interface AuthContextValue {
     user: AuthContextUser | null;
     isAuth: boolean;
+    isVerified: boolean;
     isLoading: boolean;
     updateUserData: (data: Partial<AuthContextUser>) => void;
   }

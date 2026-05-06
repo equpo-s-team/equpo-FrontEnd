@@ -2,6 +2,7 @@ import {
   type AuthError,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  reload,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -58,6 +59,10 @@ const mapFirebaseError = (error: AuthError): string => {
       return 'Operación cancelada.';
     case 'auth/account-exists-with-different-credential':
       return 'Ya existe una cuenta con este correo usando otro método de acceso.';
+    case 'auth/expired-action-code':
+      return 'El enlace de verificación ha expirado. Solicita uno nuevo.';
+    case 'auth/invalid-action-code':
+      return 'El enlace de verificación no es válido o ya fue usado.';
     default:
       return `Error de autenticación: ${error.message}`;
   }
@@ -109,15 +114,15 @@ export const useFirebaseAuth = () => {
       try {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
 
-        // Set display name
         await updateProfile(credential.user, { displayName });
 
-        // Send email verification
-        await sendEmailVerification(credential.user);
+        // Send verification link that returns to our custom action page.
+        await sendEmailVerification(credential.user, {
+          url: `${window.location.origin}/auth/action`,
+          handleCodeInApp: true,
+        });
 
-        // Create user in Data Connect using current auth.uid context.
-        await createDatabaseUser(displayName, undefined, email);
-
+        // Do NOT create the Data Connect user yet — wait until emailVerified.
         return {
           success: true,
           user: credential.user,
@@ -129,8 +134,43 @@ export const useFirebaseAuth = () => {
         setIsLoading(false);
       }
     },
-    [createDatabaseUser],
+    [],
   );
+
+  // ── Resend Verification Email ────────────────────────────────────────────────
+  const resendVerificationEmail = useCallback(async (): Promise<FirebaseAuthResult> => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return { success: false, error: 'No hay sesión activa.' };
+    setIsLoading(true);
+    try {
+      await sendEmailVerification(currentUser, {
+        url: `${window.location.origin}/auth/action`,
+        handleCodeInApp: true,
+      });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: mapFirebaseError(err as AuthError) };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // ── Refresh Email Verified Status ───────────────────────────────────────────
+  const refreshVerificationStatus = useCallback(async (): Promise<boolean> => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return false;
+    try {
+      await reload(currentUser);
+      if (auth.currentUser?.emailVerified) {
+        // Force-refresh the ID token so onIdTokenChanged fires with email_verified=true.
+        await auth.currentUser.getIdToken(true);
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }, []);
 
   // ── Google Sign-In ──────────────────────────────────────────────────────────
   const loginWithGoogle = useCallback(async (): Promise<FirebaseAuthResult> => {
@@ -203,5 +243,7 @@ export const useFirebaseAuth = () => {
     signupWithEmail,
     loginWithGoogle,
     sendPasswordReset,
+    resendVerificationEmail,
+    refreshVerificationStatus,
   };
 };

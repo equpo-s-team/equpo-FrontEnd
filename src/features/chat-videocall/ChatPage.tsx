@@ -27,7 +27,7 @@ function ChatLayout() {
       <main className={`
         ${activeRoom && !showConversationList ? 'flex' : 'hidden'}
         lg:flex
-        flex-1 flex-col min-w-0 h-full max-h-[calc(100vh-var(--bottom-nav-height,56px))] lg:max-h-screen lg:pb-0 bg-grey-50 dark:bg-gray-800
+        flex-1 flex-col min-w-0 min-h-0 h-full max-h-[calc(100vh-var(--bottom-nav-height,56px))] lg:max-h-screen lg:pb-0 bg-grey-50 dark:bg-gray-800
       `}>
         <ChatHeader />
         <MessageArea />

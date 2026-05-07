@@ -13,7 +13,8 @@ export default function AppLayout({ children }:{ children: React.ReactNode }) {
                     transition-all duration-300 ease-in-out
                     ml-0 ${collapsed ? 'lg:ml-[68px]' : 'lg:ml-[220px]'}
                     rounded-l-2xl
-                    h-[calc(100vh-var(--bottom-nav-height,56px))] lg:h-screen
+                    h-screen lg:h-screen
+                    pb-[64px] lg:pb-0
                 `}
       >
         {children}

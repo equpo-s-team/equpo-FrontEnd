@@ -64,8 +64,8 @@ export default function BoardColumn({
   return (
     <div
       className={`
-        bg-primary dark:bg-gray-800 rounded-[14px] flex flex-col
-        border-[1.5px] ${cfg.border} ${cfg.shadow}
+        bg-primary dark:bg-gray-800 rounded-xl flex flex-col
+        border ${cfg.border} ${cfg.shadow}
         min-h-104 md:min-h-120
         relative overflow-hidden
         transition-all duration-300

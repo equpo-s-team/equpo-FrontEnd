@@ -70,12 +70,12 @@ export default function ChatHeader() {
       {isCallActive && (
         <div className="bg-green/10 text-green px-3 sm:px-5 py-2 text-xs font-semibold flex justify-between items-center animate-in fade-in slide-in-from-top-2 gap-2">
           <span className="flex items-center gap-2 min-w-0">
-            <PhoneCall size={14} className="animate-pulse flex-shrink-0" /> 
+            <PhoneCall size={14} className="animate-pulse flex-shrink-0" />
             <span className="truncate">Videollamada en curso</span>
           </span>
           <button
             onClick={() => startVideoCallSession({ mode: 'join' })}
-            className="bg-green text-white px-2 sm:px-3 py-1 rounded-md hover:bg-green/90 transition-colors text-xs whitespace-nowrap flex-shrink-0"
+            className="bg-green text-white px-2 sm:px-3 py-1 rounded-xl hover:bg-green/90 transition-colors text-xs whitespace-nowrap flex-shrink-0"
           >
             Unirse
           </button>

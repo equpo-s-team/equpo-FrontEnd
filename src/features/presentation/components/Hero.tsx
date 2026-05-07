@@ -99,7 +99,7 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 mb-6 md:mb-8">
             <button
               onClick={() => setShowAuth(true)}
-              className="font-maxwell text-white px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-[14px] text-sm md:text-base no-underline hover:-translate-y-1 transition-all text-center"
+              className="font-maxwell text-white px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-xl text-sm md:text-base no-underline hover:-translate-y-1 transition-all text-center"
               style={{
                 background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 100%)',
                 boxShadow: '0 8px 28px rgba(56,185,122,0.35)',
@@ -109,7 +109,7 @@ export default function Hero() {
             </button>
             <a
               href="#what"
-              className="font-maxwell text-grey-700 dark:text-gray-200 border border-grey-200 dark:border-gray-600 bg-white/70 dark:bg-gray-800/50 backdrop-blur px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-[14px] text-sm md:text-base no-underline hover:-translate-y-1 hover:border-grey-300 dark:hover:border-gray-500 transition-all text-center"
+              className="font-maxwell text-grey-700 dark:text-gray-200 border border-grey-200 dark:border-gray-600 bg-white/70 dark:bg-gray-800/50 backdrop-blur px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-xl text-sm md:text-base no-underline hover:-translate-y-1 hover:border-grey-300 dark:hover:border-gray-500 transition-all text-center"
             >
               Ver cómo funciona
             </a>

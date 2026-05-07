@@ -62,16 +62,16 @@ export function RecurringFilter({
         </div>
 
         {isRecurring === true && (
-          <div className="px-3 pb-3 space-y-3 border-t border-grey-100 pt-3">
+          <div className="px-3 pb-3 space-y-3 border-t border-grey-100 dark:border-gray-600 pt-3">
             <div>
-              <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-1.5">
+              <p className="text-sm font-semibold text-grey-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
                 Intervalo
               </p>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full px-3 py-2 rounded-[8px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 justify-between"
+                    className="w-full px-3 py-2 rounded-xl border border-grey-200 dark:border-gray-600 text-sm font-body bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-200 outline-none focus:border-blue transition-colors duration-150 justify-between"
                   >
                     {interval ? INTERVAL_LABELS[interval] : 'Todos'}
                     <ChevronDownIcon className="h-4 w-4" />
@@ -91,7 +91,7 @@ export function RecurringFilter({
               </DropdownMenu>
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-1.5">
+              <p className="text-sm font-semibold text-grey-500 dark:text-gray-400 uppercase tracking-wide mb-1.5">
                 Cada (cantidad)
               </p>
               <input
@@ -104,7 +104,7 @@ export function RecurringFilter({
                   onCountChange(val ? Math.max(1, Number(val)) : null);
                 }}
                 placeholder="Ej: 3"
-                className="w-full px-3 py-2 rounded-[8px] border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150 placeholder:text-grey-400"
+                className="w-full px-3 py-2 rounded-xl border border-grey-200 dark:border-gray-600 text-sm font-body bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-200 outline-none focus:border-blue transition-colors duration-150 placeholder:text-grey-400 dark:placeholder:text-gray-500"
               />
             </div>
           </div>

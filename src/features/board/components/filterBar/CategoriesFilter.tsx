@@ -24,7 +24,7 @@ export function CategoryPill({ label, selected, onClick }: categoryPillProp) {
     <button
       onClick={onClick}
       className={`
-        px-2.5 py-1 rounded-xl text-[12px] font-medium border-[1.5px]
+        px-2.5 py-1 rounded-xl text-[12px] font-medium border
         transition-all duration-150 cursor-pointer
         ${cfg.bg} ${cfg.text} ${cfg.border}
         ${selected ? 'ring-2 ring-offset-0 ring-current' : 'opacity-70 hover:opacity-100'}

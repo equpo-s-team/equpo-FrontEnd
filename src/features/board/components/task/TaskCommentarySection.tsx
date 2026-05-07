@@ -93,7 +93,7 @@ function CommentaryItem({
             <div className="flex gap-2 mt-1.5">
               <button
                 onClick={handleSaveEdit}
-                className="px-3 py-1 rounded-[7px] bg-blue text-white text-[12px] font-semibold hover:bg-blue/90 cursor-pointer transition-colors"
+                className="px-3 py-1 rounded-xl bg-blue text-white text-[12px] font-semibold hover:bg-blue/90 cursor-pointer transition-colors"
               >
                 Guardar
               </button>
@@ -102,7 +102,7 @@ function CommentaryItem({
                   setEditText(commentary.commentary);
                   setEditMode(false);
                 }}
-                className="px-3 py-1 rounded-[7px] border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] hover:border-blue hover:text-blue cursor-pointer transition-colors"
+                className="px-3 py-1 rounded-xl border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] hover:border-blue hover:text-blue cursor-pointer transition-colors"
               >
                 Cancelar
               </button>
@@ -215,7 +215,7 @@ export default function TaskCommentarySection({
         {canPost && (
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-[7px] border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] font-semibold hover:border-blue hover:text-blue cursor-pointer transition-colors"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] font-semibold hover:border-blue hover:text-blue cursor-pointer transition-colors"
           >
             <MessageSquarePlus size={13} />
             Comentar
@@ -261,14 +261,14 @@ export default function TaskCommentarySection({
                   setShowForm(false);
                   setNewText('');
                 }}
-                className="px-3 py-1.5 rounded-[8px] border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] hover:border-blue hover:text-blue cursor-pointer transition-colors"
+                className="px-3 py-1.5 rounded-xl border border-grey-200 dark:border-gray-600 text-grey-500 dark:text-grey-400 text-[12px] hover:border-blue hover:text-blue cursor-pointer transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handlePublish}
                 disabled={!newText.trim() || createCommentary.isPending}
-                className="px-4 py-1.5 rounded-[8px] bg-blue text-white text-[12px] font-semibold
+                className="px-4 py-1.5 rounded-xl bg-blue text-white text-[12px] font-semibold
                   hover:bg-blue/90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
                 Publicar

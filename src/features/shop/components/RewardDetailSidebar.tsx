@@ -1,10 +1,9 @@
-import { Coins, Loader2, ShieldCheck, ShoppingCart, X, Zap } from 'lucide-react';
+import { Coins, Loader2, ShieldCheck, X, Zap } from 'lucide-react';
 
 import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { toastError, toastSuccess } from '@/components/ui/toast.ts';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { renderRewardIcon } from '@/features/shop/components/IconOrPhotoPicker.tsx';
-import { usePurchaseReward } from '@/features/shop/hooks/usePurchaseReward.ts';
 import { useRedeemReward } from '@/features/shop/hooks/useRedeemReward.ts';
 import type { MemberLedgerEntry, Reward } from '@/features/shop/types/rewardTypes.ts';
 
@@ -14,8 +13,6 @@ interface RewardDetailSidebarProps {
   reward: Reward | null;
   teamId: string;
   myRole: MyRole;
-  teamVirtualCurrency: number;
-  myMembershipCurrency: number | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -34,45 +31,15 @@ export function RewardDetailSidebar({
   reward,
   teamId,
   myRole,
-  teamVirtualCurrency,
-  myMembershipCurrency,
   isOpen,
   onClose,
 }: RewardDetailSidebarProps) {
-  const purchase = usePurchaseReward();
   const redeem = useRedeemReward();
 
   if (!reward) return null;
 
   const isAdmin = myRole === 'leader' || myRole === 'collaborator';
-  const isLeader = myRole === 'leader';
   const isSpectator = myRole === 'spectator';
-
-  const canBuyTeam = isLeader && reward.type === 'team';
-  const canBuyMember = !isSpectator && reward.type === 'member';
-
-  const insufficientTeamFunds = teamVirtualCurrency < reward.cost;
-  const insufficientMemberFunds =
-    myMembershipCurrency !== null && myMembershipCurrency < reward.cost;
-
-  // Team reward is "locked" if already obtained and not yet redeemed
-  const teamRewardLocked =
-    reward.type === 'team' && !!reward.teamRewardObtainedAt && !reward.teamRewardRedeemedAt;
-
-  const handlePurchase = async () => {
-    try {
-      await purchase.mutateAsync({ teamId, reward });
-      toastSuccess(
-        '¡Compra exitosa!',
-        reward.type === 'team'
-          ? 'La recompensa fue obtenida para el equipo. ¡Todos reciben XP!'
-          : `¡Obtuviste "${reward.name}"!`,
-      );
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al comprar';
-      toastError('Error al comprar', msg);
-    }
-  };
 
   const handleRedeemTeam = async () => {
     try {
@@ -96,8 +63,6 @@ export function RewardDetailSidebar({
       toastError('Error', msg);
     }
   };
-
-  const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
 
   return (
     <SidebarSheet
@@ -276,67 +241,6 @@ export function RewardDetailSidebar({
           </p>
         )}
       </div>
-
-      {/* Footer — buy button */}
-      {(canBuyTeam || canBuyMember) && (
-        <div className="px-6 py-4 border-t border-grey-150 dark:border-gray-600">
-          {canBuyTeam && (
-            <div className="space-y-1">
-              <button
-                type="button"
-                onClick={() => void handlePurchase()}
-                disabled={purchase.isPending || insufficientTeamFunds || teamRewardLocked}
-                title={
-                  teamRewardLocked
-                    ? 'Ya obtenida, canjéala primero'
-                    : insufficientTeamFunds
-                      ? 'El equipo no tiene suficientes monedas'
-                      : undefined
-                }
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                style={{ background: accent }}
-              >
-                {purchase.isPending ? (
-                  <Loader2 size={14} className="animate-spin" />
-                ) : (
-                  <ShoppingCart size={14} />
-                )}
-                Comprar con monedas del equipo ({reward.cost.toLocaleString()})
-              </button>
-              {insufficientTeamFunds && (
-                <p className="text-[10px] text-red text-center">
-                  El equipo no tiene suficientes monedas.
-                </p>
-              )}
-            </div>
-          )}
-
-          {canBuyMember && (
-            <div className="space-y-1">
-              <button
-                type="button"
-                onClick={() => void handlePurchase()}
-                disabled={purchase.isPending || insufficientMemberFunds}
-                title={insufficientMemberFunds ? 'No tienes suficientes monedas' : undefined}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                style={{ background: accent }}
-              >
-                {purchase.isPending ? (
-                  <Loader2 size={14} className="animate-spin" />
-                ) : (
-                  <ShoppingCart size={14} />
-                )}
-                Comprar ({reward.cost.toLocaleString()} monedas)
-              </button>
-              {insufficientMemberFunds && (
-                <p className="text-[10px] text-red text-center">
-                  No tienes suficientes monedas de membresía.
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-      )}
     </SidebarSheet>
   );
 }

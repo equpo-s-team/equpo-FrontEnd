@@ -1,3 +1,4 @@
+import type { XpRewardData } from '@/features/team/types/achievementTypes.ts';
 import { request } from '@/lib/api/core.ts';
 
 import type {
@@ -40,7 +41,18 @@ export const tasksApi = {
   createStep: (teamId: string, taskId: string, payload: { step: string }) =>
     request<{ step: TaskStep }>(`/teams/${teamId}/tasks/${taskId}/steps`, 'POST', payload),
   toggleStep: (teamId: string, taskId: string, stepId: string, payload: { isDone: boolean }) =>
-    request<{ step: TaskStep; newStatus: string }>(
+    request<{
+      step: TaskStep;
+      newStatus: string;
+      xpReward?: XpRewardData;
+      unlockedAchievements?: Array<{
+        id: string;
+        name: string;
+        description: string | null;
+        iconUrl: string | null;
+        unlockedAt: string;
+      }>;
+    }>(
       `/teams/${teamId}/tasks/${taskId}/steps/${encodeURIComponent(stepId)}/toggle`,
       'PATCH',
       payload,

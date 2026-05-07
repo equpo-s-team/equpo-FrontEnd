@@ -1,4 +1,4 @@
-import { Coins, Pencil, Trash2, Users, Zap } from 'lucide-react';
+import { Coins, Pencil, ShoppingCart, Trash2, Users, Zap } from 'lucide-react';
 
 import { renderRewardIcon } from '@/features/shop/components/IconOrPhotoPicker.tsx';
 import type { Reward } from '@/features/shop/types/rewardTypes.ts';
@@ -7,9 +7,13 @@ import { cn } from '@/lib/utils/utils.ts';
 interface RewardCardProps {
   reward: Reward;
   isAdmin: boolean;
+  canBuy: boolean;
+  disabledBuyReason?: string | null;
+  showBuy: boolean;
   onClick: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  onBuy: () => void;
 }
 
 const TYPE_BADGE: Record<string, { label: string; className: string }> = {
@@ -27,7 +31,17 @@ const TYPE_BADGE: Record<string, { label: string; className: string }> = {
   },
 };
 
-export function RewardCard({ reward, isAdmin, onClick, onEdit, onDelete }: RewardCardProps) {
+export function RewardCard({
+  reward,
+  isAdmin,
+  canBuy,
+  disabledBuyReason,
+  showBuy,
+  onClick,
+  onEdit,
+  onDelete,
+  onBuy,
+}: RewardCardProps) {
   const badge = TYPE_BADGE[reward.type] ?? TYPE_BADGE.member;
   const isObtained =
     reward.type === 'team' ? !!reward.teamRewardObtainedAt && !reward.teamRewardRedeemedAt : false;
@@ -122,6 +136,27 @@ export function RewardCard({ reward, isAdmin, onClick, onEdit, onDelete }: Rewar
             </span>
           </div>
         </div>
+
+        {/* Buy button */}
+        {showBuy && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onBuy();
+            }}
+            disabled={!canBuy}
+            title={disabledBuyReason ?? undefined}
+            className={cn(
+              'w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-white transition-all active:scale-95 cursor-pointer',
+              canBuy ? 'hover:opacity-90' : 'opacity-50 cursor-not-allowed',
+            )}
+            style={{ background: 'linear-gradient(135deg, #60AFFF, #9b7fe1)' }}
+          >
+            <ShoppingCart size={12} />
+            Comprar
+          </button>
+        )}
       </div>
     </button>
   );

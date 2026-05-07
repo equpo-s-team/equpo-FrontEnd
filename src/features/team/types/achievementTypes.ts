@@ -19,6 +19,18 @@ export interface UnlockAchievementPayload {
   unlockedAt?: string;
 }
 
+export interface XpRewardRecipient {
+  uid: string;
+  xpGained: number;
+  userCoinsGained: number;
+  membershipCoinsGained: number;
+  newXp: number;
+  newLevel: number;
+  newUserVirtualCurrency: number;
+  newMembershipVirtualCurrency: number | null;
+  leveledUp: boolean;
+}
+
 export interface XpRewardData {
   xpGained: number;
   coinsGained: number;
@@ -27,6 +39,7 @@ export interface XpRewardData {
   newLevel: number;
   newUserVirtualCurrency?: number;
   leveledUp: boolean;
+  recipients?: XpRewardRecipient[];
 }
 
 export const ACHIEVEMENT_ICON_MAP: Record<string, string> = {

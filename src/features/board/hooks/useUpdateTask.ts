@@ -4,7 +4,11 @@ import { useAchievementPopup } from '@/context/AchievementContext';
 import { useAudio } from '@/context/AudioContext';
 import { useAuth } from '@/context/AuthContext';
 import type { TeamTask, UpdateTaskPayload } from '@/features/board';
-import type { Achievement, XpRewardData } from '@/features/team/types/achievementTypes';
+import type {
+  Achievement,
+  XpRewardData,
+  XpRewardRecipient,
+} from '@/features/team/types/achievementTypes';
 
 import { tasksApi } from '../api/tasksApi';
 
@@ -55,16 +59,24 @@ export function useUpdateTask() {
         showAchievements(mapped);
       }
 
-      // Invalidate team data to reflect updated virtualCurrency
       if (data.xpReward) {
         await queryClient.invalidateQueries({ queryKey: ['teams'] });
-        updateUserData({
-          experiencePoints: data.xpReward.newXp,
-          level: data.xpReward.newLevel,
-          virtualCurrency:
-            data.xpReward.newUserVirtualCurrency ??
-            (user?.virtualCurrency || 0) + (data.xpReward.userCoinsGained ?? 0),
+        await queryClient.invalidateQueries({
+          queryKey: ['team', variables.teamId, 'rewards'],
         });
+
+        // Only update the local auth profile if the current user was a reward recipient.
+        const myEntry: XpRewardRecipient | undefined = data.xpReward.recipients?.find(
+          (r) => r.uid === user?.uid,
+        );
+
+        if (myEntry) {
+          updateUserData({
+            experiencePoints: myEntry.newXp,
+            level: myEntry.newLevel,
+            virtualCurrency: myEntry.newUserVirtualCurrency,
+          });
+        }
       }
     },
   });

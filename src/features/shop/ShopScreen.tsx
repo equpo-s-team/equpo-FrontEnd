@@ -13,6 +13,7 @@ import { RewardFormSidebar } from '@/features/shop/components/RewardFormSidebar.
 import { RewardGrid } from '@/features/shop/components/RewardGrid.tsx';
 import { ShopFilterTabs } from '@/features/shop/components/ShopFilterTabs.tsx';
 import { useDeleteReward } from '@/features/shop/hooks/useDeleteReward.ts';
+import { usePurchaseReward } from '@/features/shop/hooks/usePurchaseReward.ts';
 import { useRewards } from '@/features/shop/hooks/useRewards.ts';
 import type { Reward, RewardType } from '@/features/shop/types/rewardTypes.ts';
 import { useTeams } from '@/features/team/hooks/useTeams.ts';
@@ -30,8 +31,10 @@ export default function ShopScreen() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [rewardToDelete, setRewardToDelete] = useState<Reward | null>(null);
+  const [rewardToBuy, setRewardToBuy] = useState<Reward | null>(null);
 
   const deleteReward = useDeleteReward();
+  const purchase = usePurchaseReward();
 
   const activeTeam = teams.find((t) => t.id === teamId);
   const myRole = (() => {
@@ -75,6 +78,57 @@ export default function ShopScreen() {
     } finally {
       setRewardToDelete(null);
     }
+  };
+
+  const handleBuyConfirm = async () => {
+    if (!rewardToBuy) return;
+    try {
+      await purchase.mutateAsync({ teamId, reward: rewardToBuy });
+      toastSuccess(
+        '¡Compra exitosa!',
+        rewardToBuy.type === 'team'
+          ? 'La recompensa fue obtenida para el equipo. ¡Todos reciben XP!'
+          : `¡Obtuviste "${rewardToBuy.name}"!`,
+      );
+      if (detailReward?.id === rewardToBuy.id) setIsDetailOpen(false);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Error al comprar';
+      toastError('Error al comprar', msg);
+    } finally {
+      setRewardToBuy(null);
+    }
+  };
+
+  const getBuyState = (reward: Reward) => {
+    if (reward.type === 'equpo') return { canBuy: false, disabledReason: null, showBuy: false };
+
+    const isLeader = myRole === 'leader';
+    const isSpectator = myRole === 'spectator';
+    const teamRewardLocked =
+      reward.type === 'team' && !!reward.teamRewardObtainedAt && !reward.teamRewardRedeemedAt;
+
+    if (reward.type === 'team') {
+      if (!isLeader) return { canBuy: false, disabledReason: null, showBuy: false };
+      if (teamRewardLocked)
+        return { canBuy: false, disabledReason: 'Ya obtenida, canjéala primero', showBuy: true };
+      if (teamVirtualCurrency < reward.cost)
+        return {
+          canBuy: false,
+          disabledReason: 'El equipo no tiene suficientes monedas',
+          showBuy: true,
+        };
+      return { canBuy: true, disabledReason: null, showBuy: true };
+    }
+
+    // member type
+    if (isSpectator) return { canBuy: false, disabledReason: null, showBuy: false };
+    if (myMembershipCurrency !== null && myMembershipCurrency < reward.cost)
+      return {
+        canBuy: false,
+        disabledReason: 'No tienes suficientes monedas de membresía',
+        showBuy: true,
+      };
+    return { canBuy: true, disabledReason: null, showBuy: true };
   };
 
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
@@ -132,6 +186,8 @@ export default function ShopScreen() {
             onCardClick={handleOpenDetail}
             onEdit={handleOpenEdit}
             onDelete={(r) => setRewardToDelete(r)}
+            onBuy={(r) => setRewardToBuy(r)}
+            getBuyState={getBuyState}
           />
         )}
       </div>
@@ -146,8 +202,6 @@ export default function ShopScreen() {
         reward={detailReward}
         teamId={teamId}
         myRole={myRole}
-        teamVirtualCurrency={teamVirtualCurrency}
-        myMembershipCurrency={myMembershipCurrency}
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
       />
@@ -165,6 +219,21 @@ export default function ShopScreen() {
         isPending={deleteReward.isPending}
         onConfirm={() => void handleDeleteConfirm()}
         onCancel={() => setRewardToDelete(null)}
+      />
+
+      <ConfirmDialog
+        open={rewardToBuy !== null}
+        title="¿Confirmar compra?"
+        description={
+          rewardToBuy
+            ? `"${rewardToBuy.name}" — ${rewardToBuy.cost.toLocaleString()} monedas${rewardToBuy.type === 'team' ? ' del equipo' : ' de membresía'}.`
+            : undefined
+        }
+        confirmLabel="Comprar"
+        variant="default"
+        isPending={purchase.isPending}
+        onConfirm={() => void handleBuyConfirm()}
+        onCancel={() => setRewardToBuy(null)}
       />
     </>
   );

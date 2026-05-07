@@ -5,6 +5,7 @@ import {
   Pause,
   Play,
   Settings,
+  ShoppingBag,
   Star,
   UserCheck,
   Volume2,
@@ -67,6 +68,7 @@ export default function Sidebar() {
             <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />
           )}
           <SidebarItem id="chat" icon={MessageCircle} label="Chat" />
+          <SidebarItem id="shop" icon={ShoppingBag} label="Tienda" />
         </SidebarSection>
 
         <SidebarSection label="Moderación">

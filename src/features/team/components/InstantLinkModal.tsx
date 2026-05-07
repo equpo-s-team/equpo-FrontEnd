@@ -110,7 +110,9 @@ export function InstantLinkModal({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-grey-100 dark:border-gray-700">
           <div>
-            <h2 className="text-2xl font-bold text-grey-800 dark:text-gray-100 font-body">Enlace de invitación</h2>
+            <h2 className="text-2xl font-bold text-grey-800 dark:text-gray-100 font-body">
+              Enlace de invitación
+            </h2>
             <p className="text-sm text-grey-400 dark:text-grey-500 mt-0.5">{teamName}</p>
           </div>
           <button
@@ -126,7 +128,9 @@ export function InstantLinkModal({
           {generateInviteCode.isPending ? (
             <div className="flex flex-col items-center justify-center py-12">
               <Loader2 size={32} className="animate-spin text-blue mb-4" />
-              <p className="text-sm text-grey-500 dark:text-grey-400 font-body">Generando enlace...</p>
+              <p className="text-sm text-grey-500 dark:text-grey-400 font-body">
+                Generando enlace...
+              </p>
             </div>
           ) : generated ? (
             <>
@@ -137,7 +141,9 @@ export function InstantLinkModal({
                     <Check size={20} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-green dark:text-green-400 font-body">¡Enlace listo!</h3>
+                    <h3 className="font-semibold text-green dark:text-green-400 font-body">
+                      ¡Enlace listo!
+                    </h3>
                   </div>
                 </div>
               </div>
@@ -206,7 +212,9 @@ export function InstantLinkModal({
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-12">
-              <p className="text-sm text-red dark:text-red-400 font-body mb-4">Error al generar el enlace</p>
+              <p className="text-sm text-red dark:text-red-400 font-body mb-4">
+                Error al generar el enlace
+              </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => {

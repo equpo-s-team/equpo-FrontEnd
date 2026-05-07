@@ -87,7 +87,9 @@ export function StatusDonut({ data }: StatusDonutProps) {
       />
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-5 relative z-10 gap-2">
-        <h2 className="text-sm font-semibold text-grey-800 dark:text-gray-300 tracking-[-0.01em]">Estado general</h2>
+        <h2 className="text-sm font-semibold text-grey-800 dark:text-gray-300 tracking-[-0.01em]">
+          Estado general
+        </h2>
         <span className="text-xs text-grey-400 shrink-0">{total} misiones</span>
       </div>
 
@@ -142,7 +144,9 @@ export function StatusDonut({ data }: StatusDonutProps) {
             <span className="text-base sm:text-xl lg:text-2xl font-semibold text-grey-900  dark:text-gray-100 tracking-[-0.04em] leading-none">
               {donePct}%
             </span>
-            <span className="text-[10px] sm:text-xs text-grey-400 dark:text-grey-500 mt-0.5 sm:mt-1 whitespace-nowrap">completado</span>
+            <span className="text-[10px] sm:text-xs text-grey-400 dark:text-grey-500 mt-0.5 sm:mt-1 whitespace-nowrap">
+              completado
+            </span>
           </div>
         </div>
 

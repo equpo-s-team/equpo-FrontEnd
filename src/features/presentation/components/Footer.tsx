@@ -21,7 +21,10 @@ export default function Footer() {
   return (
     <footer
       className="relative overflow-hidden px-[5vw] pt-16 pb-8 dark:bg-gray-900/95"
-      style={{ background: 'linear-gradient(160deg, #f5fdf8 0%, #f0f7ff 50%, #fdf5ff 100%) dark:linear-gradient(160deg, #1f2937 0%, #111827 50%, #181f29 100%)' }}
+      style={{
+        background:
+          'linear-gradient(160deg, #f5fdf8 0%, #f0f7ff 50%, #fdf5ff 100%) dark:linear-gradient(160deg, #1f2937 0%, #111827 50%, #181f29 100%)',
+      }}
     >
       {/* Subtle border top */}
       <div
@@ -129,8 +132,8 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <p className="font-body text-sm text-grey-400 dark:text-gray-500">
-            <strong className="text-grey-600 dark:text-gray-300 font-semibold">equpo</strong> - Trabajo real. Impacto
-            compartido.
+            <strong className="text-grey-600 dark:text-gray-300 font-semibold">equpo</strong> -
+            Trabajo real. Impacto compartido.
           </p>
           <p className="font-body text-xs text-grey-300 dark:text-gray-600">
             © 2025 equpo. Todos los derechos reservados.

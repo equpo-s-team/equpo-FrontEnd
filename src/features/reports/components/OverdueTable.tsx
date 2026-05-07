@@ -24,7 +24,9 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
       />
 
       <div className="relative z-10 mb-3 sm:mb-5 flex flex-col sm:flex-row shrink-0 items-start sm:items-center justify-between gap-2">
-        <h2 className="text-sm font-semibold text-grey-800 dark:text-gray-300 tracking-[-0.01em]">Misiones vencidas</h2>
+        <h2 className="text-sm font-semibold text-grey-800 dark:text-gray-300 tracking-[-0.01em]">
+          Misiones vencidas
+        </h2>
         <button className="text-xs text-[#c94155] font-medium hover:opacity-70 transition-opacity shrink-0">
           Ver todas →
         </button>
@@ -47,7 +49,9 @@ export function OverdueTable({ tasks }: OverdueTableProps) {
           >
             <div className="min-w-0">
               <p className="font-medium text-grey-800 dark:text-gray-300 truncate">{task.task}</p>
-              <p className="text-xs text-grey-500 dark:text-grey-400 mt-0.5 truncate">{task.assignee}</p>
+              <p className="text-xs text-grey-500 dark:text-grey-400 mt-0.5 truncate">
+                {task.assignee}
+              </p>
             </div>
             <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-semibold bg-[rgba(246,90,112,0.1)] text-[#c94155] whitespace-nowrap text-center">
               +{task.daysOverdue}d

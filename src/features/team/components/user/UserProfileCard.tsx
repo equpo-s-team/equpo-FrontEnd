@@ -1,11 +1,11 @@
-import { Bolt, Clipboard, Coins} from 'lucide-react';
+import { Bolt, Clipboard, Coins } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { AppProgress } from '@/components/ui/AppProgress';
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { toastSuccess } from '@/components/ui/toast';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import {type Rank, ranks} from "@/features/team/types/rankTypes.ts";
+import { type Rank, ranks } from '@/features/team/types/rankTypes.ts';
 
 export interface UserProfile {
   uid: string;
@@ -74,10 +74,10 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
     }
   };
 
-  const rankName:string = levelToRank(user.level).name;
-  const rankColor:string = levelToRank(user.level).color;
-  const rankBgColor:string = levelToRank(user.level).bgColor;
-  const rankIcon:React.ElementType = levelToRank(user.level).icon;
+  const rankName: string = levelToRank(user.level).name;
+  const rankColor: string = levelToRank(user.level).color;
+  const rankBgColor: string = levelToRank(user.level).bgColor;
+  const rankIcon: React.ElementType = levelToRank(user.level).icon;
 
   return (
     <div className="relative w-full">
@@ -181,7 +181,8 @@ export const UserProfileCard: React.FC<UserProfileCardProps> = ({ user, onOpenSe
                 Nivel {user.level} → {user.level + 1}
               </span>
               <span className="text-[10px] sm:text-xs font-bold" style={{ color: '#9b7fe1' }}>
-                {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()} XP
+                {user.experience.toLocaleString()} / {user.experienceToNextLevel.toLocaleString()}{' '}
+                XP
               </span>
             </div>
             <AppProgress

@@ -57,7 +57,7 @@ export default function TeamBoard() {
     done: false,
   });
 
-  const toggleColumnCollapse = (columnId : BoardColumnId) => {
+  const toggleColumnCollapse = (columnId: BoardColumnId) => {
     setCollapsedColumns((prev) => ({
       ...prev,
       [columnId]: !prev[columnId],

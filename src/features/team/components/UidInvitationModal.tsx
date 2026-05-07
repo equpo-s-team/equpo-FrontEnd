@@ -61,10 +61,7 @@ export function UidInvitationModal({ isOpen, onClose, accent }: UidInvitationMod
       setInviteInput('');
       onClose();
     } catch (error) {
-      toastError(
-        'Error',
-        error instanceof Error ? error.message : 'No se pudo invitar al usuario',
-      );
+      toastError('Error', error instanceof Error ? error.message : 'No se pudo invitar al usuario');
     } finally {
       setIsInviting(false);
     }

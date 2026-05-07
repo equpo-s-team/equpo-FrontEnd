@@ -15,7 +15,6 @@ import {
 import { COLUMN_CONFIG, PRIORITY_CONFIG } from '../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../utils/markdownUtils';
 
-
 export default function BoardCard({
   card,
   accent,

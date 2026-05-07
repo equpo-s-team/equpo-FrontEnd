@@ -95,8 +95,7 @@ export interface TeamMembership_Key {
 }
 
 export interface TeamReward_Key {
-  teamId: UUIDString;
-  rewardId: UUIDString;
+  id: UUIDString;
   __typename?: 'TeamReward_Key';
 }
 
@@ -125,8 +124,7 @@ export interface UserAchievement_Key {
 }
 
 export interface UserReward_Key {
-  userUid: string;
-  rewardId: UUIDString;
+  id: UUIDString;
   __typename?: 'UserReward_Key';
 }
 

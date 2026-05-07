@@ -68,8 +68,8 @@ export const VerifyEmailStep: React.FC<VerifyEmailStepProps> = ({ email, onVerif
         </h3>
         <p className="text-gray-600 dark:text-gray-400 text-sm">
           Te enviamos un enlace a{' '}
-          <span className="font-medium text-emerald-500 dark:text-emerald-400">{email}</span>.
-          Abre el correo y haz clic en el enlace para activar tu cuenta.
+          <span className="font-medium text-emerald-500 dark:text-emerald-400">{email}</span>. Abre
+          el correo y haz clic en el enlace para activar tu cuenta.
         </p>
       </div>
 

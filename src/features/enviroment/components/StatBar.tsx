@@ -7,7 +7,14 @@ interface StatBarProps {
   neonClass?: string;
 }
 
-export default function StatBar({ value, max, fillClass, valueColorClass, icon , neonClass}: StatBarProps) {
+export default function StatBar({
+  value,
+  max,
+  fillClass,
+  valueColorClass,
+  icon,
+  neonClass,
+}: StatBarProps) {
   const pct = Math.round((value / max) * 100);
 
   return (

@@ -9,7 +9,10 @@ export default function Navbar() {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5vw] h-[68px] bg-white/88 dark:bg-gray-900/88 backdrop-blur-[18px] border-b border-border dark:border-gray-700/50">
-        <Link to="/" className="font-maxwell text-display-md tracking-tight text-dark dark:text-white no-underline">
+        <Link
+          to="/"
+          className="font-maxwell text-display-md tracking-tight text-dark dark:text-white no-underline"
+        >
           eq
           <span className="bg-gradient-to-r from-[#9CEDC1] via-[#60AFFF] to-[#F65A70] bg-clip-text text-transparent">
             u

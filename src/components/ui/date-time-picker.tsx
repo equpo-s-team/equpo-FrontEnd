@@ -87,8 +87,11 @@ export function DateTimePicker({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className={`w-full justify-between text-left font-normal font-body text-sm ${error ? 'border-red' : 'border-grey-200 dark:border-gray-600 hover:border-blue focus:border-blue'
-              } ${!displayLabel ? 'text-grey-400 dark:text-grey-500' : 'text-grey-800 dark:text-gray-300'} bg-primary dark:bg-gray-800`}
+            className={`w-full justify-between text-left font-normal font-body text-sm ${
+              error
+                ? 'border-red'
+                : 'border-grey-200 dark:border-gray-600 hover:border-blue focus:border-blue'
+            } ${!displayLabel ? 'text-grey-400 dark:text-grey-500' : 'text-grey-800 dark:text-gray-300'} bg-primary dark:bg-gray-800`}
           >
             <span className="truncate">{displayLabel ?? placeholder}</span>
             <ChevronDownIcon className="h-4 w-4 shrink-0 text-grey-400 dark:text-gray-500" />
@@ -109,7 +112,9 @@ export function DateTimePicker({
           <div className="border-t bg-primary dark:bg-gray-800 border-grey-100 dark:border-gray-700 px-4 py-3">
             <div className="flex items-center gap-2">
               <Clock size={14} className="text-grey-400 dark:text-gray-300 shrink-0" />
-              <span className="text-xs text-grey-500 dark:text-gray-300 font-body font-medium">Hora límite</span>
+              <span className="text-xs text-grey-500 dark:text-gray-300 font-body font-medium">
+                Hora límite
+              </span>
               <input
                 type="time"
                 value={time}

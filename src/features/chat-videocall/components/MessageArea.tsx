@@ -126,6 +126,7 @@ export default function MessageArea() {
 
   return (
     <div className="flex-1 min-h-0 overflow-y-auto px-3 sm:px-4 lg:px-5 py-2 flex flex-col gap-1 scrollbar-hide">
+      <div className="flex-1" />
       {groups.map((group) => (
         <div key={group.date}>
           <DateDivider label={group.date} />

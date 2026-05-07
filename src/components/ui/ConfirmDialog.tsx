@@ -1,6 +1,6 @@
 import { AlertTriangle, Loader2 } from 'lucide-react';
 
-import { Sheet, SheetContent } from '@/components/ui/sheet.tsx';
+import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet.tsx';
 import { cn } from '@/lib/utils/utils.ts';
 
 interface ConfirmDialogProps {
@@ -52,13 +52,15 @@ export function ConfirmDialog({
               <AlertTriangle size={20} />
             </div>
             <div className="flex-1 space-y-1">
-              <h2 className="font-maxwell text-base font-bold text-grey-800 dark:text-grey-200 tracking-wide">
+              <SheetTitle className="font-maxwell text-base font-bold text-grey-800 dark:text-grey-200 tracking-wide">
                 {title}
-              </h2>
-              {description && (
-                <p className="text-sm text-grey-500 dark:text-grey-400 leading-relaxed">
+              </SheetTitle>
+              {description ? (
+                <SheetDescription className="text-sm text-grey-500 dark:text-grey-400 leading-relaxed">
                   {description}
-                </p>
+                </SheetDescription>
+              ) : (
+                <SheetDescription className="sr-only">{title}</SheetDescription>
               )}
             </div>
           </div>

@@ -47,10 +47,17 @@ export function RewardCard({
     reward.type === 'team' ? !!reward.teamRewardObtainedAt && !reward.teamRewardRedeemedAt : false;
 
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       className="group relative rounded-2xl bg-white dark:bg-gray-800 border border-grey-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden w-full text-left"
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
     >
       {/* Admin actions */}
       {isAdmin && (
@@ -158,6 +165,6 @@ export function RewardCard({
           </button>
         )}
       </div>
-    </button>
+    </div>
   );
 }

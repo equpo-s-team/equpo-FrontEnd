@@ -46,7 +46,7 @@ export default function FilterBar({ setActiveDays }: FilterBarProps) {
         </span>
         <button
           onClick={() => setMobileOpen((open) => !open)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border-[1.5px] border-grey-200 dark:border-gray-600 text-grey-600 dark:text-grey-400 font-body transition-all duration-200"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border border-grey-200 dark:border-gray-600 text-grey-600 dark:text-grey-400 font-body transition-all duration-200"
         >
           <SlidersHorizontal size={13} />
         </button>

@@ -510,7 +510,7 @@ export default function TaskSidebar({
               <button
                 type="button"
                 onClick={() => setIsEditView(true)}
-                className="px-3 py-1.5 rounded-[10px] text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 dark:hover:bg-blue/10 transition-all duration-150 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 dark:hover:bg-blue/10 transition-all duration-150 cursor-pointer"
               >
                 Editar
               </button>
@@ -683,7 +683,7 @@ export default function TaskSidebar({
                   onChange={(e) => setName(e.target.value)}
                   maxLength={100}
                   placeholder="Nombre de la misión"
-                  className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-grey-500 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 dark:border-gray-600 focus:border-blue'}`}
+                  className={`w-full px-3 py-2.5 rounded-xl border text-sm font-body bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-grey-500 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 dark:border-gray-600 focus:border-blue'}`}
                 />
                 {errors.name && <p className="mt-1 text-xs text-red">{errors.name}</p>}
               </div>
@@ -700,7 +700,7 @@ export default function TaskSidebar({
                       type="button"
                       onClick={() => void handleIADescriptionGeneration(description)}
                       disabled={isSubmitting || isGeneratingDescription || !description.trim()}
-                      className="px-3 py-1.5 rounded-[10px] text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 dark:hover:bg-blue/10 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-1.5 rounded-xl text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 dark:hover:bg-blue/10 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isGeneratingDescription ? 'Generando...' : 'Generar con IA'}
                     </button>
@@ -873,7 +873,7 @@ export default function TaskSidebar({
                         }
                       }}
                       placeholder="Backend, API, Diseño..."
-                      className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary dark:bg-gray-800 outline-none transition-colors duration-150 ${
+                      className={`w-full px-3 py-2.5 rounded-xl border text-sm font-body bg-primary dark:bg-gray-800 outline-none transition-colors duration-150 ${
                         errors.categories
                           ? 'border-red/50 text-red focus:border-red'
                           : 'border-grey-200 dark:border-gray-600 text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-grey-500 focus:border-blue'
@@ -915,7 +915,7 @@ export default function TaskSidebar({
                           onChange={(e) =>
                             setRecurringCount(e.target.value === '' ? '' : Number(e.target.value))
                           }
-                          className={`w-16 px-2 py-1.5 rounded-[8px] border-[1.5px] text-sm font-body text-center bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-300 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 dark:border-gray-600 focus:border-blue'}`}
+                          className={`w-16 px-2 py-1.5 rounded-xl border text-sm font-body text-center bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-300 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 dark:border-gray-600 focus:border-blue'}`}
                         />
                         <AppSelect
                           value={recurringInterval}
@@ -945,7 +945,7 @@ export default function TaskSidebar({
                   type="button"
                   onClick={() => void handleDelete()}
                   disabled={isSubmitting}
-                  className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-red border-[1.5px] border-red/30 hover:bg-red/8 dark:hover:bg-red/10 transition-all duration-150 cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2.5 rounded-xl text-sm font-semibold text-red border border-red/30 hover:bg-red/8 dark:hover:bg-red/10 transition-all duration-150 cursor-pointer disabled:opacity-50"
                 >
                   Eliminar
                 </button>
@@ -954,7 +954,7 @@ export default function TaskSidebar({
               <button
                 type="button"
                 onClick={handleCancel}
-                className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-grey-500 dark:text-grey-400 border-[1.5px] border-grey-200 dark:border-gray-600 hover:border-grey-300 dark:hover:border-gray-500 transition-all duration-150 cursor-pointer"
+                className="px-4 py-2.5 rounded-xl text-sm font-semibold text-grey-500 dark:text-grey-400 border border-grey-200 dark:border-gray-600 hover:border-grey-300 dark:hover:border-gray-500 transition-all duration-150 cursor-pointer"
               >
                 Cancelar
               </button>
@@ -962,7 +962,7 @@ export default function TaskSidebar({
                 type="submit"
                 onClick={(e) => void handleSubmit(e)}
                 disabled={isSubmitDisabled}
-                className="px-5 py-2.5 rounded-[10px] text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
+                className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
               >
                 {isSubmitting
                   ? 'Guardando...'

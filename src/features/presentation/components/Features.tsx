@@ -134,7 +134,7 @@ function FeatureCard({ feat }: { feat: feature }) {
     >
       {/* Icon */}
       <div
-        className="w-12 h-12 rounded-[14px] flex items-center justify-center text-white mb-5"
+        className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-5"
         style={{ background: feat.grad, boxShadow: `0 4px 16px ${feat.border}` }}
       >
         {feat.icon}

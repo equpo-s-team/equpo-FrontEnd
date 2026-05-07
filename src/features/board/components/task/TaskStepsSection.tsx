@@ -83,14 +83,14 @@ function StepRow({
 
   return (
     <div
-      className={`flex items-center gap-2.5 py-2 px-3 rounded-[8px] group transition-colors
+      className={`flex items-center gap-2.5 py-2 px-3 rounded-xl group transition-colors
         ${isSupero ? 'bg-purple/20 border border-purple/20' : 'hover:bg-secondary/60 dark:hover:bg-gray-900/60'}`}
     >
       {/* Checkbox */}
       <button
         disabled={!canToggle || isBlocked || isToggling}
         onClick={() => onToggle(!step.isDone)}
-        className={`shrink-0 w-4 h-4 rounded border-[1.5px] flex items-center justify-center transition-all duration-200
+        className={`shrink-0 w-4 h-4 rounded border flex items-center justify-center transition-all duration-200
           ${
             step.isDone
               ? 'bg-green border-green text-white'
@@ -249,12 +249,12 @@ export default function TaskStepsSection({
               onKeyDown={(e) => e.key === 'Enter' && handleAddLocal()}
               placeholder="Escribe un paso en orden…"
               maxLength={200}
-              className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 dark:border-gray-700 bg-secondary dark:bg-gray-900 text-[13px] font-body text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-gray-300  outline-none focus:border-blue transition-colors"
+              className="flex-1 px-3 py-1.5 rounded-xl border border-grey-200 dark:border-gray-700 bg-secondary dark:bg-gray-900 text-[13px] font-body text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-gray-300  outline-none focus:border-blue transition-colors"
             />
             <button
               onClick={handleAddLocal}
               disabled={!newStepText.trim()}
-              className="px-3 py-1.5 rounded-[8px] bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
+              className="px-3 py-1.5 rounded-xl bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
             >
               <Plus size={14} />
             </button>
@@ -459,12 +459,12 @@ export default function TaskStepsSection({
                 onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                 placeholder="Agregar nuevo paso…"
                 maxLength={200}
-                className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 dark:border-gray-700 bg-secondary dark:bg-gray-900 text-[13px] font-body text-grey-800 placeholder:text-grey-400 outline-none focus:border-blue transition-colors"
+                className="flex-1 px-3 py-1.5 rounded-xl border border-grey-200 dark:border-gray-700 bg-secondary dark:bg-gray-900 text-[13px] font-body text-grey-800 placeholder:text-grey-400 outline-none focus:border-blue transition-colors"
               />
               <button
                 onClick={handleAdd}
                 disabled={!newStepText.trim()}
-                className="px-3 py-1.5 rounded-[8px] bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
+                className="px-3 py-1.5 rounded-xl bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
               >
                 <Plus size={14} />
               </button>

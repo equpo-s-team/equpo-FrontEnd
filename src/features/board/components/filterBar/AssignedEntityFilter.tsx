@@ -37,18 +37,18 @@ export function AssignedUserFilter({ members, selected, onChange }: assignedUser
         />
       </Pill>
       <DropPanel open={open} onClose={() => setOpen(false)} className="min-w-[240px]">
-        <div className="px-3 pt-3 pb-2 border-b border-grey-100">
+        <div className="px-3 pt-3 pb-2 border-b border-grey-100 dark:border-gray-800">
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar usuario…"
-            className="w-full px-2.5 py-2 rounded-[7px] bg-secondary border-[1.5px] border-transparent focus:border-blue focus:bg-blue/5 text-[13px] font-body text-grey-800 placeholder:text-grey-400 outline-none transition-all duration-200"
+            className="w-full px-2.5 py-2 rounded-xl bg-secondary dark:bg-gray-800 border border-transparent focus:border-blue focus:bg-blue/5 dark:focus:bg-blue/10 text-[13px] font-body text-grey-800 dark:text-gray-200 placeholder:text-grey-400 dark:placeholder:text-gray-500 outline-none transition-all duration-200"
           />
         </div>
 
         <div className="max-h-[210px] overflow-y-auto py-1.5">
           {filtered.length === 0 ? (
-            <p className="text-center text-[12px] text-grey-400 py-4">Sin resultados</p>
+            <p className="text-center text-[12px] text-grey-400 dark:text-gray-500 py-4">Sin resultados</p>
           ) : (
             filtered.map((m) => (
               <CheckRow
@@ -92,7 +92,7 @@ export function AssignedGroupFilter({ groups, selected, onChange }: assignedGrou
       <DropPanel open={open} onClose={() => setOpen(false)}>
         <div className="py-1.5">
           {groups.length === 0 ? (
-            <p className="text-center text-[12px] text-grey-400 py-4">No hay grupos</p>
+            <p className="text-center text-[12px] text-grey-400 dark:text-gray-500 py-4">No hay grupos</p>
           ) : (
             groups.map((g) => (
               <CheckRow

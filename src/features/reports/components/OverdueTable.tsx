@@ -13,7 +13,7 @@ const PRIORITY_STYLES: Record<Priority, string> = {
 export function OverdueTable({ tasks }: OverdueTableProps) {
   return (
     <div
-      className="relative flex flex-1 min-h-0 flex-col bg-white  dark:bg-gray-800 border border-grey-150 dark:border-gray-700 rounded-[14px] p-3 sm:p-4 lg:p-6 overflow-hidden"
+      className="relative flex flex-1 min-h-0 flex-col bg-white  dark:bg-gray-800 border border-grey-150 dark:border-gray-700 rounded-xl p-3 sm:p-4 lg:p-6 overflow-hidden"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.03)' }}
     >
       <div

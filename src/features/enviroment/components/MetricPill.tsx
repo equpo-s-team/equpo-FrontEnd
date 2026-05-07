@@ -11,7 +11,7 @@ export default function MetricPill({ icon, label, value, accent }: MetricPillPro
       className="
       flex items-center gap-2
       bg-white/20 border border-white/[0.08]
-      backdrop-blur-md rounded-[10px]
+      backdrop-blur-md rounded-xl
       px-3 py-2
     "
     >

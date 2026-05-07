@@ -59,14 +59,7 @@ export function renderRewardIcon(
     const Icon = ICON_MAP[name];
     return Icon ? <Icon size={size} className={className} /> : null;
   }
-  return (
-    <img
-      src={iconURL}
-      alt=""
-      className={cn('object-cover', className)}
-      style={{ width: size, height: size }}
-    />
-  );
+  return <img src={iconURL} alt="" className={cn('w-full h-full object-cover', className)} />;
 }
 
 type PickerTab = 'icon' | 'photo';

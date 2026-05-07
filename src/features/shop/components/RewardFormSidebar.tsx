@@ -246,9 +246,10 @@ export function RewardFormSidebar({ isOpen, onClose, initialData }: RewardFormSi
             <input
               type="number"
               min={0}
+              inputMode="numeric"
               value={cost}
               onChange={(e) => setCost(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 dark:border-gray-600 focus:border-blue text-sm text-grey-800 dark:text-grey-200 bg-white dark:bg-gray-700 outline-none transition-all font-body"
+              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 dark:border-gray-600 focus:border-blue text-sm text-grey-800 dark:text-grey-200 bg-white dark:bg-gray-700 outline-none transition-all font-body [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:m-0"
               onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
             />
@@ -260,9 +261,10 @@ export function RewardFormSidebar({ isOpen, onClose, initialData }: RewardFormSi
             <input
               type="number"
               min={0}
+              inputMode="numeric"
               value={xp}
               onChange={(e) => setXp(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 dark:border-gray-600 focus:border-blue text-sm text-grey-800 dark:text-grey-200 bg-white dark:bg-gray-700 outline-none transition-all font-body"
+              className="w-full px-4 py-2.5 rounded-xl border border-grey-150 dark:border-gray-600 focus:border-blue text-sm text-grey-800 dark:text-grey-200 bg-white dark:bg-gray-700 outline-none transition-all font-body [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:m-0"
               onFocus={(e) => (e.currentTarget.style.boxShadow = `0 0 0 3px ${accentGlow}`)}
               onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
             />

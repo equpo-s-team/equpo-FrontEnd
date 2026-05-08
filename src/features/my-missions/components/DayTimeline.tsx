@@ -227,7 +227,7 @@ export default function DayTimeline({
                 key={task.id}
                 onClick={() => onTaskClick(task)}
                 className={`
-                  absolute rounded-[10px] px-2 py-1.5 cursor-pointer border-l-[3px]
+                  absolute rounded-xl px-2 py-1.5 cursor-pointer border-l-[3px]
                   transition-all duration-200 text-left overflow-hidden
                   hover:scale-[1.02] hover:-translate-y-0.5
                   ${isOverdue ? 'bg-gradient-red-bg border-red text-white' : getTaskClasses(task.status)}

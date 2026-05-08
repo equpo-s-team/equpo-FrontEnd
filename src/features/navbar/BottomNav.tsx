@@ -37,11 +37,14 @@ export default function BottomNav() {
     <nav
       className="
             lg:hidden fixed bottom-0 left-0 right-0 z-50
-            bg-primary/95 backdrop-blur-xl
-            border-t border-secondary
+            bg-gray-900/95 backdrop-blur-xl dark:bg-gray-900/95
+            border-t border-gray-700 dark:border-gray-700
             flex items-stretch
             pb-safe
         "
+      style={{
+        '--bottom-nav-height': '56px',
+      } as React.CSSProperties}
     >
       {navItems.map(({ id, label, icon: Icon }) => {
         const isActive = activeItem === id;
@@ -54,13 +57,13 @@ export default function BottomNav() {
                             py-3 relative transition-all duration-200
                             ${
                               isActive
-                                ? 'text-blue'
-                                : 'text-primary-foreground/40 active:text-primary-foreground/70'
+                                ? 'text-blue-400'
+                                : 'text-gray-400 active:text-gray-300 dark:text-gray-400 dark:active:text-gray-300'
                             }
                         `}
           >
             {isActive && (
-              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-blue" />
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-blue-400" />
             )}
 
             <Icon size={22} strokeWidth={isActive ? 2.2 : 1.8} />
@@ -68,7 +71,7 @@ export default function BottomNav() {
             <span
               className={`
                             text-xs font-body font-medium leading-none transition-colors truncate max-w-full px-1
-                            ${isActive ? 'text-blue' : ''}
+                            ${isActive ? 'text-blue-400' : ''}
                         `}
             >
               {id === 'settings' ? 'Ajustes' : label}

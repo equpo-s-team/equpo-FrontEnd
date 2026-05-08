@@ -20,9 +20,9 @@ export function DropPanel({ open, onClose, children, className = '' }: dropPanel
     <div
       ref={ref}
       className={`
-        absolute top-[calc(100%+8px)] left-0 z-[300]
-        bg-primary border-[1.5px] border-grey-200
-        rounded-[10px] shadow-card-lg
+        absolute top-full mt-2 left-0 z-[300]
+        bg-primary dark:bg-gray-700 border border-grey-200 dark:border-gray-600
+        rounded-lg shadow-card-lg dark:text-grey-300
         overflow-hidden animate-fade-down
         min-w-60
         ${className}

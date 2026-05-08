@@ -184,7 +184,7 @@ export default function TaskDetailPanel({
               {task.categories.map((cat) => (
                 <span
                   key={cat}
-                  className="text-xs font-semibold text-purple bg-purple/10 px-2 py-0.5 rounded-md border border-purple/20"
+                  className="text-xs font-semibold text-purple bg-purple/10 px-2 py-0.5 rounded-xl border border-purple/20"
                 >
                   {cat}
                 </span>

@@ -104,9 +104,9 @@ export default function BoardCard({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       className={`
-        bg-primary dark:bg-gray-800 rounded-[10px] p-3.5
+        bg-primary dark:bg-gray-800 rounded-xl p-3.5
         ${canMoveCard ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}
-        border-[1.5px] transition-all duration-200
+        border transition-all duration-200
         ${cfg.cardBorder} ${cfg.cardShadow}
         ${cfg.cardBorderHover} ${cfg.cardShadowHover}
         hover:-translate-y-0.5 hover:shadow-lg

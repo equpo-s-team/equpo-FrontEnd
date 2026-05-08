@@ -37,8 +37,13 @@ export default function SidebarUser() {
         `}
     >
       <div className="relative flex-shrink-0">
-        <UserAvatar src={user?.photoURL} alt={userName} className="w-8 h-8" loading="eager" />
-        <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green border-[1.5px] border-dark" />
+        <UserAvatar
+          src={user?.photoURL}
+          alt={userName}
+          className="w-8 h-8"
+          loading="eager"
+        />
+        <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-green border border-dark" />
       </div>
 
       {!collapsed && (

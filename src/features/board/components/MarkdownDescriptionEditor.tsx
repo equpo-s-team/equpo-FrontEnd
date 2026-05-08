@@ -101,7 +101,7 @@ export function MarkdownDescriptionEditor({
 
   return (
     <div
-      className={`rounded-[10px] border-[1.5px] bg-primary dark:bg-gray-800 transition-colors duration-150 ${baseContainer}`}
+      className={`rounded-xl border bg-primary dark:bg-gray-800 transition-colors duration-150 ${baseContainer}`}
     >
       <div className="flex items-center justify-between border-b border-grey-150 dark:border-gray-700">
         <div className="flex items-center">

@@ -31,20 +31,20 @@ export function DueDateFilter({ value, onChange }: dueDateFilterProp) {
       </Pill>
       <DropPanel open={open} onClose={() => setOpen(false)}>
         <div className="p-3">
-          <p className="text-[11px] font-semibold text-grey-500 uppercase tracking-wide mb-2">
+          <p className="text-[11px] font-semibold text-grey-500 dark:text-gray-400 uppercase tracking-wide mb-2">
             Mostrar misiones antes de:
           </p>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-between text-left font-normal border-[1.5px] border-grey-200 text-[13px] font-body bg-primary text-grey-800 outline-none focus:border-blue transition-colors duration-150"
+                className="w-full justify-between text-left font-normal border border-grey-200 dark:border-gray-600 text-[13px] font-body bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-200 outline-none focus:border-blue transition-colors duration-150"
               >
                 {value ? format(new Date(value), 'PPP', { locale: es }) : 'Seleccionar fecha'}
                 <ChevronDownIcon className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-1 dark:bg-gray-800" align="start">
               <Calendar
                 mode="single"
                 selected={value ? new Date(value) : undefined}

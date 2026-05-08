@@ -21,14 +21,14 @@ export default function AvatarCluster({ connected, max, users }: AvatarClusterPr
             <UserAvatar
               src={u.photoUrl}
               alt={u.name}
-              className="w-[22px] h-[22px] border-[1.5px] border-black/40"
-              fallbackClassName={`text-xs text-white border-[1.5px] border-black/40 ${u.gradient}`}
+              className="w-[22px] h-[22px] border border-black/40"
+              fallbackClassName={`text-xs text-white border border-black/40 ${u.gradient}`}
             />
           </div>
         ))}
         {extra > 0 && (
           <div
-            className="w-[22px] h-[22px] rounded-full text-xs font-bold text-white flex items-center justify-center border-[1.5px] border-black/40 bg-grey-700"
+            className="w-[22px] h-[22px] rounded-full text-xs font-bold text-white flex items-center justify-center border border-black/40 bg-grey-700"
             style={{ marginLeft: '-5px' }}
           >
             +{extra}

@@ -12,7 +12,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         className={`
                     transition-all duration-300 ease-in-out
                     ml-0 ${collapsed ? 'lg:ml-[68px]' : 'lg:ml-[220px]'}
-                    lg:pb-0 rounded-l-2xl
+                    rounded-l-2xl
+                    h-screen lg:h-screen
+                    pb-[64px] lg:pb-0
                 `}
       >
         {children}

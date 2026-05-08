@@ -78,7 +78,7 @@ export default function FilterBar({
           {divider}
           <button
             onClick={resetFilters}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-red/30 text-red text-[12px] font-semibold bg-red/5 hover:bg-red/10 transition-all duration-200 cursor-pointer whitespace-nowrap"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-red/30 text-red text-[12px] font-semibold bg-red/5 hover:bg-red/10 transition-all duration-200 cursor-pointer whitespace-nowrap"
           >
             <RotateCcw size={11} />
             Limpiar todo
@@ -126,25 +126,13 @@ export default function FilterBar({
         className="
         flex md:hidden
         sticky top-14 z-40
-        bg-primary border-b border-grey-200
+        bg-primary dark:bg-gray-700  border-b border-grey-200 dark:border-gray-600
         px-4 py-2 items-center justify-between gap-2
       "
       >
-        {canCreateTask && (
-          <button
-            onClick={onCreateTask}
-            id="crear-mision-btn-mobile"
-            className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white
-              bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-400 hover:to-blue-400
-              transition-all duration-200 cursor-pointer font-body shrink-0"
-          >
-            <Plus size={12} strokeWidth={2.5} />
-            Crear Misión
-          </button>
-        )}
         <button
           onClick={() => setMobileOpen((o) => !o)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] border-[1.5px] font-body transition-all duration-200 cursor-pointer
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border font-body transition-all duration-200 cursor-pointer
             ${mobileOpen || activeFilterCount > 0 ? 'border-blue text-blue bg-blue/8' : 'border-grey-200 text-grey-500'}
           `}
         >
@@ -156,13 +144,25 @@ export default function FilterBar({
             </span>
           )}
         </button>
+        {canCreateTask && (
+          <button
+            onClick={onCreateTask}
+            id="crear-mision-btn"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold text-white
+              bg-gradient-blue-bg
+              shadow-neonBlue hover:shadow transition-all duration-200 cursor-pointer shrink-0 mr-2 font-body"
+          >
+            <Plus size={13} strokeWidth={2.5} />
+            Crear Misión
+          </button>
+        )}
       </div>
 
       {mobileOpen && (
         <div
           className="
           flex md:hidden flex-col gap-3
-          bg-primary border-b border-grey-200
+          bg-primary dark:bg-gray-800 border-b border-grey-200 dark:border-gray-600
           px-4 py-3 sticky top-[calc(56px+41px)] z-30
           shadow-[0_4px_12px_rgba(0,0,0,0.06)]
           animate-fade-down

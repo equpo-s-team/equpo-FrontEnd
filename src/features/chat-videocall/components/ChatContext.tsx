@@ -34,6 +34,7 @@ interface ChatContextType {
   rooms: ChatRoom[];
   activeRoom: ChatRoom | null;
   selectRoom: (room: ChatRoom) => void;
+  clearActiveRoom: () => void;
 
   /* messages (driven by activeRoom) */
   messages: ChatMessage[];
@@ -52,6 +53,10 @@ interface ChatContextType {
   /* search */
   searchQuery: string;
   setSearchQuery: (q: string) => void;
+
+  /* mobile view */
+  showConversationList: boolean;
+  setShowConversationList: (show: boolean) => void;
 
   /* legacy call UI (inline) */
   callState: CallState;
@@ -99,6 +104,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   // ── Active Room ─────────────────────────────────────────────────────────────
   const [activeRoom, setActiveRoom] = useState<ChatRoom | null>(null);
+  const [showConversationList, setShowConversationList] = useState(true);
   const { data: messages = [] } = useRoomMessages(teamId, activeRoom?.id ?? null);
 
   // ── Mutations ───────────────────────────────────────────────────────────────
@@ -124,6 +130,13 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const selectRoom = useCallback((room: ChatRoom) => {
     setActiveRoom(room);
     setReplyingTo(null);
+    setShowConversationList(false);
+  }, []);
+
+  const clearActiveRoom = useCallback(() => {
+    setActiveRoom(null);
+    setReplyingTo(null);
+    setShowConversationList(true);
   }, []);
 
   const sendMessage = useCallback(
@@ -259,6 +272,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         rooms: filteredRooms,
         activeRoom,
         selectRoom,
+        clearActiveRoom,
         messages,
         sendMessage,
         editMessage,
@@ -267,6 +281,8 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         setReplyingTo,
         searchQuery,
         setSearchQuery,
+        showConversationList,
+        setShowConversationList,
         callState,
         callSession,
         startCall,

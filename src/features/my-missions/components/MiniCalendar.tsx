@@ -66,6 +66,7 @@ export default function MiniCalendar({
           classNames={{
             weekday:
               'text-muted-foreground dark:text-gray-500 flex-1 select-none rounded-md text-[0.65rem] font-normal sm:text-[0.8rem]',
+
           }}
           modifiers={{
             hasTask: (date) => {

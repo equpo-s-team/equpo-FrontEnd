@@ -211,7 +211,7 @@ function KanbanCol({ title, dotGrad, tasks }: KanbanColProps) {
       {tasks.map(({ tag, tagBg, tagColor, text }) => (
         <div
           key={text}
-          className="bg-grey-50 dark:bg-gray-700 border border-grey-150 dark:border-gray-600 rounded-[10px] px-[.65rem] py-[.55rem] text-xs text-grey-700 dark:text-gray-300 mb-[.45rem]"
+          className="bg-grey-50 dark:bg-gray-700 border border-grey-150 dark:border-gray-600 rounded-xl px-[.65rem] py-[.55rem] text-xs text-grey-700 dark:text-gray-300 mb-[.45rem]"
         >
           <span
             className="inline-block text-xs font-semibold px-[.4rem] py-[.15rem] rounded mb-1"

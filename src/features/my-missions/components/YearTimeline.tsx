@@ -141,7 +141,7 @@ export default function YearTimeline({
                   }
                 }}
                 className={`
-                  p-4 rounded-2xl border-[1.5px] cursor-pointer transition-all duration-200
+                  p-4 rounded-2xl border cursor-pointer transition-all duration-200
                   hover:-translate-y-1 hover:shadow-card
                   ${isCurrentMonth ? 'border-blue bg-blue/5' : 'border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-grey-200 dark:hover:border-gray-600'}
                 `}

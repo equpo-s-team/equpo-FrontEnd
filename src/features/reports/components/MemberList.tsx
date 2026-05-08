@@ -12,7 +12,7 @@ export function MemberList({ members }: MemberListProps) {
 
   return (
     <div
-      className="relative flex flex-1 min-h-0 flex-col bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 rounded-[14px] p-3 sm:p-4 lg:p-6 overflow-hidden"
+      className="relative flex flex-1 min-h-0 flex-col bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 rounded-xl p-3 sm:p-4 lg:p-6 overflow-hidden"
       style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.03)' }}
     >
       {/* Corner neon glow */}
@@ -22,7 +22,7 @@ export function MemberList({ members }: MemberListProps) {
       />
 
       <div className="panel-header flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-5 relative z-10 gap-2">
-        <h2 className="text-sm font-semibold text-grey-800 tracking-[-0.01em]">
+        <h2 className="text-sm font-semibold dark:text-grey-100 text-grey-800 tracking-[-0.01em]">
           Contribucion por miembro
         </h2>
         <span className="text-xs text-grey-400 shrink-0">{members.length} miembros · scroll</span>

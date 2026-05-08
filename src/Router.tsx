@@ -13,6 +13,7 @@ import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import LandingPage from '@/features/presentation/page.tsx';
 import Reports from '@/features/reports/Reports.tsx';
+import ShopScreen from '@/features/shop/ShopScreen.tsx';
 import JoinTeamPage from '@/features/team/components/JoinTeamPage.tsx';
 import RedeemInvitePage from '@/features/team/components/RedeemInvitePage.tsx';
 import TeamSettings from '@/features/team/components/TeamSettings.tsx';
@@ -63,6 +64,8 @@ function Dashboard() {
         return <Reports />;
       case 'settings':
         return <TeamSettings />;
+      case 'shop':
+        return <ShopScreen />;
       default:
         return <TeamBoard />;
     }

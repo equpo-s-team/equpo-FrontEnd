@@ -34,11 +34,7 @@ export const useDirectInvitation = () => {
       if (payload.userUid) body.userUid = payload.userUid;
       else if (payload.email) body.email = payload.email;
 
-      return request<DirectInvitationResponse>(
-        `/teams/${payload.teamId}/members`,
-        'POST',
-        body,
-      );
+      return request<DirectInvitationResponse>(`/teams/${payload.teamId}/members`, 'POST', body);
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['teamMembers'] });

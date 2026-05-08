@@ -41,7 +41,7 @@ export function AppHeader({
   return (
     <header
       className={`
-        sticky top-0 z-50
+          sticky top-0 z-50
         bg-primary dark:bg-gray-800 border-b border-grey-200 dark:border-gray-600
         shadow-[0_1px_8px_rgba(0,0,0,0.06)]
         h-14 md:h-[62px]

@@ -61,7 +61,12 @@ export function AppSelect({
           <span className="text-grey-400 dark:text-gray-300">Seleccionar</span>
         )}
       </SelectTrigger>
-      <SelectContent className={cn('rounded-xl border-grey-150 dark:border-gray-700 font-body text-xs', className)}>
+      <SelectContent
+        className={cn(
+          'rounded-xl border-grey-150 dark:border-gray-700 font-body text-xs',
+          className,
+        )}
+      >
         {internalOptions.map((opt) => (
           <SelectItem
             key={opt.value}

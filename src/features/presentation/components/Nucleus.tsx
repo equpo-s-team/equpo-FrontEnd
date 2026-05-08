@@ -69,9 +69,7 @@ function NucleusDots({ count, activeIdx, onDotClick }: NucleusDotsProps) {
           onClick={() => onDotClick(i)}
           aria-label={`Ir a diapositiva ${i + 1}`}
           className={`border-none cursor-pointer transition-all rounded-full ${
-            i === activeIdx
-              ? 'w-6 h-2'
-              : 'w-2 h-2 bg-dot-inactive dark:bg-dot-inactive-dark'
+            i === activeIdx ? 'w-6 h-2' : 'w-2 h-2 bg-dot-inactive dark:bg-dot-inactive-dark'
           }`}
           style={{
             background: i === activeIdx ? SLIDES[i % SLIDES.length].grad : undefined,
@@ -134,8 +132,12 @@ function NucleusCarouselInner() {
                 {slide.icon}
               </div>
 
-              <h3 className="font-maxwell text-lg text-grey-900 dark:text-white mb-3">{slide.title}</h3>
-              <p className="font-body text-sm leading-[1.7] text-grey-500 dark:text-gray-400">{slide.text}</p>
+              <h3 className="font-maxwell text-lg text-grey-900 dark:text-white mb-3">
+                {slide.title}
+              </h3>
+              <p className="font-body text-sm leading-[1.7] text-grey-500 dark:text-gray-400">
+                {slide.text}
+              </p>
             </div>
           </CarouselItem>
         ))}
@@ -155,12 +157,8 @@ export default function Nucleus() {
       id="nucleus"
       className="relative py-24 px-[5vw] overflow-hidden bg-final-gradient dark:bg-final-gradient-dark"
     >
-      <div
-        className="absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full pointer-events-none bg-nucleus-blob-purple"
-      />
-      <div
-        className="absolute bottom-[-60px] left-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none bg-nucleus-blob-orange"
-      />
+      <div className="absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full pointer-events-none bg-nucleus-blob-purple" />
+      <div className="absolute bottom-[-60px] left-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none bg-nucleus-blob-orange" />
 
       <div className="max-w-[1160px] mx-auto relative z-10">
         <div className="text-center max-w-[680px] mx-auto mb-14">

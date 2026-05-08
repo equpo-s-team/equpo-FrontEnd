@@ -70,7 +70,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       {/* ── Divider ── */}
       <div className="flex items-center gap-3">
         <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
-        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">O con correo electrónico</span>
+        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
+          O con correo electrónico
+        </span>
         <div className="flex-1 h-px bg-gray-200 dark:bg-gray-600" />
       </div>
 
@@ -87,14 +89,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             className={cn(
               'w-full pl-10 pr-4 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
-              errors.email ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
+              errors.email
+                ? 'border-red-500 dark:border-red-400'
+                : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Correo electrónico"
             aria-describedby={errors.email ? 'email-error' : undefined}
           />
         </div>
         {errors.email && (
-          <p id="email-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
+          <p
+            id="email-error"
+            className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1"
+          >
             <AlertTriangle className="h-3 w-3" />
             {errors.email}
           </p>
@@ -114,7 +121,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             className={cn(
               'w-full pl-10 pr-12 py-3 bg-white/50 dark:bg-gray-800/50 border rounded-xl placeholder:text-gray-400 dark:placeholder:text-gray-500',
               'focus:outline-none focus:ring-2 focus:ring-emerald-400/20 transition-all dark:text-white',
-              errors.password ? 'border-red-500 dark:border-red-400' : 'border-gray-200 dark:border-gray-600',
+              errors.password
+                ? 'border-red-500 dark:border-red-400'
+                : 'border-gray-200 dark:border-gray-600',
             )}
             aria-label="Contraseña"
             aria-describedby={errors.password ? 'password-error' : undefined}
@@ -129,7 +138,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           </button>
         </div>
         {errors.password && (
-          <p id="password-error" className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1">
+          <p
+            id="password-error"
+            className="text-red-500 dark:text-red-400 text-xs mt-1 flex items-center gap-1"
+          >
             <AlertTriangle className="h-3 w-3" />
             {errors.password}
           </p>

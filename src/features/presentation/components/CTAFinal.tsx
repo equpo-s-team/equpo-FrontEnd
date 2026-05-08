@@ -8,16 +8,9 @@ export default function CTAFinal() {
       id="cta-final"
       className="relative py-28 px-[5vw] overflow-hidden bg-final-gradient dark:bg-final-gradient-dark"
     >
-      <div
-        className="absolute -top-40 -right-40 w-[550px] h-[550px] rounded-full pointer-events-none bg-cta-blob-green"
-      />
-      <div
-        className="absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full pointer-events-none bg-cta-blob-blue"
-      />
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none bg-cta-blob-purple"
-      />
-
+      <div className="absolute -top-40 -right-40 w-[550px] h-[550px] rounded-full pointer-events-none bg-cta-blob-green" />
+      <div className="absolute -bottom-32 -left-32 w-[480px] h-[480px] rounded-full pointer-events-none bg-cta-blob-blue" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none bg-cta-blob-purple" />
 
       <div className="relative z-10 max-w-[820px] mx-auto text-center">
         <SectionLabel
@@ -70,9 +63,7 @@ export default function CTAFinal() {
               key={item.label}
               className="flex items-center gap-2 font-body text-[.85rem] text-grey-600 dark:text-gray-300"
             >
-              <span
-                className="w-5 h-5 rounded-full flex items-center justify-center text-white flex-shrink-0 bg-gradient-purple-bg"
-              >
+              <span className="w-5 h-5 rounded-full flex items-center justify-center text-white flex-shrink-0 bg-gradient-purple-bg">
                 <Check size={12} />
               </span>
               {item.label}

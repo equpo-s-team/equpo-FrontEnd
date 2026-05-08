@@ -235,7 +235,9 @@ export default function TaskStepsSection({
           <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400 dark:text-gray-400">
             Pasos de la misión
           </span>
-          <span className={`text-[11px] font-semibold text-grey-400 dark:text-gray-300 px-2 py-0.5 rounded-full ${percentageBgClass}`}>
+          <span
+            className={`text-[11px] font-semibold text-grey-400 dark:text-gray-300 px-2 py-0.5 rounded-full ${percentageBgClass}`}
+          >
             0%
           </span>
         </div>
@@ -398,7 +400,9 @@ export default function TaskStepsSection({
         {isLoading && !isDraftEditing ? (
           <span className="text-[11px] text-grey-300 dark:text-gray-300">Cargando…</span>
         ) : (
-          <span className={`text-[11px] font-semibold text-grey-400 dark:text-gray-300 px-2 py-0.5 rounded-full ${percentageBgClass}`}>
+          <span
+            className={`text-[11px] font-semibold text-grey-400 dark:text-gray-300 px-2 py-0.5 rounded-full ${percentageBgClass}`}
+          >
             {totalSteps > 0 ? Math.round((stepsDone / totalSteps) * 100) : 0}%
           </span>
         )}

@@ -91,12 +91,10 @@ export function TaskAssigneesPreview({
           <div className="flex flex-col gap-2">
             {pageItems.map((user) => (
               <div key={user.uid} className="flex items-center gap-2.5">
-                <UserAvatar
-                  src={user.photoUrl}
-                  alt={user.displayName}
-                  className="w-7 h-7"
-                />
-                <p className="text-sm font-body text-grey-700 dark:text-grey-300 truncate">{user.displayName}</p>
+                <UserAvatar src={user.photoUrl} alt={user.displayName} className="w-7 h-7" />
+                <p className="text-sm font-body text-grey-700 dark:text-grey-300 truncate">
+                  {user.displayName}
+                </p>
               </div>
             ))}
           </div>

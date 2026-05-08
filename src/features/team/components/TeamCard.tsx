@@ -82,9 +82,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ team, onEnter }) => {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             {/* Color indicator */}
-            <div
-              className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white dark:text-gray-100 font-bold text-sm shadow-md"
-            >
+            <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center text-white dark:text-gray-100 font-bold text-sm shadow-md">
               <TeamAvatar
                 src={team.photoUrl}
                 name={team.name}

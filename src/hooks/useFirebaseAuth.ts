@@ -178,57 +178,60 @@ export const useFirebaseAuth = () => {
   }, []);
 
   // ── Google Sign-In ──────────────────────────────────────────────────────────
-  const loginWithGoogle = useCallback(async (remember = true): Promise<FirebaseAuthResult> => {
-    setIsLoading(true);
-    try {
-      // Limpiar caché de autenticación para evitar el bug de múltiples cuentas
-      await auth.signOut();
-      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+  const loginWithGoogle = useCallback(
+    async (remember = true): Promise<FirebaseAuthResult> => {
+      setIsLoading(true);
+      try {
+        // Limpiar caché de autenticación para evitar el bug de múltiples cuentas
+        await auth.signOut();
+        await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
 
-      // Crear un nuevo provider para asegurar parámetros frescos
-      const freshProvider = new GoogleAuthProvider();
-      freshProvider.setCustomParameters({
-        prompt: 'select_account',
-        access_type: 'offline',
-        include_granted_scopes: 'true',
-      });
+        // Crear un nuevo provider para asegurar parámetros frescos
+        const freshProvider = new GoogleAuthProvider();
+        freshProvider.setCustomParameters({
+          prompt: 'select_account',
+          access_type: 'offline',
+          include_granted_scopes: 'true',
+        });
 
-      const credential = await signInWithPopup(auth, freshProvider);
+        const credential = await signInWithPopup(auth, freshProvider);
 
-      const displayName =
-        credential.user.displayName ?? credential.user.email?.split('@')[0] ?? 'Usuario';
-      const canonicalPhotoURL = await resolveCanonicalAvatarUrl(
-        credential.user.uid,
-        credential.user.photoURL,
-      );
+        const displayName =
+          credential.user.displayName ?? credential.user.email?.split('@')[0] ?? 'Usuario';
+        const canonicalPhotoURL = await resolveCanonicalAvatarUrl(
+          credential.user.uid,
+          credential.user.photoURL,
+        );
 
-      if (canonicalPhotoURL && canonicalPhotoURL !== credential.user.photoURL) {
-        await updateProfile(credential.user, { photoURL: canonicalPhotoURL });
+        if (canonicalPhotoURL && canonicalPhotoURL !== credential.user.photoURL) {
+          await updateProfile(credential.user, { photoURL: canonicalPhotoURL });
+        }
+
+        // Ensure database user exists and always touch login time.
+        await createDatabaseUser(displayName, canonicalPhotoURL, credential.user.email);
+        await touchUserLastActive();
+
+        return {
+          success: true,
+          user: credential.user,
+          photoURL: canonicalPhotoURL ?? undefined,
+        };
+      } catch (err) {
+        const authErr = err as AuthError;
+        // User closed the popup — not a real error
+        if (
+          authErr.code === 'auth/popup-closed-by-user' ||
+          authErr.code === 'auth/cancelled-popup-request'
+        ) {
+          return { success: false, error: '' };
+        }
+        return { success: false, error: mapFirebaseError(authErr) };
+      } finally {
+        setIsLoading(false);
       }
-
-      // Ensure database user exists and always touch login time.
-      await createDatabaseUser(displayName, canonicalPhotoURL, credential.user.email);
-      await touchUserLastActive();
-
-      return {
-        success: true,
-        user: credential.user,
-        photoURL: canonicalPhotoURL ?? undefined,
-      };
-    } catch (err) {
-      const authErr = err as AuthError;
-      // User closed the popup — not a real error
-      if (
-        authErr.code === 'auth/popup-closed-by-user' ||
-        authErr.code === 'auth/cancelled-popup-request'
-      ) {
-        return { success: false, error: '' };
-      }
-      return { success: false, error: mapFirebaseError(authErr) };
-    } finally {
-      setIsLoading(false);
-    }
-  }, [createDatabaseUser, touchUserLastActive]);
+    },
+    [createDatabaseUser, touchUserLastActive],
+  );
 
   // ── Password Reset ──────────────────────────────────────────────────────────
   const sendPasswordReset = useCallback(async (email: string): Promise<FirebaseAuthResult> => {

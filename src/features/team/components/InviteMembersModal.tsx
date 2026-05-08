@@ -290,7 +290,9 @@ export default function InviteMembersModal({
               >
                 <Check size={24} className="text-green" />
               </div>
-              <h3 className="text-lg font-bold text-grey-800 dark:text-gray-100">¡Invitación lista!</h3>
+              <h3 className="text-lg font-bold text-grey-800 dark:text-gray-100">
+                ¡Invitación lista!
+              </h3>
               <p className="text-xs text-grey-400 dark:text-grey-500 mt-1">
                 Comparte el código o el link con quien quieras invitar
               </p>

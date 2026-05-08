@@ -252,7 +252,9 @@ export default function GroupFormSheet({ isOpen, onClose, initialData }: GroupFo
                   {/* Checkbox */}
                   <div
                     className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-all ${
-                      isSelected ? 'border-blue bg-blue' : 'border-grey-300 dark:border-gray-600 bg-white dark:bg-gray-700'
+                      isSelected
+                        ? 'border-blue bg-blue'
+                        : 'border-grey-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                     }`}
                   >
                     {isSelected && (

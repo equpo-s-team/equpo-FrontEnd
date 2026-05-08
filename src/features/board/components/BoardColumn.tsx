@@ -1,7 +1,7 @@
 import { ChevronUp } from 'lucide-react';
 
 import { EmptyState } from '@/components/ui/EmptyState';
-import {type BoardColumnProps, type DropZoneProps} from "@/features/board/types";
+import { type BoardColumnProps, type DropZoneProps } from '@/features/board/types';
 
 import { COLUMN_CONFIG, COLUMN_EMPTY } from '../utils/columnConfig.ts';
 import BoardCard from './BoardCard.tsx';
@@ -51,8 +51,8 @@ export default function BoardColumn({
   onCardClick,
   canMoveCard = true,
   isCollapsed = false,
-  onToggleCollapse = () => {}
-} : BoardColumnProps) {
+  onToggleCollapse = () => {},
+}: BoardColumnProps) {
   const { id, label, accent } = column;
   const cfg = COLUMN_CONFIG[accent];
   const emptyConfig = COLUMN_EMPTY[accent] ?? COLUMN_EMPTY.todo;
@@ -109,14 +109,14 @@ export default function BoardColumn({
       </div>
 
       {!isCollapsed && (
-      <div
-        role="button"
-        className="flex flex-col gap-3 px-3 pb-3 flex-1"
-        onDrop={(e) => {
-          e.preventDefault();
-          if (!canMoveCard || !e.dataTransfer) return;
-          const cardId = e.dataTransfer.getData('text/card-id');
-          const fromColumnId = e.dataTransfer.getData('text/from-column');
+        <div
+          role="button"
+          className="flex flex-col gap-3 px-3 pb-3 flex-1"
+          onDrop={(e) => {
+            e.preventDefault();
+            if (!canMoveCard || !e.dataTransfer) return;
+            const cardId = e.dataTransfer.getData('text/card-id');
+            const fromColumnId = e.dataTransfer.getData('text/from-column');
 
             if (cardId && fromColumnId && fromColumnId !== id) {
               const rect = e.currentTarget.getBoundingClientRect();
@@ -133,32 +133,32 @@ export default function BoardColumn({
           onDragLeave={(e) => {
             e.currentTarget.classList.remove('bg-blue/5');
           }}
-      >
-        {cards?.length === 0 ? (
-          <EmptyState
-            icon={emptyConfig.icon}
-            title={emptyConfig.title}
-            description={emptyConfig.description}
-            size="sm"
-            className="flex-1"
-          />
-        ) : (
-          cards.map((card, index) => (
-            <div key={card.id}>
-              <BoardCard
-                card={card}
-                accent={accent}
-                columnId={id}
-                onMoveCard={onMoveCard}
-                onCardClick={onCardClick}
-                position={index}
-                canMoveCard={canMoveCard}
-              />
-              {canMoveCard && <DropZone onDrop={handleExternalDrop} position={index + 1} />}
-            </div>
-          ))
-        )}
-      </div>
+        >
+          {cards?.length === 0 ? (
+            <EmptyState
+              icon={emptyConfig.icon}
+              title={emptyConfig.title}
+              description={emptyConfig.description}
+              size="sm"
+              className="flex-1"
+            />
+          ) : (
+            cards.map((card, index) => (
+              <div key={card.id}>
+                <BoardCard
+                  card={card}
+                  accent={accent}
+                  columnId={id}
+                  onMoveCard={onMoveCard}
+                  onCardClick={onCardClick}
+                  position={index}
+                  canMoveCard={canMoveCard}
+                />
+                {canMoveCard && <DropZone onDrop={handleExternalDrop} position={index + 1} />}
+              </div>
+            ))
+          )}
+        </div>
       )}
     </div>
   );

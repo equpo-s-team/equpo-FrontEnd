@@ -21,7 +21,9 @@ export function MarkdownDescriptionEditor({
   const editorRef = useRef<HTMLDivElement>(null);
   const lastValidMarkdownRef = useRef(value || '');
 
-  const baseContainer = hasError ? 'border-red/50' : 'border-grey-200 dark:border-gray-700 focus-within:border-blue';
+  const baseContainer = hasError
+    ? 'border-red/50'
+    : 'border-grey-200 dark:border-gray-700 focus-within:border-blue';
 
   useEffect(() => {
     if (!editorRef.current) return;

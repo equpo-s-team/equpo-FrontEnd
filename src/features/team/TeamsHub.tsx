@@ -367,7 +367,9 @@ export const TeamsHub: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 max-w-sm w-full">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-grey-800 dark:text-gray-300">Unirte a equipo</h2>
+              <h2 className="text-lg font-bold text-grey-800 dark:text-gray-300">
+                Unirte a equipo
+              </h2>
               <button
                 onClick={() => {
                   setIsRedeemModalOpen(false);
@@ -384,29 +386,31 @@ export const TeamsHub: React.FC = () => {
             </p>
 
             <form
-              onSubmit={(e) => void (async (e) => {
-                e.preventDefault();
-                if (!redeemCode.trim() || !authUser?.uid) return;
+              onSubmit={(e) =>
+                void (async (e) => {
+                  e.preventDefault();
+                  if (!redeemCode.trim() || !authUser?.uid) return;
 
-                setIsRedeeming(true);
-                try {
-                  // Use the redeemCode hook - backend handles adding user to team
-                  await redeemInviteCode.mutateAsync({
-                    code: redeemCode.trim().toUpperCase(),
-                  });
+                  setIsRedeeming(true);
+                  try {
+                    // Use the redeemCode hook - backend handles adding user to team
+                    await redeemInviteCode.mutateAsync({
+                      code: redeemCode.trim().toUpperCase(),
+                    });
 
-                  toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
-                  setIsRedeemModalOpen(false);
-                  setRedeemCode('');
-                } catch (error) {
-                  toastError(
-                    'Error',
-                    error instanceof Error ? error.message : 'No se pudo canjear el código.',
-                  );
-                } finally {
-                  setIsRedeeming(false);
-                }
-              })(e)}
+                    toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
+                    setIsRedeemModalOpen(false);
+                    setRedeemCode('');
+                  } catch (error) {
+                    toastError(
+                      'Error',
+                      error instanceof Error ? error.message : 'No se pudo canjear el código.',
+                    );
+                  } finally {
+                    setIsRedeeming(false);
+                  }
+                })(e)
+              }
               className="space-y-4"
             >
               <div>

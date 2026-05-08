@@ -205,7 +205,9 @@ export default function TaskCommentarySection({
   };
 
   const handleEdit = (commentaryId: string, commentary: string): Promise<void> => {
-    return updateCommentary.mutateAsync({ teamId, taskId, commentaryId, commentary }).then(() => {});
+    return updateCommentary
+      .mutateAsync({ teamId, taskId, commentaryId, commentary })
+      .then(() => {});
   };
 
   const handleDelete = (commentaryId: string) => {

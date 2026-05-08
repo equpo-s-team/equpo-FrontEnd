@@ -25,9 +25,7 @@ export function MemberList({ members }: MemberListProps) {
         <h2 className="text-sm font-semibold dark:text-grey-100 text-grey-800 tracking-[-0.01em]">
           Contribucion por miembro
         </h2>
-        <span className="text-xs text-grey-400 shrink-0">
-          {members.length} miembros · scroll
-        </span>
+        <span className="text-xs text-grey-400 shrink-0">{members.length} miembros · scroll</span>
       </div>
 
       {/* Scrollable list */}

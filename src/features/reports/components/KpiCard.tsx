@@ -79,7 +79,9 @@ export function KpiCard({ variant, label, value, sub }: KpiCardProps) {
       />
 
       <div className="relative z-10">
-        <p className="text-xs font-medium text-grey-500 dark:text-grey-400 mb-1.5 sm:mb-2.5">{label}</p>
+        <p className="text-xs font-medium text-grey-500 dark:text-grey-400 mb-1.5 sm:mb-2.5">
+          {label}
+        </p>
         <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-[-0.04em] text-grey-900 dark:text-gray-100 leading-none">
           {value}
         </p>

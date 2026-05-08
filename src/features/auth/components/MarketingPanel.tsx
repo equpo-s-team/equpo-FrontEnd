@@ -33,7 +33,9 @@ export const MarketingPanel: React.FC = () => {
             <Users className="w-6 h-6 text-white dark:text-gray-100" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white dark:text-gray-100">Trabajo en equipo</h3>
+            <h3 className="text-lg font-semibold text-white dark:text-gray-100">
+              Trabajo en equipo
+            </h3>
             <p className="text-white/80 dark:text-white/70">Colabora sin límites</p>
           </div>
         </div>

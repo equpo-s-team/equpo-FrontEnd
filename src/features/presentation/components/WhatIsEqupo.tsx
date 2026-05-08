@@ -34,7 +34,9 @@ export default function WhatIsEqupo() {
                 >
                   <span className="text-white text-xs font-bold">e</span>
                 </div>
-                <span className="font-maxwell text-sm text-grey-800 dark:text-gray-200">Sprint Q2 — equpo</span>
+                <span className="font-maxwell text-sm text-grey-800 dark:text-gray-200">
+                  Sprint Q2 — equpo
+                </span>
               </div>
               <div className="flex">
                 {[

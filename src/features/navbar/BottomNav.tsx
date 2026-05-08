@@ -1,4 +1,4 @@
-import { ChartColumnBig, Home, MessageCircle, Settings, Star } from 'lucide-react';
+import { ChartColumnBig, Home, MessageCircle, Settings, ShoppingBag, Star } from 'lucide-react';
 
 import { useAuth } from '@/context/AuthContext.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
@@ -10,6 +10,7 @@ const BASE_NAV_ITEMS = [
   { id: 'my-space', label: 'Mi Espacio', icon: Home },
   { id: 'missiones', label: 'Misiones', icon: Star },
   { id: 'chat', label: 'Chat', icon: MessageCircle },
+  { id: 'shop', label: 'Tienda', icon: ShoppingBag },
   { id: 'reports', label: 'Reportes', icon: ChartColumnBig },
 ];
 

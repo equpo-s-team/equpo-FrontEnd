@@ -1,4 +1,4 @@
-import {getAvatarGradientClass} from "@/lib/utils/avatar/avatarBackground.ts";
+import { getAvatarGradientClass } from '@/lib/utils/avatar/avatarBackground.ts';
 import { useAvatarState } from '@/lib/utils/avatar/avatarCore.ts';
 import { getInitials } from '@/lib/utils/avatar/avatarInitials.ts';
 import { cn } from '@/lib/utils/utils.ts';

@@ -59,11 +59,11 @@ export const UserPreviewCard: React.FC<UserPreviewCardProps> = ({
   }
 
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-lg border ${
-      isAlreadyInTeam
-        ? 'bg-grey-50 border-grey-200'
-        : 'bg-green-50 border-green-200'
-    }`}>
+    <div
+      className={`flex items-center gap-3 p-3 rounded-lg border ${
+        isAlreadyInTeam ? 'bg-grey-50 border-grey-200' : 'bg-green-50 border-green-200'
+      }`}
+    >
       {isAlreadyInTeam ? (
         <User className="w-5 h-5 text-grey-500" />
       ) : (
@@ -76,21 +76,21 @@ export const UserPreviewCard: React.FC<UserPreviewCardProps> = ({
         fallbackClassName="text-white text-sm font-medium"
       />
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-semibold truncate ${
-          isAlreadyInTeam ? 'text-grey-700' : 'text-green-800'
-        }`}>
+        <p
+          className={`text-sm font-semibold truncate ${
+            isAlreadyInTeam ? 'text-grey-700' : 'text-green-800'
+          }`}
+        >
           {user.displayName || 'Usuario sin nombre'}
         </p>
-        <p className={`text-xs font-mono truncate ${
-          isAlreadyInTeam ? 'text-grey-500' : 'text-green-600'
-        }`}>
+        <p
+          className={`text-xs font-mono truncate ${
+            isAlreadyInTeam ? 'text-grey-500' : 'text-green-600'
+          }`}
+        >
           {user.uid}
         </p>
-        {isAlreadyInTeam && (
-          <p className="text-xs text-grey-600 mt-1">
-            Ya es miembro del equipo
-          </p>
-        )}
+        {isAlreadyInTeam && <p className="text-xs text-grey-600 mt-1">Ya es miembro del equipo</p>}
       </div>
     </div>
   );

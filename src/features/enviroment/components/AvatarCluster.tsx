@@ -1,4 +1,4 @@
-import {Users} from "lucide-react";
+import { Users } from 'lucide-react';
 
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
 import { type ConnectedUser } from '@/features/enviroment/types/hud.ts';
@@ -15,7 +15,6 @@ export default function AvatarCluster({ connected, max, users }: AvatarClusterPr
 
   return (
     <div className="flex items-center gap-2.5">
-
       <div className="flex w-12">
         {shown.map((u, i) => (
           <div key={u.uid} title={u.name} style={{ marginLeft: i > 0 ? '-5px' : 0 }}>
@@ -36,7 +35,9 @@ export default function AvatarCluster({ connected, max, users }: AvatarClusterPr
           </div>
         )}
       </div>
-      <span className="text-xs font-bold uppercase tracking-[0.5px] text-grey-700"><Users size={16} strokeWidth={3}/></span>
+      <span className="text-xs font-bold uppercase tracking-[0.5px] text-grey-700">
+        <Users size={16} strokeWidth={3} />
+      </span>
       <span className="text-sm font-bold text-grey-800">{connected}</span>
       <span className="text-xs text-grey-600">/ {max}</span>
     </div>

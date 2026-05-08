@@ -36,10 +36,7 @@ export function UserAvatar({
 
   if (!shouldRenderImage) {
     return (
-      <div
-        className={baseFallbackClasses}
-        style={style}
-      >
+      <div className={baseFallbackClasses} style={style}>
         {fallbackText}
       </div>
     );

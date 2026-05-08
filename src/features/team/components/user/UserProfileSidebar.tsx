@@ -1,4 +1,4 @@
-import { Camera, Clipboard,Loader2 } from 'lucide-react';
+import { Camera, Clipboard, Loader2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
@@ -153,7 +153,6 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 alt={displayName || 'User'}
                 className="w-full h-full"
                 fallbackClassName="w-full h-full text-white text-2xl"
-
                 loading="eager"
               />
             </div>
@@ -260,9 +259,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
             <div className="flex gap-2">
               <div
                 className={`w-full bg-secondary dark:bg-gray-700 px-4 py-2.5 rounded-xl border border-tertiary dark:border-gray-700 text-sm text-grey-400 dark:text-grey-500 font-mono font-sm select-all break-all transition-all duration-200 ${
-                  isCopied
-                    ? 'bg-green-50 border-green-200 text-green-700'
-                    : 'text-grey-400'
+                  isCopied ? 'bg-green-50 border-green-200 text-green-700' : 'text-grey-400'
                 }`}
               >
                 {user.uid}
@@ -276,10 +273,7 @@ export const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 }`}
                 title={isCopied ? '¡Copiado!' : 'Copiar UID'}
               >
-                <Clipboard
-                  size={16}
-                  className={isCopied ? 'text-white' : 'text-grey-500'}
-                />
+                <Clipboard size={16} className={isCopied ? 'text-white' : 'text-grey-500'} />
               </button>
             </div>
             <p className="text-xs text-grey-400 dark:text-grey-500 mt-1">

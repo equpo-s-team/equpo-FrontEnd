@@ -113,10 +113,14 @@ export default {
         'avatar-lv': 'linear-gradient(135deg, #9b7fe1, #5961F9)',
         'avatar-dm': 'linear-gradient(135deg, #86F0FD, #60AFFF)',
         'avatar-sr': 'linear-gradient(135deg, #F65A70, #9b7fe1)',
-        'animated-gradient-new': 'linear-gradient(120deg, #ffffff 0%, #f0fdf6 25%, #eff8ff 55%, #fff5f7 80%, #fdf8ff 100%)',
-        'animated-gradient-new-dark': 'linear-gradient(120deg, #0f172a 0%, #1e293b 15%, #242E3D 35%, #111827 55%, #181f29 75%, #0f172a 100%)',
-        'final-gradient': 'linear-gradient(150deg, #f0fdf6 0%, #eff8ff 45%, #fdf5ff 80%, #fff5f7 100%)',
-        'final-gradient-dark': 'linear-gradient(150deg, #0f172a 0%, #1e293b 45%, #181f29 80%, #0f172a 100%)',
+        'animated-gradient-new':
+          'linear-gradient(120deg, #ffffff 0%, #f0fdf6 25%, #eff8ff 55%, #fff5f7 80%, #fdf8ff 100%)',
+        'animated-gradient-new-dark':
+          'linear-gradient(120deg, #0f172a 0%, #1e293b 15%, #242E3D 35%, #111827 55%, #181f29 75%, #0f172a 100%)',
+        'final-gradient':
+          'linear-gradient(150deg, #f0fdf6 0%, #eff8ff 45%, #fdf5ff 80%, #fff5f7 100%)',
+        'final-gradient-dark':
+          'linear-gradient(150deg, #0f172a 0%, #1e293b 45%, #181f29 80%, #0f172a 100%)',
         'cta-blob-green': 'radial-gradient(circle, rgba(34,197,94,0.15), transparent 65%)',
         'cta-blob-blue': 'radial-gradient(circle, rgba(59,130,246,0.12), transparent 65%)',
         'cta-blob-purple': 'radial-gradient(ellipse, rgba(147,51,234,0.08), transparent 70%)',

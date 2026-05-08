@@ -10,11 +10,7 @@ interface TeamFormSidebarProps {
   team?: Team;
   onClose: () => void;
   isSubmitting?: boolean;
-  onSubmit: (payload: {
-    name: string;
-    description: string;
-    memberIdentifiers: string[];
-  }) => void;
+  onSubmit: (payload: { name: string; description: string; memberIdentifiers: string[] }) => void;
 }
 
 const COLORS = [
@@ -245,7 +241,9 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                       {identifier.substring(0, 2).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-grey-700 dark:text-gray-300 truncate">{identifier}</p>
+                      <p className="text-xs font-semibold text-grey-700 dark:text-gray-300 truncate">
+                        {identifier}
+                      </p>
                       <p className="text-xs text-blue-500">Pendiente de añadir...</p>
                     </div>
                     <button

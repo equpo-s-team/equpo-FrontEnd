@@ -1,4 +1,4 @@
-import {Sprout} from "lucide-react";
+import { Sprout } from 'lucide-react';
 
 import StatBar from '@/features/enviroment/components/StatBar.tsx';
 
@@ -13,7 +13,6 @@ interface TopBarProps {
 export default function TopBar({ session, stats }: TopBarProps) {
   return (
     <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20 pointer-events-auto">
-
       {/* Avatar cluster pill */}
       <div
         className="
@@ -34,7 +33,7 @@ export default function TopBar({ session, stats }: TopBarProps) {
         max={stats.maxHp}
         fillClass="bg-gradient-green-bg"
         valueColorClass="text-secondary-foreground shadow-neon-green"
-        icon={<Sprout size={16}/>}
+        icon={<Sprout size={16} />}
         neonClass="border-green/50 h-12"
       />
     </div>

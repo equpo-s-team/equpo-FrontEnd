@@ -78,7 +78,9 @@ export function InvitationChoiceModal({
                 <h3 className="font-semibold text-grey-800 dark:text-gray-100 mb-1 font-body text-base">
                   Agregar por UID o Email
                 </h3>
-                <p className="text-sm text-grey-500 dark:text-grey-400 font-body">Para usuarios específicos</p>
+                <p className="text-sm text-grey-500 dark:text-grey-400 font-body">
+                  Para usuarios específicos
+                </p>
               </div>
               <div className="w-10 h-10 rounded-full bg-purple text-white flex items-center justify-center group-hover:bg-purple/600 transition-colors">
                 <ArrowRight size={20} />

@@ -78,7 +78,10 @@ const FEATURES: feature[] = [
 
 export default function Features() {
   return (
-    <section id="features" className="relative py-24 px-[5vw] overflow-hidden bg-white dark:bg-gray-900">
+    <section
+      id="features"
+      className="relative py-24 px-[5vw] overflow-hidden bg-white dark:bg-gray-900"
+    >
       {/* Subtle background pattern */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -140,8 +143,12 @@ function FeatureCard({ feat }: { feat: feature }) {
         {feat.icon}
       </div>
 
-      <h3 className="font-maxwell text-[1rem] text-grey-900 dark:text-white mb-1.5">{feat.title}</h3>
-      <p className="font-body text-[.87rem] leading-[1.6] text-grey-400 dark:text-gray-400 mb-3">{feat.desc}</p>
+      <h3 className="font-maxwell text-[1rem] text-grey-900 dark:text-white mb-1.5">
+        {feat.title}
+      </h3>
+      <p className="font-body text-[.87rem] leading-[1.6] text-grey-400 dark:text-gray-400 mb-3">
+        {feat.desc}
+      </p>
       <span
         className="font-body text-[.78rem] font-semibold flex items-center gap-1"
         style={{ color: feat.microColor }}

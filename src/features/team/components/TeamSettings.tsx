@@ -82,14 +82,19 @@ function DeleteConfirmDialog({ teamName, onConfirm, onCancel, isDeleting }: Conf
             <AlertTriangle size={20} className="text-red" style={{ color: '#F65A70' }} />
           </div>
           <div>
-            <h3 className="font-bold text-grey-800 dark:text-grey-200 font-body">¿Eliminar equipo?</h3>
-            <p className="text-xs text-grey-400 dark:text-grey-500">Esta acción es permanente e irreversible.</p>
+            <h3 className="font-bold text-grey-800 dark:text-grey-200 font-body">
+              ¿Eliminar equipo?
+            </h3>
+            <p className="text-xs text-grey-400 dark:text-grey-500">
+              Esta acción es permanente e irreversible.
+            </p>
           </div>
         </div>
 
         <p className="text-sm text-grey-600 dark:text-grey-400 mb-4 font-body">
           Se eliminarán todas las misiones, grupos, archivos y miembros del equipo. Escribe{' '}
-          <span className="font-bold text-grey-800 dark:text-grey-200">{teamName}</span> para confirmar.
+          <span className="font-bold text-grey-800 dark:text-grey-200">{teamName}</span> para
+          confirmar.
         </p>
 
         <input
@@ -159,7 +164,9 @@ function GroupDeleteConfirmDialog({
           <AlertTriangle size={24} />
         </div>
 
-        <h3 className="font-maxwell font-bold text-xl text-grey-800 dark:text-grey-200 mb-2">Eliminar Grupo</h3>
+        <h3 className="font-maxwell font-bold text-xl text-grey-800 dark:text-grey-200 mb-2">
+          Eliminar Grupo
+        </h3>
         <p className="text-sm text-grey-500 dark:text-grey-400 mb-5 font-body">
           Esta acción es permanente. Para confirmar, escribe el nombre del grupo:{' '}
           <strong className="text-grey-800 dark:text-grey-200 select-all">{groupName}</strong>
@@ -220,14 +227,14 @@ export default function TeamSettings() {
   const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
   const [isUidModalOpen, setIsUidModalOpen] = useState(false);
   const [isInstantLinkModalOpen, setIsInstantLinkModalOpen] = useState(false);
-  const [instantLinkData, setInstantLinkData] = useState<{ code: string; link: string } | undefined>(undefined);
+  const [instantLinkData, setInstantLinkData] = useState<
+    { code: string; link: string } | undefined
+  >(undefined);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const team = teams.find((t) => t.id === teamId);
   const currentUid = user?.uid ?? '';
-
-
 
   const myRole: string | null = (() => {
     if (!team || !currentUid) return null;
@@ -262,7 +269,9 @@ export default function TeamSettings() {
   if (!team || !teamId) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-grey-400 dark:text-grey-500 text-sm font-body">Selecciona un equipo para continuar.</p>
+        <p className="text-grey-400 dark:text-grey-500 text-sm font-body">
+          Selecciona un equipo para continuar.
+        </p>
       </div>
     );
   }
@@ -276,7 +285,9 @@ export default function TeamSettings() {
         >
           <Shield size={28} className="text-grey-400" />
         </div>
-        <h2 className="text-grey-700 dark:text-grey-300 font-bold text-lg font-body">Acceso restringido</h2>
+        <h2 className="text-grey-700 dark:text-grey-300 font-bold text-lg font-body">
+          Acceso restringido
+        </h2>
         <p className="text-grey-400 dark:text-grey-500 text-sm text-center max-w-xs font-body">
           Solo el líder y los colaboradores del equipo pueden acceder a los ajustes.
         </p>
@@ -377,7 +388,6 @@ export default function TeamSettings() {
     }
   };
 
-
   const accent = 'linear-gradient(135deg, #60AFFF, #9b7fe1)';
   const accentGlow = 'rgba(96,175,255,0.3)';
 
@@ -449,7 +459,9 @@ export default function TeamSettings() {
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-grey-700 dark:text-grey-300 truncate">{team.name}</p>
+              <p className="text-sm font-semibold text-grey-700 dark:text-grey-300 truncate">
+                {team.name}
+              </p>
               <p className="text-xs text-grey-400 dark:text-grey-500 mt-0.5">
                 {isUploading ? 'Subiendo imagen…' : 'JPG, PNG, GIF — máx. 5 MB'}
               </p>
@@ -540,7 +552,9 @@ export default function TeamSettings() {
                       <p className="text-sm font-semibold text-grey-800 dark:text-grey-200 truncate">
                         {member.displayName ?? member.uid}
                         {isCurrentUser && (
-                          <span className="ml-1.5 text-xs text-grey-400 dark:text-grey-500 font-normal">(tú)</span>
+                          <span className="ml-1.5 text-xs text-grey-400 dark:text-grey-500 font-normal">
+                            (tú)
+                          </span>
                         )}
                       </p>
                       <span

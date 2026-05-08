@@ -199,7 +199,10 @@ export default function WeekTimeline({
             </div>
           </div>
 
-          <div className="flex relative mt-6 mb-6" style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}>
+          <div
+            className="flex relative mt-6 mb-6"
+            style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}
+          >
             {/* Hours Background Lines */}
             <div className="absolute inset-0 pointer-events-none">
               {Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => {
@@ -210,9 +213,7 @@ export default function WeekTimeline({
                     className="absolute left-0 right-0 flex items-start"
                     style={{ top: `${i * HOUR_HEIGHT}px` }}
                   >
-                    <span
-                      className="w-[60px] whitespace-nowrap text-right text-xs pr-2 text-grey-400 dark:text-grey-500 font-body font-medium bg-white dark:bg-gray-800 -translate-y-1/2"
-                    >
+                    <span className="w-[60px] whitespace-nowrap text-right text-xs pr-2 text-grey-400 dark:text-grey-500 font-body font-medium bg-white dark:bg-gray-800 -translate-y-1/2">
                       {hour === END_HOUR ? '' : formatHour(hour)}
                     </span>
                     <div className="flex-1 h-px bg-grey-150 dark:bg-gray-700" />

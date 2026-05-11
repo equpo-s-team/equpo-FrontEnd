@@ -49,6 +49,7 @@ export const ReportsOverdueTaskSchema = z.object({
 export const ReportsKpiResponseSchema = z.object({
   kpi: ReportsKpiSchema,
   meta: ReportsMetaBaseSchema,
+  environmentHealth: z.number().optional().default(60),
 });
 
 export const ReportsOverviewResponseSchema = z.object({

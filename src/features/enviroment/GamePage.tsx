@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useAchievementPopup } from '@/context/AchievementContext';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
+import { MobileJoystick } from '@/features/enviroment/components/game/MobileJoystick.tsx';
+import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
+import { useAchievements } from '@/features/team/hooks/useAchievements';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
+import { useUnlockAchievement } from '@/features/team/hooks/useUnlockAchievement';
 
-import { MobileJoystick } from './components/environment/MobileJoystick.tsx';
-import Experience from './components/Experience.tsx';
+import Experience from './components/game/Experience.tsx';
 import HUD from './components/HUD.tsx';
 import NeonLoadingOverlay from './components/NeonLoadingOverlay.tsx';
 import { useHudData } from './hooks/useHudData.ts';
@@ -16,6 +20,7 @@ import { type Vector3State } from './types/realtime.ts';
 export default function GamePage() {
   const { user, isAuth } = useAuth();
   const { teamId } = useTeam();
+  const { setActiveItem } = useSidebar();
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -61,7 +66,11 @@ export default function GamePage() {
     localRotation: localRot,
   });
 
-  const { stats, session } = useHudData({
+  const { mutate: unlockAchievement } = useUnlockAchievement();
+  const { showAchievement } = useAchievementPopup();
+  const { data: teamAchievements } = useAchievements(teamId || undefined);
+
+  const { stats, session, setCoinBalance } = useHudData({
     teamId,
     connectedUsers,
     connectedUserUids,
@@ -80,16 +89,50 @@ export default function GamePage() {
     setIsReady(true);
   }, []);
 
+  const handleBoardEntry = useCallback(() => {
+    setActiveItem('missiones');
+  }, [setActiveItem]);
+
+  const disabledPointIds = useMemo(() => {
+    const ids = new Set<string>();
+    const explorador = teamAchievements?.find(a => a.name === 'Explorador');
+    if (explorador?.unlockedAt) {
+      ids.add('duck-statue');
+    }
+    return ids;
+  }, [teamAchievements]);
+
+  const handleDuckStatue = useCallback(() => {
+    if (!teamId || !localUid) return;
+
+    const processAchievement = () => {
+      const achievement = teamAchievements?.find(a => a.name === 'Explorador');
+      if (!achievement) return;
+
+      unlockAchievement(
+        { teamId, payload: { userUid: localUid, achievementId: achievement.id } },
+        {
+          onSuccess: () => {
+            showAchievement(achievement);
+          },
+          onError: (error) => {
+            console.error('Failed to unlock achievement:', error);
+          },
+        },
+      );
+    };
+
+    processAchievement();
+  }, [teamId, localUid, teamAchievements, unlockAchievement, showAchievement]);
+
   const playerNames = useMemo(() => {
     if (!teamMembers) return {};
     const map: Record<string, string> = {};
     for (const member of teamMembers) {
       if (member.displayName) {
-        // Extract first name
         map[member.uid] = member.displayName.split(' ')[0] || member.displayName;
       }
     }
-    // Also include local user's first name if possible
     const authUser = user as { uid?: string; displayName?: string } | null;
     if (authUser?.uid && authUser.displayName) {
       map[authUser.uid] = authUser.displayName.split(' ')[0] || authUser.displayName;
@@ -114,10 +157,15 @@ export default function GamePage() {
           playerNames={playerNames}
           onLoaded={handleLoaded}
           onLocalMove={handleLocalMove}
+          teamId={teamId ?? null}
+          coinBalance={stats.coinBalance}
+          onCoinSpent={setCoinBalance}
+          onBoardEntry={handleBoardEntry}
+          onDuckStatue={handleDuckStatue}
+          disabledPointIds={disabledPointIds}
         />
       </div>
 
-      {/* Mobile joystick overlay — only rendered on touch devices */}
       {isTouchDevice && <MobileJoystick inputRef={inputRef} />}
 
       <HUD stats={stats} session={session} />

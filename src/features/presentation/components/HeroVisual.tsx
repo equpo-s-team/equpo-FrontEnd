@@ -82,7 +82,7 @@ export default function HeroVisual() {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.4;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -232,12 +232,12 @@ export default function HeroVisual() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     /* ── Animation loop ───────────────────────────────────────────────── */
-    let animId: number | undefined;
-    const clock = new THREE.Clock();
+    let animId:  number | undefined;
+    const timer = { startTime: Date.now() };
 
     function animate() {
       animId = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
+      const t = (Date.now() - timer.startTime) / 1000;
 
       // Smooth parallax
       currentGhostOffset.lerp(targetGhostOffset, 0.06);

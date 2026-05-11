@@ -7,11 +7,11 @@ import { type InputState } from '../hooks/usePlayerInput';
 import { normalizeHealthInput, type TintEntry } from '../lib/environmentEffects';
 import { CLEAN_FOG_COLOR, CLEAN_SKY_COLOR } from '../lib/physicsConstants';
 import { type PlayerRealtimeState, type SlotId, type Vector3State } from '../types/realtime';
-import { Diorama } from './environment/Diorama';
-import { EnvironmentLighting } from './environment/EnvironmentLighting';
-import { FollowCamera } from './environment/FollowCamera';
-import { LocalPlayer } from './environment/LocalPlayer';
-import { RemotePlayers } from './environment/RemotePlayers';
+import { Diorama } from './game/Diorama';
+import { EnvironmentLighting } from './game/EnvironmentLighting';
+import { FollowCamera } from './game/FollowCamera';
+import { LocalPlayer } from './game/LocalPlayer';
+import { RemotePlayers } from './game/RemotePlayers';
 
 const hour = new Date().getHours();
 const isNightTime = hour >= 18 || hour < 6;
@@ -48,9 +48,11 @@ export default function Experience({
 
   return (
     <Canvas
+
       shadows
       camera={{ fov: 50, near: 0.1, far: 1000, position: [-30, 10, 30] }}
       gl={{
+        preserveDrawingBuffer: false,
         outputColorSpace: THREE.SRGBColorSpace,
         antialias: true,
       }}

@@ -58,7 +58,7 @@ function CommentaryItem({
     if (!editText.trim()) return;
     setIsSaving(true);
     try {
-      await onEdit(commentary.commentary, editText.trim());
+      await onEdit(commentary.id, editText.trim());
       setEditMode(false);
     } catch {
       // keep edit mode open so user doesn't lose their text
@@ -101,7 +101,9 @@ function CommentaryItem({
             />
             <div className="flex gap-2 mt-1.5">
               <button
-                onClick={handleSaveEdit}
+                onClick={() => {
+                  void handleSaveEdit();
+                }}
                 disabled={isSaving}
                 className="px-3 py-1 rounded-xl bg-blue text-white text-[12px] font-semibold hover:bg-blue/90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >
@@ -136,7 +138,7 @@ function CommentaryItem({
             <Edit2 size={12} />
           </button>
           <button
-            onClick={() => onDelete(commentary.commentary)}
+            onClick={() => onDelete(commentary.id)}
             disabled={isDeleting}
             className="p-1 rounded text-grey-400 dark:text-grey-500 hover:text-red disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
@@ -266,7 +268,7 @@ export default function TaskCommentarySection({
               resolveAuthor={resolveAuthor}
               onEdit={handleEdit}
               onDelete={handleDelete}
-              isDeleting={pendingDeleteIds.has(c.commentary)}
+              isDeleting={pendingDeleteIds.has(c.id)}
             />
           ))}
         </div>

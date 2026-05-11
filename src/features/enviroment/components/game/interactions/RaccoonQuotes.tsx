@@ -32,7 +32,7 @@ export function RaccoonQuotes({
         onComplete?.();
         clearQuote();
         hasPlayedRef.current = false;
-      }, 60000);
+      }, 30000);
 
       return () => clearTimeout(timer);
     }

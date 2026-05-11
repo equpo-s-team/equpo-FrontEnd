@@ -37,8 +37,11 @@ interface ExperienceProps {
   playerNames?: Record<string, string>;
   onLoaded?: () => void;
   teamId: string | null;
+  coinBalance: number;
   onCoinSpent?: (newBalance: number) => void;
   onBoardEntry?: () => void;
+  onDuckStatue?: () => void;
+  disabledPointIds?: Set<string>;
 }
 
 function SceneContent({
@@ -51,8 +54,11 @@ function SceneContent({
   playerNames = {},
   onLoaded,
   teamId,
+  coinBalance,
   onCoinSpent,
   onBoardEntry,
+  onDuckStatue,
+  disabledPointIds,
 }: ExperienceProps) {
   const tintMapRef = useRef<Map<string, TintEntry>>(new Map());
   const cameraTargetRef = useRef(new THREE.Vector3(0, 0, 0));
@@ -93,7 +99,10 @@ function SceneContent({
       play('boardEntry');
       onBoardEntry?.();
     },
-  }), [teamId, onCoinSpent, onBoardEntry, play]);
+    onDuckStatue: () => {
+      onDuckStatue?.();
+    },
+  }), [teamId, onCoinSpent, onBoardEntry, onDuckStatue, play]);
 
   return (
     <>
@@ -103,6 +112,8 @@ function SceneContent({
       <ProximityButtons
         eventHandlers={handleProximityEvents}
         playerPosRef={cameraTargetRef}
+        coinBalance={coinBalance}
+        disabledIds={disabledPointIds}
       />
 
       <Physics gravity={[0, -20, 0]} timeStep={1 / 60}>

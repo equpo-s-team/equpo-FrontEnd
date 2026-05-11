@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useAchievementPopup } from '@/context/AchievementContext';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { MobileJoystick } from '@/features/enviroment/components/game/MobileJoystick.tsx';
-import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
+import { teamsApi } from '@/features/team/api/teamsApi';
+import { useAchievements } from '@/features/team/hooks/useAchievements';
+import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
+import { useUnlockAchievement } from '@/features/team/hooks/useUnlockAchievement';
 
 import Experience from './components/game/Experience.tsx';
 import HUD from './components/HUD.tsx';
@@ -63,6 +67,10 @@ export default function GamePage() {
     localRotation: localRot,
   });
 
+  const { mutate: unlockAchievement } = useUnlockAchievement();
+  const { showAchievement } = useAchievementPopup();
+  const { data: teamAchievements } = useAchievements(teamId || undefined);
+
   const { stats, session, setCoinBalance } = useHudData({
     teamId,
     connectedUsers,
@@ -85,6 +93,50 @@ export default function GamePage() {
   const handleBoardEntry = useCallback(() => {
     setActiveItem('missiones');
   }, [setActiveItem]);
+
+  const disabledPointIds = useMemo(() => {
+    const ids = new Set<string>();
+    const explorador = teamAchievements?.find(a => a.name === 'Explorador');
+    if (explorador?.unlockedAt) {
+      ids.add('duck-statue');
+    }
+    return ids;
+  }, [teamAchievements]);
+
+  const handleDuckStatue = useCallback(() => {
+    if (!teamId || !localUid) return;
+
+    const processAchievement = async () => {
+      let achievement = teamAchievements?.find(a => a.name === 'Explorador');
+
+      if (!achievement) {
+        const result = await teamsApi.createAchievement(teamId, {
+          name: 'Explorador',
+          description: 'Encuentra la estatua de pato en el ambiente',
+        }).catch(() => null);
+        if (!result) return;
+        achievement = {
+          id: result.achievement.id,
+          name: result.achievement.name,
+          description: result.achievement.description,
+          icon: '',
+          iconUrl: result.achievement.iconUrl,
+        };
+      }
+
+      const finalAchievement = achievement;
+      unlockAchievement(
+        { teamId, payload: { userUid: localUid, achievementId: finalAchievement.id } },
+        {
+          onSuccess: () => {
+            showAchievement(finalAchievement);
+          },
+        },
+      );
+    };
+
+    processAchievement().catch(console.error);
+  }, [teamId, localUid, teamAchievements, unlockAchievement, showAchievement]);
 
   const playerNames = useMemo(() => {
     if (!teamMembers) return {};
@@ -119,8 +171,11 @@ export default function GamePage() {
           onLoaded={handleLoaded}
           onLocalMove={handleLocalMove}
           teamId={teamId ?? null}
+          coinBalance={stats.coinBalance}
           onCoinSpent={setCoinBalance}
           onBoardEntry={handleBoardEntry}
+          onDuckStatue={handleDuckStatue}
+          disabledPointIds={disabledPointIds}
         />
       </div>
 

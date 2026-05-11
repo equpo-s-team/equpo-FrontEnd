@@ -53,4 +53,5 @@ export const ACHIEVEMENT_ICON_MAP: Record<string, string> = {
   'red-de-trabajo': 'network',
   'mentor-virtual': 'eye',
   'velocidad-luz': 'zap',
+  explorador: 'map',
 };

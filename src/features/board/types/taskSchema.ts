@@ -42,6 +42,7 @@ export const TaskStepSchema = z.object({
 });
 
 export const TaskCommentarySchema = z.object({
+  id: z.string(),
   taskId: z.string(),
   userUid: z.string(),
   commentary: z.string(),

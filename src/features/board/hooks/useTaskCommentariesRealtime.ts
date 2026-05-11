@@ -27,8 +27,9 @@ export function useTaskCommentariesRealtime(teamId: string, taskId: string) {
         const map =
           (snapshot.data() as { commentaries?: FirestoreCommentariesMap } | undefined)
             ?.commentaries ?? {};
-        const commentaries: TaskCommentary[] = Object.values(map)
-          .map((c) => ({
+        const commentaries: TaskCommentary[] = Object.entries(map)
+          .map(([id, c]) => ({
+            id,
             taskId,
             userUid: c.userUid,
             commentary: c.commentary,

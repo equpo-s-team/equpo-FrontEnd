@@ -7,6 +7,7 @@ export interface ProximityPoint {
   triggerDistance: number;
   eventType: 'feed-ducks' | 'raccoon-quotes' | 'duck-statue' | 'board-entry' | 'water-garden';
   icon: LucideIcon;
+  cost?: number;
 }
 
 export interface ProximityEventHandlers {
@@ -14,4 +15,5 @@ export interface ProximityEventHandlers {
   onRaccoonQuotes?: (pointId: string) => void;
   onWaterGarden?: (pointId: string) => void;
   onBoardEntry?: () => void;
+  onDuckStatue?: () => void;
 }

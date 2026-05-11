@@ -9,7 +9,8 @@ export const PROXIMITY_POINTS: ProximityPoint[] = [
     label: 'Alimentar\nCosto: 10',
     icon: Heart,
     triggerDistance: 15,
-    eventType: 'feed-ducks'
+    eventType: 'feed-ducks',
+    cost: 10,
   },
   {
     id: 'raccoon-quotes-area',
@@ -41,7 +42,8 @@ export const PROXIMITY_POINTS: ProximityPoint[] = [
     label: 'Regar\nCosto: 15',
     icon: Droplets,
     triggerDistance: 10,
-    eventType: 'water-garden'
+    eventType: 'water-garden',
+    cost: 15,
   },
   {
     id: 'water-garden2',
@@ -49,7 +51,8 @@ export const PROXIMITY_POINTS: ProximityPoint[] = [
     label: 'Regar\nCosto: 15',
     icon: Droplets,
     triggerDistance: 10,
-    eventType: 'water-garden'
+    eventType: 'water-garden',
+    cost: 15,
   },
   {
     id: 'water-garden3',
@@ -57,6 +60,7 @@ export const PROXIMITY_POINTS: ProximityPoint[] = [
     label: 'Regar\nCosto: 15',
     icon: Droplets,
     triggerDistance: 10,
-    eventType: 'water-garden'
+    eventType: 'water-garden',
+    cost: 15,
   }
 ];

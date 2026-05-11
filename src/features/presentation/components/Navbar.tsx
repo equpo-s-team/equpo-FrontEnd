@@ -35,7 +35,7 @@ export default function Navbar() {
           </a>
           <Link
             to="/teams"
-            className="text-sm font-medium text-purple-foreground dark:text-emerald-400 bg-dark dark:bg-gray-800 px-[1.3rem] py-[.55rem] rounded-lg hover:bg-dark-mid dark:hover:bg-gray-700 transition-all hover:-translate-y-px no-underline"
+            className="text-sm font-medium text-purple-foreground dark:text-emerald-400  px-[1.3rem] py-[.55rem] rounded-lg hover:bg-dark-mid dark:hover:bg-gray-700 transition-all hover:-translate-y-px no-underline"
           >
             Empezar
           </Link>

@@ -101,7 +101,9 @@ function CommentaryItem({
             />
             <div className="flex gap-2 mt-1.5">
               <button
-                onClick={handleSaveEdit}
+                onClick={() => {
+                  void handleSaveEdit();
+                }}
                 disabled={isSaving}
                 className="px-3 py-1 rounded-xl bg-blue text-white text-[12px] font-semibold hover:bg-blue/90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
               >

@@ -5,7 +5,6 @@ import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { MobileJoystick } from '@/features/enviroment/components/game/MobileJoystick.tsx';
 import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
-import { teamsApi } from '@/features/team/api/teamsApi';
 import { useAchievements } from '@/features/team/hooks/useAchievements';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useUnlockAchievement } from '@/features/team/hooks/useUnlockAchievement';
@@ -106,36 +105,24 @@ export default function GamePage() {
   const handleDuckStatue = useCallback(() => {
     if (!teamId || !localUid) return;
 
-    const processAchievement = async () => {
-      let achievement = teamAchievements?.find(a => a.name === 'Explorador');
+    const processAchievement = () => {
+      const achievement = teamAchievements?.find(a => a.name === 'Explorador');
+      if (!achievement) return;
 
-      if (!achievement) {
-        const result = await teamsApi.createAchievement(teamId, {
-          name: 'Explorador',
-          description: 'Encuentra la estatua de pato en el ambiente',
-        }).catch(() => null);
-        if (!result) return;
-        achievement = {
-          id: result.achievement.id,
-          name: result.achievement.name,
-          description: result.achievement.description,
-          icon: '',
-          iconUrl: result.achievement.iconUrl,
-        };
-      }
-
-      const finalAchievement = achievement;
       unlockAchievement(
-        { teamId, payload: { userUid: localUid, achievementId: finalAchievement.id } },
+        { teamId, payload: { userUid: localUid, achievementId: achievement.id } },
         {
           onSuccess: () => {
-            showAchievement(finalAchievement);
+            showAchievement(achievement);
+          },
+          onError: (error) => {
+            console.error('Failed to unlock achievement:', error);
           },
         },
       );
     };
 
-    processAchievement().catch(console.error);
+    processAchievement();
   }, [teamId, localUid, teamAchievements, unlockAchievement, showAchievement]);
 
   const playerNames = useMemo(() => {

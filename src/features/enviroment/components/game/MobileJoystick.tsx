@@ -112,8 +112,19 @@ export function MobileJoystick({ inputRef }: MobileJoystickProps) {
 
   return (
     <>
+      <button
+        type="button"
+        className="absolute bottom-20 right-8 z-30 flex items-center justify-center rounded-full border-2 border-white/30 bg-white/15 font-body text-sm text-white shadow-lg touch-none select-none"
+        style={{ width: JOYSTICK_JUMP_SIZE, height: JOYSTICK_JUMP_SIZE }}
+        onPointerDown={handleJumpStart}
+        onPointerUp={handleJumpEnd}
+        onPointerCancel={handleJumpEnd}
+      >
+        <ArrowUpFromLine className="w-8 h-8" />
+      </button>
+
       <div
-        className="absolute bottom-8 left-8 z-30 touch-none select-none"
+        className="absolute bottom-20 left-8 z-30 touch-none select-none"
         style={{ width: JOYSTICK_SIZE, height: JOYSTICK_SIZE }}
         onPointerDown={handlePointerStart}
         onPointerMove={handlePointerMove}
@@ -150,16 +161,6 @@ export function MobileJoystick({ inputRef }: MobileJoystickProps) {
         </div>
       </div>
 
-      <button
-        type="button"
-        className="absolute bottom-10 right-8 z-30 flex items-center justify-center rounded-full border-2 border-white/30 bg-white/15 font-body text-sm text-white shadow-lg touch-none select-none"
-        style={{ width: JOYSTICK_JUMP_SIZE, height: JOYSTICK_JUMP_SIZE }}
-        onPointerDown={handleJumpStart}
-        onPointerUp={handleJumpEnd}
-        onPointerCancel={handleJumpEnd}
-      >
-        <ArrowUpFromLine className="w-8 h-8" />
-      </button>
     </>
   );
 }

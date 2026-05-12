@@ -4,8 +4,7 @@ export const GHOST_Y_OFFSET = 3;
 export const GHOST_PHYSICS_RADIUS = 0.5;
 export const GHOST_SPAWN_Y = 10;
 export const GHOST_SPAWN_X = 27.5;
-export const GHOST_SPAWN_Z =12.5;
-
+export const GHOST_SPAWN_Z = 12.5;
 
 export const MOVEMENT_SPEED = 20;
 export const ROTATION_SPEED = 20;

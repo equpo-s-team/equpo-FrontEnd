@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { Activity, CheckCircle, LoaderCircle, MessageCircle, TrendingUp } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 
-import HeroVisual from '@/features/presentation/components/HeroVisual.tsx';
 import { type FloatCardProps, type FloatCardRingProps } from '@/features/presentation/types';
 
 import AuthSwitch from '../../auth/components/AuthSwitch.tsx';
+
+const HeroVisual = lazy(() => import('@/features/presentation/components/HeroVisual.tsx'));
 
 export default function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
@@ -95,24 +96,24 @@ export default function Hero() {
               Haz que el equipo prospere.
             </h1>
 
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 mb-6 md:mb-8">
-            <button
-              onClick={() => setShowAuth(true)}
-              className="font-maxwell text-white px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-xl text-sm md:text-base no-underline hover:-translate-y-1 transition-all text-center"
-              style={{
-                background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 100%)',
-                boxShadow: '0 8px 28px rgba(56,185,122,0.35)',
-              }}
-            >
-              Crear mi primer equipo
-            </button>
-            <a
-              href="#what"
-              className="font-maxwell text-grey-700 dark:text-gray-200 border border-grey-200 dark:border-gray-600 bg-white/70 dark:bg-gray-800/50 backdrop-blur px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-xl text-sm md:text-base no-underline hover:-translate-y-1 hover:border-grey-300 dark:hover:border-gray-500 transition-all text-center"
-            >
-              Ver cómo funciona
-            </a>
-          </div>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 mb-6 md:mb-8">
+              <button
+                onClick={() => setShowAuth(true)}
+                className="font-maxwell text-white px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-xl text-sm md:text-base no-underline hover:-translate-y-1 transition-all text-center"
+                style={{
+                  background: 'linear-gradient(135deg, #38b97a 0%, #2e8fd4 100%)',
+                  boxShadow: '0 8px 28px rgba(56,185,122,0.35)',
+                }}
+              >
+                Crear mi primer equipo
+              </button>
+              <a
+                href="#what"
+                className="font-maxwell text-grey-700 dark:text-gray-200 border border-grey-200 dark:border-gray-600 bg-white/70 dark:bg-gray-800/50 backdrop-blur px-6 md:px-[2.2rem] py-3 md:py-[1.1rem] rounded-xl text-sm md:text-base no-underline hover:-translate-y-1 hover:border-grey-300 dark:hover:border-gray-500 transition-all text-center"
+              >
+                Ver cómo funciona
+              </a>
+            </div>
 
             <div className="flex flex-col gap-2.5 mb-6 md:mb-8">
               {['Empieza en minutos.', 'Diseñado para equipos colaborativos.'].map((txt) => (
@@ -172,7 +173,9 @@ export default function Hero() {
             className="hidden md:flex hero-visual-enter relative h-[300px] md:h-[400px] lg:min-h-screen md:-mr-[5vw] overflow-visible"
             style={{ marginRight: 'calc(-5vw)' }}
           >
-            <HeroVisual />
+            <Suspense fallback={<div style={{ width: '100%', height: '100%' }} />}>
+              <HeroVisual />
+            </Suspense>
 
             {/* Floating cards - repositioned for smaller screens */}
             <FloatCard

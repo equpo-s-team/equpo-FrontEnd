@@ -41,13 +41,13 @@ export function EnvironmentLighting({ deterioration }: EnvironmentLightingProps)
 
   useFrame(() => {
     frameCountRef.current++;
-    
+
     // Update every 4 frames (~15fps) for even better performance
     if (frameCountRef.current % 4 !== 0) return;
 
     const prevDet = currentDetRef.current;
     targetDetRef.current = deterioration;
-    
+
     // Only lerp if target changed
     if (Math.abs(targetDetRef.current - prevDet) > 0.001) {
       currentDetRef.current = THREE.MathUtils.lerp(

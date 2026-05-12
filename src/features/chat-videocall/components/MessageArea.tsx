@@ -110,7 +110,13 @@ export default function MessageArea() {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-center p-4 sm:p-8">
         <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-3xl bg-grey-100 dark:bg-gray-600 flex items-center justify-center mb-3 sm:mb-4">
-          <ResponsiveIcon component={MessageCircle} mobileSize={24} desktopSize={28} strokeWidth={1.5} className="text-grey-300" />
+          <ResponsiveIcon
+            component={MessageCircle}
+            mobileSize={24}
+            desktopSize={28}
+            strokeWidth={1.5}
+            className="text-grey-300"
+          />
         </div>
         <h3 className="font-body font-semibold text-grey-700 text-sm sm:text-base mb-1">
           Selecciona una sala

@@ -10,7 +10,8 @@ import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import ChatInfoModal from './ChatInfoModal';
 
 export default function ChatHeader() {
-  const { activeRoom, startVideoCallSession, startCall, teamId, clearActiveRoom } = useChatContext();
+  const { activeRoom, startVideoCallSession, startCall, teamId, clearActiveRoom } =
+    useChatContext();
   const [showInfo, setShowInfo] = useState(false);
   const activeCalls = useActiveCalls(teamId || '');
   const { data: teamMembers = [] } = useTeamMembers(teamId || '');
@@ -43,7 +44,11 @@ export default function ChatHeader() {
 
         {/* Room avatar + name */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <GroupAvatar src={activeRoom.photoUrl} name={activeRoom.name} className="w-8 h-8 sm:w-10 sm:h-10" />
+          <GroupAvatar
+            src={activeRoom.photoUrl}
+            name={activeRoom.name}
+            className="w-8 h-8 sm:w-10 sm:h-10"
+          />
           <div className="min-w-0">
             <h3 className="font-body font-semibold text-grey-900 dark:text-gray-300 text-sm sm:text-base leading-tight truncate">
               {activeRoom.name}

@@ -29,11 +29,9 @@ export const teamsApi = {
   updateMemberRole: (teamId: string, userUid: string, payload: UpdateTeamMemberRolePayload) =>
     request(`/teams/${teamId}/members/${userUid}/role`, 'PATCH', payload),
   createAchievement: (teamId: string, payload: CreateAchievementPayload) =>
-    request<{ achievement: { id: string; name: string; description: string | null; iconUrl: string | null } }>(
-      `/teams/${teamId}/achievements`,
-      'POST',
-      payload,
-    ),
+    request<{
+      achievement: { id: string; name: string; description: string | null; iconUrl: string | null };
+    }>(`/teams/${teamId}/achievements`, 'POST', payload),
   unlockAchievement: (teamId: string, payload: UnlockAchievementPayload) =>
     request(`/teams/${teamId}/achievements/unlocks`, 'POST', payload),
   listMembers: (teamId: string) =>

@@ -95,7 +95,7 @@ export default function GamePage() {
 
   const disabledPointIds = useMemo(() => {
     const ids = new Set<string>();
-    const explorador = teamAchievements?.find(a => a.name === 'Explorador');
+    const explorador = teamAchievements?.find((a) => a.name === 'Explorador');
     if (explorador?.unlockedAt) {
       ids.add('duck-statue');
     }
@@ -106,7 +106,7 @@ export default function GamePage() {
     if (!teamId || !localUid) return;
 
     const processAchievement = () => {
-      const achievement = teamAchievements?.find(a => a.name === 'Explorador');
+      const achievement = teamAchievements?.find((a) => a.name === 'Explorador');
       if (!achievement) return;
 
       unlockAchievement(

@@ -1,6 +1,6 @@
 import { Text } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useMemo,useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 interface HeartParticlesProps {
@@ -12,7 +12,7 @@ interface HeartParticlesProps {
 export function HeartParticles({
   position = [0, 0, 0],
   count = 10,
-  onComplete
+  onComplete,
 }: HeartParticlesProps) {
   const groupRef = useRef<THREE.Group>(null);
   const startTime = useRef(Date.now());
@@ -23,15 +23,15 @@ export function HeartParticles({
       offset: new THREE.Vector3(
         (Math.random() - 0.5) * 2,
         Math.random() * 2,
-        (Math.random() - 0.5) * 2
+        (Math.random() - 0.5) * 2,
       ),
       velocity: new THREE.Vector3(
         (Math.random() - 0.5) * 0.02,
         Math.random() * 0.03 + 0.01,
-        (Math.random() - 0.5) * 0.02
+        (Math.random() - 0.5) * 0.02,
       ),
       scale: Math.random() * 0.8 + 0.2,
-      rotationSpeed: (Math.random() - 0.5) * 0.1
+      rotationSpeed: (Math.random() - 0.5) * 0.1,
     }));
   }, [count]);
 

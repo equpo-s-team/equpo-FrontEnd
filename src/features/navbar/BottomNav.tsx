@@ -42,9 +42,11 @@ export default function BottomNav() {
             flex items-stretch
             pb-safe
         "
-      style={{
-        '--bottom-nav-height': '56px',
-      } as React.CSSProperties}
+      style={
+        {
+          '--bottom-nav-height': '56px',
+        } as React.CSSProperties
+      }
     >
       {navItems.map(({ id, label, icon: Icon }) => {
         const isActive = activeItem === id;

@@ -1,4 +1,4 @@
-import { Html,useGLTF } from '@react-three/drei';
+import { Html, useGLTF } from '@react-three/drei';
 import { useEffect, useRef } from 'react';
 import type { Group } from 'three';
 
@@ -14,7 +14,7 @@ interface RaccoonQuotesProps {
 export function RaccoonQuotes({
   position = [65, 4, -35],
   isInteracting = false,
-  onComplete
+  onComplete,
 }: RaccoonQuotesProps) {
   const group = useRef<Group>(null);
   const { scene } = useGLTF('/models/raccoon.glb');

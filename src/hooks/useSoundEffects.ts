@@ -17,7 +17,6 @@ export const SOUND_EFFECTS = {
   raccoonQuotes: '/sounds/raccoon-quotes.mp3',
   waterGarden: '/sounds/water-garden.mp3',
   boardEntry: '/sounds/board-entry.mp3',
-
 } as const;
 
 export type SoundEffectName = keyof typeof SOUND_EFFECTS;

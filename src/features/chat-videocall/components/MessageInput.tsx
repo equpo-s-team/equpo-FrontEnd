@@ -1,8 +1,6 @@
-import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Paperclip, Send, Smile, X } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip';
 import { ResponsiveIcon } from '@/components/ui/ResponsiveIcon';
@@ -12,6 +10,8 @@ import { storage } from '@/firebase';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { darkModeManager } from '@/lib/darkMode';
 
+const EmojiPicker = lazy(() => import('@emoji-mart/react'));
+
 export default function MessageInput() {
   const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId, myRole } = useChatContext();
   const isSpectator = myRole === 'spectator';
@@ -19,6 +19,7 @@ export default function MessageInput() {
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const emojiDataRef = useRef<unknown>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -135,7 +136,10 @@ export default function MessageInput() {
             </span>
             <span className="text-xs text-grey-600 truncate">{replyingTo.text}</span>
           </div>
-          <button onClick={() => setReplyingTo(null)} className="text-grey-400 hover:text-grey-700 flex-shrink-0">
+          <button
+            onClick={() => setReplyingTo(null)}
+            className="text-grey-400 hover:text-grey-700 flex-shrink-0"
+          >
             <X size={14} />
           </button>
         </div>
@@ -143,12 +147,21 @@ export default function MessageInput() {
 
       {/* Emoji Picker Popover */}
       {showEmojiPicker && (
-        <div ref={emojiPickerRef} className="absolute bottom-full right-2 sm:right-4 mb-2 z-50 shadow-2xl">
-          <Picker
-            data={data}
-            onEmojiSelect={handleEmojiSelect}
-            theme={darkModeManager.isDarkMode() ? 'dark' : 'light'}
-          />
+        <div
+          ref={emojiPickerRef}
+          className="absolute bottom-full right-2 sm:right-4 mb-2 z-50 shadow-2xl"
+        >
+          <Suspense
+            fallback={
+              <div className="w-[352px] h-[450px] bg-grey-100 dark:bg-gray-700 rounded-xl" />
+            }
+          >
+            <EmojiPicker
+              data={emojiDataRef.current}
+              onEmojiSelect={handleEmojiSelect}
+              theme={darkModeManager.isDarkMode() ? 'dark' : 'light'}
+            />
+          </Suspense>
         </div>
       )}
 
@@ -198,7 +211,14 @@ export default function MessageInput() {
           <button
             ref={emojiButtonRef}
             disabled={!activeRoom || isUploading || isSpectator}
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            onClick={() => {
+              if (!emojiDataRef.current) {
+                void import('@emoji-mart/data').then((m) => {
+                  emojiDataRef.current = m.default;
+                });
+              }
+              setShowEmojiPicker((prev) => !prev);
+            }}
             className="w-6 sm:w-7 h-6 sm:h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40 flex-shrink-0"
           >
             <ResponsiveIcon component={Smile} mobileSize={14} desktopSize={16} />

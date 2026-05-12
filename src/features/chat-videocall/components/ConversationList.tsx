@@ -59,15 +59,25 @@ export default function ConversationList() {
       {/* Header */}
       <div className="flex items-center justify-between px-3 sm:px-4 pt-3 sm:pt-5 pb-2 sm:pb-3">
         <div className="flex items-center gap-2">
-          <ResponsiveIcon component={MessageCircle} mobileSize={16} desktopSize={18} className="text-purple flex-shrink-0" />
-          <h2 className="font-body font-bold text-grey-900 dark:text-white text-sm sm:text-base">Mensajes</h2>
+          <ResponsiveIcon
+            component={MessageCircle}
+            mobileSize={16}
+            desktopSize={18}
+            className="text-purple flex-shrink-0"
+          />
+          <h2 className="font-body font-bold text-grey-900 dark:text-white text-sm sm:text-base">
+            Mensajes
+          </h2>
         </div>
       </div>
 
       {/* Search */}
       <div className="px-3 sm:px-4 pb-2 sm:pb-3">
         <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-400 flex-shrink-0" />
+          <Search
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-grey-400 flex-shrink-0"
+          />
           <input
             type="text"
             value={searchQuery}
@@ -88,7 +98,12 @@ export default function ConversationList() {
       <div className="flex-1 overflow-y-auto px-1.5 sm:px-2 pb-4 flex flex-col gap-0.5 scrollbar-hide">
         {rooms.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 sm:py-12 text-grey-400">
-            <ResponsiveIcon component={MessageCircle} mobileSize={24} desktopSize={32} strokeWidth={1.5} />
+            <ResponsiveIcon
+              component={MessageCircle}
+              mobileSize={24}
+              desktopSize={32}
+              strokeWidth={1.5}
+            />
             <p className="mt-2 font-body text-xs sm:text-sm">Sin salas disponibles</p>
           </div>
         ) : (

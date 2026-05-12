@@ -116,7 +116,7 @@ export function useThreeRealtime({
     socket.on('room_sync', (state: Record<string, PlayerRealtimeState>) => {
       updateCounts(state);
 
-      setPlayersState(prev => {
+      setPlayersState((prev) => {
         const next: Record<string, PlayerRealtimeState> = {};
         for (const [playerUid, playerState] of Object.entries(state)) {
           if (playerUid === uid || !playerState.active) continue;
@@ -128,10 +128,13 @@ export function useThreeRealtime({
     });
 
     // ── player_moved: high-frequency individual position updates ──────
-    socket.on('player_moved', ({ uid: movedUid, state }: { uid: string; state: PlayerRealtimeState }) => {
-      if (movedUid === uid) return;
-      setPlayersState(prev => ({ ...prev, [movedUid]: state }));
-    });
+    socket.on(
+      'player_moved',
+      ({ uid: movedUid, state }: { uid: string; state: PlayerRealtimeState }) => {
+        if (movedUid === uid) return;
+        setPlayersState((prev) => ({ ...prev, [movedUid]: state }));
+      },
+    );
 
     return () => {
       socket.disconnect();
@@ -155,4 +158,3 @@ export function useThreeRealtime({
 
   return { connectedUsers, connectedUserUids, playersState, localSlotId };
 }
-

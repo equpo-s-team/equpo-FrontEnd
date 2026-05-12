@@ -48,7 +48,9 @@ export function AssignedUserFilter({ members, selected, onChange }: assignedUser
 
         <div className="max-h-[210px] overflow-y-auto py-1.5">
           {filtered.length === 0 ? (
-            <p className="text-center text-[12px] text-grey-400 dark:text-gray-500 py-4">Sin resultados</p>
+            <p className="text-center text-[12px] text-grey-400 dark:text-gray-500 py-4">
+              Sin resultados
+            </p>
           ) : (
             filtered.map((m) => (
               <CheckRow
@@ -92,7 +94,9 @@ export function AssignedGroupFilter({ groups, selected, onChange }: assignedGrou
       <DropPanel open={open} onClose={() => setOpen(false)}>
         <div className="py-1.5">
           {groups.length === 0 ? (
-            <p className="text-center text-[12px] text-grey-400 dark:text-gray-500 py-4">No hay grupos</p>
+            <p className="text-center text-[12px] text-grey-400 dark:text-gray-500 py-4">
+              No hay grupos
+            </p>
           ) : (
             groups.map((g) => (
               <CheckRow

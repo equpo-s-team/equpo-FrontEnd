@@ -14,21 +14,25 @@ function ChatLayout() {
       <CallNotification />
 
       {/* Conversation sidebar - Hidden on mobile if chat is active, always visible on desktop */}
-      <div className={`
+      <div
+        className={`
         ${showConversationList ? 'block' : 'hidden'}
         lg:block
         w-full lg:w-[280px] h-auto lg:h-screen lg:flex-shrink-0
         border-r border-grey-150 dark:border-gray-700
-      `}>
+      `}
+      >
         <ConversationList />
       </div>
 
       {/* Main chat area - Full screen on mobile when active, flex-1 on desktop */}
-      <main className={`
+      <main
+        className={`
         ${activeRoom && !showConversationList ? 'flex' : 'hidden'}
         lg:flex
         flex-1 flex-col min-w-0 min-h-0 h-full bg-grey-50 dark:bg-gray-800 pb-0.5 lg:pb-0
-      `}>
+      `}
+      >
         <ChatHeader />
         <MessageArea />
         <MessageInput />

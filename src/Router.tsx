@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import AppLayout from '@/components/AppLayout.tsx';
@@ -8,7 +9,8 @@ import TeamBoard from '@/features/board/TeamBoard.tsx';
 import ChatPage from '@/features/chat-videocall/ChatPage.tsx';
 import { ChatProvider } from '@/features/chat-videocall/components/ChatContext.tsx';
 import VideoCallPage from '@/features/chat-videocall/VideoCallPage.tsx';
-import GamePage from '@/features/enviroment/GamePage.tsx';
+
+const GamePage = lazy(() => import('@/features/enviroment/GamePage.tsx'));
 import MyMissions from '@/features/my-missions/MyMissions.tsx';
 import { SidebarProvider, useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import LandingPage from '@/features/presentation/page.tsx';
@@ -51,7 +53,20 @@ function Dashboard() {
   const renderContent = () => {
     switch (activeItem) {
       case 'my-space':
-        return <GamePage />;
+        return (
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center min-h-screen bg-grey-900">
+                <div
+                  className="w-10 h-10 rounded-full border-4 border-grey-200 animate-spin"
+                  style={{ borderTopColor: '#60AFFF' }}
+                />
+              </div>
+            }
+          >
+            <GamePage />
+          </Suspense>
+        );
       case 'missiones':
         return <TeamBoard />;
       case 'my-missions':

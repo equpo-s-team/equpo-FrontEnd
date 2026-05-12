@@ -18,6 +18,7 @@ export default tseslint.config(
       'node_modules',
       'src/dataconnect-generated',
       '**/*.d.ts',
+      'scripts/',
     ],
   },
 

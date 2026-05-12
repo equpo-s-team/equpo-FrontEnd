@@ -113,9 +113,7 @@ export function applyDeterioration({
 
   // Fog
   if (scene.fog instanceof THREE.Fog) {
-    scene.fog.color
-      .copy(baseFogColor)
-      .lerp(new THREE.Color(DETERIORATED_FOG_COLOR), deterioration);
+    scene.fog.color.copy(baseFogColor).lerp(new THREE.Color(DETERIORATED_FOG_COLOR), deterioration);
     scene.fog.near = THREE.MathUtils.lerp(FOG_NEAR_CLEAN, FOG_NEAR_DIRTY, deterioration);
     scene.fog.far = THREE.MathUtils.lerp(FOG_FAR_CLEAN, FOG_FAR_DIRTY, deterioration);
   }

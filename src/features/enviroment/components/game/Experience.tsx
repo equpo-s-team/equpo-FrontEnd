@@ -63,8 +63,7 @@ function SceneContent({
   const tintMapRef = useRef<Map<string, TintEntry>>(new Map());
   const cameraTargetRef = useRef(new THREE.Vector3(0, 0, 0));
   const deterioration = 1 - normalizeHealthInput(healthPercent);
-  const localPlayerName =
-    localUid && playerNames[localUid] ? playerNames[localUid] : 'Me';
+  const localPlayerName = localUid && playerNames[localUid] ? playerNames[localUid] : 'Me';
   const { play } = useSoundEffects();
 
   const [currentInteraction, setCurrentInteraction] = useState<{
@@ -72,37 +71,42 @@ function SceneContent({
     position: [number, number, number];
   } | null>(null);
 
-  const handleProximityEvents = useMemo(() => ({
-    onFeedDucks: (pointId: string) => {
-      const point = PROXIMITY_POINTS.find(p => p.id === pointId);
-      if (!point || !teamId) return;
-      setCurrentInteraction({ type: 'duck-feeding', position: point.position });
-      environmentApi.interact(teamId, 'feed-ducks')
-        .then(result => onCoinSpent?.(result.newCoinBalance))
-        .catch(() => {});
-    },
-    onRaccoonQuotes: (pointId: string) => {
-      const point = PROXIMITY_POINTS.find(p => p.id === pointId);
-      if (point) {
-        setCurrentInteraction({ type: 'raccoon-quotes', position: point.position });
-      }
-    },
-    onWaterGarden: (pointId: string) => {
-      const point = PROXIMITY_POINTS.find(p => p.id === pointId);
-      if (!point || !teamId) return;
-      setCurrentInteraction({ type: 'water-garden', position: point.position });
-      environmentApi.interact(teamId, 'water-garden')
-        .then(result => onCoinSpent?.(result.newCoinBalance))
-        .catch(() => {});
-    },
-    onBoardEntry: () => {
-      play('boardEntry');
-      onBoardEntry?.();
-    },
-    onDuckStatue: () => {
-      onDuckStatue?.();
-    },
-  }), [teamId, onCoinSpent, onBoardEntry, onDuckStatue, play]);
+  const handleProximityEvents = useMemo(
+    () => ({
+      onFeedDucks: (pointId: string) => {
+        const point = PROXIMITY_POINTS.find((p) => p.id === pointId);
+        if (!point || !teamId) return;
+        setCurrentInteraction({ type: 'duck-feeding', position: point.position });
+        environmentApi
+          .interact(teamId, 'feed-ducks')
+          .then((result) => onCoinSpent?.(result.newCoinBalance))
+          .catch(() => {});
+      },
+      onRaccoonQuotes: (pointId: string) => {
+        const point = PROXIMITY_POINTS.find((p) => p.id === pointId);
+        if (point) {
+          setCurrentInteraction({ type: 'raccoon-quotes', position: point.position });
+        }
+      },
+      onWaterGarden: (pointId: string) => {
+        const point = PROXIMITY_POINTS.find((p) => p.id === pointId);
+        if (!point || !teamId) return;
+        setCurrentInteraction({ type: 'water-garden', position: point.position });
+        environmentApi
+          .interact(teamId, 'water-garden')
+          .then((result) => onCoinSpent?.(result.newCoinBalance))
+          .catch(() => {});
+      },
+      onBoardEntry: () => {
+        play('boardEntry');
+        onBoardEntry?.();
+      },
+      onDuckStatue: () => {
+        onDuckStatue?.();
+      },
+    }),
+    [teamId, onCoinSpent, onBoardEntry, onDuckStatue, play],
+  );
 
   return (
     <>

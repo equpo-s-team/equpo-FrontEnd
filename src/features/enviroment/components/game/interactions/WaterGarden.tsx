@@ -18,7 +18,6 @@ export function WaterGarden({
   const [showParticles, setShowParticles] = useState(false);
   const { play } = useSoundEffects();
 
-
   useEffect(() => {
     if (playAnimation && !showParticles) {
       setShowParticles(true);
@@ -43,4 +42,3 @@ export function WaterGarden({
     </>
   );
 }
-

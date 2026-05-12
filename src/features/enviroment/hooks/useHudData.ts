@@ -72,10 +72,15 @@ export function useHudData({
 
   useEffect(() => {
     let cancelled = false;
-    userProfileApi.getMyProfile().then(profile => {
-      if (!cancelled) setCoinBalance(profile.virtualCurrency);
-    }).catch(() => {});
-    return () => { cancelled = true; };
+    userProfileApi
+      .getMyProfile()
+      .then((profile) => {
+        if (!cancelled) setCoinBalance(profile.virtualCurrency);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return useMemo(() => {

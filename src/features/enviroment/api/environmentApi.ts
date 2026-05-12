@@ -6,11 +6,12 @@ export interface EnvironmentInteractResult {
 }
 
 export const environmentApi = {
-  interact(teamId: string, eventType: 'feed-ducks' | 'water-garden'): Promise<EnvironmentInteractResult> {
-    return request<EnvironmentInteractResult>(
-      `/teams/${teamId}/environment/interact`,
-      'POST',
-      { eventType }
-    );
+  interact(
+    teamId: string,
+    eventType: 'feed-ducks' | 'water-garden',
+  ): Promise<EnvironmentInteractResult> {
+    return request<EnvironmentInteractResult>(`/teams/${teamId}/environment/interact`, 'POST', {
+      eventType,
+    });
   },
 };

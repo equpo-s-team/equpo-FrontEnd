@@ -137,3 +137,6 @@ CLAUDE.md
 /skills-lock.json
 
 debug-model-simple.js
+
+# Raw (uncompressed) 3D models — source of truth for compression, too large for git
+public/models/raw/

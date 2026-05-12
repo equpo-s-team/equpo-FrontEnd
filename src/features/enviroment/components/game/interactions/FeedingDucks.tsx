@@ -1,4 +1,4 @@
-import { useAnimations,useGLTF } from '@react-three/drei';
+import { useAnimations, useGLTF } from '@react-three/drei';
 import { useEffect, useRef, useState } from 'react';
 import type { Group } from 'three';
 import * as THREE from 'three';
@@ -16,7 +16,7 @@ interface DucksModelProps {
 export function FeedingDucks({
   position = [-18, 2, 40],
   playAnimation = false,
-  onComplete
+  onComplete,
 }: DucksModelProps) {
   const group = useRef<Group>(null);
   const { scene, animations } = useGLTF('/models/ducks.glb');
@@ -42,7 +42,7 @@ export function FeedingDucks({
     });
 
     return () => {
-      activeActions.forEach(action => action.stop());
+      activeActions.forEach((action) => action.stop());
     };
   }, [playAnimation, actions, names]);
 

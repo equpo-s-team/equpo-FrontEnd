@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const BLENDER = {
@@ -115,6 +116,9 @@ export default function HeroVisual() {
     const N = getScaled();
 
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+    loader.setDRACOLoader(dracoLoader);
     const BASE = '/models/';
 
     const ghostPivot = new THREE.Group();
@@ -232,7 +236,7 @@ export default function HeroVisual() {
     window.addEventListener('scroll', onScroll, { passive: true });
 
     /* ── Animation loop ───────────────────────────────────────────────── */
-    let animId:  number | undefined;
+    let animId: number | undefined;
     const timer = { startTime: Date.now() };
 
     function animate() {
@@ -288,6 +292,7 @@ export default function HeroVisual() {
       container.removeEventListener('mouseleave', onMouseLeave as EventListener);
       window.removeEventListener('scroll', onScroll as EventListener);
       ro.disconnect();
+      dracoLoader.dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode === container) {
         renderer.domElement.parentNode.removeChild(renderer.domElement);

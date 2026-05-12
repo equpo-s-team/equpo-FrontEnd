@@ -1,10 +1,10 @@
-import {Html, useGLTF} from '@react-three/drei';
-import {useFrame} from '@react-three/fiber';
-import {BallCollider, type RapierRigidBody, RigidBody, useRapier} from '@react-three/rapier';
-import {useCallback, useEffect, useRef} from 'react';
+import { Html, useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { BallCollider, type RapierRigidBody, RigidBody, useRapier } from '@react-three/rapier';
+import { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-import {type InputState} from '../../hooks/usePlayerInput';
+import { type InputState } from '../../hooks/usePlayerInput';
 import {
   GHOST_PHYSICS_RADIUS,
   GHOST_SCALE,
@@ -19,7 +19,7 @@ import {
   RESPAWN_Y_THRESHOLD,
   ROTATION_SPEED,
 } from '../../lib/physicsConstants';
-import {type SlotId, THREE_SLOT_MODELS, type Vector3State} from '../../types/realtime';
+import { type SlotId, THREE_SLOT_MODELS, type Vector3State } from '../../types/realtime';
 
 interface LocalPlayerProps {
   slotId: SlotId;
@@ -71,10 +71,7 @@ export function LocalPlayer({
     const pos = body.translation();
 
     if (jump) {
-      const ray = new rapier.Ray(
-        { x: pos.x, y: pos.y, z: pos.z },
-        { x: 0, y: -1, z: 0 },
-      );
+      const ray = new rapier.Ray({ x: pos.x, y: pos.y, z: pos.z }, { x: 0, y: -1, z: 0 });
       const maxToi = GHOST_PHYSICS_RADIUS + GROUND_RAY_EXTRA;
       const hit = world.castRay(ray, maxToi, true);
       if (hit && hit.timeOfImpact <= maxToi) {
@@ -87,10 +84,7 @@ export function LocalPlayer({
     if (isMoving) {
       dir.normalize();
       const vel = body.linvel();
-      body.setLinvel(
-        { x: dir.x * MOVEMENT_SPEED, y: vel.y, z: dir.z * MOVEMENT_SPEED },
-        true,
-      );
+      body.setLinvel({ x: dir.x * MOVEMENT_SPEED, y: vel.y, z: dir.z * MOVEMENT_SPEED }, true);
 
       const targetRotation = Math.atan2(dir.x, dir.z);
       rotationY.current = THREE.MathUtils.lerp(
@@ -118,10 +112,7 @@ export function LocalPlayer({
     const now = performance.now();
     if (isMoving && now - lastMoveSync.current > MOVE_SYNC_INTERVAL) {
       lastMoveSync.current = now;
-      onLocalMove(
-        { x: pos.x, y: pos.y, z: pos.z },
-        { x: 0, y: rotationY.current, z: 0 },
-      );
+      onLocalMove({ x: pos.x, y: pos.y, z: pos.z }, { x: 0, y: rotationY.current, z: 0 });
     }
   });
 
@@ -130,7 +121,7 @@ export function LocalPlayer({
       <RigidBody
         ref={rigidBodyRef}
         colliders={false}
-        position={[ GHOST_SPAWN_X, GHOST_SPAWN_Y, GHOST_SPAWN_Z ]}
+        position={[GHOST_SPAWN_X, GHOST_SPAWN_Y, GHOST_SPAWN_Z]}
         linearDamping={4}
         angularDamping={10}
         lockRotations
@@ -140,9 +131,7 @@ export function LocalPlayer({
       </RigidBody>
 
       <group ref={meshRef}>
-        {clonedScene.current && (
-          <primitive object={clonedScene.current} scale={GHOST_SCALE} />
-        )}
+        {clonedScene.current && <primitive object={clonedScene.current} scale={GHOST_SCALE} />}
         <Html position={LABEL_POSITION} center distanceFactor={25} zIndexRange={[0, 5]}>
           <div className="px-2 py-1 text-md font-maxwell font-bold text-white bg-black/30 rounded backdrop-blur-sm pointer-events-none whitespace-nowrap">
             {playerName}

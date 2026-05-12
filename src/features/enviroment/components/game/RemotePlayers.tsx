@@ -13,7 +13,7 @@ import {
 interface RemotePlayerState {
   position: Vector3State;
   rotation: Vector3State;
-  slotId: SlotId | null;
+  slotId: SlotId;
   updatedAt: number;
 }
 
@@ -26,8 +26,8 @@ const LABEL_POSITION: [number, number, number] = [0, 2.5, 0];
 const LERP_FACTOR = 0.2;
 
 function RemoteGhost({ playerName, state }: RemoteGhostProps) {
-  const modelPath = state.slotId ? `/models/${THREE_SLOT_MODELS[state.slotId]}` : null;
-  const { scene } = useGLTF(modelPath ?? '/models/blueGhost.glb');
+  const modelPath = `/models/${THREE_SLOT_MODELS[state.slotId]}`;
+  const { scene } = useGLTF(modelPath);
   const clonedScene = useRef<THREE.Group | null>(null);
   const groupRef = useRef<THREE.Group>(null);
   const hasInitialized = useRef(false);
@@ -92,16 +92,13 @@ interface RemotePlayersProps {
 export function RemotePlayers({ remotePlayers, playerNames }: RemotePlayersProps) {
   return (
     <>
-      {Object.entries(remotePlayers).map(([uid, state]) => {
-        if (!state.slotId) return null;
-        return (
+      {Object.entries(remotePlayers).map(([uid, state]) => (
           <RemoteGhost
             key={uid}
             playerName={playerNames[uid] || 'Player'}
             state={state}
           />
-        );
-      })}
+        ))}
     </>
   );
 }

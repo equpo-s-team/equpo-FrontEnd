@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
 
 import {
   type PlayerRealtimeState,
   type SlotId,
+  uidToModelId,
   type Vector3State,
 } from '@/features/enviroment/types/realtime.ts';
 import { BASE_URL } from '@/lib/api/core';
@@ -23,7 +24,8 @@ interface ThreePresenceSnapshot {
   localSlotId: SlotId | null;
 }
 
-const UPDATE_INTERVAL_MS = 10;
+// 12 FPS update rate (approx 83ms)
+const UPDATE_INTERVAL_MS = 83;
 
 export function useThreeRealtime({
   teamId,
@@ -39,71 +41,103 @@ export function useThreeRealtime({
   const [localSlotId, setLocalSlotId] = useState<SlotId | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
-  const localSlotIdRef = useRef<SlotId | null>(null);
   const latestState = useRef({ position: localPosition, rotation: localRotation });
-
-  // Keep the ref in sync with state
-  const updateLocalSlotId = useCallback((slotId: SlotId | null) => {
-    localSlotIdRef.current = slotId;
-    setLocalSlotId(slotId);
-  }, []);
 
   useEffect(() => {
     latestState.current = { position: localPosition, rotation: localRotation };
   }, [localPosition, localRotation]);
 
+  // Assign model immediately from UID — no server dependency
+  useEffect(() => {
+    if (localUid) {
+      setLocalSlotId(uidToModelId(localUid));
+    } else {
+      setLocalSlotId(null);
+    }
+  }, [localUid]);
+
+  // ── Socket connection ──────────────────────────────────────────────────
   useEffect(() => {
     if (!isEnabled || !teamId || !localUid) {
       setPlayersState({});
       setConnectedUsers(0);
       setConnectedUserUids([]);
-      updateLocalSlotId(null);
       return;
     }
 
+    const uid = localUid; // stable reference for closures
     const wsUrl = new URL(BASE_URL).origin;
 
     const socket = io(wsUrl, {
-      query: { teamId, uid: localUid },
-      transports: ['websocket', 'polling'], // Fallback to polling if websocket fails
+      query: { teamId, uid },
+      transports: ['websocket', 'polling'],
     });
 
     socketRef.current = socket;
 
+    // ── Helper: update connected user counts ──────────────────────────
+    function updateCounts(fullState: Record<string, PlayerRealtimeState>) {
+      const uids: string[] = [];
+      let count = 0;
+      for (const [playerUid, state] of Object.entries(fullState)) {
+        if (state.active) {
+          count++;
+          uids.push(playerUid);
+        }
+      }
+      setConnectedUsers(count);
+      setConnectedUserUids(uids);
+    }
+
+    // ── Helper: extract remote players (exclude self) ─────────────────
+    function extractRemotePlayers(
+      fullState: Record<string, PlayerRealtimeState>,
+    ): Record<string, PlayerRealtimeState> {
+      const states: Record<string, PlayerRealtimeState> = {};
+      for (const [playerUid, state] of Object.entries(fullState)) {
+        if (state.active && playerUid !== uid) {
+          states[playerUid] = state;
+        }
+      }
+      return states;
+    }
+
     socket.on('connect', () => {
-      // Claim a slot when connected
-      socket.emit('claim_slot', { clientId }, (slotId: SlotId | null) => {
-        updateLocalSlotId(slotId);
+      socket.emit('join_room', { clientId });
+    });
+
+    // ── initial_state: full replace (sent from join_room on server) ──
+    socket.on('initial_state', (state: Record<string, PlayerRealtimeState>) => {
+      updateCounts(state);
+      setPlayersState(extractRemotePlayers(state));
+    });
+
+    // ── room_sync: smart merge (preserves interpolated positions) ─────
+    socket.on('room_sync', (state: Record<string, PlayerRealtimeState>) => {
+      updateCounts(state);
+
+      setPlayersState(prev => {
+        const next: Record<string, PlayerRealtimeState> = {};
+        for (const [playerUid, playerState] of Object.entries(state)) {
+          if (playerUid === uid || !playerState.active) continue;
+          // Preserve existing position data for smooth interpolation
+          next[playerUid] = prev[playerUid] ?? playerState;
+        }
+        return next;
       });
     });
 
-    socket.on('state_update', (payload: Record<string, PlayerRealtimeState>) => {
-      const nextUids: string[] = [];
-      const nextStates: Record<string, PlayerRealtimeState> = {};
-      let count = 0;
-
-      Object.entries(payload).forEach(([uid, playerState]) => {
-        if (playerState.active) {
-          count++;
-          nextUids.push(uid);
-          if (uid !== localUid) {
-            nextStates[uid] = playerState;
-          } else if (playerState.slotId && playerState.slotId !== localSlotIdRef.current) {
-            updateLocalSlotId(playerState.slotId);
-          }
-        }
-      });
-
-      setConnectedUsers(count);
-      setConnectedUserUids(nextUids);
-      setPlayersState(nextStates);
+    // ── player_moved: high-frequency individual position updates ──────
+    socket.on('player_moved', ({ uid: movedUid, state }: { uid: string; state: PlayerRealtimeState }) => {
+      if (movedUid === uid) return;
+      setPlayersState(prev => ({ ...prev, [movedUid]: state }));
     });
 
     return () => {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [isEnabled, teamId, localUid, clientId, updateLocalSlotId]);
+  }, [isEnabled, teamId, localUid, clientId]);
 
   // Interval for sending local movement updates
   useEffect(() => {
@@ -112,10 +146,7 @@ export function useThreeRealtime({
     const intervalId = setInterval(() => {
       if (socketRef.current?.connected) {
         const { position, rotation } = latestState.current;
-        socketRef.current.emit('local_move', {
-          position,
-          rotation,
-        });
+        socketRef.current.emit('local_move', { position, rotation });
       }
     }, UPDATE_INTERVAL_MS);
 
@@ -124,3 +155,4 @@ export function useThreeRealtime({
 
   return { connectedUsers, connectedUserUids, playersState, localSlotId };
 }
+

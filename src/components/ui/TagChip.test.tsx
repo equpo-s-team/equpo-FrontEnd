@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { TagChip, getTagColorClass } from './TagChip'
+import { describe, expect,it } from 'vitest'
+
+import { getTagColorClass,TagChip } from './TagChip'
 
 describe('TagChip Component', () => {
   it('should render label text', () => {
@@ -123,7 +124,7 @@ describe('getTagColorClass function', () => {
   })
 
   it('should be deterministic', () => {
-    const colors = []
+    const colors: string[] = []
     for (let i = 0; i < 5; i++) {
       colors.push(getTagColorClass('test-label'))
     }

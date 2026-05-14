@@ -1,8 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Box,Heart, Search } from 'lucide-react'
+import { describe, expect, it, vi } from 'vitest'
+
 import { EmptyState } from './EmptyState'
-import { Heart, Search, Box } from 'lucide-react'
 
 describe('EmptyState Component', () => {
   it('should render title text', () => {

@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { describe, expect,it } from 'vitest'
+
 import { FieldLabel } from './FieldLabel'
 
 describe('FieldLabel Component', () => {
@@ -106,7 +107,7 @@ describe('FieldLabel Component', () => {
   })
 
   it('should render empty label gracefully', () => {
-    render(<FieldLabel></FieldLabel>)
+    render(<FieldLabel>{''}</FieldLabel>)
     const label = screen.getByRole('generic', { hidden: true })
     expect(label).toBeInTheDocument()
   })

@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect,it } from 'vitest'
+
 import { cn } from './utils'
 
 describe('cn - className utility function', () => {
@@ -15,7 +16,7 @@ describe('cn - className utility function', () => {
   })
 
   it('should handle false values', () => {
-    const result = cn('px-2', false && 'py-1', 'rounded')
+    const result = cn('px-2', (false as boolean) && 'py-1', 'rounded')
     expect(result).toContain('px-2')
     expect(result).not.toContain('py-1')
     expect(result).toContain('rounded')

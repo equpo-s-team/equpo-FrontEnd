@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { Bell,Heart, Star } from 'lucide-react'
+import { describe, expect,it } from 'vitest'
+
 import { ResponsiveIcon } from './ResponsiveIcon'
-import { Heart, Star, Bell } from 'lucide-react'
 
 describe('ResponsiveIcon Component', () => {
   it('should render icon component', () => {

@@ -9,13 +9,16 @@ on:
   pull_request:
 
 jobs:
+
   quality:
-    name: Formato, lint y typecheck
+    name: Formato, lint, typecheck y Sonar
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurar Node.js
         uses: actions/setup-node@v4
@@ -39,3 +42,11 @@ jobs:
 
       - name: Check de tipos
         run: npm run typecheck
+
+      - name: Ejecutar tests con coverage
+        run: npm run test:coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

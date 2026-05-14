@@ -9,30 +9,27 @@ on:
   pull_request:
 
 jobs:
+
   quality:
-    name: Calidad de Código (Lint, Tests, SonarCloud)
+    name: Formato, lint, typecheck y Sonar
     runs-on: ubuntu-latest
 
     steps:
-      # ============ CHECKOUT ============
       - name: Checkout del repositorio
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Necesario para SonarCloud
+          fetch-depth: 0
 
-      # ============ SETUP NODE ============
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      # ============ INSTALAR DEPENDENCIAS ============
       - name: Instalar dependencias
         run: npm ci
 
-      # ============ ANÁLISIS ESTÁTICO LOCAL ============
-      - name: Corrección automática (format & lint)
+      - name: Corrección automática
         run: |
           npm run format
           npm run lint:fix
@@ -46,27 +43,10 @@ jobs:
       - name: Check de tipos
         run: npm run typecheck
 
-      # ============ TESTS Y COBERTURA ============
-      - name: Ejecutar tests con cobertura
+      - name: Ejecutar tests con coverage
         run: npm run test:coverage
 
-      # ============ SONARCLOUD ============
-      - name: Analizar con SonarCloud
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          # Opciones adicionales si es necesario
-          args: >
-            -Dsonar.projectKey=equpo-frontend
-            -Dsonar.organization=equpo-team
-
-      # ============ REPORTE (Opcional) ============
-      - name: Cargar reporte de cobertura
-        if: always()
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/lcov.info
-          flags: unittests
-          name: codecov-umbrella

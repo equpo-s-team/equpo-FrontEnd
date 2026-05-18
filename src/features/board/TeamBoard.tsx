@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react';
 
+import { MissionsScopeSwitch } from '@/components/ui/MissionsScopeSwitch';
 import { toastError } from '@/components/ui/toast.ts';
 import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext';
 import type { BoardColumnId, Card, TaskSidebarMode } from '@/features/board/types/columnTypes';
 import { type TeamTask } from '@/features/board/types/taskSchema';
 import { COLUMN_TO_STATUS, COLUMNS, STATUS_TO_COLUMN } from '@/features/board/utils/columnConfig';
+import { useSidebar } from '@/features/navbar/SidebarContext';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
@@ -43,7 +45,8 @@ function groupTasksByColumn(tasks: TeamTask[]) {
 }
 
 export default function TeamBoard() {
-  const { teamId } = useTeam();
+  const { teamId, myRole, isSpectator } = useTeam();
+  const { setActiveItem } = useSidebar();
   const { user } = useAuth();
   const { data, isLoading } = useTasks(teamId || '');
   const { data: members = [] } = useTeamMembers(teamId);
@@ -64,12 +67,7 @@ export default function TeamBoard() {
     }));
   };
 
-  const myRole = useMemo(() => {
-    if (!user?.uid || !members.length) return 'member';
-    return members.find((m) => m.uid === user.uid)?.role ?? 'member';
-  }, [user, members]);
-
-  const canMoveCard = myRole !== 'spectator';
+  const canMoveCard = !isSpectator;
 
   const assignableMembers = useMemo(() => members.filter((m) => m.role !== 'spectator'), [members]);
 
@@ -253,7 +251,7 @@ export default function TeamBoard() {
 
     setSidebar({
       isOpen: true,
-      mode: myRole === 'spectator' ? 'readonly' : 'view',
+      mode: isSpectator ? 'readonly' : 'view',
       task: taskData,
       defaultStatus: taskData.status ?? 'todo',
     });
@@ -278,6 +276,12 @@ export default function TeamBoard() {
   return (
     <div className="min-h-screen bg-offwhite dark:bg-gray-900 font-body">
       <AppHeader />
+      {!isSpectator && (
+        <MissionsScopeSwitch
+          value="team"
+          onChange={(v) => setActiveItem(v === 'mine' ? 'my-missions' : 'missiones')}
+        />
+      )}
       <FilterBar
         filters={filters}
         setFilter={setFilter}
@@ -290,7 +294,7 @@ export default function TeamBoard() {
         }))}
         groups={groups}
         onCreateTask={openCreate}
-        canCreateTask={myRole !== 'spectator'}
+        canCreateTask={!isSpectator}
       />
 
       {isLoading && (
@@ -328,7 +332,7 @@ export default function TeamBoard() {
         onTaskCreated={handleTaskCreated}
         onTaskUpdated={handleTaskUpdated}
         onTaskDeleted={handleTaskDeleted}
-        myRole={myRole}
+        myRole={myRole ?? undefined}
         currentUserUid={user?.uid ?? null}
       />
     </div>

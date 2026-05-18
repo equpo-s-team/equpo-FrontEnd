@@ -13,9 +13,7 @@ import {
 } from 'lucide-react';
 
 import { useAudio } from '@/context/AudioContext.tsx';
-import { useAuth } from '@/context/AuthContext.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
-import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
 import { useSidebar } from './SidebarContext.tsx';
 import SidebarItem from './SidebarItem.tsx';
@@ -26,9 +24,7 @@ import SidebarUser from './SidebarUser.tsx';
 
 export default function Sidebar() {
   const { collapsed } = useSidebar();
-  const { user } = useAuth();
-  const { teamId } = useTeam();
-  const { data: teams = [] } = useTeams();
+  const { isSpectator, canAccessSettings } = useTeam();
   const {
     isPlaying,
     volume,
@@ -39,15 +35,6 @@ export default function Sidebar() {
     setMusicEnabled,
     toggleMute,
   } = useAudio();
-
-  const currentTeam = teams.find((t) => t.id === teamId);
-  const currentUid = user?.uid ?? '';
-  const myRole = (() => {
-    if (!currentTeam || !currentUid) return null;
-    if (currentTeam.leaderUid === currentUid) return 'leader';
-    return currentTeam.members.find((m) => m.userUid === currentUid)?.role ?? null;
-  })();
-  const canAccessSettings = myRole === 'leader' || myRole === 'collaborator';
 
   return (
     <aside
@@ -64,9 +51,7 @@ export default function Sidebar() {
         <SidebarSection label="Principal">
           <SidebarItem id="my-space" icon={Home} label="Mi Espacio" />
           <SidebarItem id="missiones" icon={Star} label="Misiones del Equipo" />
-          {myRole !== 'spectator' && (
-            <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />
-          )}
+          {!isSpectator && <SidebarItem id="my-missions" icon={UserCheck} label="Mis Misiones" />}
           <SidebarItem id="chat" icon={MessageCircle} label="Chat" />
           <SidebarItem id="shop" icon={ShoppingBag} label="Tienda" />
         </SidebarSection>
@@ -207,7 +192,7 @@ export default function Sidebar() {
         ) : (
           <button
             onClick={toggleMute}
-            className="w-full flex items-center justify-center gap-3 px-3 py-2.5 rounded-xl text-primary-foreground hover:text-tertiary-foreground hover:bg-secondary transition-all duration-200"
+            className="w-full flex items-center justify-center gap-3 px-3 py-2.5 rounded-xl text-primary-foreground dark:text-gray-400 hover:text-tertiary-foreground hover:bg-secondary dark:hover:bg-gray-600 transition-all duration-200"
             title={isMuted ? 'Desmutear audio' : 'Mutear audio'}
           >
             {isMuted ? <VolumeX size={18} className="text-red" /> : <Volume2 size={18} />}

@@ -160,7 +160,6 @@ export function MobileJoystick({ inputRef }: MobileJoystickProps) {
           </svg>
         </div>
       </div>
-
     </>
   );
 }

@@ -24,9 +24,8 @@ import TeamsHub from '@/features/team/TeamsHub.tsx';
 
 function Dashboard() {
   const { activeItem } = useSidebar();
-  const { teamId } = useTeam();
-  const { user } = useAuth();
-  const { data: teams = [], isLoading } = useTeams();
+  const { activeTeam, myRole } = useTeam();
+  const { isLoading } = useTeams();
 
   if (isLoading) {
     return (
@@ -39,16 +38,9 @@ function Dashboard() {
     );
   }
 
-  const activeTeam = teams.find((t) => t.id === teamId);
   if (!activeTeam) {
     return <Navigate to="/teams" replace />;
   }
-
-  const myRole = (() => {
-    if (!activeTeam || !user?.uid) return null;
-    if (activeTeam.leaderUid === user.uid) return 'leader';
-    return activeTeam.members.find((m) => m.userUid === user.uid)?.role ?? null;
-  })();
 
   const renderContent = () => {
     switch (activeItem) {

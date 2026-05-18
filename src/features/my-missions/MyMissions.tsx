@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { AppHeader } from '@/components/ui/app-header';
+import { MissionsScopeSwitch } from '@/components/ui/MissionsScopeSwitch';
+import { useAuth } from '@/context/AuthContext';
 import { useTeam } from '@/context/TeamContext.tsx';
 import TaskSidebar from '@/features/board/components/task/TaskSidebar';
 import type { TeamTask } from '@/features/board/types';
+import { useSidebar } from '@/features/navbar/SidebarContext';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
-import { useAuth } from '@/hooks/useAuth';
 
 import CategoryFilter from './components/CategoryFilter';
 import DayTimeline from './components/DayTimeline';
@@ -23,18 +25,14 @@ function toDateKey(d: Date) {
 }
 
 export default function MyMissions() {
-  const { teamId } = useTeam();
-  const { myTasks, tasksByDate, allCategories, isLoading } = useMyTasks(teamId);
+  const { teamId, myRole } = useTeam();
+  const { setActiveItem } = useSidebar();
   const { user } = useAuth();
+  const currentUserUid = user?.uid ?? null;
+  const { myTasks, tasksByDate, allCategories, isLoading } = useMyTasks(teamId);
 
   const { data: teamMembers = [] } = useTeamMembers(teamId ?? '');
   const { data: teamGroups = [] } = useTeamGroups(teamId ?? '');
-
-  const currentUserUid = user?.uid ?? null;
-  const myRole = useMemo(() => {
-    if (!currentUserUid || !teamMembers.length) return 'member';
-    return teamMembers.find((m) => m.uid === currentUserUid)?.role ?? 'member';
-  }, [currentUserUid, teamMembers]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [view, setView] = useState<'day' | 'week' | 'month' | 'year'>('day');
@@ -102,6 +100,10 @@ export default function MyMissions() {
     <div className="min-h-screen bg-offwhite dark:bg-gray-900 font-body overflow-hidden">
       {/* Header */}
       <AppHeader title="Mis Misiones" variant="purple" />
+      <MissionsScopeSwitch
+        value="mine"
+        onChange={(v) => setActiveItem(v === 'team' ? 'missiones' : 'my-missions')}
+      />
 
       {/* Loading */}
       {isLoading && (
@@ -116,7 +118,7 @@ export default function MyMissions() {
 
       <div className="flex h-[92vh] overflow-hidden dark:bg-gray-900">
         {/* Left panel: Calendar + Categories */}
-        <aside className="hidden h-full lg:flex flex-col w-1/5 border-r border-grey-150 bg-grey-50/50 dark:bg-gray-900 p-4 gap-4 overflow-hidden">
+        <aside className="hidden h-full lg:flex flex-col w-1/5 border-r border-grey-150 dark:border-grey-700 bg-grey-50/50 dark:bg-gray-900 p-4 gap-4 overflow-hidden">
           <div className="max-h-[42%] w-full">
             <MiniCalendar
               selectedDate={selectedDate}
@@ -185,7 +187,7 @@ export default function MyMissions() {
           )}
         </main>
 
-        <aside className="hidden xl:flex flex-col w-1/5 border-l border-grey-150 bg-grey-50/50 dark:bg-gray-900 p-4 overflow-y-auto custom-scrollbar">
+        <aside className="hidden xl:flex flex-col w-1/5 border-l border-grey-150 dark:border-grey-700 bg-grey-50/50 dark:bg-gray-900 p-4 overflow-y-auto custom-scrollbar">
           <TaskDetailPanel
             task={selectedTask}
             onClose={() => setSelectedTask(null)}
@@ -193,7 +195,7 @@ export default function MyMissions() {
             members={teamMembers}
             groups={teamGroups}
             currentUserUid={currentUserUid}
-            myRole={myRole}
+            myRole={myRole ?? undefined}
           />
         </aside>
       </div>
@@ -205,7 +207,7 @@ export default function MyMissions() {
         task={editSidebar.task}
         teamId={teamId ?? ''}
         defaultStatus={editSidebar.task?.status ?? 'todo'}
-        myRole={myRole}
+        myRole={myRole ?? undefined}
         currentUserUid={currentUserUid}
       />
     </div>

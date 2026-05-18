@@ -24,7 +24,7 @@ export default function FilterBar({
 }: filterBarProp) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const divider = <div className="w-px h-5 bg-grey-200 shrink-0" />;
+  const divider = <div className="w-px h-5 bg-grey-200 dark:bg-grey-600 shrink-0" />;
 
   const filterControls = (
     <>
@@ -133,7 +133,7 @@ export default function FilterBar({
         <button
           onClick={() => setMobileOpen((o) => !o)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border font-body transition-all duration-200 cursor-pointer
-            ${mobileOpen || activeFilterCount > 0 ? 'border-blue text-blue bg-blue/8' : 'border-grey-200 text-grey-500'}
+            ${mobileOpen || activeFilterCount > 0 ? 'border-blue text-blue bg-blue/8' : 'border-grey-200 dark:border-grey-600 text-grey-500 dark:text-grey-300'}
           `}
         >
           <SlidersHorizontal size={13} />

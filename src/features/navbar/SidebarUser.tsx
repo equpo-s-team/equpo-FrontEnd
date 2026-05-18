@@ -1,40 +1,28 @@
-import { Ellipsis, SquareArrowRightExit, Users } from 'lucide-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Ellipsis } from 'lucide-react';
 
-import { AppTooltip } from '@/components/ui/AppTooltip.tsx';
 import { UserAvatar } from '@/components/ui/UserAvatar.tsx';
-import { logOut, useAuth } from '@/context/AuthContext.tsx';
+import { useAuth } from '@/context/AuthContext.tsx';
 import { useTeam } from '@/context/TeamContext.tsx';
-import { useTeams } from '@/features/team/hooks/useTeams.ts';
 
 import { useSidebar } from './SidebarContext.tsx';
+import UserActionsMenu from './UserActionsMenu';
 
 export default function SidebarUser() {
   const { collapsed } = useSidebar();
   const { user } = useAuth();
-  const { teamId } = useTeam();
-  const { data: teams = [] } = useTeams();
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+  const { myRole } = useTeam();
 
-  const activeTeam = teams.find((t) => t.id === teamId);
-  const teamRole = activeTeam?.members?.find((m) => m.userUid === user?.uid)?.role || 'Miembro';
-
-  const displayRole =
-    typeof teamRole === 'string' && teamRole.length > 0
-      ? teamRole.charAt(0).toUpperCase() + teamRole.slice(1)
-      : 'Miembro';
+  const displayRole = myRole ? myRole.charAt(0).toUpperCase() + myRole.slice(1) : 'Miembro';
 
   const userName = user?.displayName || user?.email?.split('@')[0] || 'Usuario';
 
   return (
     <div
       className={`
-            border-t border-foreground/5 pt-3 mt-auto
-            flex items-center gap-3 px-3 py-2.5
-            ${collapsed ? 'flex-col justify-center' : ''}
-        `}
+        border-t border-foreground/5 pt-3 mt-auto
+        flex items-center gap-3 px-3 py-2.5
+        ${collapsed ? 'flex-col justify-center' : ''}
+      `}
     >
       <div className="relative flex-shrink-0">
         <UserAvatar src={user?.photoURL} alt={userName} className="w-8 h-8" loading="eager" />
@@ -49,55 +37,23 @@ export default function SidebarUser() {
           >
             {userName}
           </p>
-          <p className="text-secondary-foreground dark:text-gray-400  text-xs font-body mt-0.5 truncate">
+          <p className="text-secondary-foreground dark:text-gray-400 text-xs font-body mt-0.5 truncate">
             {displayRole}
           </p>
         </div>
       )}
 
-      {/* Menu Options */}
-      <div className="relative">
-        <AppTooltip content="Opciones">
+      <UserActionsMenu
+        variant="desktop"
+        tooltip="Opciones"
+        trigger={
           <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`flex-shrink-0 p-1.5 rounded-lg text-secondary-foreground dark:text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200 ${collapsed ? 'mt-1' : ''} `}
+            className={`flex-shrink-0 p-1.5 rounded-lg text-secondary-foreground dark:text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200 focus:outline-none ${collapsed ? 'mt-1' : ''}`}
           >
             <Ellipsis size={18} />
           </button>
-        </AppTooltip>
-
-        {isOpen && (
-          <>
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-            <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-            <div className="absolute bottom-[calc(100%+8px)] right-0 w-44 bg-white dark:bg-gray-600 rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-grey-150 dark:border-gray-700 z-50 overflow-hidden py-1">
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  void navigate('/teams');
-                }}
-                className="w-full text-left px-3 py-2.5 text-sm text-grey-700 dark:text-gray-300 hover:bg-grey-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2 font-medium"
-              >
-                <Users size={16} className="text-grey-400" />
-                <span>Mis Equipos</span>
-              </button>
-
-              <div className="h-px w-full bg-grey-100 dark:bg-gray-700 my-1" />
-
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  void logOut();
-                }}
-                className="w-full text-left px-3 py-2.5 text-sm text-[#F65A70] hover:bg-red-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2 font-medium"
-              >
-                <SquareArrowRightExit size={16} />
-                <span>Cerrar sesión</span>
-              </button>
-            </div>
-          </>
-        )}
-      </div>
+        }
+      />
     </div>
   );
 }

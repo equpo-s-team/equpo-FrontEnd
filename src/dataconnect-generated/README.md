@@ -13,6 +13,7 @@ This README will guide you through the process of using the generated JavaScript
   - [*GetUser*](#getuser)
 - [**Mutations**](#mutations)
   - [*CreateUser*](#createuser)
+  - [*BackfillUserEmail*](#backfilluseremail)
   - [*TouchUserLastActive*](#touchuserlastactive)
   - [*UpdateUserProfile*](#updateuserprofile)
 
@@ -101,6 +102,7 @@ export interface GetUserData {
   users: ({
     uid: string;
     displayName: string;
+    email: string;
     level: number;
     experiencePoints: number;
     virtualCurrency: number;
@@ -213,6 +215,7 @@ The `CreateUser` mutation requires an argument of type `CreateUserVariables`, wh
 export interface CreateUserVariables {
   displayName: string;
   photoURL?: string | null;
+  email?: string | null;
 }
 ```
 ### Return Type
@@ -234,13 +237,14 @@ import { connectorConfig, createUser, CreateUserVariables } from '@dataconnect/g
 const createUserVars: CreateUserVariables = {
   displayName: ..., 
   photoURL: ..., // optional
+  email: ..., // optional
 };
 
 // Call the `createUser()` function to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
 const { data } = await createUser(createUserVars);
 // Variables can be defined inline as well.
-const { data } = await createUser({ displayName: ..., photoURL: ..., });
+const { data } = await createUser({ displayName: ..., photoURL: ..., email: ..., });
 
 // You can also pass in a `DataConnect` instance to the action shortcut function.
 const dataConnect = getDataConnect(connectorConfig);
@@ -265,12 +269,13 @@ import { connectorConfig, createUserRef, CreateUserVariables } from '@dataconnec
 const createUserVars: CreateUserVariables = {
   displayName: ..., 
   photoURL: ..., // optional
+  email: ..., // optional
 };
 
 // Call the `createUserRef()` function to get a reference to the mutation.
 const ref = createUserRef(createUserVars);
 // Variables can be defined inline as well.
-const ref = createUserRef({ displayName: ..., photoURL: ..., });
+const ref = createUserRef({ displayName: ..., photoURL: ..., email: ..., });
 
 // You can also pass in a `DataConnect` instance to the `MutationRef` function.
 const dataConnect = getDataConnect(connectorConfig);
@@ -286,6 +291,118 @@ console.log(data.user_upsert);
 executeMutation(ref).then((response) => {
   const data = response.data;
   console.log(data.user_upsert);
+});
+```
+
+## BackfillUserEmail
+You can execute the `BackfillUserEmail` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [dataconnect-generated/index.d.ts](./index.d.ts):
+```typescript
+backfillUserEmail(vars: BackfillUserEmailVariables): MutationPromise<BackfillUserEmailData, BackfillUserEmailVariables>;
+
+interface BackfillUserEmailRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: BackfillUserEmailVariables): MutationRef<BackfillUserEmailData, BackfillUserEmailVariables>;
+}
+export const backfillUserEmailRef: BackfillUserEmailRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+backfillUserEmail(dc: DataConnect, vars: BackfillUserEmailVariables): MutationPromise<BackfillUserEmailData, BackfillUserEmailVariables>;
+
+interface BackfillUserEmailRef {
+  ...
+  (dc: DataConnect, vars: BackfillUserEmailVariables): MutationRef<BackfillUserEmailData, BackfillUserEmailVariables>;
+}
+export const backfillUserEmailRef: BackfillUserEmailRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the backfillUserEmailRef:
+```typescript
+const name = backfillUserEmailRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `BackfillUserEmail` mutation requires an argument of type `BackfillUserEmailVariables`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface BackfillUserEmailVariables {
+  uid: string;
+  email: string;
+}
+```
+### Return Type
+Recall that executing the `BackfillUserEmail` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `BackfillUserEmailData`, which is defined in [dataconnect-generated/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface BackfillUserEmailData {
+  user_update?: User_Key | null;
+}
+```
+### Using `BackfillUserEmail`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, backfillUserEmail, BackfillUserEmailVariables } from '@dataconnect/generated';
+
+// The `BackfillUserEmail` mutation requires an argument of type `BackfillUserEmailVariables`:
+const backfillUserEmailVars: BackfillUserEmailVariables = {
+  uid: ..., 
+  email: ..., 
+};
+
+// Call the `backfillUserEmail()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await backfillUserEmail(backfillUserEmailVars);
+// Variables can be defined inline as well.
+const { data } = await backfillUserEmail({ uid: ..., email: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await backfillUserEmail(dataConnect, backfillUserEmailVars);
+
+console.log(data.user_update);
+
+// Or, you can use the `Promise` API.
+backfillUserEmail(backfillUserEmailVars).then((response) => {
+  const data = response.data;
+  console.log(data.user_update);
+});
+```
+
+### Using `BackfillUserEmail`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, backfillUserEmailRef, BackfillUserEmailVariables } from '@dataconnect/generated';
+
+// The `BackfillUserEmail` mutation requires an argument of type `BackfillUserEmailVariables`:
+const backfillUserEmailVars: BackfillUserEmailVariables = {
+  uid: ..., 
+  email: ..., 
+};
+
+// Call the `backfillUserEmailRef()` function to get a reference to the mutation.
+const ref = backfillUserEmailRef(backfillUserEmailVars);
+// Variables can be defined inline as well.
+const ref = backfillUserEmailRef({ uid: ..., email: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = backfillUserEmailRef(dataConnect, backfillUserEmailVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.user_update);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.user_update);
 });
 ```
 

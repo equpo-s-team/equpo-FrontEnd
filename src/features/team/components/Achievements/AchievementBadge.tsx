@@ -1,8 +1,8 @@
-import {CircleX} from "lucide-react";
-import React, {useState} from 'react';
+import { CircleX } from 'lucide-react';
+import React, { useState } from 'react';
 
-import {type Achievement} from '@/features/team/types';
-import {cn} from '@/lib/utils.ts';
+import { type Achievement } from '@/features/team/types';
+import { cn } from '@/lib/utils/utils.ts';
 
 interface AchievementBadgeProps {
   achievement: Achievement;
@@ -18,22 +18,21 @@ function resolveAchievementImage(achievement: Achievement): string | null {
   return null;
 }
 
-export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement}) => {
+export const AchievementBadge: React.FC<AchievementBadgeProps> = ({ achievement }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const isLocked = !achievement.unlockedAt;
   const imageSrc = resolveAchievementImage(achievement);
 
   const displayName =
-    achievement.name.charAt(0).toUpperCase() +
-    achievement.name.slice(1).replace(/-/g, ' ');
+    achievement.name.charAt(0).toUpperCase() + achievement.name.slice(1).replace(/-/g, ' ');
 
   const subtitle = achievement.unlockedAt
     ? `Desbloqueado ${new Date(achievement.unlockedAt).toLocaleDateString('es-CO', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    })}`
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      })}`
     : 'Aun no desbloqueado';
 
   const openModal = () => {
@@ -51,7 +50,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
       <button
         type="button"
         onClick={openModal}
-        className="group flex h-36 flex-col items-center gap-2 p-2 transition-all duration-200"
+        className="group flex h-28 sm:h-32 lg:h-36 flex-col items-center gap-1 sm:gap-2 p-1.5 sm:p-2 transition-all duration-200"
         title={displayName}
       >
         <div className="flex-1 w-full overflow-hidden rounded-xl">
@@ -82,7 +81,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
         <p
           className={cn(
             'w-full text-center text-xs font-semibold leading-tight font-body line-clamp-2',
-            isLocked ? 'text-grey-400' : 'text-secondary-foreground'
+            isLocked ? 'text-grey-400' : 'text-secondary-foreground dark:text-white',
           )}
         >
           {displayName}
@@ -96,23 +95,23 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
             aria-label="Cerrar detalle del logro"
             className={cn(
               'absolute inset-0 bg-grey-900/30 backdrop-blur-sm transition-opacity duration-200',
-              modalVisible ? 'opacity-100' : 'opacity-0'
+              modalVisible ? 'opacity-100' : 'opacity-0',
             )}
             onClick={closeModal}
           />
 
           <section
             className={cn(
-              'relative w-full max-w-sm max-h-sm rounded-2xl bg-white p-5 shadow-card-lg transition-all duration-200',
-              modalVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+              'relative w-full max-w-sm max-h-sm rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-card-lg transition-all duration-200',
+              modalVisible ? 'scale-100 opacity-100' : 'scale-95 opacity-0',
             )}
           >
             <button
               type="button"
               onClick={closeModal}
-              className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-grey-100 text-xs text-grey-500 transition-colors hover:bg-grey-200"
+              className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-grey-100 dark:bg-transparent text-xs text-grey-500 transition-colors hover:bg-grey-200"
             >
-              <CircleX size={20}/>
+              <CircleX size={20} />
             </button>
 
             <div className="flex flex-col items-center gap-3">
@@ -140,7 +139,7 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({achievement})
                 )}
               </div>
 
-              <h3 className="text-center text-base font-bold text-grey-800 font-body">
+              <h3 className="text-center text-base font-bold text-grey-800 dark:text-gray-300 font-body">
                 {isLocked ? '???' : displayName}
               </h3>
               <p className="text-center text-xs text-grey-400">{subtitle}</p>

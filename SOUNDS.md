@@ -2,12 +2,12 @@
 
 ## Sonidos Disponibles
 
-### Efectos de Tareas
+### Efectos de misiones
 
-- `task-created.mp3` - Se reproduce al crear una nueva tarea
-- `task-updated.mp3` - Se reproduce al modificar una tarea existente
-- `task-completed.mp3` - Se reproduce al mover una tarea a "Completada"
-- `task-deleted.mp3` - Se reproduce al eliminar una tarea
+- `task-created.mp3` - Se reproduce al crear una nueva misión
+- `task-updated.mp3` - Se reproduce al modificar una misión existente
+- `task-completed.mp3` - Se reproduce al mover una misión a "Completada"
+- `task-deleted.mp3` - Se reproduce al eliminar una misión
 
 ### Efectos de Chat
 

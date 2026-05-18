@@ -7,8 +7,8 @@ import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 import { getTaskClasses } from '../utils/timelineStyles';
 
 const HOUR_HEIGHT = 64; // px per hour slot
-const START_HOUR = 6;
-const END_HOUR = 22;
+const START_HOUR = 0;
+const END_HOUR = 24;
 const TOTAL_HOURS = END_HOUR - START_HOUR;
 
 const STATUS_LABEL: Record<string, string> = {
@@ -130,10 +130,10 @@ export default function DayTimeline({
   const nowOffset = ((nowMinutes - START_HOUR * 60) / (TOTAL_HOURS * 60)) * 100;
 
   return (
-    <div className="flex flex-col h-full rounded-2xl bg-white border border-grey-150 shadow-card overflow-hidden">
+    <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card overflow-hidden">
       {/* Header bar */}
       <div
-        className="flex items-center justify-between px-5 py-3 border-b border-grey-150"
+        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 dark:border-gray-700"
         style={{
           background: 'linear-gradient(135deg, #5961F9 0%, #60AFFF 100%)',
         }}
@@ -189,11 +189,11 @@ export default function DayTimeline({
                 style={{ top: `${i * HOUR_HEIGHT}px` }}
               >
                 {/* Hour label */}
-                <span className="absolute -left-16 w-14 text-right text-xs text-grey-400 font-body font-medium -translate-y-1/2">
-                  {formatHour(hour)}
+                <span className="absolute -left-16 w-14 text-right text-xs text-grey-400 dark:text-grey-500 font-body font-medium -translate-y-1/2">
+                  {hour === END_HOUR ? '' : formatHour(hour)}
                 </span>
                 {/* Grid line */}
-                <div className="w-full h-px bg-grey-150" />
+                <div className="w-full h-px bg-grey-150 dark:bg-gray-700" />
               </div>
             );
           })}
@@ -227,7 +227,7 @@ export default function DayTimeline({
                 key={task.id}
                 onClick={() => onTaskClick(task)}
                 className={`
-                  absolute rounded-[10px] px-2 py-1.5 cursor-pointer border-l-[3px]
+                  absolute rounded-xl px-2 py-1.5 cursor-pointer border-l-[3px]
                   transition-all duration-200 text-left overflow-hidden
                   hover:scale-[1.02] hover:-translate-y-0.5
                   ${isOverdue ? 'bg-gradient-red-bg border-red text-white' : getTaskClasses(task.status)}
@@ -250,11 +250,11 @@ export default function DayTimeline({
                     {STATUS_LABEL[task.status] ?? task.status}
                   </span>
                 </div>
-                <p className="text-[11px] font-bold text-white leading-1 font-body truncate">
+                <p className="text-[11px] font-bold text-gray-100 leading-1 font-body truncate">
                   {task.name}
                 </p>
                 {task.categories?.length > 0 && (
-                  <p className="text-[9px] text-white/75 mt-1 line-clamp-1 font-body leading-none">
+                  <p className="text-[10px] text-gray-100 mt-1 line-clamp-1 font-body leading-none">
                     {task.categories.length > 2
                       ? `${task.categories.slice(0, 2).join(' · ')} + ${task.categories.length - 2} más`
                       : task.categories.join(' · ')}
@@ -268,11 +268,11 @@ export default function DayTimeline({
           {laidOut.length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <Calendar size={32} className="mx-auto mb-2 text-grey-300" />
-                <p className="text-sm font-medium text-grey-400 font-body">
-                  Sin tareas para este día
+                <Calendar size={32} className="mx-auto mb-2 text-grey-300 dark:text-grey-500" />
+                <p className="text-sm font-medium text-grey-400 dark:text-grey-500 font-body">
+                  Sin misiones para este día
                 </p>
-                <p className="text-xs text-grey-300 font-body mt-1">
+                <p className="text-xs text-grey-300 dark:text-grey-500 font-body mt-1">
                   Selecciona otro día en el calendario
                 </p>
               </div>

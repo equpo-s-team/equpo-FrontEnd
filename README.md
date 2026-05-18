@@ -11,19 +11,19 @@ equpo/
 │       └── MAXWELL_BOLD.ttf       ← fuente custom (ya incluida)
 ├── src/
 │   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Hero.jsx
-│   │   ├── WhatIsEqupo.jsx
-│   │   ├── Nucleus.jsx
-│   │   ├── Features.jsx
-│   │   ├── CTAFinal.jsx
-│   │   └── Footer.jsx
+│   │   ├── Navbar.tsx
+│   │   ├── Hero.tsx
+│   │   ├── WhatIsEqupo.tsx
+│   │   ├── Nucleus.tsx
+│   │   ├── Features.tsx
+│   │   ├── CTAFinal.tsx
+│   │   └── Footer.tsx
 │   ├── hooks/
 │   │   └── useReveal.js
-│   ├── App.jsx
+│   ├── App.tsx
 │   ├── app.css
 │   ├── index.css
-│   └── main.jsx
+│   └── main.tsx
 ├── index.html
 ├── tailwind.config.js
 ├── postcss.config.js

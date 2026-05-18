@@ -1,6 +1,7 @@
 declare module '@/context/AuthContext' {
   export interface AuthContextUser {
     uid: string;
+    displayName: string;
     virtualCurrency?: number;
     experiencePoints?: number;
     level?: number;
@@ -9,6 +10,7 @@ declare module '@/context/AuthContext' {
   export interface AuthContextValue {
     user: AuthContextUser | null;
     isAuth: boolean;
+    isVerified: boolean;
     isLoading: boolean;
     updateUserData: (data: Partial<AuthContextUser>) => void;
   }

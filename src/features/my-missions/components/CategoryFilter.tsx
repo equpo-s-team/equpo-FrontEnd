@@ -42,12 +42,17 @@ export default function CategoryFilter({
   const allSelected = activeCategories.size === 0; // empty means "show all"
 
   return (
-    <div className="h-full rounded-2xl bg-white border border-grey-150 shadow-card p-4 overflow-hidden">
-      <h3 className="text-sm font-bold text-grey-800 font-body mb-3">Categorías</h3>
+    <div className="h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-4 overflow-hidden">
+      <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body mb-3">
+        Categorías
+      </h3>
 
       {/* Search */}
       <div className="relative mb-3">
-        <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-grey-400" />
+        <Search
+          size={14}
+          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-grey-400 dark:text-grey-500"
+        />
         <input
           type="text"
           value={search}
@@ -55,8 +60,8 @@ export default function CategoryFilter({
           placeholder="Buscar..."
           className="
             w-full pl-8 pr-3 py-2 rounded-xl text-xs font-body
-            bg-grey-50 border border-grey-150
-            text-grey-700 placeholder:text-grey-400
+            bg-grey-50 dark:bg-gray-800 border border-grey-150 dark:border-gray-600
+            text-grey-700 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-grey-500
             focus:outline-none focus:border-blue/50 focus:ring-1 focus:ring-blue/20
             transition-all duration-200
           "
@@ -72,14 +77,14 @@ export default function CategoryFilter({
           ${
             allSelected
               ? 'bg-blue/10 text-blue border border-blue/20'
-              : 'text-grey-600 hover:bg-grey-50 border border-transparent'
+              : 'text-grey-600 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-800 border border-transparent'
           }
         `}
       >
         <span
           className={`
             w-3 h-3 rounded-full border-2 flex-shrink-0
-            ${allSelected ? 'bg-blue border-blue' : 'border-grey-300'}
+            ${allSelected ? 'bg-blue border-blue' : 'border-grey-300 dark:border-gray-600'}
           `}
         />
         Seleccionar Todo
@@ -101,14 +106,14 @@ export default function CategoryFilter({
                 ${
                   isActive
                     ? `${color.bg} text-grey-800 border ${color.border}`
-                    : 'text-grey-600 hover:bg-grey-50 border border-transparent'
+                    : 'text-grey-600 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-800 border border-transparent'
                 }
               `}
             >
               <span
                 className={`
                   w-3 h-3 rounded-full flex-shrink-0
-                  ${isActive ? color.dot : 'bg-grey-300'}
+                  ${isActive ? color.dot : 'bg-grey-300 dark:bg-gray-600'}
                 `}
               />
               {cat}
@@ -117,7 +122,9 @@ export default function CategoryFilter({
         })}
 
         {filteredCategories.length === 0 && (
-          <p className="text-xs text-grey-400 text-center py-3">Sin categorías</p>
+          <p className="text-xs text-grey-400 dark:text-grey-500 text-center py-3">
+            Sin categorías
+          </p>
         )}
       </div>
     </div>

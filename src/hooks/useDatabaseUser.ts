@@ -11,6 +11,7 @@ import {
 export interface DatabaseUser {
   uid: string;
   displayName: string;
+  email?: string | null;
   level: number;
   experiencePoints: number;
   virtualCurrency: number;
@@ -28,12 +29,14 @@ export const useDatabaseUser = () => {
     async (
       displayName: string,
       photoURL?: string | null,
+      email?: string | null,
     ): Promise<{ success: boolean; error?: string; user?: DatabaseUser }> => {
       setIsLoading(true);
       try {
         const userVars: CreateUserVariables = {
           displayName,
           photoURL: photoURL ?? null,
+          email: email ?? null,
         };
 
         await createUserFn(userVars);

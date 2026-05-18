@@ -1,14 +1,16 @@
-import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Paperclip, Send, Smile, X } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
 import { AppTooltip } from '@/components/ui/AppTooltip';
+import { ResponsiveIcon } from '@/components/ui/ResponsiveIcon';
 import { useChatContext } from '@/features/chat-videocall/components/ChatContext.tsx';
 import { useTyping } from '@/features/chat-videocall/hooks/useTyping';
 import { storage } from '@/firebase';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { darkModeManager } from '@/lib/darkMode';
+
+const EmojiPicker = lazy(() => import('@emoji-mart/react'));
 
 export default function MessageInput() {
   const { activeRoom, sendMessage, replyingTo, setReplyingTo, teamId, myRole } = useChatContext();
@@ -17,11 +19,12 @@ export default function MessageInput() {
   const [value, setValue] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const emojiDataRef = useRef<unknown>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const emojiButtonRef = useRef<HTMLButtonElement>(null);
-  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [typingTimeout, setTypingTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -95,17 +98,15 @@ export default function MessageInput() {
 
       let url: string;
       try {
-        // 2. If it already exists, just get the URL
         url = await getDownloadURL(storageRef);
       } catch {
-        // 3. Otherwise, upload it
         await uploadBytes(storageRef, file);
         url = await getDownloadURL(storageRef);
       }
 
       const isImage = file.type.startsWith('image/');
       sendMessage(file.name, isImage ? 'image' : 'file', url, file.name);
-      play('messageSent'); // Play sound when sending file
+      play('messageSent');
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {
@@ -120,18 +121,25 @@ export default function MessageInput() {
 
   const canSend = Boolean(value.trim() && activeRoom) && !isUploading && !isSpectator;
 
+  if (!activeRoom) {
+    return null;
+  }
+
   return (
-    <div className="px-4 py-3 border-t border-grey-150 bg-primary flex-shrink-0 relative">
+    <div className="px-3 sm:px-4 py-0.5 border-t border-grey-150 dark:border-gray-700 bg-primary dark:bg-gray-800 flex-shrink-0 relative">
       {/* ReplyTo Indicator */}
       {replyingTo && (
-        <div className="mb-2 bg-grey-100 rounded-lg px-3 py-2 flex items-center justify-between border-l-4 border-purple-DEFAULT">
-          <div className="flex flex-col overflow-hidden">
-            <span className="text-[10px] text-purple-DEFAULT font-semibold">
+        <div className="mb-1 bg-grey-100 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 flex items-center justify-between border-l-4 border-purple-DEFAULT gap-2">
+          <div className="flex flex-col overflow-hidden min-w-0">
+            <span className="text-[9px] sm:text-[10px] text-purple-DEFAULT font-semibold truncate">
               Respondiendo a {replyingTo.senderName}
             </span>
             <span className="text-xs text-grey-600 truncate">{replyingTo.text}</span>
           </div>
-          <button onClick={() => setReplyingTo(null)} className="text-grey-400 hover:text-grey-700">
+          <button
+            onClick={() => setReplyingTo(null)}
+            className="text-grey-400 hover:text-grey-700 flex-shrink-0"
+          >
             <X size={14} />
           </button>
         </div>
@@ -139,12 +147,25 @@ export default function MessageInput() {
 
       {/* Emoji Picker Popover */}
       {showEmojiPicker && (
-        <div ref={emojiPickerRef} className="absolute bottom-full right-4 mb-2 z-50 shadow-2xl">
-          <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light" />
+        <div
+          ref={emojiPickerRef}
+          className="absolute bottom-full right-2 sm:right-4 mb-2 z-50 shadow-2xl"
+        >
+          <Suspense
+            fallback={
+              <div className="w-[352px] h-[450px] bg-grey-100 dark:bg-gray-700 rounded-xl" />
+            }
+          >
+            <EmojiPicker
+              data={emojiDataRef.current}
+              onEmojiSelect={handleEmojiSelect}
+              theme={darkModeManager.isDarkMode() ? 'dark' : 'light'}
+            />
+          </Suspense>
         </div>
       )}
 
-      <div className="flex items-center gap-2 bg-grey-100 rounded-2xl px-3 py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
+      <div className="flex items-center gap-1.5 sm:gap-2 bg-grey-100 dark:bg-gray-700 rounded-2xl px-2 sm:px-3 py-1.5 sm:py-2 border border-transparent focus-within:border-grey-200 focus-within:bg-grey-50 transition-all duration-200">
         {/* Attach */}
         <input
           type="file"
@@ -156,9 +177,9 @@ export default function MessageInput() {
           <button
             disabled={!activeRoom || isUploading || isSpectator}
             onClick={() => fileInputRef.current?.click()}
-            className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+            className="w-6 sm:w-7 h-6 sm:h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40 flex-shrink-0"
           >
-            <Paperclip size={16} />
+            <ResponsiveIcon component={Paperclip} mobileSize={14} desktopSize={16} />
           </button>
         </AppTooltip>
 
@@ -172,14 +193,14 @@ export default function MessageInput() {
           disabled={!activeRoom || isSpectator}
           placeholder={
             isSpectator
-              ? 'Solo lectura — los espectadores no pueden enviar mensajes'
+              ? 'Solo lectura'
               : activeRoom
                 ? 'Escribe un mensaje...'
                 : 'Selecciona una sala'
           }
           className="
             flex-1 bg-transparent outline-none
-            font-body text-sm text-grey-800 placeholder:text-grey-400
+            font-body text-xs sm:text-sm text-grey-800 dark:text-gray-300 placeholder:text-grey-400
             disabled:cursor-not-allowed
           "
           autoComplete="off"
@@ -190,10 +211,17 @@ export default function MessageInput() {
           <button
             ref={emojiButtonRef}
             disabled={!activeRoom || isUploading || isSpectator}
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
-            className="w-7 h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40"
+            onClick={() => {
+              if (!emojiDataRef.current) {
+                void import('@emoji-mart/data').then((m) => {
+                  emojiDataRef.current = m.default;
+                });
+              }
+              setShowEmojiPicker((prev) => !prev);
+            }}
+            className="w-6 sm:w-7 h-6 sm:h-7 flex items-center justify-center text-grey-400 hover:text-grey-700 transition-colors disabled:opacity-40 flex-shrink-0"
           >
-            <Smile size={16} />
+            <ResponsiveIcon component={Smile} mobileSize={14} desktopSize={16} />
           </button>
         </AppTooltip>
 
@@ -203,16 +231,16 @@ export default function MessageInput() {
             onClick={handleSend}
             disabled={!canSend}
             className={`
-              w-8 h-8 rounded-xl flex items-center justify-center
-              transition-all duration-200
+              w-7 sm:w-8 h-7 sm:h-8 rounded-xl flex items-center justify-center
+              transition-all duration-200 flex-shrink-0
               ${
                 canSend
                   ? 'bg-gradient-purple-bg text-white shadow-neonPurple hover:shadow-neonBlue hover:scale-105 active:scale-95'
-                  : 'bg-grey-200 text-grey-400 cursor-not-allowed'
+                  : 'bg-grey-200 text-grey-400 dark:bg-gray-800 dark:text-gray-300 cursor-not-allowed'
               }
             `}
           >
-            <Send size={14} />
+            <ResponsiveIcon component={Send} mobileSize={12} desktopSize={14} />
           </button>
         </AppTooltip>
       </div>

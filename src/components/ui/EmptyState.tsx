@@ -1,7 +1,7 @@
 import { type LucideIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils.ts';
 
 interface EmptyStateProps {
   icon: LucideIcon;
@@ -59,18 +59,22 @@ export function EmptyState({
     >
       <div
         className={cn(
-          'rounded-2xl bg-secondary flex items-center justify-center mb-4',
+          'rounded-2xl bg-secondary dark:bg-gray-700 flex items-center justify-center mb-4',
           sizeConfig.iconBox,
           iconClassName,
         )}
       >
         <Icon size={sizeConfig.iconSize} className="text-grey-400" />
       </div>
-      <p className={cn('font-maxwell text-grey-700 mb-1', sizeConfig.titleClass)}>{title}</p>
+      <p
+        className={cn('font-maxwell text-grey-700 dark:text-grey-300 mb-1', sizeConfig.titleClass)}
+      >
+        {title}
+      </p>
       {description && (
         <p
           className={cn(
-            'font-body text-grey-400 max-w-[220px] leading-relaxed',
+            'font-body text-grey-400 dark:text-grey-300 max-w-[220px] leading-relaxed',
             sizeConfig.descClass,
           )}
         >

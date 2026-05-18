@@ -21,6 +21,20 @@ exports.createUser = function createUser(dcOrVars, vars) {
 }
 ;
 
+const backfillUserEmailRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'BackfillUserEmail', inputVars);
+}
+backfillUserEmailRef.operationName = 'BackfillUserEmail';
+exports.backfillUserEmailRef = backfillUserEmailRef;
+
+exports.backfillUserEmail = function backfillUserEmail(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars } = validateArgs(connectorConfig, dcOrVars, vars, true);
+  return executeMutation(backfillUserEmailRef(dcInstance, inputVars));
+}
+;
+
 const touchUserLastActiveRef = (dc) => {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
   dcInstance._useGeneratedSdk();

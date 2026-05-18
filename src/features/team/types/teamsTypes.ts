@@ -37,7 +37,8 @@ export interface UpdateTeamPayload {
 }
 
 export interface AddTeamMemberPayload {
-  userUid: string;
+  userUid?: string;
+  email?: string;
   role?: 'collaborator' | 'spectator' | 'member';
 }
 

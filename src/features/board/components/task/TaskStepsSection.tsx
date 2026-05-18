@@ -1,8 +1,8 @@
 import { Check, ChevronLeft, ChevronRight, Lock, Plus, Shield, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import {useSoundEffects} from "@/hooks/useSoundEffects.ts";
-import { toastError } from '@/lib/toast.ts';
+import { toastError } from '@/components/ui/toast.ts';
+import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
 
 import { useTaskStepsRealtime } from '../../hooks/useTaskStepsRealtime.ts';
 import { useToggleTaskStep } from '../../hooks/useToggleTaskStep.ts';
@@ -27,8 +27,8 @@ interface TaskStepsSectionProps {
   currentUserUid: string | null;
   /** Role of the current user in the team */
   myRole: string;
-  /** UIDs of users assigned to the task */
-  assignedUserUids: string[];
+  /** Whether the current user is assigned to the task (directly or via group) */
+  isAssigned: boolean;
   /** Whether to show the add-step input (create/edit mode) */
   canEdit: boolean;
   /** In create mode we receive the steps locally (not from API) */
@@ -42,6 +42,7 @@ interface TaskStepsSectionProps {
   /** Whether the task has at least one assigned user or group; used to gate the
    * status-auto-transitioning toggle when the task is still in 'todo'. */
   taskHasAssignment?: boolean;
+  percentageBgClass?: string;
 }
 
 function StepRow({
@@ -50,6 +51,7 @@ function StepRow({
   isBlocked,
   canEdit,
   canToggle,
+  isToggling,
   onToggle,
   onDelete,
   onEdit,
@@ -59,6 +61,7 @@ function StepRow({
   isBlocked: boolean;
   canEdit: boolean;
   canToggle: boolean;
+  isToggling: boolean;
   onToggle: (isDone: boolean) => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
@@ -80,22 +83,22 @@ function StepRow({
 
   return (
     <div
-      className={`flex items-center gap-2.5 py-2 px-3 rounded-[8px] group transition-colors
-        ${isSupero ? 'bg-purple/20 border border-purple/20' : 'hover:bg-secondary/60'}`}
+      className={`flex items-center gap-2.5 py-2 px-3 rounded-xl group transition-colors
+        ${isSupero ? 'bg-purple/20 border border-purple/20' : 'hover:bg-secondary/60 dark:hover:bg-gray-900/60'}`}
     >
       {/* Checkbox */}
       <button
-        disabled={!canToggle || isBlocked}
+        disabled={!canToggle || isBlocked || isToggling}
         onClick={() => onToggle(!step.isDone)}
-        className={`shrink-0 w-4 h-4 rounded border-[1.5px] flex items-center justify-center transition-all duration-200
+        className={`shrink-0 w-4 h-4 rounded border flex items-center justify-center transition-all duration-200
           ${
             step.isDone
               ? 'bg-green border-green text-white'
               : isBlocked
-                ? 'border-grey-200 bg-grey-100 cursor-not-allowed'
+                ? 'border-grey-200 dark:border-gray-700 bg-grey-100 dark:bg-gray-700 cursor-not-allowed'
                 : canToggle
-                  ? 'border-grey-300 hover:border-green cursor-pointer'
-                  : 'border-grey-200 cursor-not-allowed'
+                  ? 'border-grey-300 dark:border-gray-700 hover:border-green cursor-pointer'
+                  : 'border-grey-200 dark:border-gray-600 cursor-not-allowed'
           }`}
       >
         {step.isDone && <Check size={10} strokeWidth={3} />}
@@ -114,13 +117,13 @@ function StepRow({
               if (e.key === 'Escape') setEditMode(false);
             }}
             maxLength={200}
-            className="w-full text-[13px] bg-transparent border-b border-blue outline-none font-body text-grey-800"
+            className="w-full text-[13px] bg-transparent border-b border-blue outline-none font-body text-grey-800 dark:text-gray-800"
           />
         ) : (
           <button
             type="button"
             className={`text-left text-[13px] font-body leading-snug break-words w-full
-              ${step.isDone ? 'line-through text-grey-400' : 'text-grey-800'}
+              ${step.isDone ? 'line-through text-grey-400 ' : 'text-grey-800 dark:text-gray-400'}
               ${isSupero ? 'font-semibold text-purple' : ''}
               ${canEdit && !isSupero ? 'cursor-text' : 'cursor-default'}`}
             onClick={() => canEdit && !isSupero && setEditMode(true)}
@@ -148,7 +151,7 @@ function StepRow({
       {canEdit && !isSupero && (
         <button
           onClick={onDelete}
-          className="shrink-0 opacity-0 group-hover:opacity-100 text-grey-400 hover:text-red transition-all duration-150 cursor-pointer"
+          className="shrink-0 opacity-0 group-hover:opacity-100 text-grey-400 dark:text-gray-400 hover:text-red transition-all duration-150 cursor-pointer"
         >
           <Trash2 size={13} />
         </button>
@@ -161,9 +164,8 @@ export default function TaskStepsSection({
   teamId,
   taskId,
   taskStatus,
-  currentUserUid,
   myRole,
-  assignedUserUids,
+  isAssigned,
   canEdit,
   createMode = false,
   localSteps = [],
@@ -171,9 +173,11 @@ export default function TaskStepsSection({
   editDrafts,
   onEditDraftsChange,
   taskHasAssignment = true,
+  percentageBgClass = 'bg-secondary dark:bg-gray-900',
 }: TaskStepsSectionProps) {
   const [page, setPage] = useState(0);
   const [newStepText, setNewStepText] = useState('');
+  const [togglingIds, setTogglingIds] = useState<Set<string>>(new Set());
 
   const { data, isLoading } = useTaskStepsRealtime(
     createMode ? '' : teamId,
@@ -184,7 +188,6 @@ export default function TaskStepsSection({
 
   const isSpectator = myRole === 'spectator';
   const isLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
 
   // Edit task (add/delete/edit steps): reviewers + leadership can edit, assigned workers cannot.
   const canEditTask = !isSpectator && (isLeaderOrCollab || !isAssigned);
@@ -229,10 +232,12 @@ export default function TaskStepsSection({
     return (
       <div className="flex flex-col mt-4 gap-2">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400">
-            Pasos de la tarea
+          <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400 dark:text-gray-400">
+            Pasos de la misión
           </span>
-          <span className="text-[11px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-full">
+          <span
+            className={`text-[11px] font-semibold text-grey-400 dark:text-gray-300 px-2 py-0.5 rounded-full ${percentageBgClass}`}
+          >
             0%
           </span>
         </div>
@@ -246,12 +251,12 @@ export default function TaskStepsSection({
               onKeyDown={(e) => e.key === 'Enter' && handleAddLocal()}
               placeholder="Escribe un paso en orden…"
               maxLength={200}
-              className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 bg-secondary text-[13px] font-body text-grey-800 placeholder:text-grey-400 outline-none focus:border-blue transition-colors"
+              className="flex-1 px-3 py-1.5 rounded-xl border border-grey-200 dark:border-gray-700 bg-secondary dark:bg-gray-900 text-[13px] font-body text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-gray-300  outline-none focus:border-blue transition-colors"
             />
             <button
               onClick={handleAddLocal}
               disabled={!newStepText.trim()}
-              className="px-3 py-1.5 rounded-[8px] bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
+              className="px-3 py-1.5 rounded-xl bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
             >
               <Plus size={14} />
             </button>
@@ -263,32 +268,24 @@ export default function TaskStepsSection({
             const isSupero = step.step === 'Supero Review';
             const globalIndex = page * STEPS_PER_PAGE + i;
             return (
-              <div
+              <StepRow
                 key={step.step}
-                className={`flex items-center gap-2.5 py-2 px-3 rounded-[8px] transition-colors
-                  ${isSupero ? 'bg-violet-50 border border-violet-200/60' : 'bg-secondary/40'}`}
-              >
-                <div className="w-4 h-4 rounded border-[1.5px] border-grey-200 bg-grey-100 shrink-0" />
-                <span
-                  className={`flex-1 text-[13px] font-body leading-snug
-                    ${isSupero ? 'font-semibold text-violet-700' : 'text-grey-700'}`}
-                >
-                  {step.step}
-                </span>
-                {isSupero && (
-                  <span className="text-[10px] text-violet-400 font-semibold flex items-center gap-1">
-                    <Lock size={10} /> Auto
-                  </span>
-                )}
-                {!isSupero && (
-                  <button
-                    onClick={() => handleDeleteLocal(globalIndex)}
-                    className="text-grey-400 hover:text-red cursor-pointer transition-colors"
-                  >
-                    <Trash2 size={13} />
-                  </button>
-                )}
-              </div>
+                step={step}
+                isSupero={isSupero}
+                isBlocked={true}
+                canEdit={!isSupero}
+                canToggle={false}
+                isToggling={false}
+                onToggle={() => {}}
+                onDelete={() => handleDeleteLocal(globalIndex)}
+                onEdit={(text) => {
+                  if (onLocalStepsChange) {
+                    const newSteps = [...localSteps];
+                    newSteps[globalIndex] = text;
+                    onLocalStepsChange(newSteps);
+                  }
+                }}
+              />
             );
           })}
         </div>
@@ -349,18 +346,30 @@ export default function TaskStepsSection({
   const pageSteps = nonSupero.slice(page * STEPS_PER_PAGE, (page + 1) * STEPS_PER_PAGE);
 
   const handleToggle = (step: TaskStep, isDone: boolean) => {
+    if (togglingIds.has(step.step)) return;
     const isSuperoStep = step.step === 'Supero Review';
     // Toggling a regular step done while task is 'todo' would auto-transition
     // it to 'in-progress' on the backend; require an assignment first.
     if (!isSuperoStep && taskStatus === 'todo' && isDone && !taskHasAssignment) {
       toastError(
         'No se puede iniciar',
-        'Asigna un usuario o grupo a la tarea antes de marcar pasos.',
+        'Asigna un usuario o grupo a la misión antes de marcar pasos.',
       );
       return;
     }
     play('stepChecked');
-    toggleStep.mutate({ teamId, taskId, stepId: step.step, isDone });
+    setTogglingIds((prev) => new Set(prev).add(step.step));
+    toggleStep.mutate(
+      { teamId, taskId, stepId: step.step, isDone },
+      {
+        onSettled: () =>
+          setTogglingIds((prev) => {
+            const next = new Set(prev);
+            next.delete(step.step);
+            return next;
+          }),
+      },
+    );
   };
 
   const handleDelete = (step: TaskStep) => {
@@ -385,13 +394,15 @@ export default function TaskStepsSection({
   return (
     <div className="mt-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400">
-          Pasos de la tarea
+        <span className="text-[11px] font-bold uppercase tracking-[0.8px] text-grey-400 dark:text-gray-300">
+          Pasos de la misión
         </span>
         {isLoading && !isDraftEditing ? (
-          <span className="text-[11px] text-grey-300">Cargando…</span>
+          <span className="text-[11px] text-grey-300 dark:text-gray-300">Cargando…</span>
         ) : (
-          <span className="text-[11px] font-semibold text-grey-400 bg-secondary px-2 py-0.5 rounded-full">
+          <span
+            className={`text-[11px] font-semibold text-grey-400 dark:text-gray-300 px-2 py-0.5 rounded-full ${percentageBgClass}`}
+          >
             {totalSteps > 0 ? Math.round((stepsDone / totalSteps) * 100) : 0}%
           </span>
         )}
@@ -409,6 +420,7 @@ export default function TaskStepsSection({
                 isBlocked={false}
                 canEdit={canEdit && canEditTask}
                 canToggle={!canEdit && canToggleRegularStep}
+                isToggling={togglingIds.has(step.step)}
                 onToggle={(isDone) => handleToggle(step, isDone)}
                 onDelete={() => handleDelete(step)}
                 onEdit={(text) => handleEdit(step, text)}
@@ -421,7 +433,7 @@ export default function TaskStepsSection({
 
           {/* Pagination (regular steps only) */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between text-[11px] text-grey-400 mb-2">
+            <div className="flex items-center justify-between text-[11px] text-grey-400 dark:text-gray-300 mb-2">
               <button
                 disabled={page === 0}
                 onClick={() => setPage((p) => p - 1)}
@@ -451,12 +463,12 @@ export default function TaskStepsSection({
                 onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                 placeholder="Agregar nuevo paso…"
                 maxLength={200}
-                className="flex-1 px-3 py-1.5 rounded-[8px] border-[1.5px] border-grey-200 bg-secondary text-[13px] font-body text-grey-800 placeholder:text-grey-400 outline-none focus:border-blue transition-colors"
+                className="flex-1 px-3 py-1.5 rounded-xl border border-grey-200 dark:border-gray-700 bg-secondary dark:bg-gray-900 text-[13px] font-body text-grey-800 placeholder:text-grey-400 outline-none focus:border-blue transition-colors"
               />
               <button
                 onClick={handleAdd}
                 disabled={!newStepText.trim()}
-                className="px-3 py-1.5 rounded-[8px] bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
+                className="px-3 py-1.5 rounded-xl bg-blue text-white text-[12px] font-semibold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed hover:bg-blue/90 transition-colors"
               >
                 <Plus size={14} />
               </button>
@@ -476,6 +488,7 @@ export default function TaskStepsSection({
                   isBlocked={isBlocked}
                   canEdit={false}
                   canToggle={canToggle}
+                  isToggling={togglingIds.has(superoStep.step)}
                   onToggle={(isDone) => handleToggle(superoStep, isDone)}
                   onDelete={() => {}}
                   onEdit={() => {}}

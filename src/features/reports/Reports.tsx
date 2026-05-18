@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
 import { useTeam } from '@/context/TeamContext.tsx';
 import { KpiStrip, MemberList, OverdueTable, StatusDonut } from '@/features/reports/components';
 import AppHeader from '@/features/reports/components/AppHeader.tsx';
@@ -9,6 +8,7 @@ import { useReportsKpi, useReportsOverview, useReportsTaskSync } from '@/feature
 import type { ReportsMember, ReportsOverdueTask } from '@/features/reports/types';
 import type { KpiData, OverdueTaskRow, ReportMemberRow } from '@/features/reports/types';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { getInitials } from '@/lib/utils/avatar/avatarInitials.ts';
 
 const EMPTY_KPI: KpiData = {
   todo: 0,
@@ -125,33 +125,35 @@ export default function Reports() {
         : 'No se pudieron cargar los reportes.';
 
   return (
-    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-white text-grey-800 font-body">
+    <div className="relative flex flex-col min-h-screen overflow-hidden bg-white dark:bg-gray-900 text-grey-800 dark:text-gray-300 font-body">
       <AppHeader />
       <FilterBar setActiveDays={setActiveDays} />
-      <main className="relative z-10 mx-1 flex flex-1 min-h-0 max-w-full flex-col overflow-hidden px-4 py-4 sm:px-6 lg:px-9">
-        <p className="mb-3.5 shrink-0 text-xs font-semibold uppercase tracking-[0.1em] text-grey-400">
+      <main className="relative z-10 mx-1 flex flex-1 flex-col overflow-y-auto px-4 py-4 sm:px-6 lg:px-9 pb-20 lg:pb-4">
+        <p className="mb-3.5 shrink-0 text-xs font-semibold uppercase tracking-[0.1em] text-grey-400 dark:text-grey-500">
           Resumen de estados
         </p>
 
         {isError && (
-          <div className="mb-3 rounded-lg border border-[#f6d2da] bg-[#fff4f7] px-3 py-2 text-sm text-[#c94155]">
+          <div className="mb-3 rounded-lg border border-[#f6d2da] bg-[#fff4f7] dark:bg-red/10 dark:border-red/30 px-3 py-2 text-sm text-[#c94155] dark:text-red">
             {errorMessage}
           </div>
         )}
 
         <div
-          className={`relative flex min-h-0 flex-1 flex-row gap-2 ${isLoading ? 'opacity-70' : ''}`}
+          className={`relative flex flex-col lg:flex-row gap-2 lg:gap-4 ${isLoading ? 'opacity-70' : ''}`}
         >
-          <div className="flex h-full min-h-0 w-3/5 flex-col gap-2">
+          <div className="flex w-full lg:w-3/5 flex-col gap-2 min-w-0">
             <KpiStrip data={kpi} />
-            <div className="min-h-0 flex-1">
+            <div className="flex-1 min-h-[300px] lg:min-h-0">
               <MemberList members={members} />
             </div>
           </div>
 
-          <div className="flex h-full min-h-0 w-2/5 flex-col gap-5">
-            <StatusDonut data={kpi} />
-            <div className="min-h-0 flex-1">
+          <div className="flex w-full lg:w-2/5 flex-col gap-5 min-w-0">
+            <div className="flex-shrink-0">
+              <StatusDonut data={kpi} />
+            </div>
+            <div className="flex-1 min-h-[300px] lg:min-h-0">
               <OverdueTable tasks={overdueTasks} />
             </div>
           </div>

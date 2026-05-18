@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { getInitials } from '@/components/ui/avatar/avatarInitials.ts';
+import { userProfileApi } from '@/features/enviroment/api/userProfileApi';
 import { useReportsKpi } from '@/features/reports/hooks';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
-import { computeEnvironmentHealth } from '@/lib/healthUtils.ts';
+import { getInitials } from '@/lib/utils/avatar/avatarInitials.ts';
 
 import type { ConnectedUser, PlayerStats, SessionInfo } from '../types/hud.ts';
 
@@ -17,6 +17,7 @@ interface UseHudDataParams {
 interface UseHudDataResult {
   stats: PlayerStats;
   session: SessionInfo;
+  setCoinBalance: (n: number) => void;
 }
 
 const AVATAR_GRADIENTS = [
@@ -67,6 +68,20 @@ export function useHudData({
 }: UseHudDataParams): UseHudDataResult {
   const kpiQuery = useReportsKpi(teamId, { days: 30 });
   const membersQuery = useTeamMembers(teamId);
+  const [coinBalance, setCoinBalance] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    userProfileApi
+      .getMyProfile()
+      .then((profile) => {
+        if (!cancelled) setCoinBalance(profile.virtualCurrency);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return useMemo(() => {
     const totalTasks = kpiQuery.data?.kpi.total ?? 0;
@@ -76,7 +91,7 @@ export function useHudData({
     const completedPercent = totalTasks > 0 ? clampPercentage((doneTasks / totalTasks) * 100) : 0;
     const overduePercent = totalTasks > 0 ? clampPercentage((overdueTasks / totalTasks) * 100) : 0;
 
-    const hp = computeEnvironmentHealth(totalTasks, doneTasks, overdueTasks);
+    const hp = kpiQuery.data?.environmentHealth ?? 60;
     const maxUsers = membersQuery.data?.length ?? 0;
     const energy = maxUsers > 0 ? clampPercentage((connectedUsers / maxUsers) * 100) : 0;
     const connectedMembers = toConnectedUsers(membersQuery.data, connectedUserUids);
@@ -87,6 +102,7 @@ export function useHudData({
         maxHp: 100,
         energy: Math.round(energy),
         maxEnergy: 100,
+        coinBalance,
       },
       session: {
         elapsedSeconds,
@@ -96,11 +112,14 @@ export function useHudData({
         overduePercent: Math.round(overduePercent),
         connectedMembers,
       },
+      setCoinBalance,
     };
   }, [
+    coinBalance,
     connectedUserUids,
     connectedUsers,
     elapsedSeconds,
+    kpiQuery.data?.environmentHealth,
     kpiQuery.data?.kpi.done,
     kpiQuery.data?.kpi.overdue,
     kpiQuery.data?.kpi.total,

@@ -3,7 +3,6 @@ import type {
   CreateAchievementPayload,
   CreateGroupPayload,
   CreateTeamPayload,
-  CreateTeamRewardPayload,
   TeamGroup,
   TeamMember,
   UnlockAchievementPayload,
@@ -29,10 +28,10 @@ export const teamsApi = {
     request(`/teams/${teamId}/members`, 'POST', payload),
   updateMemberRole: (teamId: string, userUid: string, payload: UpdateTeamMemberRolePayload) =>
     request(`/teams/${teamId}/members/${userUid}/role`, 'PATCH', payload),
-  createReward: (teamId: string, payload: CreateTeamRewardPayload) =>
-    request(`/teams/${teamId}/rewards`, 'POST', payload),
   createAchievement: (teamId: string, payload: CreateAchievementPayload) =>
-    request(`/teams/${teamId}/achievements`, 'POST', payload),
+    request<{
+      achievement: { id: string; name: string; description: string | null; iconUrl: string | null };
+    }>(`/teams/${teamId}/achievements`, 'POST', payload),
   unlockAchievement: (teamId: string, payload: UnlockAchievementPayload) =>
     request(`/teams/${teamId}/achievements/unlocks`, 'POST', payload),
   listMembers: (teamId: string) =>
@@ -46,11 +45,7 @@ export const teamsApi = {
       payload,
     ),
   updateGroup: (teamId: string, groupId: string, payload: UpdateGroupPayload) =>
-    request<{ success: boolean }>(
-      `/teams/${teamId}/groups/${groupId}`,
-      'PATCH',
-      payload,
-    ),
+    request<{ success: boolean }>(`/teams/${teamId}/groups/${groupId}`, 'PATCH', payload),
   deleteGroup: (teamId: string, groupId: string) =>
     request<void>(`/teams/${teamId}/groups/${groupId}`, 'DELETE'),
   removeMember: (teamId: string, userUid: string) =>

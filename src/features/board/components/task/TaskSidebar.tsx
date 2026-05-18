@@ -9,12 +9,12 @@ import { FieldLabel } from '@/components/ui/FieldLabel.tsx';
 import { Input } from '@/components/ui/input.tsx';
 import { SidebarSheet } from '@/components/ui/sidebar-sheet.tsx';
 import { TagChip } from '@/components/ui/TagChip.tsx';
-import type { TaskStatus, TeamTask } from '@/features/board/types';
-import { useSidebar } from '@/features/navbar/SidebarContext.jsx';
+import { toastError, toastSuccess } from '@/components/ui/toast.ts';
+import { STATUS_TO_COLUMN, type TaskSidebarProps } from '@/features/board/types';
+import { useSidebar } from '@/features/navbar/SidebarContext.tsx';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups.ts';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers.ts';
 import { useSoundEffects } from '@/hooks/useSoundEffects.ts';
-import { toastError, toastSuccess } from '@/lib/toast.ts';
 
 import { useCreateTask } from '../../hooks/useCreateTask.ts';
 import { useCreateTaskStep } from '../../hooks/useCreateTaskStep.ts';
@@ -25,6 +25,7 @@ import { useRecurringRollover } from '../../hooks/useRecurringRollover.ts';
 import { useUpdateTask } from '../../hooks/useUpdateTask.ts';
 import { useUpdateTaskStep } from '../../hooks/useUpdateTaskStep.ts';
 import type { TaskStep } from '../../types/taskSchema.ts';
+import { COLUMN_CONFIG } from '../../utils/columnConfig.ts';
 import { markdownToEditorHtml } from '../../utils/markdownUtils.ts';
 import { needsRollover } from '../../utils/recurringRollover.ts';
 import {
@@ -35,37 +36,11 @@ import {
   STATUS_TO_PROGRESS,
   toInputDatetime,
 } from '../../utils/taskUtils.ts';
-import { COLUMN_CONFIG } from '../columnConfig';
 import { MarkdownDescriptionEditor } from '../MarkdownDescriptionEditor.tsx';
 import { TaskAssigneesPreview } from './TaskAssigneesPreview';
 import TaskCommentarySection from './TaskCommentarySection';
 import type { LocalStepDraft } from './TaskStepsSection';
 import TaskStepsSection from './TaskStepsSection';
-
-type BoardColumnId = 'todo' | 'progress' | 'qa' | 'done';
-
-const STATUS_TO_COLUMN: Record<TaskStatus, BoardColumnId> = {
-  todo: 'todo',
-  'in-progress': 'progress',
-  'in-qa': 'qa',
-  done: 'done',
-};
-
-interface TaskSidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-  mode: 'create' | 'edit' | 'view' | 'readonly';
-  task?: TeamTask | null;
-  teamId: string;
-  defaultStatus?: string;
-  onTaskCreated?: () => void;
-  onTaskUpdated?: () => void;
-  onTaskDeleted?: () => void;
-  /** Current user's role in the team */
-  myRole?: string;
-  /** Current user's Firebase UID */
-  currentUserUid?: string | null;
-}
 
 export default function TaskSidebar({
   isOpen,
@@ -223,11 +198,11 @@ export default function TaskSidebar({
 
     // Require at least one step in create mode
     if (mode === 'create' && localSteps.length === 0) {
-      e.steps = 'Agrega al menos un paso antes de crear la tarea';
+      e.steps = 'Agrega al menos un paso antes de crear la misión';
     }
     // Require at least one step in edit mode when drafts are loaded
     if (mode !== 'create' && editStepDrafts !== null && editStepDrafts.length === 0) {
-      e.steps = 'La tarea debe tener al menos un paso';
+      e.steps = 'La misión debe tener al menos un paso';
     }
 
     const catArray = categories
@@ -317,7 +292,7 @@ export default function TaskSidebar({
       }
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al guardar la tarea';
+      const msg = err instanceof Error ? err.message : 'Error al guardar la misión';
       toastError('Error al guardar', msg);
     } finally {
       setIsSubmitting(false);
@@ -330,10 +305,10 @@ export default function TaskSidebar({
     try {
       await deleteTask.mutateAsync({ teamId, taskId: task.id });
       play('taskDeleted');
-      toastSuccess('Tarea eliminada', 'La tarea fue eliminada permanentemente.');
+      toastSuccess('Tarea eliminada', 'La misión fue eliminada permanentemente.');
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al eliminar la tarea';
+      const msg = err instanceof Error ? err.message : 'Error al eliminar la misión';
       toastError('Error al eliminar', msg);
     } finally {
       setIsSubmitting(false);
@@ -456,10 +431,20 @@ export default function TaskSidebar({
   const assignedUserUids = (task?.assignedUsers ?? []).map((u) => u.uid);
   const isSidebarSpectator = myRole === 'spectator';
   const isSidebarLeaderOrCollab = myRole === 'leader' || myRole === 'collaborator';
-  const isSidebarAssigned = currentUserUid ? assignedUserUids.includes(currentUserUid) : false;
+  const hasAssignees = (task?.assignedUsers?.length ?? 0) > 0 || Boolean(task?.assignedGroupId);
+
+  const assignedGroupInfo = groups.find((g) => g.id === task?.assignedGroupId);
+  const isAssignedViaGroup =
+    currentUserUid && assignedGroupInfo?.members?.some((m) => m.uid === currentUserUid);
+  const isSidebarAssigned = currentUserUid
+    ? assignedUserUids.includes(currentUserUid) || Boolean(isAssignedViaGroup)
+    : false;
+
   const isTaskDone = task?.status === 'done';
   const canEditTask =
-    !isSidebarSpectator && (isSidebarLeaderOrCollab || !isSidebarAssigned) && !isTaskDone;
+    !isSidebarSpectator &&
+    !isTaskDone &&
+    (isSidebarLeaderOrCollab || !hasAssignees || isSidebarAssigned);
 
   const selectedPriority =
     PRIORITY_OPTIONS.find((opt) => opt.value === priority)?.label ?? priority;
@@ -505,15 +490,15 @@ export default function TaskSidebar({
         open={isOpen}
         onOpenChange={handleOpenChange}
         side="right"
-        contentClassName="h-full w-full sm:w-[760px] xl:w-[920px] bg-primary border-l-[1.5px] border-grey-200 shadow-card-lg flex flex-col"
+        contentClassName="h-full w-full sm:w-[760px] xl:w-[920px] bg-primary dark:bg-gray-900 border-l-[1.5px] border-grey-200 dark:border-gray-700 shadow-card-lg flex flex-col"
         contentProps={{
           onInteractOutside: handleInteractOutside,
           onPointerDownOutside: handleInteractOutside,
         }}
       >
         {/* ── Header ── */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-grey-200">
-          <h2 className="font-maxwell text-base font-bold text-grey-800 tracking-wide">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-grey-200 dark:border-gray-700">
+          <h2 className="font-maxwell text-base font-bold text-grey-800 dark:text-gray-300 tracking-wide">
             {isReadOnlyView
               ? 'Detalle de Tarea'
               : mode === 'edit' || mode === 'view'
@@ -525,7 +510,7 @@ export default function TaskSidebar({
               <button
                 type="button"
                 onClick={() => setIsEditView(true)}
-                className="px-3 py-1.5 rounded-[10px] text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 transition-all duration-150 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 dark:hover:bg-blue/10 transition-all duration-150 cursor-pointer"
               >
                 Editar
               </button>
@@ -533,7 +518,7 @@ export default function TaskSidebar({
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-grey-400 hover:text-grey-700 hover:bg-secondary transition-all duration-150 cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-grey-400 dark:text-grey-500 hover:text-grey-700 dark:hover:text-grey-300 hover:bg-secondary dark:hover:bg-gray-800 transition-all duration-150 cursor-pointer"
             >
               <X size={18} />
             </button>
@@ -543,7 +528,7 @@ export default function TaskSidebar({
         {isReadOnlyView ? (
           <section className="flex-1 overflow-y-auto px-8 py-7 sm:px-10 sm:py-8">
             <div className="mb-5">
-              <h1 className="font-maxwell text-2xl font-bold text-grey-900 tracking-wide">
+              <h1 className="font-maxwell text-2xl font-bold text-grey-900 dark:text-gray-100 tracking-wide">
                 {name || 'Sin nombre'}
               </h1>
             </div>
@@ -556,11 +541,11 @@ export default function TaskSidebar({
                 </FieldLabel>
                 {description.trim() ? (
                   <div
-                    className="min-h-[280px] sm:min-h-[420px] max-h-[560px] overflow-y-auto py-2.5 text-md font-body text-grey-800 leading-relaxed [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5"
+                    className="min-h-[280px] sm:min-h-[420px] max-h-[560px] overflow-y-auto py-2.5 text-md font-body text-grey-800 dark:text-gray-300 leading-relaxed [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5"
                     dangerouslySetInnerHTML={{ __html: markdownToEditorHtml(description) }}
                   />
                 ) : (
-                  <p className="py-2.5 text-sm text-grey-400">Sin descripción</p>
+                  <p className="py-2.5 text-sm text-grey-400 dark:text-grey-500">Sin descripción</p>
                 )}
               </div>
 
@@ -571,7 +556,9 @@ export default function TaskSidebar({
                     <CalendarDays size={12} className="inline mr-1 -mt-0.5" />
                     Fecha Límite
                   </FieldLabel>
-                  <p className="text-sm font-body text-grey-800">{formattedDueDate}</p>
+                  <p className="text-sm font-body text-grey-800 dark:text-gray-300">
+                    {formattedDueDate}
+                  </p>
                 </div>
 
                 {/* Priority */}
@@ -616,7 +603,9 @@ export default function TaskSidebar({
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm font-body text-grey-800">Sin categorías</p>
+                    <p className="text-sm font-body text-grey-800 dark:text-gray-300">
+                      Sin categorías
+                    </p>
                   )}
                 </div>
 
@@ -626,7 +615,7 @@ export default function TaskSidebar({
                     <Repeat size={12} className="inline mr-1 -mt-0.5" />
                     Recurrente
                   </FieldLabel>
-                  <p className="text-sm font-body text-grey-800">
+                  <p className="text-sm font-body text-grey-800 dark:text-gray-300">
                     {isRecurring ? `Cada ${recurringCount} ${recurringLabel}` : 'No'}
                   </p>
                 </div>
@@ -634,7 +623,7 @@ export default function TaskSidebar({
                 {/* Progress */}
                 <div>
                   <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.7px] text-grey-400 dark:text-grey-500">
                       Progreso
                     </span>
                     <span
@@ -656,11 +645,12 @@ export default function TaskSidebar({
                 taskStatus={task.status}
                 currentUserUid={currentUserUid}
                 myRole={myRole}
-                assignedUserUids={(task.assignedUsers ?? []).map((u) => u.uid)}
+                isAssigned={isSidebarAssigned}
                 canEdit={isEditView}
                 taskHasAssignment={
                   (task.assignedUsers?.length ?? 0) > 0 || Boolean(task.assignedGroupId)
                 }
+                percentageBgClass="bg-transparent"
               />
             )}
 
@@ -692,8 +682,8 @@ export default function TaskSidebar({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   maxLength={100}
-                  placeholder="Nombre de la tarea"
-                  className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary text-grey-800 placeholder:text-grey-400 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+                  placeholder="Nombre de la misión"
+                  className={`w-full px-3 py-2.5 rounded-xl border text-sm font-body bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-grey-500 outline-none transition-colors duration-150 ${errors.name ? 'border-red' : 'border-grey-200 dark:border-gray-600 focus:border-blue'}`}
                 />
                 {errors.name && <p className="mt-1 text-xs text-red">{errors.name}</p>}
               </div>
@@ -710,7 +700,7 @@ export default function TaskSidebar({
                       type="button"
                       onClick={() => void handleIADescriptionGeneration(description)}
                       disabled={isSubmitting || isGeneratingDescription || !description.trim()}
-                      className="px-3 py-1.5 rounded-[10px] text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-1.5 rounded-xl text-xs font-semibold text-blue border border-blue/30 hover:bg-blue/8 dark:hover:bg-blue/10 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isGeneratingDescription ? 'Generando...' : 'Generar con IA'}
                     </button>
@@ -732,7 +722,7 @@ export default function TaskSidebar({
                     taskStatus={task?.status ?? 'todo'}
                     currentUserUid={currentUserUid}
                     myRole={myRole}
-                    assignedUserUids={(task?.assignedUsers ?? []).map((u) => u.uid)}
+                    isAssigned={isSidebarAssigned}
                     canEdit={true}
                     createMode={mode === 'create'}
                     localSteps={localSteps}
@@ -742,6 +732,7 @@ export default function TaskSidebar({
                     taskHasAssignment={
                       (task?.assignedUsers?.length ?? 0) > 0 || Boolean(task?.assignedGroupId)
                     }
+                    percentageBgClass="bg-transparent"
                   />
                   {errors.steps && <p className="mt-1 text-xs text-red">{errors.steps}</p>}
                 </div>
@@ -757,7 +748,7 @@ export default function TaskSidebar({
                     <DateTimePicker
                       value={dueDate}
                       onChange={setDueDate}
-                      placeholder="Seleccionar fecha y hora"
+                      placeholder="Fecha y hora"
                       error={!!errors.dueDate}
                       required={true}
                       showLabel={false}
@@ -806,7 +797,10 @@ export default function TaskSidebar({
                       onChange={setAssignedUserUid}
                       options={[
                         { value: '', label: 'Sin asignar' },
-                        ...assignableMembers.map((m) => ({ value: m.uid, label: m.displayName || m.uid })),
+                        ...assignableMembers.map((m) => ({
+                          value: m.uid,
+                          label: m.displayName || m.uid,
+                        })),
                       ]}
                       triggerClassName="w-full"
                     />
@@ -835,7 +829,12 @@ export default function TaskSidebar({
                               {
                                 value: '__more_groups__',
                                 label: 'Crear grupo',
-                                icon: <Settings size={12} className="text-grey-400" />,
+                                icon: (
+                                  <Settings
+                                    size={12}
+                                    className="text-grey-400 dark:text-grey-500"
+                                  />
+                                ),
                               },
                             ]
                           : []),
@@ -874,16 +873,18 @@ export default function TaskSidebar({
                         }
                       }}
                       placeholder="Backend, API, Diseño..."
-                      className={`w-full px-3 py-2.5 rounded-[10px] border-[1.5px] text-sm font-body bg-primary outline-none transition-colors duration-150 ${
+                      className={`w-full px-3 py-2.5 rounded-xl border text-sm font-body bg-primary dark:bg-gray-800 outline-none transition-colors duration-150 ${
                         errors.categories
                           ? 'border-red/50 text-red focus:border-red'
-                          : 'border-grey-200 text-grey-800 placeholder:text-grey-400 focus:border-blue'
+                          : 'border-grey-200 dark:border-gray-600 text-grey-800 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-grey-500 focus:border-blue'
                       }`}
                     />
                     {errors.categories ? (
                       <p className="mt-1 text-xs font-medium text-red">{errors.categories}</p>
                     ) : (
-                      <p className="mt-1 text-xs text-grey-400">Separadas por coma</p>
+                      <p className="mt-1 text-xs text-grey-400 dark:text-grey-500">
+                        Separadas por coma
+                      </p>
                     )}
                   </div>
 
@@ -896,7 +897,7 @@ export default function TaskSidebar({
                     <button
                       type="button"
                       onClick={() => setIsRecurring((prev) => !prev)}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer ${isRecurring ? 'bg-blue' : 'bg-grey-300'}`}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer ${isRecurring ? 'bg-blue' : 'bg-grey-300 dark:bg-gray-600'}`}
                     >
                       <span
                         className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ${isRecurring ? 'translate-x-6' : 'translate-x-1'}`}
@@ -905,7 +906,7 @@ export default function TaskSidebar({
 
                     {isRecurring && (
                       <div className="flex items-center gap-2 mt-3">
-                        <span className="text-xs text-grey-600">Cada</span>
+                        <span className="text-xs text-grey-600 dark:text-grey-400">Cada</span>
                         <Input
                           type="number"
                           min={1}
@@ -914,7 +915,7 @@ export default function TaskSidebar({
                           onChange={(e) =>
                             setRecurringCount(e.target.value === '' ? '' : Number(e.target.value))
                           }
-                          className={`w-16 px-2 py-1.5 rounded-[8px] border-[1.5px] text-sm font-body text-center bg-primary text-grey-800 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 focus:border-blue'}`}
+                          className={`w-16 px-2 py-1.5 rounded-xl border text-sm font-body text-center bg-primary dark:bg-gray-800 text-grey-800 dark:text-gray-300 outline-none transition-colors duration-150 ${errors.recurringCount ? 'border-red' : 'border-grey-200 dark:border-gray-600 focus:border-blue'}`}
                         />
                         <AppSelect
                           value={recurringInterval}
@@ -938,13 +939,13 @@ export default function TaskSidebar({
             </form>
 
             {/* ── Footer ── */}
-            <div className="px-6 py-4 border-t border-grey-200 flex items-center gap-3">
+            <div className="px-6 py-4 border-t border-grey-200 dark:border-gray-700 flex items-center gap-3">
               {(mode === 'edit' || mode === 'view') && (
                 <button
                   type="button"
                   onClick={() => void handleDelete()}
                   disabled={isSubmitting}
-                  className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-red border-[1.5px] border-red/30 hover:bg-red/8 transition-all duration-150 cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2.5 rounded-xl text-sm font-semibold text-red border border-red/30 hover:bg-red/8 dark:hover:bg-red/10 transition-all duration-150 cursor-pointer disabled:opacity-50"
                 >
                   Eliminar
                 </button>
@@ -953,7 +954,7 @@ export default function TaskSidebar({
               <button
                 type="button"
                 onClick={handleCancel}
-                className="px-4 py-2.5 rounded-[10px] text-sm font-semibold text-grey-500 border-[1.5px] border-grey-200 hover:border-grey-300 transition-all duration-150 cursor-pointer"
+                className="px-4 py-2.5 rounded-xl text-sm font-semibold text-grey-500 dark:text-grey-400 border border-grey-200 dark:border-gray-600 hover:border-grey-300 dark:hover:border-gray-500 transition-all duration-150 cursor-pointer"
               >
                 Cancelar
               </button>
@@ -961,7 +962,7 @@ export default function TaskSidebar({
                 type="submit"
                 onClick={(e) => void handleSubmit(e)}
                 disabled={isSubmitDisabled}
-                className="px-5 py-2.5 rounded-[10px] text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
+                className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-green to-blue shadow-green-glow hover:shadow-green-glow-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-green-glow"
               >
                 {isSubmitting
                   ? 'Guardando...'

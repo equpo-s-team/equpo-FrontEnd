@@ -64,7 +64,7 @@ export function KpiCard({ variant, label, value, sub }: KpiCardProps) {
 
   return (
     <div
-      className="relative bg-white border rounded-[14px] px-5 pt-5 pb-4 overflow-hidden transition-all duration-200 hover:-translate-y-0.5"
+      className="relative bg-white dark:bg-gray-800 border rounded-xl px-3 sm:px-5 pt-3 sm:pt-5 pb-2.5 sm:pb-4 overflow-hidden transition-all duration-200 hover:-translate-y-0.5"
       style={{ borderColor: styles.borderColor, boxShadow: styles.cardGlow }}
     >
       {/* Top neon bar */}
@@ -74,16 +74,18 @@ export function KpiCard({ variant, label, value, sub }: KpiCardProps) {
       />
       {/* Inner ambient glow */}
       <div
-        className="absolute inset-0 rounded-[14px] pointer-events-none opacity-50"
+        className="absolute inset-0 rounded-xl pointer-events-none opacity-50"
         style={{ background: styles.innerGlow }}
       />
 
       <div className="relative z-10">
-        <p className="text-xs font-medium text-grey-500 mb-2.5">{label}</p>
-        <p className="text-4xl font-semibold tracking-[-0.04em] text-grey-900 leading-none">
+        <p className="text-xs font-medium text-grey-500 dark:text-grey-400 mb-1.5 sm:mb-2.5">
+          {label}
+        </p>
+        <p className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-[-0.04em] text-grey-900 dark:text-gray-100 leading-none">
           {value}
         </p>
-        <p className="text-xs text-grey-400 mt-1.5">{sub}</p>
+        <p className="text-xs text-grey-400 dark:text-grey-500 mt-1.5">{sub}</p>
       </div>
     </div>
   );

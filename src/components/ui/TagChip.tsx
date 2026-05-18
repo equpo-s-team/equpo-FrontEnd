@@ -24,7 +24,7 @@ export function TagChip({ label }: TagChipProps) {
   const colorClass = getTagColorClass(label);
   return (
     <span
-      className={`px-2 py-[2.5px] rounded-[8px] font-semibold tracking-wide border-[1px] ${colorClass}`}
+      className={`px-2 py-[2.5px] rounded-xl font-semibold tracking-wide border-[1px] ${colorClass}`}
     >
       {label}
     </span>

@@ -7,22 +7,24 @@ export function useCreateTeam() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: CreateTeamPayload & { memberUids?: string[] }) => {
+    mutationFn: async (payload: CreateTeamPayload & { memberIdentifiers?: string[] }) => {
       const response = await teamsApi.create({
         name: payload.name,
         description: payload.description,
       });
 
-      if (payload.memberUids && payload.memberUids.length > 0) {
+      if (payload.memberIdentifiers && payload.memberIdentifiers.length > 0) {
         const teamId = response.team?.id;
         if (teamId) {
           await Promise.all(
-            payload.memberUids.map(
-              (uid) =>
-                teamsApi
-                  .addMember(teamId, { userUid: uid, role: 'member' })
-                  .catch((err) => console.error(`Failed to add user ${uid}`, err)), // Ignore if user doesn't exist to not crash entirely
-            ),
+            payload.memberIdentifiers.map((identifier) => {
+              const body = identifier.includes('@')
+                ? { email: identifier, role: 'member' as const }
+                : { userUid: identifier, role: 'member' as const };
+              return teamsApi
+                .addMember(teamId, body)
+                .catch((err) => console.error(`Failed to add user ${identifier}`, err));
+            }),
           );
         }
       }

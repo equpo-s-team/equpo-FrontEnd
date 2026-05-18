@@ -10,24 +10,27 @@ export function useUpdateTeam() {
     mutationFn: async ({
       teamId,
       payload,
-      memberUids,
+      memberIdentifiers,
     }: {
       teamId: string;
       payload: UpdateTeamPayload;
-      memberUids?: string[];
+      memberIdentifiers?: string[];
     }) => {
       let response;
       if (Object.keys(payload).length > 0) {
         response = await teamsApi.update(teamId, payload);
       }
 
-      if (memberUids && memberUids.length > 0) {
+      if (memberIdentifiers && memberIdentifiers.length > 0) {
         await Promise.all(
-          memberUids.map((uid) =>
-            teamsApi
-              .addMember(teamId, { userUid: uid, role: 'member' })
-              .catch((err) => console.error(`Failed to add user ${uid}`, err)),
-          ),
+          memberIdentifiers.map((identifier) => {
+            const body = identifier.includes('@')
+              ? { email: identifier, role: 'member' as const }
+              : { userUid: identifier, role: 'member' as const };
+            return teamsApi
+              .addMember(teamId, body)
+              .catch((err) => console.error(`Failed to add user ${identifier}`, err));
+          }),
         );
       }
 

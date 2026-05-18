@@ -99,7 +99,7 @@ export default function MyMissions() {
   }, [selectedDate, tasksByDate, activeCategories]);
 
   return (
-    <div className="min-h-screen bg-offwhite font-body overflow-hidden">
+    <div className="min-h-screen bg-offwhite dark:bg-gray-900 font-body overflow-hidden">
       {/* Header */}
       <AppHeader title="Mis Misiones" variant="purple" />
 
@@ -114,9 +114,9 @@ export default function MyMissions() {
         </div>
       )}
 
-      <div className="flex h-[92vh] overflow-hidden">
+      <div className="flex h-[92vh] overflow-hidden dark:bg-gray-900">
         {/* Left panel: Calendar + Categories */}
-        <aside className="hidden h-full lg:flex flex-col w-1/5 border-r border-grey-150 bg-grey-50/50 p-4 gap-4 overflow-hidden">
+        <aside className="hidden h-full lg:flex flex-col w-1/5 border-r border-grey-150 bg-grey-50/50 dark:bg-gray-900 p-4 gap-4 overflow-hidden">
           <div className="max-h-[42%] w-full">
             <MiniCalendar
               selectedDate={selectedDate}
@@ -185,7 +185,7 @@ export default function MyMissions() {
           )}
         </main>
 
-        <aside className="hidden xl:flex flex-col w-1/5 border-l border-grey-150 bg-grey-50/50 p-4 overflow-y-auto custom-scrollbar">
+        <aside className="hidden xl:flex flex-col w-1/5 border-l border-grey-150 bg-grey-50/50 dark:bg-gray-900 p-4 overflow-y-auto custom-scrollbar">
           <TaskDetailPanel
             task={selectedTask}
             onClose={() => setSelectedTask(null)}

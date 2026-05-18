@@ -12,6 +12,7 @@ export interface PlayerStats {
   maxHp: number;
   energy: number;
   maxEnergy: number;
+  coinBalance: number;
 }
 
 export interface ConnectedUser {

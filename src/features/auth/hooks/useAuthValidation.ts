@@ -1,11 +1,6 @@
 import { useCallback } from 'react';
 
-import {
-  type AuthMode,
-  type FormData,
-  type FormErrors,
-  type RegistrationStep,
-} from '@/features/auth';
+import { type AuthMode, type FormData, type FormErrors } from '@/features/auth';
 
 const calculatePasswordStrength = (password: string) => {
   const requirements = {
@@ -20,11 +15,7 @@ const calculatePasswordStrength = (password: string) => {
   return { score, requirements };
 };
 
-export const useAuthValidation = (
-  formData: FormData,
-  authMode: AuthMode,
-  registrationStep: RegistrationStep,
-) => {
+export const useAuthValidation = (formData: FormData, authMode: AuthMode) => {
   const validateField = useCallback(
     (field: keyof FormData, value: string | boolean) => {
       let error = '';
@@ -78,12 +69,13 @@ export const useAuthValidation = (
 
       return error;
     },
-    [formData.password, authMode, registrationStep],
+    [formData.password, authMode],
   );
 
   const validateForm = useCallback(() => {
     const newErrors: FormErrors = {};
-    const fieldsToValidate: (keyof FormData)[] = authMode === 'reset' ? ['email'] : ['email', 'password'];
+    const fieldsToValidate: (keyof FormData)[] =
+      authMode === 'reset' ? ['email'] : ['email', 'password'];
 
     if (authMode === 'signup') {
       fieldsToValidate.push('name', 'confirmPassword', 'agreeToTerms');
@@ -95,7 +87,7 @@ export const useAuthValidation = (
     });
 
     return newErrors;
-  }, [authMode, registrationStep, formData, validateField]);
+  }, [authMode, formData, validateField]);
 
   return { validateField, validateForm };
 };

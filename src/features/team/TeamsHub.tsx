@@ -1,23 +1,25 @@
 import log from 'loglevel';
-import { Users } from 'lucide-react';
+import { Loader2, LogOut, Plus, UserPlus, Users, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { EmptyState } from '@/components/ui/EmptyState';
-import { useAuth } from '@/context/AuthContext';
+import { toastError, toastSuccess } from '@/components/ui/toast';
+import { logOut, useAuth } from '@/context/AuthContext.tsx';
+import DarkModeToggle from '@/features/team/components/DarkModeToggle.tsx';
 import { TeamCard } from '@/features/team/components/TeamCard';
 import { TeamFormSidebar } from '@/features/team/components/TeamFormSidebar';
 import { UserProfileSidebar } from '@/features/team/components/user/UserProfileSidebar.tsx';
 import { useCreateTeam } from '@/features/team/hooks/useCreateTeam';
+import { useRedeemInviteCode } from '@/features/team/hooks/useRedeemInviteCode';
 import { useTeams } from '@/features/team/hooks/useTeams';
 import { useUpdateTeam } from '@/features/team/hooks/useUpdateTeam';
 import { useUpdateUserProfile } from '@/features/team/hooks/useUpdateUserProfile';
 import type { ModalState } from '@/features/team/types/teamsTypes';
 import { type UserProfileSaveInput } from '@/features/team/types/userTypes';
-import { toastError, toastSuccess } from '@/lib/toast';
 
-import { AchievementsSection } from './components/Achievements/AchievementsSection.tsx';
-import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard.tsx';
+import { AchievementsSection } from './components/Achievements/AchievementsSection';
+import { type UserProfile, UserProfileCard } from './components/user/UserProfileCard';
 import { useAchievements } from './hooks/useAchievements';
 
 type AuthContextUser = {
@@ -65,9 +67,14 @@ export const TeamsHub: React.FC = () => {
   const createTeam = useCreateTeam();
   const updateTeam = useUpdateTeam();
   const { saveProfile } = useUpdateUserProfile();
+  const redeemInviteCode = useRedeemInviteCode();
 
   const [modal, setModal] = useState<ModalState>({ mode: null });
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false);
+  const [redeemCode, setRedeemCode] = useState('');
+  const [isRedeeming, setIsRedeeming] = useState(false);
+
   const [profileOverrides, setProfileOverrides] = useState<
     Partial<Pick<UserProfile, 'displayName' | 'photoURL'>>
   >({});
@@ -97,12 +104,16 @@ export const TeamsHub: React.FC = () => {
   const openCreate = () => setModal({ mode: 'create' });
   const closeModal = () => setModal({ mode: null });
 
-  const handleCreate = (payload: { name: string; description: string; memberUids: string[] }) => {
+  const handleCreate = (payload: {
+    name: string;
+    description: string;
+    memberIdentifiers: string[];
+  }) => {
     createTeam.mutate(
       {
         name: payload.name,
         description: payload.description || null,
-        memberUids: payload.memberUids,
+        memberIdentifiers: payload.memberIdentifiers,
       },
       {
         onSuccess: () => {
@@ -120,14 +131,14 @@ export const TeamsHub: React.FC = () => {
 
   const handleEdit = (
     teamId: string,
-    payload: { name: string; description: string; memberUids: string[] },
+    payload: { name: string; description: string; memberIdentifiers: string[] },
   ) => {
     const updatePayload: Record<string, string | null> = {};
     if (activeTeam && payload.name !== activeTeam.name) updatePayload.name = payload.name;
     if (activeTeam && payload.description !== (activeTeam.description || ''))
       updatePayload.description = payload.description || null;
     updateTeam.mutate(
-      { teamId, payload: updatePayload, memberUids: payload.memberUids },
+      { teamId, payload: updatePayload, memberIdentifiers: payload.memberIdentifiers },
       {
         onSuccess: () => {
           closeModal();
@@ -179,39 +190,61 @@ export const TeamsHub: React.FC = () => {
 
   const activeTeam = modal.teamId ? teams.find((t) => t.id === modal.teamId) : undefined;
 
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logOut();
+      void navigate('/');
+    } catch {
+      toastError('Error al cerrar sesión', 'No se pudo cerrar la sesión. Intenta de nuevo.');
+    }
+  };
+
   return (
-    <div className="h-[100dvh] bg-white relative overflow-hidden flex flex-col">
+    <div className="h-[100dvh] bg-white dark:bg-gray-900 relative overflow-hidden flex flex-col">
       {/* Header */}
-      <div className="shrink-0 flex w-full items-center justify-between p-4 lg:p-6 border-b border-grey-150">
+      <div className="shrink-0 flex w-full items-center justify-between p-4 lg:p-6 border-b border-grey-150 dark:border-gray-700">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-equpo">
             <span className="text-white text-sm font-bold">U</span>
           </div>
-          <span className="font-bold text-grey-800 text-lg">Equpo</span>
+          <span className="font-bold text-grey-800 dark:text-gray-100 text-lg">Equpo</span>
+        </div>
+        <div className="w-full flex items-end justify-end gap-3">
+          <DarkModeToggle />
+          <button
+            onClick={() => void handleLogout()}
+            className="flex p-2 h-10 w-10 rounded-lg items-center gap-2 rounded-xl border border-red-200 text-sm font-medium text-red-600 bg-white dark:bg-gray-800 dark:text-red dark:border-red hover:bg-red-50 transition-colors gap-2"
+          >
+            <LogOut size={20} />
+          </button>
         </div>
       </div>
 
       {/* Main content - Responsive grid */}
       <div className="flex-1 min-h-0 overflow-y-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
-          
+        <div className="grid lg:h-full grid-cols-1 lg:grid-cols-4 gap-6 p-4 lg:p-6 lg:grid-rows-[auto_minmax(0,1fr)]">
           {/* User Profile Card - Full width on mobile, spans 3 cols on desktop */}
           <section className="lg:col-span-3">
             <UserProfileCard user={user} onOpenSettings={() => setIsProfileOpen(true)} />
           </section>
 
           {/* Teams Section - Main content */}
-          <section className="lg:col-span-3 rounded-xl bg-grey-50 p-5 lg:p-6 flex flex-col min-h-0">
-            
+          <section className="lg:col-span-3 lg:h-full rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 flex flex-col min-h-0">
             {/* Teams Header with Search and Create */}
             <div className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 backdrop-blur-sm shrink-0" style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}>
-                <div className="w-2 h-2 rounded-full" style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }} />
+              <div
+                className="flex items-center gap-3 px-4 py-2.5 rounded-full border border-grey-150 bg-white/80 dark:bg-gray-900 dark:text-gray-100 dark:border-blue backdrop-blur-sm shrink-0"
+                style={{ boxShadow: '0 4px 16px rgba(96,175,255,0.25)' }}
+              >
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: '#60AFFF', boxShadow: '0 0 8px #60AFFF' }}
+                />
                 <div className="flex flex-row gap-2 items-center">
                   <p className="text-sm font-bold" style={{ color: '#60AFFF' }}>
                     {teams.length}
                   </p>
-                  <p className="text-xs text-grey-400">Equipos activos</p>
+                  <p className="text-xs text-grey-400 ">Equipos activos</p>
                 </div>
               </div>
 
@@ -226,7 +259,7 @@ export const TeamsHub: React.FC = () => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Buscar equipos…"
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-grey-150 bg-white/80 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 text-sm text-grey-700 outline-none backdrop-blur-sm transition-all"
                     onFocus={(e) =>
                       (e.currentTarget.style.boxShadow = '0 0 0 3px rgba(96,175,255,0.2)')
                     }
@@ -243,8 +276,17 @@ export const TeamsHub: React.FC = () => {
                     boxShadow: '0 4px 20px rgba(96,175,255,0.4)',
                   }}
                 >
-                  <span className="text-base leading-none">+</span>
+                  <Plus size={18} />
                   <span className="hidden sm:inline">Crear equipo</span>
+                </button>
+
+                {/* Redeem Code Button */}
+                <button
+                  onClick={() => setIsRedeemModalOpen(true)}
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-grey-700 dark:text-gray-300 darbg-white border dark:bg-gray-600 border-grey-200 dark:border-gray-500 transition-all hover:bg-grey-50 active:scale-95 shrink-0"
+                >
+                  <UserPlus size={18} />
+                  <span className="hidden sm:inline">Unirte a equipo</span>
                 </button>
               </div>
             </div>
@@ -290,14 +332,13 @@ export const TeamsHub: React.FC = () => {
           </section>
 
           {/* Achievements Section - Mobile: full width below with scroll, Desktop: right sidebar */}
-          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full max-h-[50vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
-            <div className="rounded-xl bg-grey-50 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
+          <section className="lg:col-start-4 lg:row-start-1 lg:row-span-2 lg:h-full lg:max-h-none lg:overflow-visible">
+            <div className="rounded-xl bg-grey-50 dark:bg-gray-800 p-5 lg:p-6 lg:h-full lg:flex lg:flex-col">
               <AchievementsSection achievements={mappedAchievements} />
             </div>
           </section>
         </div>
       </div>
-
 
       {/* Modals */}
       {(modal.mode === 'create' || modal.mode === 'edit') && (
@@ -305,6 +346,7 @@ export const TeamsHub: React.FC = () => {
           mode={modal.mode}
           team={modal.mode === 'edit' ? activeTeam : undefined}
           onClose={closeModal}
+          isSubmitting={createTeam.isPending || updateTeam.isPending}
           onSubmit={(payload) => {
             if (modal.mode === 'create') handleCreate(payload);
             else if (modal.mode === 'edit' && activeTeam) handleEdit(activeTeam.id, payload);
@@ -318,6 +360,98 @@ export const TeamsHub: React.FC = () => {
           onClose={() => setIsProfileOpen(false)}
           onSave={handleProfileSave}
         />
+      )}
+
+      {/* Redeem Code Modal */}
+      {isRedeemModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 max-w-sm w-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-grey-800 dark:text-gray-300">
+                Unirte a equipo
+              </h2>
+              <button
+                onClick={() => {
+                  setIsRedeemModalOpen(false);
+                  setRedeemCode('');
+                }}
+                className="text-grey-400 hover:text-grey-600 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p className="text-sm text-grey-600 dark:text-gray-300 mb-4">
+              Ingresa el código que recibiste para unirte a un equipo.
+            </p>
+
+            <form
+              onSubmit={(e) =>
+                void (async (e) => {
+                  e.preventDefault();
+                  if (!redeemCode.trim() || !authUser?.uid) return;
+
+                  setIsRedeeming(true);
+                  try {
+                    // Use the redeemCode hook - backend handles adding user to team
+                    await redeemInviteCode.mutateAsync({
+                      code: redeemCode.trim().toUpperCase(),
+                    });
+
+                    toastSuccess('¡Bienvenido!', 'Te has unido al equipo exitosamente.');
+                    setIsRedeemModalOpen(false);
+                    setRedeemCode('');
+                  } catch (error) {
+                    toastError(
+                      'Error',
+                      error instanceof Error ? error.message : 'No se pudo canjear el código.',
+                    );
+                  } finally {
+                    setIsRedeeming(false);
+                  }
+                })(e)
+              }
+              className="space-y-4"
+            >
+              <div>
+                <label className="block text-sm font-medium text-grey-700 dark:text-gray-300 mb-2">
+                  Código
+                </label>
+                <input
+                  type="text"
+                  value={redeemCode}
+                  onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
+                  placeholder="Ej: ABC123XY"
+                  disabled={isRedeeming}
+                  className="w-full px-4 py-3 border dark:bg-gray-800 dark:border-gray-700 rounded-xl text-sm text-grey-800 dark:text-gray-300 outline-none focus:ring-2 focus:ring-blue focus:border-transparent disabled:opacity-50"
+                  required
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRedeemModalOpen(false);
+                    setRedeemCode('');
+                  }}
+                  disabled={isRedeeming}
+                  className="flex-1 py-2.5 rounded-xl border dark:bg-gray-800 border-grey-200 dark:border-gray-700 text-sm font-medium text-grey-600 dark:text-gray-300 hover:bg-grey-50 dark:hover:bg-gray-900 disabled:opacity-50 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={!redeemCode.trim() || isRedeeming}
+                  className="flex-1 py-2.5 rounded-xl bg-blue text-white text-sm font-semibold hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 transition-all"
+                >
+                  {isRedeeming && <Loader2 size={14} className="animate-spin" />}
+                  {isRedeeming ? 'Canjeando...' : 'Canjear'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {/* CSS for orb animation */}

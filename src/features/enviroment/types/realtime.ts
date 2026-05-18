@@ -46,15 +46,22 @@ export interface PlayerRealtimeState {
   rotation: Vector3State;
   clientId: string;
   updatedAt: number;
-  slotId: SlotId | null;
-}
-
-export interface SlotClaimState {
-  uid: string;
-  clientId: string;
-  updatedAt: number;
+  slotId: SlotId;
 }
 
 export function isSlotId(value: unknown): value is SlotId {
   return typeof value === 'string' && /^Character_0[1-6]$/.test(value);
+}
+
+/**
+ * Deterministically assigns a character model to a user based on their UID.
+ * The same UID always receives the same model regardless of how many users
+ * are connected or which window/browser is being used.
+ */
+export function uidToModelId(uid: string): SlotId {
+  let hash = 0;
+  for (let i = 0; i < uid.length; i++) {
+    hash = (hash * 31 + uid.charCodeAt(i)) >>> 0;
+  }
+  return SPLINE_SLOT_IDS[hash % SPLINE_SLOT_IDS.length];
 }

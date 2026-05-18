@@ -30,42 +30,58 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
   const overdueInQa = overdueTasks.filter((t) => t.status === 'in-qa').length;
 
   return (
-    <div className="rounded-2xl bg-white border border-grey-150 shadow-card p-4">
-      <h3 className="text-sm font-bold text-grey-800 font-body mb-3">Resumen</h3>
+    <div className="rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-4">
+      <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body mb-3">Resumen</h3>
       <div className="flex flex-col gap-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-kanban-todo" />
-            <span className="text-xs font-semibold text-grey-600 font-body">Por Hacer</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              Por Hacer
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 font-body">{todo}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {todo}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-blue" />
-            <span className="text-xs font-semibold text-grey-600 font-body">En Progreso</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              En Progreso
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 font-body">{inProgress}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {inProgress}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-kanban-qa" />
-            <span className="text-xs font-semibold text-grey-600 font-body">En QA</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              En QA
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 font-body">{inQa}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {inQa}
+          </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-green" />
-            <span className="text-xs font-semibold text-grey-600 font-body">Completadas</span>
+            <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+              Completadas
+            </span>
           </div>
-          <span className="text-xs font-bold text-grey-800 font-body">{done}</span>
+          <span className="text-xs font-bold text-grey-800 dark:text-gray-300 font-body">
+            {done}
+          </span>
         </div>
 
-        <hr className="border-grey-100 my-1" />
+        <hr className="border-grey-100 dark:border-gray-700 my-1" />
 
         {overdueTasks.length > 0 ? (
           <div
@@ -82,13 +98,13 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
           >
             <div className="flex items-center gap-2 select-none">
               <span className="w-2.5 h-2.5 rounded-full bg-red animate-pulse shadow-[0_0_8px_rgba(246,90,112,0.6)]" />
-              <span className="text-xs font-semibold text-grey-600 font-body group-hover:text-grey-900 transition-colors">
+              <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body group-hover:text-grey-900 dark:group-hover:text-gray-300 transition-colors">
                 Vencidas
               </span>
               {isOverdueExpanded ? (
-                <ChevronUp className="w-3 h-3 text-grey-400 group-hover:text-grey-600 transition-colors" />
+                <ChevronUp className="w-3 h-3 text-grey-400 dark:text-grey-500 group-hover:text-grey-600 dark:group-hover:text-grey-300 transition-colors" />
               ) : (
-                <ChevronDown className="w-3 h-3 text-grey-400 group-hover:text-grey-600 transition-colors" />
+                <ChevronDown className="w-3 h-3 text-grey-400 dark:text-grey-500 group-hover:text-grey-600 dark:group-hover:text-grey-300 transition-colors" />
               )}
             </div>
             <span className="text-xs font-bold font-body text-red">{overdueTasks.length}</span>
@@ -97,9 +113,11 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 select-none">
               <span className="w-2.5 h-2.5 rounded-full bg-red" />
-              <span className="text-xs font-semibold text-grey-600 font-body">Vencidas</span>
+              <span className="text-xs font-semibold text-grey-600 dark:text-grey-400 font-body">
+                Vencidas
+              </span>
             </div>
-            <span className="text-xs font-bold font-body text-grey-800">0</span>
+            <span className="text-xs font-bold font-body text-grey-800 dark:text-gray-300">0</span>
           </div>
         )}
 
@@ -110,27 +128,39 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-kanban-todo opacity-60" />
-                  <span className="text-xs font-medium text-grey-500">Por Hacer</span>
+                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">
+                    Por Hacer
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-grey-700">{overdueTodo}</span>
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">
+                  {overdueTodo}
+                </span>
               </div>
             )}
             {overdueInProgress > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue opacity-60" />
-                  <span className="text-xs font-medium text-grey-500">En Progreso</span>
+                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">
+                    En Progreso
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-grey-700">{overdueInProgress}</span>
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">
+                  {overdueInProgress}
+                </span>
               </div>
             )}
             {overdueInQa > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-kanban-qa opacity-60" />
-                  <span className="text-xs font-medium text-grey-500">En QA</span>
+                  <span className="text-xs font-medium text-grey-500 dark:text-grey-400">
+                    En QA
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-grey-700">{overdueInQa}</span>
+                <span className="text-xs font-bold text-grey-700 dark:text-gray-300">
+                  {overdueInQa}
+                </span>
               </div>
             )}
           </div>

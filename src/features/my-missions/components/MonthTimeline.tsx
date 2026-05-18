@@ -104,10 +104,10 @@ export default function MonthTimeline({
   const todayKey = new Date().toISOString().slice(0, 10);
 
   return (
-    <div className="flex flex-col h-full rounded-2xl bg-white border border-grey-150 shadow-card overflow-hidden">
+    <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card overflow-hidden">
       {/* Header */}
       <div
-        className="flex items-center justify-between px-5 py-3 border-b border-grey-150"
+        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 dark:border-gray-700"
         style={{
           background: 'linear-gradient(135deg, #5961F9 0%, #60AFFF 100%)',
         }}
@@ -146,13 +146,13 @@ export default function MonthTimeline({
       </div>
 
       {/* Grid */}
-      <div className="flex-1 flex flex-col min-h-0 bg-grey-50">
+      <div className="flex-1 flex flex-col min-h-0 bg-grey-50 dark:bg-gray-800">
         {/* Day headers */}
-        <div className="grid grid-cols-7 border-b border-grey-150 bg-white shrink-0">
+        <div className="grid grid-cols-7 border-b border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 shrink-0">
           {DAYS_OF_WEEK.map((day) => (
             <div
               key={day}
-              className="py-2 text-xs font-bold text-grey-400 text-center uppercase tracking-widest font-body"
+              className="py-2 text-xs font-bold text-grey-400 dark:text-grey-500 text-center uppercase tracking-widest font-body"
             >
               {day}
             </div>
@@ -160,7 +160,7 @@ export default function MonthTimeline({
         </div>
 
         {/* Day cells */}
-        <div className="flex-1 grid grid-cols-7 grid-rows-6 gap-px bg-grey-150 min-h-0">
+        <div className="flex-1 grid grid-cols-7 grid-rows-6 gap-px bg-grey-150 dark:bg-gray-700 min-h-0">
           {calendarDays.map(({ date, key, isCurrentMonth, tasks: dayTasks }) => {
             const isToday = key === todayKey;
 
@@ -168,14 +168,14 @@ export default function MonthTimeline({
               <div
                 key={key}
                 className={`
-                  flex flex-col min-w-0 bg-white p-1 overflow-hidden
-                  ${isCurrentMonth ? '' : 'bg-grey-50 opacity-60'}
+                  flex flex-col min-w-0 bg-white dark:bg-gray-800 p-1 overflow-hidden
+                  ${isCurrentMonth ? '' : 'bg-grey-50 dark:bg-gray-800 opacity-60'}
                 `}
               >
                 <div
                   className={`
                     w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body shrink-0
-                    ${isToday ? 'bg-blue text-white shadow-neonBlue mx-auto mt-0.5' : 'text-grey-700 ml-1'}
+                    ${isToday ? 'bg-blue text-white shadow-neonBlue mx-auto mt-0.5' : 'text-grey-700 dark:text-gray-300 ml-1'}
                   `}
                 >
                   {date.getDate()}

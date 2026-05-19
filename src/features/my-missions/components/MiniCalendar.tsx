@@ -57,16 +57,15 @@ export default function MiniCalendar({
   onToggleCollapse,
 }: MiniCalendarProps) {
   return (
-    <div className="w-full rounded-xl border border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 px-2 py-3 shadow-card sm:rounded-2xl sm:px-3 sm:py-4">
-      <div className="flex items-center justify-between mb-2 lg:hidden">
-        <span className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body">
-          Calendario
-        </span>
+    <div className="w-full rounded-xl border border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-card sm:rounded-2xl">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body">Calendario</h3>
         {onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
-            className="p-1 hover:bg-grey-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
+            className="lg:hidden p-1 rounded-lg text-grey-500 dark:text-grey-300 hover:bg-grey-100 dark:hover:bg-gray-700 hover:text-grey-700 dark:hover:text-white transition-all duration-200"
             title={isCollapsed ? 'Expandir' : 'Contraer'}
+            aria-label={isCollapsed ? 'Expandir' : 'Contraer'}
           >
             <ChevronUp
               size={16}

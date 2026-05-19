@@ -43,8 +43,9 @@ export default function MissionStats({
         {onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
-            className="lg:hidden p-1 hover:bg-grey-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
+            className="lg:hidden p-1 rounded-lg text-grey-500 dark:text-grey-300 hover:bg-grey-100 dark:hover:bg-gray-700 hover:text-grey-700 dark:hover:text-white transition-all duration-200"
             title={isCollapsed ? 'Expandir' : 'Contraer'}
+            aria-label={isCollapsed ? 'Expandir' : 'Contraer'}
           >
             <ChevronUp
               size={16}

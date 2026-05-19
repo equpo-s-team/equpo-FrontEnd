@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { AppHeader } from '@/components/ui/app-header';
 import { MissionsScopeSwitch } from '@/components/ui/MissionsScopeSwitch';
@@ -9,6 +9,7 @@ import type { TeamTask } from '@/features/board/types';
 import { useSidebar } from '@/features/navbar/SidebarContext';
 import { useTeamGroups } from '@/features/team/hooks/useTeamGroups';
 import { useTeamMembers } from '@/features/team/hooks/useTeamMembers';
+import { cn } from '@/lib/utils/utils';
 
 import CategoryFilter from './components/CategoryFilter';
 import DayTimeline from './components/DayTimeline';
@@ -23,6 +24,8 @@ import { useMyTasks } from './hooks/useMyTasks';
 function toDateKey(d: Date) {
   return d.toISOString().slice(0, 10);
 }
+
+const XL_BREAKPOINT = '(max-width: 1279px)';
 
 export default function MyMissions() {
   const { teamId, myRole } = useTeam();
@@ -53,6 +56,16 @@ export default function MyMissions() {
 
   const selectAllCategories = useCallback(() => {
     setActiveCategories(new Set());
+  }, []);
+
+  // ── Mobile left-panel collapse state (mirroring TeamBoard column collapse) ──
+  const [collapsedLeft, setCollapsedLeft] = useState({
+    calendar: true,
+    categories: true,
+    stats: true,
+  });
+  const toggleLeft = useCallback((k: keyof typeof collapsedLeft) => {
+    setCollapsedLeft((p) => ({ ...p, [k]: !p[k] }));
   }, []);
 
   const [selectedTask, setSelectedTask] = useState<TeamTask | null>(null);
@@ -87,6 +100,30 @@ export default function MyMissions() {
     setEditSidebar((prev) => ({ ...prev, isOpen: false }));
   }, []);
 
+  // ── Refs for mobile auto-scroll ──
+  const timelineRef = useRef<HTMLElement>(null);
+  const detailRef = useRef<HTMLElement>(null);
+
+  // Scroll to detail panel when a task is selected on mobile
+  useEffect(() => {
+    if (selectedTask && window.matchMedia(XL_BREAKPOINT).matches) {
+      requestAnimationFrame(() => {
+        detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  }, [selectedTask?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Close detail + scroll back to timeline (mobile-aware)
+  const handleCloseDetail = useCallback(() => {
+    const wasMobile = window.matchMedia(XL_BREAKPOINT).matches;
+    setSelectedTask(null);
+    if (wasMobile) {
+      requestAnimationFrame(() => {
+        timelineRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  }, []);
+
   const dayTasks = useMemo(() => {
     const dateKey = toDateKey(selectedDate);
     const tasksForDay = tasksByDate.get(dateKey) ?? [];
@@ -97,7 +134,7 @@ export default function MyMissions() {
   }, [selectedDate, tasksByDate, activeCategories]);
 
   return (
-    <div className="min-h-screen bg-offwhite dark:bg-gray-900 font-body overflow-hidden">
+    <div className="min-h-screen bg-offwhite dark:bg-gray-900 font-body pb-[64px] lg:pb-0">
       {/* Header */}
       <AppHeader title="Mis Misiones" variant="purple" />
       <MissionsScopeSwitch
@@ -116,30 +153,40 @@ export default function MyMissions() {
         </div>
       )}
 
-      <div className="flex h-[92vh] overflow-hidden dark:bg-gray-900">
-        {/* Left panel: Calendar + Categories */}
-        <aside className="hidden h-full lg:flex flex-col w-1/5 border-r border-grey-150 dark:border-grey-700 bg-grey-50/50 dark:bg-gray-900 p-4 gap-4 overflow-hidden">
-          <div className="max-h-[42%] w-full">
-            <MiniCalendar
-              selectedDate={selectedDate}
-              onDateSelect={setSelectedDate}
-              tasksByDate={tasksByDate}
-            />
-          </div>
-          <div className="max-h-[28%] w-full">
+      {/* ── 3-panel container ── */}
+      {/* Mobile: stacked flex-col + natural page scroll */}
+      {/* Desktop (lg+): side-by-side row with fixed 92vh height */}
+      <div className="flex flex-col lg:flex-row lg:h-[92vh] lg:overflow-hidden dark:bg-gray-900">
+        {/* ── Left panel: Calendar + Categories + Stats ── */}
+        <aside className="flex flex-col w-full lg:w-1/5 lg:h-full border-b lg:border-b-0 lg:border-r border-grey-150 dark:border-grey-700 bg-grey-50/50 dark:bg-gray-900 p-4 gap-4 lg:overflow-hidden">
+          <MiniCalendar
+            selectedDate={selectedDate}
+            onDateSelect={setSelectedDate}
+            tasksByDate={tasksByDate}
+            isCollapsed={collapsedLeft.calendar}
+            onToggleCollapse={() => toggleLeft('calendar')}
+          />
+          <div className="lg:max-h-[28%] w-full">
             <CategoryFilter
               allCategories={allCategories}
               activeCategories={activeCategories}
               onToggle={toggleCategory}
               onSelectAll={selectAllCategories}
+              isCollapsed={collapsedLeft.categories}
+              onToggleCollapse={() => toggleLeft('categories')}
             />
           </div>
-          <div className="max-h-[20%] w-full">
-            <MissionStats tasks={myTasks} />
+          <div className="lg:max-h-[20%] w-full">
+            <MissionStats
+              tasks={myTasks}
+              isCollapsed={collapsedLeft.stats}
+              onToggleCollapse={() => toggleLeft('stats')}
+            />
           </div>
         </aside>
 
-        <main className="flex-1 w-3/5 p-4">
+        {/* ── Center panel: Timeline ── */}
+        <main ref={timelineRef} className="flex-1 w-full lg:w-3/5 p-4 h-[75vh] lg:h-full">
           {view === 'day' && (
             <DayTimeline
               selectedDate={selectedDate}
@@ -187,10 +234,21 @@ export default function MyMissions() {
           )}
         </main>
 
-        <aside className="hidden xl:flex flex-col w-1/5 border-l border-grey-150 dark:border-grey-700 bg-grey-50/50 dark:bg-gray-900 p-4 overflow-y-auto custom-scrollbar">
+        {/* ── Right panel: Task detail ── */}
+        {/* Mobile (< xl): only visible when a task is selected; auto-scrolls into view */}
+        {/* Desktop (xl+): always mounted, shows "Selecciona una misión" empty state */}
+        <aside
+          ref={detailRef}
+          className={cn(
+            'flex-col w-full xl:w-1/5 xl:h-full',
+            'border-t xl:border-t-0 xl:border-l border-grey-150 dark:border-grey-700',
+            'bg-grey-50/50 dark:bg-gray-900 p-4 overflow-y-auto custom-scrollbar',
+            selectedTask ? 'flex' : 'hidden xl:flex',
+          )}
+        >
           <TaskDetailPanel
             task={selectedTask}
-            onClose={() => setSelectedTask(null)}
+            onClose={handleCloseDetail}
             onEdit={openEdit}
             members={teamMembers}
             groups={teamGroups}

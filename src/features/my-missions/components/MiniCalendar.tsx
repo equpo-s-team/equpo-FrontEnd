@@ -1,4 +1,5 @@
 import { es } from 'date-fns/locale';
+import { ChevronUp } from 'lucide-react';
 import * as React from 'react';
 
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar';
@@ -9,6 +10,8 @@ interface MiniCalendarProps {
   selectedDate: Date;
   onDateSelect: (date: Date) => void;
   tasksByDate: Map<string, TeamTask[]>;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 function toDateKey(d: Date) {
@@ -50,10 +53,29 @@ export default function MiniCalendar({
   selectedDate,
   onDateSelect,
   tasksByDate,
+  isCollapsed = false,
+  onToggleCollapse,
 }: MiniCalendarProps) {
   return (
     <div className="w-full rounded-xl border border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 px-2 py-3 shadow-card sm:rounded-2xl sm:px-3 sm:py-4">
-      <div className="w-full overflow-hidden">
+      <div className="flex items-center justify-between mb-2 lg:hidden">
+        <span className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body">
+          Calendario
+        </span>
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            className="p-1 hover:bg-grey-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
+            title={isCollapsed ? 'Expandir' : 'Contraer'}
+          >
+            <ChevronUp
+              size={16}
+              className={cn('transition-transform duration-300', isCollapsed && 'rotate-180')}
+            />
+          </button>
+        )}
+      </div>
+      <div className={cn('w-full overflow-hidden', isCollapsed && 'hidden lg:block')}>
         <Calendar
           mode="single"
           selected={selectedDate}

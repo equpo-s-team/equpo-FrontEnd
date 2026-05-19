@@ -1,10 +1,11 @@
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
 import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 import { getTaskClasses } from '../utils/timelineStyles';
+import TimelineHeader from './TimelineHeader';
 
 const HOUR_HEIGHT = 64; // px per hour slot
 const START_HOUR = 0;
@@ -131,47 +132,13 @@ export default function DayTimeline({
 
   return (
     <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card overflow-hidden">
-      {/* Header bar */}
-      <div
-        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 dark:border-gray-700"
-        style={{
-          background: 'linear-gradient(135deg, #5961F9 0%, #60AFFF 100%)',
-        }}
-      >
-        <div className="flex items-center gap-3">
-          {/* View Switcher inside the timeline header */}
-          <div className="flex items-center bg-black/10 backdrop-blur-sm rounded-xl p-0.5">
-            {(['day', 'week', 'month', 'year'] as const).map((v) => {
-              const labels = { day: 'Día', week: 'Semana', month: 'Mes', year: 'Año' };
-              const isActive = view === v;
-              return (
-                <button
-                  key={v}
-                  onClick={() => onViewChange(v)}
-                  className={`
-                    px-3 py-1 font-body text-xs font-bold rounded-lg transition-all
-                    ${isActive ? 'bg-white text-blue shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10 cursor-pointer'}
-                  `}
-                >
-                  {labels[v]}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-white/90 font-body">{dateLabel}</span>
-          <div className="flex items-center gap-0.5">
-            <button onClick={goPrev} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
-              <ChevronLeft size={14} className="text-white" />
-            </button>
-            <button onClick={goNext} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
-              <ChevronRight size={14} className="text-white" />
-            </button>
-          </div>
-        </div>
-      </div>
+      <TimelineHeader
+        view={view}
+        onViewChange={onViewChange}
+        label={dateLabel}
+        onPrev={goPrev}
+        onNext={goNext}
+      />
 
       {/* Timeline body */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -189,7 +156,7 @@ export default function DayTimeline({
                 style={{ top: `${i * HOUR_HEIGHT}px` }}
               >
                 {/* Hour label */}
-                <span className="absolute -left-16 w-14 text-right text-xs text-grey-400 dark:text-grey-500 font-body font-medium -translate-y-1/2">
+                <span className="absolute -left-16 w-14 text-right text-[10px] sm:text-xs text-grey-400 dark:text-grey-500 font-body font-medium -translate-y-1/2">
                   {hour === END_HOUR ? '' : formatHour(hour)}
                 </span>
                 {/* Grid line */}
@@ -267,12 +234,12 @@ export default function DayTimeline({
           {/* Empty state */}
           {laidOut.length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <Calendar size={32} className="mx-auto mb-2 text-grey-300 dark:text-grey-500" />
+              <div className="text-center flex flex-col items-center gap-1.5">
+                <Calendar size={40} className="text-grey-300 dark:text-grey-500" />
                 <p className="text-sm font-medium text-grey-400 dark:text-grey-500 font-body">
                   Sin misiones para este día
                 </p>
-                <p className="text-xs text-grey-300 dark:text-grey-500 font-body mt-1">
+                <p className="text-xs text-grey-300 dark:text-grey-500 font-body">
                   Selecciona otro día en el calendario
                 </p>
               </div>

@@ -1,10 +1,10 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
 import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 import { getTaskClasses } from '../utils/timelineStyles';
+import TimelineHeader from './TimelineHeader';
 
 interface MonthTimelineProps {
   selectedDate: Date;
@@ -105,45 +105,13 @@ export default function MonthTimeline({
 
   return (
     <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card overflow-hidden">
-      {/* Header */}
-      <div
-        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 dark:border-gray-700"
-        style={{
-          background: 'linear-gradient(135deg, #5961F9 0%, #60AFFF 100%)',
-        }}
-      >
-        <div className="flex items-center bg-black/10 backdrop-blur-sm rounded-xl p-0.5">
-          {(['day', 'week', 'month', 'year'] as const).map((v) => {
-            const labels = { day: 'Día', week: 'Semana', month: 'Mes', year: 'Año' };
-            const isActive = view === v;
-            return (
-              <button
-                key={v}
-                onClick={() => onViewChange(v)}
-                className={`
-                  px-3 py-1 font-body text-xs font-bold rounded-lg transition-all
-                  ${isActive ? 'bg-white text-blue shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10 cursor-pointer'}
-                `}
-              >
-                {labels[v]}
-              </button>
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-white/90 font-body capitalize">
-            {MONTH_NAMES[month]} {year}
-          </span>
-          <div className="flex items-center gap-0.5">
-            <button onClick={goPrev} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
-              <ChevronLeft size={14} className="text-white" />
-            </button>
-            <button onClick={goNext} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
-              <ChevronRight size={14} className="text-white" />
-            </button>
-          </div>
-        </div>
-      </div>
+      <TimelineHeader
+        view={view}
+        onViewChange={onViewChange}
+        label={`${MONTH_NAMES[month]} ${year}`}
+        onPrev={goPrev}
+        onNext={goNext}
+      />
 
       {/* Grid */}
       <div className="flex-1 flex flex-col min-h-0 bg-grey-50 dark:bg-gray-800">
@@ -168,7 +136,7 @@ export default function MonthTimeline({
               <div
                 key={key}
                 className={`
-                  flex flex-col min-w-0 bg-white dark:bg-gray-800 p-1 overflow-hidden
+                  flex flex-col min-w-0 bg-white dark:bg-gray-800 p-1 overflow-hidden min-h-[80px] sm:min-h-[100px]
                   ${isCurrentMonth ? '' : 'bg-grey-50 dark:bg-gray-800 opacity-60'}
                 `}
               >

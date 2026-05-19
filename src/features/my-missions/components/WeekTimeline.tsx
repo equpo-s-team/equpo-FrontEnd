@@ -1,10 +1,10 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
 import { isTaskOverdue } from '@/features/board/utils/taskUtils';
 
 import { getTaskClasses } from '../utils/timelineStyles';
+import TimelineHeader from './TimelineHeader';
 
 const HOUR_HEIGHT = 64; // px per hour slot
 const START_HOUR = 0;
@@ -125,167 +125,138 @@ export default function WeekTimeline({
 
   return (
     <div className="flex flex-col h-full rounded-2xl bg-white dark:bg-gray-900 border border-grey-150 dark:border-gray-700 shadow-card overflow-hidden">
-      {/* Header */}
-      <div
-        className="flex items-center justify-between px-5 py-3 border-b border-grey-150 dark:border-gray-700 shrink-0"
-        style={{
-          background: 'linear-gradient(135deg, #5961F9 0%, #60AFFF 100%)',
-        }}
-      >
-        <div className="flex items-center bg-black/10 backdrop-blur-sm rounded-xl p-0.5">
-          {(['day', 'week', 'month', 'year'] as const).map((v) => {
-            const labels = { day: 'Día', week: 'Semana', month: 'Mes', year: 'Año' };
-            const isActive = view === v;
-            return (
-              <button
-                key={v}
-                onClick={() => onViewChange(v)}
-                className={`
-                  px-3 py-1 font-body text-xs font-bold rounded-lg transition-all
-                  ${isActive ? 'bg-white text-blue shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10 cursor-pointer'}
-                `}
-              >
-                {labels[v]}
-              </button>
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-white/90 font-body capitalize">
-            {weekLabel}
-          </span>
-          <div className="flex items-center gap-0.5">
-            <button onClick={goPrev} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
-              <ChevronLeft size={14} className="text-white" />
-            </button>
-            <button onClick={goNext} className="p-1 rounded-lg hover:bg-white/20 transition-colors">
-              <ChevronRight size={14} className="text-white" />
-            </button>
-          </div>
-        </div>
-      </div>
+      <TimelineHeader
+        view={view}
+        onViewChange={onViewChange}
+        label={weekLabel}
+        onPrev={goPrev}
+        onNext={goNext}
+      />
 
       {/* Grid container */}
       <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-gray-800 relative">
-        {/* Scrollable Timeline */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar relative">
-          {/* Sticky Header Row for Days */}
-          <div className="flex border-b border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 sticky top-0 z-40">
-            {/* Spacer for hours column */}
-            <div className="w-[60px] shrink-0 border-r border-grey-150 dark:border-gray-700 bg-grey-50 dark:bg-gray-800" />
-            <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700">
-              {weekDays.map(({ date, key }) => {
-                const isToday = key === todayKey;
-                return (
-                  <div
-                    key={`header-${key}`}
-                    className={`py-3 px-1 text-center bg-white dark:bg-gray-800 ${isToday ? 'bg-blue/5' : ''}`}
-                  >
-                    <p className="text-xs font-bold text-grey-400 dark:text-grey-500 uppercase tracking-widest font-body">
-                      {DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1]}
-                    </p>
+        {/* Scrollable Timeline — horizontal scroll on phones */}
+        <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar relative">
+          <div className="min-w-[640px]">
+            {/* Sticky Header Row for Days */}
+            <div className="flex border-b border-grey-150 dark:border-gray-700 bg-white dark:bg-gray-800 sticky top-0 z-40">
+              {/* Spacer for hours column */}
+              <div className="w-[60px] shrink-0 border-r border-grey-150 dark:border-gray-700 bg-grey-50 dark:bg-gray-800" />
+              <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700">
+                {weekDays.map(({ date, key }) => {
+                  const isToday = key === todayKey;
+                  return (
                     <div
-                      className={`mx-auto mt-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body ${
-                        isToday
-                          ? 'bg-blue text-white shadow-neonBlue'
-                          : 'text-grey-800 dark:text-gray-300'
-                      }`}
+                      key={`header-${key}`}
+                      className={`py-3 px-1 text-center bg-white dark:bg-gray-800 ${isToday ? 'bg-blue/5' : ''}`}
                     >
-                      {date.getDate()}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div
-            className="flex relative mt-6 mb-6"
-            style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}
-          >
-            {/* Hours Background Lines */}
-            <div className="absolute inset-0 pointer-events-none">
-              {Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => {
-                const hour = START_HOUR + i;
-                return (
-                  <div
-                    key={hour}
-                    className="absolute left-0 right-0 flex items-start"
-                    style={{ top: `${i * HOUR_HEIGHT}px` }}
-                  >
-                    <span className="w-[60px] whitespace-nowrap text-right text-xs pr-2 text-grey-400 dark:text-grey-500 font-body font-medium bg-white dark:bg-gray-800 -translate-y-1/2">
-                      {hour === END_HOUR ? '' : formatHour(hour)}
-                    </span>
-                    <div className="flex-1 h-px bg-grey-150 dark:bg-gray-700" />
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Day Columns */}
-            <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700 ml-[60px] relative z-10">
-              {weekDays.map(({ key, tasks: dayTasks }) => {
-                const isToday = key === todayKey;
-                const laidOut = layoutTasks(dayTasks);
-
-                return (
-                  <div
-                    key={`col-${key}`}
-                    className={`relative w-full h-full ${isToday ? 'bg-blue/5' : ''}`}
-                  >
-                    {/* Current time indicator */}
-                    {isToday && nowOffset >= 0 && nowOffset <= 100 && (
+                      <p className="text-xs font-bold text-grey-400 dark:text-grey-500 uppercase tracking-widest font-body">
+                        {DAYS_OF_WEEK[date.getDay() === 0 ? 6 : date.getDay() - 1]}
+                      </p>
                       <div
-                        className="absolute left-0 right-0 z-30 flex items-center pointer-events-none"
-                        style={{ top: `${nowOffset}%` }}
+                        className={`mx-auto mt-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold font-body ${
+                          isToday
+                            ? 'bg-blue text-white shadow-neonBlue'
+                            : 'text-grey-800 dark:text-gray-300'
+                        }`}
                       >
-                        <div className="w-2 h-2 rounded-full bg-red -ml-1 shadow-neonRed" />
-                        <div className="flex-1 h-[2px] bg-red/60" />
+                        {date.getDate()}
                       </div>
-                    )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
-                    {/* Tasks */}
-                    {laidOut.map(({ task, col, totalCols }) => {
-                      const hour = getTaskHour(task);
-                      const clampedHour = Math.max(START_HOUR, Math.min(hour, END_HOUR - 1));
-                      const top = (clampedHour - START_HOUR) * HOUR_HEIGHT + 4;
-                      const blockHeight = 1 * HOUR_HEIGHT - 8;
+            <div
+              className="flex relative mt-6 mb-6"
+              style={{ height: `${TOTAL_HOURS * HOUR_HEIGHT}px` }}
+            >
+              {/* Hours Background Lines */}
+              <div className="absolute inset-0 pointer-events-none">
+                {Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => {
+                  const hour = START_HOUR + i;
+                  return (
+                    <div
+                      key={hour}
+                      className="absolute left-0 right-0 flex items-start"
+                      style={{ top: `${i * HOUR_HEIGHT}px` }}
+                    >
+                      <span className="w-[60px] whitespace-nowrap text-right text-xs pr-2 text-grey-400 dark:text-grey-500 font-body font-medium bg-white dark:bg-gray-800 -translate-y-1/2">
+                        {hour === END_HOUR ? '' : formatHour(hour)}
+                      </span>
+                      <div className="flex-1 h-px bg-grey-150 dark:bg-gray-700" />
+                    </div>
+                  );
+                })}
+              </div>
 
-                      const widthPct = totalCols > 1 ? 100 / totalCols : 100;
-                      const leftPct = col * widthPct;
-                      const isActive = selectedTaskId === task.id;
-                      const isOverdue = isTaskOverdue(task);
+              {/* Day Columns */}
+              <div className="flex-1 grid grid-cols-7 divide-x divide-grey-150 dark:divide-gray-700 ml-[60px] relative z-10">
+                {weekDays.map(({ key, tasks: dayTasks }) => {
+                  const isToday = key === todayKey;
+                  const laidOut = layoutTasks(dayTasks);
 
-                      return (
-                        <button
-                          key={task.id}
-                          onClick={() => onTaskClick(task)}
-                          className={`
+                  return (
+                    <div
+                      key={`col-${key}`}
+                      className={`relative w-full h-full ${isToday ? 'bg-blue/5' : ''}`}
+                    >
+                      {/* Current time indicator */}
+                      {isToday && nowOffset >= 0 && nowOffset <= 100 && (
+                        <div
+                          className="absolute left-0 right-0 z-30 flex items-center pointer-events-none"
+                          style={{ top: `${nowOffset}%` }}
+                        >
+                          <div className="w-2 h-2 rounded-full bg-red -ml-1 shadow-neonRed" />
+                          <div className="flex-1 h-[2px] bg-red/60" />
+                        </div>
+                      )}
+
+                      {/* Tasks */}
+                      {laidOut.map(({ task, col, totalCols }) => {
+                        const hour = getTaskHour(task);
+                        const clampedHour = Math.max(START_HOUR, Math.min(hour, END_HOUR - 1));
+                        const top = (clampedHour - START_HOUR) * HOUR_HEIGHT + 4;
+                        const blockHeight = 1 * HOUR_HEIGHT - 8;
+
+                        const widthPct = totalCols > 1 ? 100 / totalCols : 100;
+                        const leftPct = col * widthPct;
+                        const isActive = selectedTaskId === task.id;
+                        const isOverdue = isTaskOverdue(task);
+
+                        return (
+                          <button
+                            key={task.id}
+                            onClick={() => onTaskClick(task)}
+                            className={`
                             absolute rounded-[6px] px-1.5 py-1 cursor-pointer border-l-[2.5px]
                             transition-all duration-200 text-left overflow-hidden
                             hover:brightness-110
                             ${isOverdue ? 'bg-gradient-red-bg border-red text-white' : getTaskClasses(task.status)}
                             ${isActive ? 'ring-2 ring-grey-400 shadow-neonGrey scale-[1.02]' : ''}
                           `}
-                          style={{
-                            top: `${top}px`,
-                            height: `${blockHeight}px`,
-                            left: `${leftPct}%`,
-                            width: `${widthPct}%`,
-                            zIndex: isActive ? 30 : 10 + col,
-                          }}
-                        >
-                          <p className="text-xs font-bold text-white leading-tight line-clamp-2 font-body break-words">
-                            {task.name}
-                          </p>
-                        </button>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+                            style={{
+                              top: `${top}px`,
+                              height: `${blockHeight}px`,
+                              left: `${leftPct}%`,
+                              width: `${widthPct}%`,
+                              zIndex: isActive ? 30 : 10 + col,
+                            }}
+                          >
+                            <p className="text-xs font-bold text-white leading-tight line-clamp-2 font-body break-words">
+                              {task.name}
+                            </p>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
+          {/* /min-w-[640px] */}
         </div>
       </div>
     </div>

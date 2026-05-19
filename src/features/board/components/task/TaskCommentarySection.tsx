@@ -181,7 +181,7 @@ export default function TaskCommentarySection({
 
   useEffect(() => {
     if (showForm && formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [showForm]);
 

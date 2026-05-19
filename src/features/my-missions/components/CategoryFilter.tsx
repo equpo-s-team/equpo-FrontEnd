@@ -1,5 +1,7 @@
-import { Search } from 'lucide-react';
+import { ChevronUp, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
+
+import { cn } from '@/lib/utils/utils';
 
 const CATEGORY_COLORS = [
   { bg: 'bg-kanban-todo/20', border: 'border-kanban-todo/40', dot: 'bg-kanban-todo' },
@@ -23,6 +25,8 @@ interface CategoryFilterProps {
   activeCategories: Set<string>;
   onToggle: (category: string) => void;
   onSelectAll: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 export default function CategoryFilter({
@@ -30,6 +34,8 @@ export default function CategoryFilter({
   activeCategories,
   onToggle,
   onSelectAll,
+  isCollapsed = false,
+  onToggleCollapse,
 }: CategoryFilterProps) {
   const [search, setSearch] = useState('');
 
@@ -43,35 +49,48 @@ export default function CategoryFilter({
 
   return (
     <div className="h-full rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-4 overflow-hidden">
-      <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body mb-3">
-        Categorías
-      </h3>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body">Categorías</h3>
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            className="lg:hidden p-1 hover:bg-grey-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
+            title={isCollapsed ? 'Expandir' : 'Contraer'}
+          >
+            <ChevronUp
+              size={16}
+              className={cn('transition-transform duration-300', isCollapsed && 'rotate-180')}
+            />
+          </button>
+        )}
+      </div>
 
-      {/* Search */}
-      <div className="relative mb-3">
-        <Search
-          size={14}
-          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-grey-400 dark:text-grey-500"
-        />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar..."
-          className="
+      <div className={cn(isCollapsed && 'hidden lg:block')}>
+        {/* Search */}
+        <div className="relative mb-3">
+          <Search
+            size={14}
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-grey-400 dark:text-grey-500"
+          />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar..."
+            className="
             w-full pl-8 pr-3 py-2 rounded-xl text-xs font-body
             bg-grey-50 dark:bg-gray-800 border border-grey-150 dark:border-gray-600
             text-grey-700 dark:text-gray-300 placeholder:text-grey-400 dark:placeholder:text-grey-500
             focus:outline-none focus:border-blue/50 focus:ring-1 focus:ring-blue/20
             transition-all duration-200
           "
-        />
-      </div>
+          />
+        </div>
 
-      {/* Select All */}
-      <button
-        onClick={onSelectAll}
-        className={`
+        {/* Select All */}
+        <button
+          onClick={onSelectAll}
+          className={`
           w-full flex items-center gap-2.5 px-3 py-2 rounded-xl mb-1
           text-xs font-medium font-body transition-all duration-200
           ${
@@ -80,27 +99,27 @@ export default function CategoryFilter({
               : 'text-grey-600 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-800 border border-transparent'
           }
         `}
-      >
-        <span
-          className={`
+        >
+          <span
+            className={`
             w-3 h-3 rounded-full border-2 flex-shrink-0
             ${allSelected ? 'bg-blue border-blue' : 'border-grey-300 dark:border-gray-600'}
           `}
-        />
-        Seleccionar Todo
-      </button>
+          />
+          Seleccionar Todo
+        </button>
 
-      {/* Category chips */}
-      <div className="flex flex-col gap-0.5 max-h-28 overflow-y-auto scrollbar-hide">
-        {filteredCategories.map((cat) => {
-          const color = getCategoryColor(cat);
-          const isActive = activeCategories.has(cat);
+        {/* Category chips */}
+        <div className="flex flex-col gap-0.5 max-h-28 overflow-y-auto scrollbar-hide">
+          {filteredCategories.map((cat) => {
+            const color = getCategoryColor(cat);
+            const isActive = activeCategories.has(cat);
 
-          return (
-            <button
-              key={cat}
-              onClick={() => onToggle(cat)}
-              className={`
+            return (
+              <button
+                key={cat}
+                onClick={() => onToggle(cat)}
+                className={`
                 flex items-center gap-2.5 px-3 py-2 rounded-xl
                 text-xs font-medium font-body transition-all duration-200
                 ${
@@ -109,24 +128,26 @@ export default function CategoryFilter({
                     : 'text-grey-600 dark:text-grey-400 hover:bg-grey-50 dark:hover:bg-gray-800 border border-transparent'
                 }
               `}
-            >
-              <span
-                className={`
+              >
+                <span
+                  className={`
                   w-3 h-3 rounded-full flex-shrink-0
                   ${isActive ? color.dot : 'bg-grey-300 dark:bg-gray-600'}
                 `}
-              />
-              {cat}
-            </button>
-          );
-        })}
+                />
+                {cat}
+              </button>
+            );
+          })}
 
-        {filteredCategories.length === 0 && (
-          <p className="text-xs text-grey-400 dark:text-grey-500 text-center py-3">
-            Sin categorías
-          </p>
-        )}
+          {filteredCategories.length === 0 && (
+            <p className="text-xs text-grey-400 dark:text-grey-500 text-center py-3">
+              Sin categorías
+            </p>
+          )}
+        </div>
       </div>
+      {/* /collapsible body */}
     </div>
   );
 }

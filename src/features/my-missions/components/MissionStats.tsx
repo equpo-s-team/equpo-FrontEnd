@@ -3,12 +3,19 @@ import { useState } from 'react';
 
 import type { TeamTask } from '@/features/board/types';
 import { isTaskOverdue, type ProjectedTeamTask } from '@/features/board/utils/taskUtils';
+import { cn } from '@/lib/utils/utils';
 
 interface MissionStatsProps {
   tasks: TeamTask[];
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export default function MissionStats({ tasks }: MissionStatsProps) {
+export default function MissionStats({
+  tasks,
+  isCollapsed = false,
+  onToggleCollapse,
+}: MissionStatsProps) {
   const [isOverdueExpanded, setIsOverdueExpanded] = useState(false);
 
   // Projections are visual-only future occurrences — exclude them from counts
@@ -31,8 +38,22 @@ export default function MissionStats({ tasks }: MissionStatsProps) {
 
   return (
     <div className="rounded-2xl bg-white dark:bg-gray-800 border border-grey-150 dark:border-gray-700 shadow-card p-4">
-      <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body mb-3">Resumen</h3>
-      <div className="flex flex-col gap-2.5">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-bold text-grey-800 dark:text-gray-300 font-body">Resumen</h3>
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            className="lg:hidden p-1 hover:bg-grey-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200"
+            title={isCollapsed ? 'Expandir' : 'Contraer'}
+          >
+            <ChevronUp
+              size={16}
+              className={cn('transition-transform duration-300', isCollapsed && 'rotate-180')}
+            />
+          </button>
+        )}
+      </div>
+      <div className={cn('flex flex-col gap-2.5', isCollapsed && 'hidden lg:flex')}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-kanban-todo" />
